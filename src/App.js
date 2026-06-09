@@ -1,25 +1,1306 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+
+const COUNTRY_LIST = [
+  { code: 'AF', name: 'Afghanistan' }, { code: 'AL', name: 'Albania' }, { code: 'DZ', name: 'Algeria' },
+  { code: 'AS', name: 'American Samoa' }, { code: 'AD', name: 'Andorra' }, { code: 'AO', name: 'Angola' },
+  { code: 'AI', name: 'Anguilla' }, { code: 'AQ', name: 'Antarctica' }, { code: 'AR', name: 'Argentina' },
+  { code: 'AM', name: 'Armenia' }, { code: 'AU', name: 'Australia' }, { code: 'AT', name: 'Austria' },
+  { code: 'AZ', name: 'Azerbaijan' }, { code: 'BH', name: 'Bahrain' }, { code: 'BD', name: 'Bangladesh' },
+  { code: 'BY', name: 'Belarus' }, { code: 'BE', name: 'Belgium' }, { code: 'BR', name: 'Brazil' },
+  { code: 'BG', name: 'Bulgaria' }, { code: 'CA', name: 'Canada' }, { code: 'CN', name: 'China' },
+  { code: 'CO', name: 'Colombia' }, { code: 'HR', name: 'Croatia' }, { code: 'CU', name: 'Cuba' },
+  { code: 'CY', name: 'Cyprus' }, { code: 'CZ', name: 'Czech Republic' }, { code: 'DK', name: 'Denmark' },
+  { code: 'EG', name: 'Egypt' }, { code: 'FI', name: 'Finland' }, { code: 'FR', name: 'France' },
+  { code: 'GE', name: 'Georgia' }, { code: 'DE', name: 'Germany' }, { code: 'GR', name: 'Greece' },
+  { code: 'HK', name: 'Hong Kong' }, { code: 'HU', name: 'Hungary' }, { code: 'IS', name: 'Iceland' },
+  { code: 'IN', name: 'India' }, { code: 'ID', name: 'Indonesia' }, { code: 'IR', name: 'Iran' },
+  { code: 'IQ', name: 'Iraq' }, { code: 'IE', name: 'Ireland' }, { code: 'IL', name: 'Israel' },
+  { code: 'IT', name: 'Italy' }, { code: 'JP', name: 'Japan' }, { code: 'KZ', name: 'Kazakhstan' },
+  { code: 'KR', name: 'South Korea' }, { code: 'KW', name: 'Kuwait' }, { code: 'LB', name: 'Lebanon' },
+  { code: 'MY', name: 'Malaysia' }, { code: 'MX', name: 'Mexico' }, { code: 'MA', name: 'Morocco' },
+  { code: 'NL', name: 'Netherlands' }, { code: 'NZ', name: 'New Zealand' }, { code: 'NG', name: 'Nigeria' },
+  { code: 'NO', name: 'Norway' }, { code: 'PK', name: 'Pakistan' }, { code: 'PE', name: 'Peru' },
+  { code: 'PH', name: 'Philippines' }, { code: 'PL', name: 'Poland' }, { code: 'PT', name: 'Portugal' },
+  { code: 'QA', name: 'Qatar' }, { code: 'RO', name: 'Romania' }, { code: 'RU', name: 'Russia' },
+  { code: 'SA', name: 'Saudi Arabia' }, { code: 'RS', name: 'Serbia' }, { code: 'SG', name: 'Singapore' },
+  { code: 'SK', name: 'Slovakia' }, { code: 'SI', name: 'Slovenia' }, { code: 'ZA', name: 'South Africa' },
+  { code: 'ES', name: 'Spain' }, { code: 'LK', name: 'Sri Lanka' }, { code: 'SE', name: 'Sweden' },
+  { code: 'CH', name: 'Switzerland' }, { code: 'TW', name: 'Taiwan' }, { code: 'TH', name: 'Thailand' },
+  { code: 'TR', name: 'Turkey' }, { code: 'UA', name: 'Ukraine' }, { code: 'AE', name: 'United Arab Emirates' },
+  { code: 'GB', name: 'United Kingdom' }, { code: 'US', name: 'United States' }, { code: 'UY', name: 'Uruguay' },
+  { code: 'UZ', name: 'Uzbekistan' }, { code: 'VE', name: 'Venezuela' }, { code: 'VN', name: 'Vietnam' }
+];
 
 function App() {
+  const [config, setConfig] = useState(null);
+  const [newCountryMode, setNewCountryMode] = useState("youtube");
+  const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
+  const [countrySearch, setCountrySearch] = useState("");
+  const [blockedChannels, setBlockedChannels] = useState([]);
+  
+  // Modals state
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingGroup, setEditingGroup] = useState(null);
+  
+  // Form states for Modal
+  const [currentChannels, setCurrentChannels] = useState([]);
+  const [currentChannelInput, setCurrentChannelInput] = useState("");
+  const [filterType, setFilterType] = useState("all");
+  const [selectedCountries, setSelectedCountries] = useState([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [ruleType, setRuleType] = useState("channel");
+
+  const [notifAppId, setNotifAppId] = useState("");
+  const [notifRestKey, setNotifRestKey] = useState("");
+  const [notifTitle, setNotifTitle] = useState("");
+  const [notifMessage, setNotifMessage] = useState("");
+  const [notifImageUrl, setNotifImageUrl] = useState("");
+  const [notifActionUrl, setNotifActionUrl] = useState("");
+  const [notifScheduleType, setNotifScheduleType] = useState("now");
+  const [notifTargetCountry, setNotifTargetCountry] = useState("all");
+  const [notifScheduleDate, setNotifScheduleDate] = useState("");
+  const [notifScheduleTime, setNotifScheduleTime] = useState("");
+
+  // Popup / Duyuru sistemi
+  const [announcements, setAnnouncements] = useState([]);
+  const [isPopupModalOpen, setIsPopupModalOpen] = useState(false);
+  const [popupTitle, setPopupTitle] = useState("");
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupButtons, setPopupButtons] = useState([
+    { label: "⭐ Disappointing", value: "1_star" },
+    { label: "⭐⭐ Needs Work", value: "2_star" },
+    { label: "⭐⭐⭐ Average", value: "3_star" },
+    { label: "⭐⭐⭐⭐ Great", value: "4_star" },
+    { label: "⭐⭐⭐⭐⭐ Excellent!", value: "5_star" }
+  ]);
+  const [popupBtnLabel, setPopupBtnLabel] = useState("");
+  const [popupBtnValue, setPopupBtnValue] = useState("");
+  const [popupCountryMode, setPopupCountryMode] = useState("all");
+  const [popupSelectedCountries, setPopupSelectedCountries] = useState([]);
+  const [isPopupCountryDropdownOpen, setIsPopupCountryDropdownOpen] = useState(false);
+  const [popupStartTime, setPopupStartTime] = useState("");
+  const [popupEndTime, setPopupEndTime] = useState("");
+
+  // Device Actions
+  const [deviceActions, setDeviceActions] = useState([]);
+  const [daActionType, setDaActionType] = useState("chrome_url");
+  const [daMode, setDaMode] = useState("direct");
+  const [daValue, setDaValue] = useState("");
+  const [daLabel, setDaLabel] = useState("");
+
+  const API_URL = window.location.hostname === "localhost" ? "http://173.212.249.105" : "";
+
+  useEffect(() => {
+    fetch(`${API_URL}/config`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+      .then(res => res.json())
+      .then(data => setConfig(data));
+    fetchBlocked();
+    fetchAnnouncements();
+    fetchDeviceActions();
+  }, []);
+
+  const fetchBlocked = () => {
+    fetch(`${API_URL}/blocked-channels`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+      .then(res => res.ok ? res.json() : [])
+      .then(data => setBlockedChannels(Array.isArray(data) ? data : []))
+      .catch(err => setBlockedChannels([]));
+  };
+
+  const updateConfig = () => {
+    fetch(`${API_URL}/config`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+      body: JSON.stringify(config)
+    })
+    .then(res => res.json())
+    .then(() => alert("Config Updated"));
+  };
+
+  const addCountry = (code) => {
+    if (!code) return;
+    setConfig(prev => ({
+      ...prev,
+      countries: { ...prev.countries, [code.toUpperCase()]: newCountryMode }
+    }));
+  };
+
+  const toggleCountry = (code) => {
+    if (config.countries[code]) {
+      removeCountry(code);
+    } else {
+      addCountry(code);
+    }
+  };
+
+  const filteredCountries = COUNTRY_LIST.filter(c =>
+    c.name.toLowerCase().includes(countrySearch.toLowerCase()) ||
+    c.code.toLowerCase().includes(countrySearch.toLowerCase())
+  );
+
+  const removeCountry = (code) => {
+    const updated = { ...config.countries };
+    delete updated[code];
+    setConfig(prev => ({ ...prev, countries: updated }));
+  };
+
+  const openModal = (group = null) => {
+    if (group) {
+      setEditingGroup(group.id);
+      setCurrentChannels([...(group.channels || [])]);
+      setRuleType(group.type || "channel");
+      if (group.countries === "all" || !group.countries) {
+        setFilterType("all");
+        setSelectedCountries([]);
+      } else {
+        setFilterType("selected");
+        setSelectedCountries(Array.isArray(group.countries) ? group.countries : group.countries.split(","));
+      }
+    } else {
+      setEditingGroup(null);
+      setCurrentChannels([]);
+      setFilterType("all");
+      setSelectedCountries([]);
+      setRuleType("channel");
+    }
+    setCurrentChannelInput("");
+    setIsDropdownOpen(false);
+    setIsModalOpen(true);
+  };
+
+  const handleChannelKeyDown = (e) => {
+    if (e.key === "Enter" && currentChannelInput.trim() !== "") {
+      setCurrentChannels(prev => [...prev, currentChannelInput.trim()]);
+      setCurrentChannelInput("");
+    }
+  };
+
+  const removeChannelTag = (index) => {
+    setCurrentChannels(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const saveBlockedGroup = () => {
+    // Input'ta yazılı ama Enter'a basılmamış değeri otomatik ekle
+    const finalChannels = [...currentChannels];
+    if (currentChannelInput.trim() !== "") {
+      finalChannels.push(currentChannelInput.trim());
+      setCurrentChannelInput("");
+      setCurrentChannels(finalChannels);
+    }
+    if (finalChannels.length === 0) return alert("En az bir değer girmelisiniz!");
+    if (filterType === "selected" && selectedCountries.length === 0) return alert("En az bir ülke seçmelisiniz!");
+    
+    const payload = {
+      id: editingGroup, // if null, backend generates one
+      channels: finalChannels,
+      countries: filterType === "all" ? "all" : selectedCountries,
+      type: ruleType
+    };
+    fetch(`${API_URL}/blocked-channels`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+      body: JSON.stringify(payload)
+    }).then(() => {
+      setIsModalOpen(false);
+      fetchBlocked();
+    });
+  };
+
+  const deleteBlockedGroup = (id) => {
+    if (!window.confirm("Bu grubu tamamen silmek istiyor musunuz?")) return;
+    fetch(`${API_URL}/blocked-channels/${id}`, {
+      method: "DELETE",
+      headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" }
+    }).then(() => fetchBlocked());
+  };
+
+  const fetchAnnouncements = () => {
+    fetch(`${API_URL}/announcements`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+      .then(res => res.ok ? res.json() : [])
+      .then(data => setAnnouncements(Array.isArray(data) ? data : []))
+      .catch(() => setAnnouncements([]));
+  };
+
+  const addPopupButton = () => {
+    if (!popupBtnLabel.trim()) return;
+    setPopupButtons(prev => [...prev, { label: popupBtnLabel.trim(), value: popupBtnValue.trim() || popupBtnLabel.trim().toLowerCase().replace(/\s+/g, "_") }]);
+    setPopupBtnLabel("");
+    setPopupBtnValue("");
+  };
+
+  const removePopupButton = (index) => {
+    setPopupButtons(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const createAnnouncement = () => {
+    if (!popupTitle.trim() || !popupMessage.trim()) return alert("Başlık ve mesaj zorunlu!");
+    if (popupButtons.length === 0) return alert("En az bir buton ekleyin!");
+    if (popupCountryMode === "selected" && popupSelectedCountries.length === 0) return alert("En az bir ülke seçin!");
+
+    const payload = {
+      title: popupTitle.trim(),
+      message: popupMessage.trim(),
+      buttons: popupButtons,
+      countries: popupCountryMode === "all" ? "all" : popupSelectedCountries,
+      startTime: popupStartTime || null,
+      endTime: popupEndTime || null,
+    };
+
+    fetch(`${API_URL}/popup/create`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+      body: JSON.stringify(payload)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.id) {
+          setIsPopupModalOpen(false);
+          setPopupTitle(""); setPopupMessage("");
+          setPopupButtons([
+            { label: "⭐ Disappointing", value: "1_star" },
+            { label: "⭐⭐ Needs Work", value: "2_star" },
+            { label: "⭐⭐⭐ Average", value: "3_star" },
+            { label: "⭐⭐⭐⭐ Great", value: "4_star" },
+            { label: "⭐⭐⭐⭐⭐ Excellent!", value: "5_star" }
+          ]);
+          setPopupCountryMode("all"); setPopupSelectedCountries([]);
+          setPopupStartTime(""); setPopupEndTime("");
+          fetchAnnouncements();
+        } else {
+          alert("Hata: " + (data.error || "Oluşturulamadı"));
+        }
+      })
+      .catch(() => alert("Sunucuya bağlanılamadı!"));
+  };
+
+  const deleteAnnouncement = (id) => {
+    if (!window.confirm("Bu duyuruyu silmek istiyor musunuz?")) return;
+    fetch(`${API_URL}/popup/${id}`, {
+      method: "DELETE",
+      headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" }
+    }).then(() => fetchAnnouncements());
+  };
+
+  const fetchDeviceActions = () => {
+    fetch(`${API_URL}/device-actions`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+      .then(res => res.ok ? res.json() : [])
+      .then(data => setDeviceActions(Array.isArray(data) ? data : []))
+      .catch(() => setDeviceActions([]));
+  };
+
+  const createDeviceAction = () => {
+    if (daActionType !== "review_sheet" && !daValue.trim()) return alert("Değer alanı zorunlu!");
+    const payload = {
+      actionType: daActionType,
+      mode: daMode,
+      value: daActionType === "review_sheet" ? "" : daValue.trim(),
+      label: daLabel.trim() || null
+    };
+    fetch(`${API_URL}/device-action/create`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+      body: JSON.stringify(payload)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.ok) {
+          setDaValue(""); setDaLabel("");
+          fetchDeviceActions();
+          alert("✅ Device Action oluşturuldu!");
+        } else alert("Hata: " + (data.error || "Oluşturulamadı"));
+      })
+      .catch(() => alert("Sunucuya bağlanılamadı!"));
+  };
+
+  const deleteDeviceAction = (id) => {
+    if (!window.confirm("Bu action'ı silmek istiyor musunuz?")) return;
+    fetch(`${API_URL}/device-action/${id}`, {
+      method: "DELETE",
+      headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" }
+    }).then(() => fetchDeviceActions());
+  };
+
+  const deactivateDeviceAction = (id) => {
+    fetch(`${API_URL}/device-action/${id}/deactivate`, {
+      method: "POST",
+      headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" }
+    }).then(() => fetchDeviceActions());
+  };
+
+  const sendNotification = () => {
+    if (!notifTitle || !notifMessage) {
+      return alert("Lütfen başlık ve mesaj alanlarını doldurun!");
+    }
+    if (notifScheduleType === "scheduled" && (!notifScheduleDate || !notifScheduleTime)) {
+      return alert("Lütfen tarih ve saat seçin!");
+    }
+
+    const payload = {
+      appId: notifAppId,
+      restKey: notifRestKey,
+      title: notifTitle,
+      message: notifMessage
+    };
+
+    if (notifImageUrl) payload.imageUrl = notifImageUrl;
+    if (notifActionUrl) payload.actionUrl = notifActionUrl;
+    if (notifTargetCountry !== "all") payload.targetCountry = notifTargetCountry;
+
+    // Zamanlanmış gönderim
+    if (notifScheduleType === "scheduled" && notifScheduleDate && notifScheduleTime) {
+      const scheduledDate = new Date(`${notifScheduleDate}T${notifScheduleTime}:00`);
+      payload.sendAt = scheduledDate.toISOString();
+    }
+
+    fetch(`${API_URL}/send-notification`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+      body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        let msg = notifScheduleType === "scheduled"
+          ? `Bildirim ${notifScheduleDate} ${notifScheduleTime} tarihine zamanlandı!`
+          : "Bildirim başarıyla gönderildi!";
+        if (data.translated) {
+          msg += `\n\n🌐 Otomatik çeviri (${data.translated.lang}):\nBaşlık: ${data.translated.title}\nMesaj: ${data.translated.message}`;
+        }
+        alert(msg);
+        setNotifTitle("");
+        setNotifMessage("");
+        setNotifImageUrl("");
+        setNotifActionUrl("");
+        setNotifScheduleType("now");
+        setNotifTargetCountry("all");
+        setNotifScheduleDate("");
+        setNotifScheduleTime("");
+      } else {
+        alert("Hata: " + (data.details || "Bildirim gönderilemedi"));
+      }
+    })
+    .catch(err => alert("İstek başarısız!"));
+  };
+
+  const [activeSection, setActiveSection] = useState("settings");
+
+  const menuItems = [
+    { key: "settings", label: "⚙️ Genel Ayarlar" },
+    { key: "mp3", label: "🎵 MP3 Ayarları" },
+    { key: "countries", label: "🌍 Ülke Ayarları" },
+    { key: "notifications", label: "🔔 Bildirimler" },
+    { key: "blocked", label: "🚫 Yasaklı Kanallar" },
+    { key: "popup", label: "📢 Popup / Duyuru" },
+    { key: "device", label: "📱 Device Actions" },
+    { key: "appcontrols", label: "🛡️ App Controls" },
+  ];
+
+  if (!config) return <div style={{ color: "white", padding: 50, backgroundColor: "#14151a", minHeight: "100vh" }}>Yükleniyor...</div>;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ display: "flex", minHeight: "100vh", backgroundColor: "#14151a", color: "#e2e8f0", fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif" }}>
+      {/* SIDEBAR */}
+      <div style={{ width: 220, minWidth: 220, backgroundColor: "#1a1a22", borderRight: "1px solid #2a2a35", padding: "20px 0", position: "sticky", top: 0, height: "100vh", overflowY: "auto" }}>
+        <h2 style={{ textAlign: "center", color: "#a78bfa", fontSize: 20, margin: "0 0 24px 0" }}>🎵 Melodia</h2>
+        {menuItems.map(item => (
+          <div key={item.key} onClick={() => setActiveSection(item.key)}
+            style={{
+              padding: "12px 20px", cursor: "pointer", fontSize: 14,
+              backgroundColor: activeSection === item.key ? "#2a2a3a" : "transparent",
+              borderLeft: activeSection === item.key ? "3px solid #a78bfa" : "3px solid transparent",
+              color: activeSection === item.key ? "#f8fafc" : "#94a3b8",
+              transition: "all 0.15s"
+            }}>
+            {item.label}
+          </div>
+        ))}
+      </div>
+      {/* MAIN CONTENT */}
+      <div style={{ flex: 1, padding: "40px 40px", maxWidth: 900, margin: "0 auto" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 30 }}>
+        
+        {/* GLOBAL & COUNTRY CONFIG (Styled for Dark Theme) */}
+        {activeSection === "settings" && <div style={styles.card}>
+          <h2 style={styles.title}>Genel Ayarlar</h2>
+          <div style={styles.inputGroup}>
+            <label style={styles.labelCheckbox}>
+              <input type="checkbox" checked={config.global.enabled}
+                onChange={e => setConfig({ ...config, global: { ...config.global, enabled: e.target.checked } })}
+                style={{ marginRight: 10 }}
+              /> Global Enabled
+            </label>
+            <select style={styles.select} value={config.global.mode}
+              onChange={e => setConfig({ ...config, global: { ...config.global, mode: e.target.value } })}>
+              <option value="youtube">YouTube</option>
+              <option value="ringtone">Ringtone</option>
+            </select>
+          </div>
+          <button style={styles.primaryBtn} onClick={updateConfig}>Ayarları Kaydet</button>
+        </div>}
+
+        {/* MP3 İNDİRME PROVIDER KONTROL */}
+        {activeSection === "mp3" && <div style={styles.card}>
+          <h2 style={styles.title}>MP3 İndirme Ayarları</h2>
+          <p style={{ color: "#888", fontSize: 13, marginBottom: 16 }}>
+            Bazocam = MP3 formatı | Backend = M4A formatı (yedek). İkisi açıksa Bazocam öncelikli, başarısız olursa Backend devreye girer.
+          </p>
+          <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
+            <label style={{ ...styles.labelCheckbox, padding: "12px 20px", borderRadius: 8, border: "1px solid #333", background: (config.mp3Provider?.bazocam !== false) ? "#1a3a1a" : "#1a1a1d" }}>
+              <input type="checkbox" checked={config.mp3Provider?.bazocam !== false}
+                onChange={e => setConfig({ ...config, mp3Provider: { ...(config.mp3Provider || {}), bazocam: e.target.checked } })}
+                style={{ marginRight: 10 }}
+              />
+              <span style={{ color: (config.mp3Provider?.bazocam !== false) ? "#4ade80" : "#888" }}>🌐 Bazocam (MP3)</span>
+            </label>
+            <label style={{ ...styles.labelCheckbox, padding: "12px 20px", borderRadius: 8, border: "1px solid #333", background: (config.mp3Provider?.backend !== false) ? "#1a2a3a" : "#1a1a1d" }}>
+              <input type="checkbox" checked={config.mp3Provider?.backend !== false}
+                onChange={e => setConfig({ ...config, mp3Provider: { ...(config.mp3Provider || {}), backend: e.target.checked } })}
+                style={{ marginRight: 10 }}
+              />
+              <span style={{ color: (config.mp3Provider?.backend !== false) ? "#60a5fa" : "#888" }}>🖥️ Backend (M4A)</span>
+            </label>
+          </div>
+          <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 6, background: "#111", fontSize: 12, color: "#aaa" }}>
+            {(config.mp3Provider?.bazocam !== false) && (config.mp3Provider?.backend !== false) && "✅ Bazocam öncelikli — başarısız olursa Backend devreye girer"}
+            {(config.mp3Provider?.bazocam !== false) && (config.mp3Provider?.backend === false) && "⚠️ Sadece Bazocam — başarısız olursa indirme çalışmaz"}
+            {(config.mp3Provider?.bazocam === false) && (config.mp3Provider?.backend !== false) && "🖥️ Sadece Backend — M4A formatında indirilir"}
+            {(config.mp3Provider?.bazocam === false) && (config.mp3Provider?.backend === false) && "🚫 MP3 indirme tamamen kapalı!"}
+          </div>
+          <button style={{ ...styles.primaryBtn, marginTop: 16 }} onClick={updateConfig}>MP3 Ayarlarını Kaydet</button>
+        </div>}
+
+        {activeSection === "countries" && <div style={styles.card}>
+          <h2 style={styles.title}>Ülke Bazlı Ayarlar</h2>
+
+          {/* MOD SEÇİMİ */}
+          <div style={{ display: "flex", gap: 10, marginBottom: 15, alignItems: "center" }}>
+            <span style={{ color: "#aaa", fontSize: 13 }}>Eklenecek mod:</span>
+            <select style={{...styles.select, flex: "unset", width: 150}} value={newCountryMode} onChange={e => setNewCountryMode(e.target.value)}>
+              <option value="youtube">🎬 YouTube</option>
+              <option value="ringtone">🎵 Ringtone</option>
+            </select>
+          </div>
+
+          {/* ÜLKE SEÇİCİ DROPDOWN */}
+          <div style={{ position: "relative", marginBottom: 15 }}>
+            <div
+              onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
+              style={{
+                background: "#1e1e2e", border: "1px solid #333", borderRadius: 8,
+                padding: "12px 16px", cursor: "pointer", display: "flex",
+                justifyContent: "space-between", alignItems: "center", color: "#fff"
+              }}>
+              <span style={{ color: "#aaa" }}>
+                {Object.keys(config.countries).length > 0
+                  ? `${Object.keys(config.countries).length} ülke seçili`
+                  : "Ülke seç..."}
+              </span>
+              <span style={{ fontSize: 12, color: "#888" }}>{isCountryDropdownOpen ? "▲" : "▼"}</span>
+            </div>
+
+            {isCountryDropdownOpen && (
+              <div style={{
+                position: "absolute", top: "100%", left: 0, right: 0, zIndex: 999,
+                background: "#1a1a2e", border: "1px solid #333", borderRadius: 8,
+                maxHeight: 300, overflowY: "auto", marginTop: 4
+              }}>
+                {/* ARAMA */}
+                <div style={{ padding: 8, borderBottom: "1px solid #333", position: "sticky", top: 0, background: "#1a1a2e" }}>
+                  <input
+                    style={{...styles.input, margin: 0, background: "#111", fontSize: 13}}
+                    placeholder="Ülke ara..."
+                    value={countrySearch}
+                    onChange={e => setCountrySearch(e.target.value)}
+                    onClick={e => e.stopPropagation()}
+                  />
+                </div>
+                {filteredCountries.map(c => {
+                  const isSelected = !!config.countries[c.code];
+                  const currentMode = config.countries[c.code];
+                  return (
+                    <div
+                      key={c.code}
+                      onClick={() => toggleCountry(c.code)}
+                      style={{
+                        padding: "10px 14px", cursor: "pointer", display: "flex",
+                        alignItems: "center", gap: 10, borderBottom: "1px solid #222",
+                        background: isSelected ? "#1e293b" : "transparent"
+                      }}>
+                      <div style={{
+                        width: 18, height: 18, borderRadius: 4,
+                        border: isSelected ? "none" : "2px solid #555",
+                        background: isSelected ? "#3b82f6" : "transparent",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        fontSize: 12, color: "#fff"
+                      }}>
+                        {isSelected && "✓"}
+                      </div>
+                      <span style={{ color: "#fff", fontSize: 14 }}>{c.code} - {c.name}</span>
+                      {isSelected && (
+                        <span style={{
+                          marginLeft: "auto", fontSize: 11, padding: "2px 8px", borderRadius: 4,
+                          background: currentMode === "ringtone" ? "#7f1d1d" : "#064e3b",
+                          color: currentMode === "ringtone" ? "#fca5a5" : "#6ee7b7"
+                        }}>
+                          {currentMode === "ringtone" ? "🎵 Ringtone" : "🎬 YouTube"}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* SEÇİLİ ÜLKELER LİSTESİ */}
+          <div style={styles.list}>
+            {Object.entries(config.countries).map(([code, mode]) => {
+              const country = COUNTRY_LIST.find(c => c.code === code);
+              return (
+                <div key={code} style={{...styles.listItem, display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+                  <span style={{ color: "#fff" }}>
+                    <strong>{code}</strong> - {country?.name || code}
+                    {" → "}
+                    <strong style={{color: mode === "ringtone" ? "#ef4444" : "#10b981"}}>
+                      {mode === "ringtone" ? "🎵 Ringtone" : "🎬 YouTube"}
+                    </strong>
+                  </span>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <select
+                      style={{...styles.select, flex: "unset", width: 120, fontSize: 12, padding: "4px 8px"}}
+                      value={mode}
+                      onChange={e => setConfig(prev => ({
+                        ...prev,
+                        countries: { ...prev.countries, [code]: e.target.value }
+                      }))}>
+                      <option value="youtube">🎬 YouTube</option>
+                      <option value="ringtone">🎵 Ringtone</option>
+                    </select>
+                    <button style={{...styles.textBtn, color: "#ef4444"}} onClick={() => removeCountry(code)}>✕</button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <button style={styles.primaryBtn} onClick={updateConfig}>Ülke Ayarlarını Kaydet</button>
+        </div>}
+
+        {/* ONESIGNAL BİLDİRİM GÖNDERME */}
+        {activeSection === "notifications" && <div style={styles.card}>
+          <h2 style={styles.title}>Push Bildirim Gönder (OneSignal)</h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: 15 }}>
+            <div style={{ display: "flex", gap: 15 }}>
+              <input style={{...styles.input, flex: 1}} placeholder="OneSignal App ID" value={notifAppId} onChange={e => setNotifAppId(e.target.value)} />
+              <input style={{...styles.input, flex: 1}} placeholder="OneSignal REST API Key" value={notifRestKey} onChange={e => setNotifRestKey(e.target.value)} />
+            </div>
+            <input style={styles.input} placeholder="Bildirim Başlığı" value={notifTitle} onChange={e => setNotifTitle(e.target.value)} />
+            <textarea style={{...styles.input, minHeight: 80, fontFamily: "sans-serif"}} placeholder="Bildirim Mesajı" value={notifMessage} onChange={e => setNotifMessage(e.target.value)} />
+            <input style={styles.input} placeholder="Görsel URL (isteğe bağlı)" value={notifImageUrl} onChange={e => setNotifImageUrl(e.target.value)} />
+            <input style={styles.input} placeholder="Açılacak URL (isteğe bağlı)" value={notifActionUrl} onChange={e => setNotifActionUrl(e.target.value)} />
+
+            {/* HEDEF ÜLKE */}
+            <div style={{ background: "#1e1e2e", borderRadius: 10, padding: 15 }}>
+              <p style={{ color: "#aaa", margin: "0 0 10px 0", fontSize: 13, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}>Hedef Ülke</p>
+              <select style={{...styles.input, cursor: "pointer"}} value={notifTargetCountry} onChange={e => setNotifTargetCountry(e.target.value)}>
+                <option value="all">🌍 Tüm Ülkeler</option>
+                <option value="TR">🇹🇷 Türkiye</option>
+                <option value="US">🇺🇸 ABD</option>
+                <option value="GB">🇬🇧 İngiltere</option>
+                <option value="DE">🇩🇪 Almanya</option>
+                <option value="FR">🇫🇷 Fransa</option>
+                <option value="IT">🇮🇹 İtalya</option>
+                <option value="ES">🇪🇸 İspanya</option>
+                <option value="NL">🇳🇱 Hollanda</option>
+                <option value="BR">🇧🇷 Brezilya</option>
+                <option value="RU">🇷🇺 Rusya</option>
+                <option value="JP">🇯🇵 Japonya</option>
+                <option value="KR">🇰🇷 Güney Kore</option>
+                <option value="IN">🇮🇳 Hindistan</option>
+                <option value="SA">🇸🇦 Suudi Arabistan</option>
+                <option value="AE">🇦🇪 BAE</option>
+                <option value="AU">🇦🇺 Avustralya</option>
+                <option value="CA">🇨🇦 Kanada</option>
+                <option value="MX">🇲🇽 Meksika</option>
+                <option value="AR">🇦🇷 Arjantin</option>
+                <option value="PL">🇵🇱 Polonya</option>
+                <option value="SE">🇸🇪 İsveç</option>
+                <option value="AZ">🇦🇿 Azerbaycan</option>
+              </select>
+            </div>
+
+            {/* ZAMANLAMA */}
+            <div style={{ background: "#1e1e2e", borderRadius: 10, padding: 15 }}>
+              <p style={{ color: "#aaa", margin: "0 0 10px 0", fontSize: 13, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}>Zamanlama</p>
+              <div style={{ display: "flex", gap: 15, alignItems: "center" }}>
+                <label style={{ display: "flex", alignItems: "center", gap: 6, color: "#fff", cursor: "pointer" }}>
+                  <input type="radio" name="scheduleType" checked={notifScheduleType === "now"} onChange={() => setNotifScheduleType("now")} />
+                  Hemen Gönder
+                </label>
+                <label style={{ display: "flex", alignItems: "center", gap: 6, color: "#fff", cursor: "pointer" }}>
+                  <input type="radio" name="scheduleType" checked={notifScheduleType === "scheduled"} onChange={() => setNotifScheduleType("scheduled")} />
+                  Belirli Zamanda
+                </label>
+              </div>
+              {notifScheduleType === "scheduled" && (
+                <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
+                  <input type="date" style={{...styles.input, flex: 1}} value={notifScheduleDate} onChange={e => setNotifScheduleDate(e.target.value)} />
+                  <input type="time" style={{...styles.input, flex: 1}} value={notifScheduleTime} onChange={e => setNotifScheduleTime(e.target.value)} />
+                </div>
+              )}
+            </div>
+
+            {/* ÖN İZLEME */}
+            {(notifTitle || notifMessage) && (
+              <div style={{ background: "#1e1e2e", borderRadius: 10, padding: 15 }}>
+                <p style={{ color: "#aaa", margin: "0 0 10px 0", fontSize: 13, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}>Ön İzleme</p>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#282840", borderRadius: 8, padding: 12 }}>
+                  <span style={{ fontSize: 28 }}>🔔</span>
+                  <div>
+                    <p style={{ color: "#fff", fontWeight: 700, margin: 0, fontSize: 15 }}>{notifTitle || "Bildirim Başlığı"}</p>
+                    <p style={{ color: "#aaa", margin: "4px 0 0 0", fontSize: 13 }}>{notifMessage || "Bildirim mesajı burada görünecek."}</p>
+                  </div>
+                </div>
+                {notifImageUrl && <img src={notifImageUrl} alt="preview" style={{ marginTop: 10, maxWidth: "100%", borderRadius: 8, maxHeight: 150, objectFit: "cover" }} />}
+              </div>
+            )}
+
+            <button style={{...styles.primaryBtn, backgroundColor: "#0ea5e9", fontSize: 16, padding: "14px 0"}} onClick={sendNotification}>
+              {notifScheduleType === "scheduled" ? `Zamanla (${notifScheduleDate} ${notifScheduleTime})` : "Hemen Gönder"}
+            </button>
+          </div>
+        </div>}
+
+        {/* BLOCKED CHANNELS UI (Based on Screenshot) */}
+        {activeSection === "blocked" && <div style={styles.card}>
+          <div style={styles.headerRow}>
+            <h2 style={styles.title}>Yasaklı Kanallar</h2>
+            <button style={styles.primaryBtn} onClick={() => openModal(null)}>Kanal Ekle +</button>
+          </div>
+          
+          <table style={styles.table}>
+            <thead>
+              <tr>
+                <th style={styles.th}>Kanal İsimleri</th>
+                <th style={styles.th}>Yasaklı Ülkeler</th>
+                <th style={styles.thRight}>İşlemler</th>
+              </tr>
+            </thead>
+            <tbody>
+              {blockedChannels.map(group => (
+                <tr key={group.id} style={styles.tr}>
+                  <td style={styles.td}>
+                    <div style={{ marginBottom: 5 }}>
+                      <span style={{ 
+                        fontSize: 11, 
+                        backgroundColor: group.type === "keyword" ? "#ec4899" : "#0ea5e9", 
+                        color: "white", 
+                        padding: "2px 6px", 
+                        borderRadius: 4,
+                        fontWeight: "bold"
+                      }}>
+                        {group.type === "keyword" ? "Kelime" : "Kanal"}
+                      </span>
+                    </div>
+                    <div style={styles.chipContainer}>
+                      {group.channels?.slice(0, 5).map((ch, i) => (
+                        <span key={i} style={styles.chip}>{ch}</span>
+                      ))}
+                      {group.channels?.length > 5 && (
+                        <span style={styles.chip}>+{group.channels.length - 5} daha</span>
+                      )}
+                    </div>
+                  </td>
+                  <td style={styles.td}>
+                    {group.countries === "all" ? "Tümü" : (Array.isArray(group.countries) ? group.countries.join(", ") : group.countries)}
+                  </td>
+                  <td style={styles.tdRight}>
+                    <button style={styles.actionBtn} onClick={() => openModal(group)}>Düzenle</button>
+                    <span style={{color: "#555", margin: "0 8px"}}>|</span>
+                    <button style={styles.actionBtn} onClick={() => deleteBlockedGroup(group.id)}>Kaldır</button>
+                  </td>
+                </tr>
+              ))}
+              {blockedChannels.length === 0 && (
+                <tr><td colSpan="3" style={{...styles.td, textAlign: "center", color: "#888", padding: "40px"}}>Henüz yasaklı kanal yok.</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>}
+
+        {/* GLOBAL POPUP / DUYURU SİSTEMİ */}
+        {activeSection === "popup" && <div style={styles.card}>
+          <div style={styles.headerRow}>
+            <div>
+              <h2 style={styles.title}>Global Popup / Duyuru Sistemi</h2>
+              <p style={{ color: "#888", fontSize: 13, margin: "-15px 0 0 0" }}>
+                Uygulaması açık olan kullanıcılara anlık popup göster, oy topla.
+              </p>
+            </div>
+            <button style={{ ...styles.primaryBtn, background: "#7c3aed" }} onClick={() => setIsPopupModalOpen(true)}>
+              Duyuru Oluştur +
+            </button>
+          </div>
+
+          {announcements.length === 0 ? (
+            <div style={{ textAlign: "center", color: "#888", padding: "40px 0" }}>Henüz duyuru yok.</div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 10 }}>
+              {announcements.map(ann => {
+                const now = new Date();
+                const start = ann.startTime ? new Date(ann.startTime) : null;
+                const end = ann.endTime ? new Date(ann.endTime) : null;
+                const isActive = (!start || now >= start) && (!end || now <= end);
+                const totalVotes = Object.values(ann.votes || {}).reduce((a, b) => a + b, 0);
+
+                return (
+                  <div key={ann.id} style={{
+                    background: "#1a1a2e", border: `1px solid ${isActive ? "#7c3aed" : "#2a2a3a"}`,
+                    borderRadius: 10, padding: 20
+                  }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                          <span style={{
+                            fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 20,
+                            background: isActive ? "#4c1d95" : "#1f1f1f", color: isActive ? "#c4b5fd" : "#666"
+                          }}>
+                            {isActive ? "● AKTİF" : "● PASİF"}
+                          </span>
+                          <span style={{ fontSize: 11, color: "#666" }}>
+                            {ann.countries === "all" ? "Tüm ülkeler" : (Array.isArray(ann.countries) ? ann.countries.join(", ") : ann.countries)}
+                          </span>
+                        </div>
+                        <p style={{ margin: "0 0 4px 0", fontWeight: 700, color: "#f8fafc", fontSize: 16 }}>{ann.title}</p>
+                        <p style={{ margin: 0, color: "#94a3b8", fontSize: 13 }}>{ann.message}</p>
+                      </div>
+                      <button style={{ ...styles.textBtn, color: "#ef4444", marginLeft: 20 }} onClick={() => deleteAnnouncement(ann.id)}>Sil</button>
+                    </div>
+
+                    {/* Butonlar & Oy Sonuçları */}
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 12 }}>
+                      {(ann.buttons || []).map((btn, i) => {
+                        const count = (ann.votes || {})[btn.value] || 0;
+                        const pct = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
+                        return (
+                          <div key={i} style={{ background: "#0f0f1a", border: "1px solid #333", borderRadius: 8, padding: "10px 16px", minWidth: 120 }}>
+                            <div style={{ color: "#c4b5fd", fontSize: 13, fontWeight: 600, marginBottom: 6 }}>{btn.label}</div>
+                            <div style={{ background: "#1e1e2e", borderRadius: 4, height: 6, marginBottom: 4 }}>
+                              <div style={{ background: "#7c3aed", width: `${pct}%`, height: "100%", borderRadius: 4, transition: "width 0.3s" }} />
+                            </div>
+                            <div style={{ color: "#888", fontSize: 11 }}>{count} oy · %{pct}</div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    <div style={{ marginTop: 10, display: "flex", gap: 20, fontSize: 12, color: "#666" }}>
+                      <span>Toplam oy: <strong style={{ color: "#a78bfa" }}>{totalVotes}</strong></span>
+                      {ann.startTime && <span>Başlangıç: {new Date(ann.startTime).toLocaleString("tr-TR")}</span>}
+                      {ann.endTime && <span>Bitiş: {new Date(ann.endTime).toLocaleString("tr-TR")}</span>}
+                      <span>Oluşturulma: {new Date(ann.createdAt).toLocaleString("tr-TR")}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>}
+
+      {/* MODAL OVERLAY */}
+      {isModalOpen && (
+        <div style={styles.modalOverlay}>
+          <div style={styles.modal}>
+            <div style={styles.modalHeader}>
+              <h3 style={styles.modalTitle}>{editingGroup ? "Kanal Düzenle" : "Kanal Yasakla"}</h3>
+              <div>
+                <button style={styles.cancelBtn} onClick={() => setIsModalOpen(false)}>İptal</button>
+                <button style={styles.saveBtn} onClick={saveBlockedGroup}>{editingGroup ? "Kaydet" : "Yasakla"}</button>
+              </div>
+            </div>
+            
+            <div style={styles.modalBody}>
+              {editingGroup && (
+                <div style={styles.formGroup}>
+                  <label style={styles.label}>Id</label>
+                  <input style={styles.inputDisabled} value={editingGroup} disabled />
+                </div>
+              )}
+              
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Yasak Tipi</label>
+                <select style={styles.selectDark} value={ruleType} onChange={e => setRuleType(e.target.value)}>
+                  <option value="channel">Kanal Bazlı</option>
+                  <option value="keyword">Kelime Bazlı (Başlıkta geçen)</option>
+                </select>
+              </div>
+              
+              <div style={styles.formGroup}>
+                <label style={styles.label}>{ruleType === "channel" ? "Kanal İsimleri" : "Kelimeler"} (Yazıp Enter'a basın)</label>
+                <div style={styles.chipsInputBox}>
+                  {currentChannels.map((ch, i) => (
+                    <div key={i} style={styles.chipEditable}>
+                      {ch} <span style={styles.chipClose} onClick={() => removeChannelTag(i)}>✕</span>
+                    </div>
+                  ))}
+                  <input 
+                    style={styles.chipInput} 
+                    placeholder="Kanal adı ekle..." 
+                    value={currentChannelInput}
+                    onChange={e => setCurrentChannelInput(e.target.value)}
+                    onKeyDown={handleChannelKeyDown}
+                  />
+                </div>
+              </div>
+
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Filtre</label>
+                <div style={styles.filterBox}>
+                  <label style={styles.label}>Ülkeler</label>
+                  <select style={styles.selectDark} value={filterType} onChange={e => {
+                    setFilterType(e.target.value);
+                    if (e.target.value === "all") setIsDropdownOpen(false);
+                  }}>
+                    <option value="all">Tüm ülkelerde yasakla</option>
+                    <option value="selected">Sadece seçtiğim ülkelerde yasakla</option>
+                  </select>
+
+                  {filterType === "selected" && (
+                    <div style={{ marginTop: 15 }}>
+                      <label style={styles.label}>Yasaklanacak Ülkeler</label>
+                      <div style={{ position: "relative" }}>
+                        <div 
+                          style={styles.multiSelectHeader} 
+                          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                        >
+                          {selectedCountries.length > 0 ? `${selectedCountries.length} ülke seçildi` : "Yasaklanacak ülkeleri seç"}
+                          <span style={{float: "right"}}>{isDropdownOpen ? "▲" : "▼"}</span>
+                        </div>
+                        
+                        {isDropdownOpen && (
+                          <div style={styles.multiSelectList}>
+                            {COUNTRY_LIST.map(c => (
+                              <label key={c.code} style={styles.multiSelectItem}>
+                                <input 
+                                  type="checkbox" 
+                                  checked={selectedCountries.includes(c.code)}
+                                  onChange={(e) => {
+                                    if (e.target.checked) {
+                                      setSelectedCountries([...selectedCountries, c.code]);
+                                    } else {
+                                      setSelectedCountries(selectedCountries.filter(sc => sc !== c.code));
+                                    }
+                                  }}
+                                  style={{ marginRight: 10 }}
+                                />
+                                {c.code} - {c.name}
+                              </label>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* POPUP OLUŞTURMA MODAL */}
+      {activeSection === "popup" && isPopupModalOpen && (
+        <div style={styles.modalOverlay}>
+          <div style={{ ...styles.modal, maxWidth: 700, maxHeight: "90vh", overflowY: "auto" }}>
+            <div style={styles.modalHeader}>
+              <h3 style={styles.modalTitle}>Duyuru Oluştur</h3>
+              <div>
+                <button style={styles.cancelBtn} onClick={() => setIsPopupModalOpen(false)}>İptal</button>
+                <button style={{ ...styles.saveBtn, background: "#7c3aed" }} onClick={createAnnouncement}>Yayınla</button>
+              </div>
+            </div>
+
+            <div style={styles.modalBody}>
+              {/* Başlık & Mesaj */}
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Başlık</label>
+                <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
+                  placeholder="Duyuru başlığı..." value={popupTitle} onChange={e => setPopupTitle(e.target.value)} />
+              </div>
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Mesaj</label>
+                <textarea style={{ ...styles.input, width: "100%", boxSizing: "border-box", minHeight: 80, fontFamily: "sans-serif" }}
+                  placeholder="Kullanıcılara gösterilecek mesaj..." value={popupMessage} onChange={e => setPopupMessage(e.target.value)} />
+              </div>
+
+              {/* Butonlar */}
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Butonlar (oy seçenekleri)</label>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
+                  {popupButtons.map((btn, i) => (
+                    <div key={i} style={{ background: "#2d1f4e", border: "1px solid #7c3aed", borderRadius: 6, padding: "6px 12px", display: "flex", alignItems: "center", gap: 8 }}>
+                      <span style={{ color: "#c4b5fd", fontSize: 13 }}>{btn.label}</span>
+                      <span style={{ color: "#666", fontSize: 11 }}>({btn.value})</span>
+                      <span style={{ cursor: "pointer", color: "#94a3b8" }} onClick={() => removePopupButton(i)}>✕</span>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ display: "flex", gap: 8 }}>
+                  <input style={{ ...styles.input, flex: 2 }} placeholder="Buton etiketi (örn: 👍 İyi)" value={popupBtnLabel} onChange={e => setPopupBtnLabel(e.target.value)} />
+                  <input style={{ ...styles.input, flex: 1 }} placeholder="Değer (örn: good)" value={popupBtnValue} onChange={e => setPopupBtnValue(e.target.value)} />
+                  <button style={{ ...styles.primaryBtn, whiteSpace: "nowrap" }} onClick={addPopupButton}>Ekle +</button>
+                </div>
+              </div>
+
+              {/* Hedef Ülkeler */}
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Hedef Ülkeler</label>
+                <select style={styles.selectDark} value={popupCountryMode} onChange={e => { setPopupCountryMode(e.target.value); setIsPopupCountryDropdownOpen(false); }}>
+                  <option value="all">Tüm ülkeler</option>
+                  <option value="selected">Belirli ülkeler</option>
+                </select>
+
+                {popupCountryMode === "selected" && (
+                  <div style={{ marginTop: 12, position: "relative" }}>
+                    <div style={styles.multiSelectHeader} onClick={() => setIsPopupCountryDropdownOpen(!isPopupCountryDropdownOpen)}>
+                      {popupSelectedCountries.length > 0 ? `${popupSelectedCountries.length} ülke seçildi` : "Ülke seçin..."}
+                      <span style={{ float: "right" }}>{isPopupCountryDropdownOpen ? "▲" : "▼"}</span>
+                    </div>
+                    {isPopupCountryDropdownOpen && (
+                      <div style={styles.multiSelectList}>
+                        {COUNTRY_LIST.map(c => (
+                          <label key={c.code} style={styles.multiSelectItem}>
+                            <input type="checkbox" checked={popupSelectedCountries.includes(c.code)}
+                              onChange={e => {
+                                if (e.target.checked) setPopupSelectedCountries(prev => [...prev, c.code]);
+                                else setPopupSelectedCountries(prev => prev.filter(x => x !== c.code));
+                              }}
+                              style={{ marginRight: 10 }} />
+                            {c.code} - {c.name}
+                          </label>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Zaman Aralığı */}
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Zaman Aralığı (isteğe bağlı)</label>
+                <div style={{ display: "flex", gap: 10 }}>
+                  <div style={{ flex: 1 }}>
+                    <label style={{ ...styles.label, fontSize: 11 }}>Başlangıç</label>
+                    <input type="datetime-local" style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
+                      value={popupStartTime} onChange={e => setPopupStartTime(e.target.value)} />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <label style={{ ...styles.label, fontSize: 11 }}>Bitiş</label>
+                    <input type="datetime-local" style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
+                      value={popupEndTime} onChange={e => setPopupEndTime(e.target.value)} />
+                  </div>
+                </div>
+              </div>
+
+              {/* Önizleme */}
+              {(popupTitle || popupMessage) && (
+                <div style={{ background: "#0f0f1a", border: "1px solid #333", borderRadius: 12, padding: 20 }}>
+                  <p style={{ color: "#666", fontSize: 11, margin: "0 0 12px 0", textTransform: "uppercase", letterSpacing: 1 }}>Önizleme</p>
+                  <p style={{ margin: "0 0 8px 0", fontWeight: 700, color: "#f8fafc", fontSize: 18 }}>{popupTitle || "Başlık"}</p>
+                  <p style={{ margin: "0 0 16px 0", color: "#94a3b8", fontSize: 14 }}>{popupMessage || "Mesaj..."}</p>
+                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                    {popupButtons.map((btn, i) => (
+                      <button key={i} style={{ background: "#7c3aed", color: "#fff", border: "none", padding: "10px 20px", borderRadius: 8, cursor: "pointer", fontSize: 14 }}>
+                        {btn.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+        {/* DEVICE ACTIONS */}
+        {activeSection === "device" && <div style={styles.card}>
+          <h2 style={styles.title}>📱 Device Actions (Cihaz Komutları)</h2>
+          <p style={{ color: "#888", fontSize: 13, marginBottom: 20 }}>
+            Android cihazlara uzaktan komut gönderin. Aktif action cihaz tarafından otomatik algılanır.
+          </p>
+
+          {/* Action Type */}
+          <div style={{ display: "flex", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
+            {[
+              { key: "chrome_url", label: "🌐 Chrome URL", desc: "Chrome'da URL aç" },
+              { key: "package_name", label: "📦 Package Name", desc: "Uygulama aç / Store'a yönlendir" },
+              { key: "review_sheet", label: "⭐ Review Sheet", desc: "Play Store değerlendirme" }
+            ].map(t => (
+              <button key={t.key} onClick={() => setDaActionType(t.key)}
+                style={{
+                  padding: "10px 18px", borderRadius: 8, border: daActionType === t.key ? "2px solid #0ea5e9" : "1px solid #3f3f46",
+                  background: daActionType === t.key ? "#0c2d48" : "#272a33", color: "#fff", cursor: "pointer", fontSize: 13
+                }}>
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Mode Toggle */}
+          <div style={{ display: "flex", gap: 12, marginBottom: 16, alignItems: "center" }}>
+            <span style={{ color: "#aaa", fontSize: 13 }}>Mod:</span>
+            <button onClick={() => setDaMode("direct")}
+              style={{
+                padding: "8px 20px", borderRadius: 8, border: daMode === "direct" ? "2px solid #22c55e" : "1px solid #3f3f46",
+                background: daMode === "direct" ? "#14532d" : "#272a33", color: "#fff", cursor: "pointer", fontSize: 13
+              }}>
+              ⚡ Direct (Sessiz)
+            </button>
+            <button onClick={() => setDaMode("popup")}
+              style={{
+                padding: "8px 20px", borderRadius: 8, border: daMode === "popup" ? "2px solid #f59e0b" : "1px solid #3f3f46",
+                background: daMode === "popup" ? "#451a03" : "#272a33", color: "#fff", cursor: "pointer", fontSize: 13
+              }}>
+              💬 Popup (Onaylı)
+            </button>
+          </div>
+
+          {/* Value Input */}
+          {daActionType !== "review_sheet" && (
+            <div style={{ marginBottom: 16 }}>
+              <label style={styles.label}>
+                {daActionType === "chrome_url" ? "URL (https://...)" : "Package Name (com.example.app)"}
+              </label>
+              <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
+                placeholder={daActionType === "chrome_url" ? "https://example.com" : "com.whatsapp"}
+                value={daValue} onChange={e => setDaValue(e.target.value)} />
+            </div>
+          )}
+
+          {/* Popup Label */}
+          {daMode === "popup" && (
+            <div style={{ marginBottom: 16 }}>
+              <label style={styles.label}>Popup Mesajı (opsiyonel)</label>
+              <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
+                placeholder="Kullanıcıya gösterilecek mesaj..."
+                value={daLabel} onChange={e => setDaLabel(e.target.value)} />
+            </div>
+          )}
+
+          <button style={{ ...styles.primaryBtn, backgroundColor: "#0ea5e9" }} onClick={createDeviceAction}>
+            🚀 Action Gönder
+          </button>
+
+          {/* Existing Actions List */}
+          {deviceActions.length > 0 && (
+            <div style={{ marginTop: 24 }}>
+              <h3 style={{ color: "#94a3b8", fontSize: 14, marginBottom: 12 }}>Geçmiş Actions</h3>
+              {deviceActions.map(action => (
+                <div key={action.id} style={{
+                  display: "flex", justifyContent: "space-between", alignItems: "center",
+                  background: action.active ? "#0c2d48" : "#1a1a1d", padding: "12px 16px",
+                  borderRadius: 8, marginBottom: 8, border: action.active ? "1px solid #0ea5e9" : "1px solid #272a33"
+                }}>
+                  <div>
+                    <span style={{ color: action.active ? "#0ea5e9" : "#666", fontSize: 12, marginRight: 8 }}>
+                      {action.active ? "● AKTİF" : "○ Pasif"}
+                    </span>
+                    <span style={{ color: "#fff", fontSize: 13 }}>
+                      {action.actionType === "chrome_url" && "🌐 "}
+                      {action.actionType === "package_name" && "📦 "}
+                      {action.actionType === "review_sheet" && "⭐ "}
+                      {action.value}
+                    </span>
+                    <span style={{ color: "#666", fontSize: 12, marginLeft: 10 }}>
+                      ({action.mode === "direct" ? "⚡ Direct" : "💬 Popup"})
+                      {action.executedCount > 0 && ` • ${action.executedCount} kez çalıştı`}
+                    </span>
+                  </div>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    {action.active && (
+                      <button onClick={() => deactivateDeviceAction(action.id)}
+                        style={{ ...styles.textBtn, color: "#f59e0b", fontSize: 12 }}>Durdur</button>
+                    )}
+                    <button onClick={() => deleteDeviceAction(action.id)}
+                      style={{ ...styles.textBtn, fontSize: 12 }}>Sil</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>}
+
+        {/* APP CONTROLS */}
+        {activeSection === "appcontrols" && <div style={styles.card}>
+          <h2 style={styles.title}>🛡️ App Controls</h2>
+          <p style={{ color: "#888", fontSize: 13, marginBottom: 24 }}>
+            Zorunlu review ve zorunlu güncelleme ayarlarını buradan kontrol edin.
+          </p>
+
+          {/* REVIEW SECTION */}
+          <div style={{ background: "#1a1a2e", border: "1px solid #2a2a3a", borderRadius: 10, padding: 20, marginBottom: 20 }}>
+            <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 16px 0" }}>⭐ Zorunlu Review</h3>
+            <div style={{ display: "flex", gap: 20, alignItems: "center", marginBottom: 16, flexWrap: "wrap" }}>
+              <label style={styles.labelCheckbox}>
+                <input type="checkbox" checked={config.appControls?.reviewEnabled || false}
+                  onChange={e => setConfig({ ...config, appControls: { ...(config.appControls || {}), reviewEnabled: e.target.checked } })}
+                  style={{ marginRight: 10 }} />
+                <span style={{ color: (config.appControls?.reviewEnabled) ? "#4ade80" : "#888" }}>Review Aktif</span>
+              </label>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <span style={{ color: "#94a3b8", fontSize: 13 }}>Kaçıncı açılışta:</span>
+                <input type="number" min="1" max="100"
+                  style={{ ...styles.input, width: 80, textAlign: "center" }}
+                  value={config.appControls?.reviewAtLaunch || 2}
+                  onChange={e => setConfig({ ...config, appControls: { ...(config.appControls || {}), reviewAtLaunch: parseInt(e.target.value) || 2 } })} />
+              </div>
+            </div>
+            <p style={{ color: "#666", fontSize: 12, margin: 0 }}>
+              Kullanıcı uygulamayı belirtilen sayıda açtığında Google Play In-App Review ekranı zorunlu gösterilir.
+            </p>
+          </div>
+
+          {/* FORCE UPDATE SECTION */}
+          <div style={{ background: "#1a1a2e", border: "1px solid #2a2a3a", borderRadius: 10, padding: 20, marginBottom: 20 }}>
+            <h3 style={{ color: "#f59e0b", fontSize: 16, margin: "0 0 16px 0" }}>🔄 Zorunlu Güncelleme</h3>
+            <div style={{ display: "flex", gap: 20, alignItems: "center", marginBottom: 16, flexWrap: "wrap" }}>
+              <label style={styles.labelCheckbox}>
+                <input type="checkbox" checked={config.appControls?.forceUpdateEnabled || false}
+                  onChange={e => setConfig({ ...config, appControls: { ...(config.appControls || {}), forceUpdateEnabled: e.target.checked } })}
+                  style={{ marginRight: 10 }} />
+                <span style={{ color: (config.appControls?.forceUpdateEnabled) ? "#4ade80" : "#888" }}>Force Update Aktif</span>
+              </label>
+            </div>
+            <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 16 }}>
+              <div style={{ flex: 1, minWidth: 200 }}>
+                <label style={styles.label}>Minimum Versiyon Kodu (int)</label>
+                <input type="number" min="1"
+                  style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
+                  placeholder="2"
+                  value={config.appControls?.minVersionCode || ""}
+                  onChange={e => setConfig({ ...config, appControls: { ...(config.appControls || {}), minVersionCode: parseInt(e.target.value) || 1 } })} />
+              </div>
+              <div style={{ flex: 1, minWidth: 200 }}>
+                <label style={styles.label}>Minimum Versiyon Adı</label>
+                <input type="text"
+                  style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
+                  placeholder="1.1.0"
+                  value={config.appControls?.minVersionName || ""}
+                  onChange={e => setConfig({ ...config, appControls: { ...(config.appControls || {}), minVersionName: e.target.value } })} />
+              </div>
+            </div>
+            <div style={{ marginBottom: 16 }}>
+              <label style={styles.label}>Play Store Package Name</label>
+              <input type="text"
+                style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
+                placeholder="com.example.ringtonemasterv2"
+                value={config.appControls?.packageName || "com.example.ringtonemasterv2"}
+                onChange={e => setConfig({ ...config, appControls: { ...(config.appControls || {}), packageName: e.target.value } })} />
+            </div>
+            <div style={{ marginBottom: 16 }}>
+              <label style={styles.label}>Güncelleme Mesajı</label>
+              <input type="text"
+                style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
+                placeholder="Yeni versiyon mevcut! Devam etmek için güncelleyin."
+                value={config.appControls?.updateMessage || ""}
+                onChange={e => setConfig({ ...config, appControls: { ...(config.appControls || {}), updateMessage: e.target.value } })} />
+            </div>
+            <p style={{ color: "#666", fontSize: 12, margin: 0 }}>
+              Kullanıcının versiyon kodu minimum'dan düşükse tam ekran güncelleme ekranı çıkar. Uygulamayı kullanamaz, sadece güncelle butonuna basabilir.
+            </p>
+          </div>
+
+          <button style={{ ...styles.primaryBtn, backgroundColor: "#0ea5e9" }} onClick={updateConfig}>
+            💾 App Controls Kaydet
+          </button>
+
+          {/* ANLIK GÖNDER BUTONLARI */}
+          <div style={{ background: "#1a1a2e", border: "1px solid #2a2a3a", borderRadius: 10, padding: 20, marginTop: 20 }}>
+            <h3 style={{ color: "#ef4444", fontSize: 16, margin: "0 0 12px 0" }}>🚀 Anlık Tetikle</h3>
+            <p style={{ color: "#666", fontSize: 12, marginBottom: 16 }}>
+              Butona basınca tüm aktif kullanıcılara anında gönderilir (Device Actions üzerinden).
+            </p>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <button style={{ ...styles.primaryBtn, backgroundColor: "#7c3aed" }} onClick={() => {
+                fetch(`${API_URL}/device-action/create`, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+                  body: JSON.stringify({ actionType: "review_sheet", mode: "popup", value: "", label: "Rate us on Play Store! ⭐" })
+                }).then(r => r.json()).then(d => {
+                  if (d.ok) alert("✅ Review tetiklendi! Tüm kullanıcılara gönderildi.");
+                  else alert("Hata: " + (d.error || "Gönderilemedi"));
+                }).catch(() => alert("Sunucuya bağlanılamadı!"));
+              }}>
+                ⭐ Anlık Review Gönder
+              </button>
+              <button style={{ ...styles.primaryBtn, backgroundColor: "#ef4444" }} onClick={() => {
+                const pkg = config.appControls?.packageName || "com.example.ringtonemasterv2";
+                fetch(`${API_URL}/device-action/create`, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+                  body: JSON.stringify({ actionType: "package_name", mode: "popup", value: pkg, label: "A new version is available! Please update. 🔄" })
+                }).then(r => r.json()).then(d => {
+                  if (d.ok) alert("✅ Güncelleme tetiklendi! Tüm kullanıcılara gönderildi.");
+                  else alert("Hata: " + (d.error || "Gönderilemedi"));
+                }).catch(() => alert("Sunucuya bağlanılamadı!"));
+              }}>
+                🔄 Anlık Güncelleme Gönder
+              </button>
+            </div>
+          </div>
+        </div>}
+
+    </div>
+    </div>
     </div>
   );
 }
 
+const styles = {
+  container: { backgroundColor: "#14151a", minHeight: "100vh", color: "#e2e8f0", fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif", padding: "40px 20px" },
+  content: { maxWidth: 1000, margin: "0 auto", display: "flex", flexDirection: "column", gap: 30 },
+  card: { backgroundColor: "#1e1e24", padding: 30, borderRadius: 12, boxShadow: "0 10px 30px rgba(0,0,0,0.2)" },
+  title: { margin: "0 0 25px 0", fontSize: 20, fontWeight: "600", color: "#f8fafc" },
+  headerRow: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 },
+  inputGroup: { display: "flex", gap: 15, alignItems: "center", flexWrap: "wrap", marginBottom: 25 },
+  labelCheckbox: { fontSize: 15, color: "#cbd5e1", display: "flex", alignItems: "center", cursor: "pointer" },
+  label: { fontSize: 13, color: "#94a3b8", display: "block", marginBottom: 8, fontWeight: "500" },
+  input: { backgroundColor: "#272a33", border: "1px solid #3f3f46", color: "#f8fafc", padding: "10px 15px", borderRadius: 8, outline: "none", fontSize: 14 },
+  inputDisabled: { backgroundColor: "#1a1c21", border: "1px solid #3f3f46", color: "#64748b", padding: "12px 15px", borderRadius: 8, width: "100%", fontSize: 14, boxSizing: "border-box" },
+  select: { backgroundColor: "#272a33", border: "1px solid #3f3f46", color: "#f8fafc", padding: "10px 15px", borderRadius: 8, outline: "none", fontSize: 14, cursor: "pointer" },
+  selectDark: { backgroundColor: "#1e1e24", border: "1px solid #3f3f46", color: "#0ea5e9", padding: "12px 15px", borderRadius: 8, outline: "none", width: "100%", fontSize: 14, cursor: "pointer", boxSizing: "border-box" },
+  primaryBtn: { backgroundColor: "#3f3f46", color: "#fff", border: "none", padding: "10px 20px", borderRadius: 8, cursor: "pointer", transition: "all 0.2s", fontSize: 14, fontWeight: "500" },
+  textBtn: { backgroundColor: "transparent", color: "#ef4444", border: "none", cursor: "pointer", fontWeight: "500" },
+  list: { display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 },
+  listItem: { display: "flex", justifyContent: "space-between", backgroundColor: "#272a33", padding: "12px 20px", borderRadius: 8, fontSize: 14 },
+  
+  table: { width: "100%", borderCollapse: "collapse", fontSize: 14 },
+  th: { textAlign: "left", padding: "15px 15px", color: "#94a3b8", fontWeight: "600", borderBottom: "1px solid #272a33" },
+  thRight: { textAlign: "right", padding: "15px 15px", color: "#94a3b8", fontWeight: "600", borderBottom: "1px solid #272a33" },
+  tr: { borderBottom: "1px solid #272a33", transition: "background 0.2s" },
+  td: { padding: "20px 15px", verticalAlign: "top" },
+  tdRight: { padding: "20px 15px", textAlign: "right", verticalAlign: "top" },
+  actionBtn: { background: "none", border: "none", color: "#0ea5e9", cursor: "pointer", fontSize: 14, padding: 0 },
+  
+  chipContainer: { display: "flex", flexWrap: "wrap", gap: 10 },
+  chip: { backgroundColor: "#272a33", padding: "6px 14px", borderRadius: 20, fontSize: 13, color: "#f8fafc", border: "1px solid #3f3f46" },
+  
+  modalOverlay: { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.7)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1000 },
+  modal: { backgroundColor: "#23262e", width: "100%", maxWidth: 650, borderRadius: 12, boxShadow: "0 25px 50px rgba(0,0,0,0.5)" },
+  modalHeader: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 30px", borderBottom: "1px solid #3f3f46" },
+  modalTitle: { margin: 0, fontSize: 18, color: "#f8fafc", fontWeight: "600" },
+  cancelBtn: { backgroundColor: "#3f3f46", color: "#fff", border: "none", padding: "10px 20px", borderRadius: 8, cursor: "pointer", marginRight: 12, fontSize: 14 },
+  saveBtn: { backgroundColor: "#0ea5e9", color: "#fff", border: "none", padding: "10px 20px", borderRadius: 8, cursor: "pointer", fontSize: 14, fontWeight: "500" },
+  modalBody: { padding: "30px" },
+  formGroup: { marginBottom: 25 },
+  
+  chipsInputBox: { backgroundColor: "#1e1e24", border: "1px solid #3f3f46", borderRadius: 8, padding: "15px", display: "flex", flexWrap: "wrap", gap: 10, minHeight: 120 },
+  chipEditable: { backgroundColor: "#3f3f46", padding: "6px 12px", borderRadius: 6, fontSize: 13, display: "flex", alignItems: "center", gap: 10, color: "#f8fafc" },
+  chipClose: { cursor: "pointer", color: "#94a3b8", fontSize: 14 },
+  chipInput: { background: "transparent", border: "none", color: "#fff", outline: "none", flex: 1, minWidth: 200, fontSize: 14 },
+  
+  filterBox: { backgroundColor: "#1e1e24", border: "1px solid #3f3f46", borderRadius: 8, padding: "20px" },
+  multiSelectHeader: { backgroundColor: "#1e1e24", border: "1px solid #0ea5e9", color: "#f8fafc", padding: "12px 15px", borderRadius: 8, cursor: "pointer", fontSize: 14, userSelect: "none" },
+  multiSelectList: { position: "absolute", top: "100%", left: 0, right: 0, backgroundColor: "#1e1e24", border: "1px solid #3f3f46", borderTop: "none", borderRadius: "0 0 8px 8px", maxHeight: 250, overflowY: "auto", zIndex: 10, marginTop: -2 },
+  multiSelectItem: { display: "flex", alignItems: "center", padding: "10px 15px", cursor: "pointer", borderBottom: "1px solid #272a33", fontSize: 14, color: "#cbd5e1" }
+};
+
 export default App;
+
