@@ -392,6 +392,7 @@ function App() {
     { key: "popup", label: "📢 Popup / Duyuru" },
     { key: "downloadad", label: "💰 İndirme Reklamı" },
     { key: "bannerad", label: "📢 Arama Reklamı" },
+    { key: "bottombanner", label: "📌 Alt Banner Reklam" },
     { key: "adfree", label: "🚫 Reklamsız Ülkeler" },
     { key: "device", label: "📱 Device Actions" },
     { key: "appcontrols", label: "🛡️ App Controls" },
@@ -1389,6 +1390,154 @@ function App() {
               </div>
             ))}
           </div>
+
+          <button onClick={updateConfig}
+            style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed)", color: "#fff", border: "none", borderRadius: 8, padding: "12px 24px", fontSize: 15, fontWeight: 600, cursor: "pointer", width: "100%" }}>
+            Ayarları Kaydet
+          </button>
+        </div>}
+
+        {/* ALT BANNER REKLAM */}
+        {activeSection === "bottombanner" && <div style={styles.card}>
+          <h2 style={styles.title}>📌 Alt Banner Reklam</h2>
+          <p style={{ color: "#888", fontSize: 13, marginBottom: 20 }}>
+            Ekranın en altında sabit duran banner reklam. Ülke bazlı Google AdMob veya kendi görseliniz.
+          </p>
+
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+            <label style={{ fontSize: 14, color: "#ccc" }}>Alt Banner Aktif:</label>
+            <input type="checkbox" checked={config.bottomBannerAd?.enabled || false}
+              onChange={e => setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, enabled: e.target.checked } }))}
+              style={{ width: 18, height: 18, cursor: "pointer" }} />
+            <span style={{ color: config.bottomBannerAd?.enabled ? "#22c55e" : "#ef4444", fontSize: 12, fontWeight: 600 }}>
+              {config.bottomBannerAd?.enabled ? "AKTİF" : "KAPALI"}
+            </span>
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+            <h3 style={{ color: "#f59e0b", margin: 0, fontSize: 15 }}>🏳️ Ülke Bazlı Kurallar</h3>
+            <button onClick={() => {
+              const rules = [...(config.bottomBannerAd?.rules || [])];
+              rules.push({ countries: [], enabled: true, type: "admob", admobUnitId: "", imageUrl: "", clickUrl: "" });
+              setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
+            }} style={{ background: "#f59e0b", color: "#000", border: "none", borderRadius: 6, padding: "6px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+              + Kural Ekle
+            </button>
+          </div>
+
+          {(config.bottomBannerAd?.rules || []).length === 0 && (
+            <p style={{ color: "#666", fontSize: 13, textAlign: "center", padding: 20 }}>
+              Kural yok — alt banner gösterilmez.
+            </p>
+          )}
+
+          {(config.bottomBannerAd?.rules || []).map((rule, idx) => (
+            <div key={idx} style={{ padding: "14px", background: "#1a1a2e", borderRadius: 8, border: `1px solid ${rule.enabled ? "#f59e0b" : "#2a2a35"}`, marginBottom: 12 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <input type="checkbox" checked={rule.enabled}
+                    onChange={e => {
+                      const rules = [...(config.bottomBannerAd?.rules || [])];
+                      rules[idx] = { ...rules[idx], enabled: e.target.checked };
+                      setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
+                    }} style={{ width: 16, height: 16 }} />
+                  <span style={{ fontSize: 13, fontWeight: 600, color: rule.enabled ? "#f59e0b" : "#666" }}>
+                    Kural #{idx + 1} {rule.enabled ? "● AKTİF" : "● PASİF"}
+                  </span>
+                </div>
+                <button onClick={() => {
+                  const rules = [...(config.bottomBannerAd?.rules || [])];
+                  rules.splice(idx, 1);
+                  setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
+                }} style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer", fontSize: 13 }}>Sil</button>
+              </div>
+
+              <div style={{ display: "flex", gap: 12, marginBottom: 10 }}>
+                <div style={{ flex: 1 }}>
+                  <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Ülkeler:</label>
+                  <div style={{ position: "relative" }}>
+                    <div
+                      onClick={e => { const d = e.currentTarget.nextSibling; d.style.display = d.style.display === "block" ? "none" : "block"; }}
+                      style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, cursor: "pointer", minHeight: 30 }}>
+                      {(rule.countries || []).length > 0
+                        ? (rule.countries || []).map(c => { const found = COUNTRY_LIST.find(x => x.code === c); return found ? found.code : c; }).join(", ")
+                        : "Tüm ülkeler"}
+                    </div>
+                    <div style={{ display: "none", position: "absolute", top: "100%", left: 0, right: 0, background: "#23232b", border: "1px solid #444", borderRadius: 6, maxHeight: 200, overflowY: "auto", zIndex: 999 }}>
+                      {COUNTRY_LIST.map(c => (
+                        <label key={c.code} style={{ display: "flex", alignItems: "center", padding: "4px 10px", fontSize: 12, color: "#ccc", cursor: "pointer" }}>
+                          <input type="checkbox" checked={(rule.countries || []).includes(c.code)}
+                            onChange={e => {
+                              const rules = [...(config.bottomBannerAd?.rules || [])];
+                              const countries = [...(rules[idx].countries || [])];
+                              if (e.target.checked) countries.push(c.code);
+                              else countries.splice(countries.indexOf(c.code), 1);
+                              rules[idx] = { ...rules[idx], countries };
+                              setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
+                            }} style={{ marginRight: 8 }} />
+                          {c.code} - {c.name}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div style={{ flex: 1 }}>
+                  <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tür:</label>
+                  <select value={rule.type || "admob"}
+                    onChange={e => {
+                      const rules = [...(config.bottomBannerAd?.rules || [])];
+                      rules[idx] = { ...rules[idx], type: e.target.value };
+                      setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
+                    }}
+                    style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                    <option value="admob">Google AdMob</option>
+                    <option value="custom">Kendi Görselim (Resim + Link)</option>
+                  </select>
+                </div>
+              </div>
+
+              {rule.type === "admob" && (
+                <div style={{ marginBottom: 8 }}>
+                  <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>AdMob Banner Unit ID:</label>
+                  <input type="text" placeholder="ca-app-pub-xxx/yyy"
+                    value={rule.admobUnitId || ""}
+                    onChange={e => {
+                      const rules = [...(config.bottomBannerAd?.rules || [])];
+                      rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
+                      setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
+                    }}
+                    style={{ width: "100%", background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                </div>
+              )}
+
+              {rule.type === "custom" && (
+                <>
+                  <div style={{ marginBottom: 8 }}>
+                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Görsel URL:</label>
+                    <input type="text" placeholder="https://example.com/banner.jpg"
+                      value={rule.imageUrl || ""}
+                      onChange={e => {
+                        const rules = [...(config.bottomBannerAd?.rules || [])];
+                        rules[idx] = { ...rules[idx], imageUrl: e.target.value };
+                        setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
+                      }}
+                      style={{ width: "100%", background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                  </div>
+                  <div style={{ marginBottom: 8 }}>
+                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
+                    <input type="text" placeholder="https://example.com/landing"
+                      value={rule.clickUrl || ""}
+                      onChange={e => {
+                        const rules = [...(config.bottomBannerAd?.rules || [])];
+                        rules[idx] = { ...rules[idx], clickUrl: e.target.value };
+                        setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
+                      }}
+                      style={{ width: "100%", background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                  </div>
+                </>
+              )}
+            </div>
+          ))}
 
           <button onClick={updateConfig}
             style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed)", color: "#fff", border: "none", borderRadius: 8, padding: "12px 24px", fontSize: 15, fontWeight: 600, cursor: "pointer", width: "100%" }}>
