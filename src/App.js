@@ -680,7 +680,7 @@ function App() {
           <table style={styles.table}>
             <thead>
               <tr>
-                <th style={styles.th}>Kanal İsimleri</th>
+                <th style={styles.th}>Engellenen Değerler</th>
                 <th style={styles.th}>Yasaklı Ülkeler</th>
                 <th style={styles.thRight}>İşlemler</th>
               </tr>
@@ -690,15 +690,15 @@ function App() {
                 <tr key={group.id} style={styles.tr}>
                   <td style={styles.td}>
                     <div style={{ marginBottom: 5 }}>
-                      <span style={{ 
-                        fontSize: 11, 
-                        backgroundColor: group.type === "keyword" ? "#ec4899" : "#0ea5e9", 
-                        color: "white", 
-                        padding: "2px 6px", 
+                      <span style={{
+                        fontSize: 11,
+                        backgroundColor: group.type === "keyword" ? "#ec4899" : group.type === "channelId" ? "#f59e0b" : group.type === "videoId" ? "#ef4444" : "#0ea5e9",
+                        color: "white",
+                        padding: "2px 6px",
                         borderRadius: 4,
                         fontWeight: "bold"
                       }}>
-                        {group.type === "keyword" ? "Kelime" : "Kanal"}
+                        {group.type === "keyword" ? "Kelime" : group.type === "channelId" ? "Kanal ID" : group.type === "videoId" ? "Video ID" : "Kanal"}
                       </span>
                     </div>
                     <div style={styles.chipContainer}>
@@ -829,13 +829,15 @@ function App() {
               <div style={styles.formGroup}>
                 <label style={styles.label}>Yasak Tipi</label>
                 <select style={styles.selectDark} value={ruleType} onChange={e => setRuleType(e.target.value)}>
-                  <option value="channel">Kanal Bazlı</option>
+                  <option value="channel">Kanal Adı</option>
+                  <option value="channelId">YouTube Kanal ID (UCxxxxxxx)</option>
+                  <option value="videoId">YouTube Video ID (şarkı engelle)</option>
                   <option value="keyword">Kelime Bazlı (Başlıkta geçen)</option>
                 </select>
               </div>
               
               <div style={styles.formGroup}>
-                <label style={styles.label}>{ruleType === "channel" ? "Kanal İsimleri" : "Kelimeler"} (Yazıp Enter'a basın)</label>
+                <label style={styles.label}>{ruleType === "channelId" ? "YouTube Kanal ID'leri" : ruleType === "videoId" ? "YouTube Video ID'leri" : ruleType === "keyword" ? "Kelimeler" : "Kanal İsimleri"} (Yazıp Enter'a basın)</label>
                 <div style={styles.chipsInputBox}>
                   {currentChannels.map((ch, i) => (
                     <div key={i} style={styles.chipEditable}>
@@ -844,7 +846,7 @@ function App() {
                   ))}
                   <input 
                     style={styles.chipInput} 
-                    placeholder="Kanal adı ekle..." 
+                    placeholder={ruleType === "channelId" ? "UCxxxxxxx..." : ruleType === "videoId" ? "dQw4w9WgXcQ..." : ruleType === "keyword" ? "Kelime ekle..." : "Kanal adı ekle..."} 
                     value={currentChannelInput}
                     onChange={e => setCurrentChannelInput(e.target.value)}
                     onKeyDown={handleChannelKeyDown}
