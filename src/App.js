@@ -392,6 +392,7 @@ function App() {
     { key: "popup", label: "📢 Popup / Duyuru" },
     { key: "downloadad", label: "💰 İndirme Reklamı" },
     { key: "bannerad", label: "📢 Arama Reklamı" },
+    { key: "adfree", label: "🚫 Reklamsız Ülkeler" },
     { key: "device", label: "📱 Device Actions" },
     { key: "appcontrols", label: "🛡️ App Controls" },
   ];
@@ -1392,6 +1393,59 @@ function App() {
           <button onClick={updateConfig}
             style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed)", color: "#fff", border: "none", borderRadius: 8, padding: "12px 24px", fontSize: 15, fontWeight: 600, cursor: "pointer", width: "100%" }}>
             Ayarları Kaydet
+          </button>
+        </div>}
+
+        {/* REKLAMSIZ ÜLKELER */}
+        {activeSection === "adfree" && <div style={styles.card}>
+          <h2 style={styles.title}>🚫 Reklamsız Ülkeler</h2>
+          <p style={{ color: "#888", fontSize: 13, marginBottom: 20 }}>
+            Seçtiğiniz ülkelerde hiçbir reklam gösterilmez (indirme reklamı + banner reklam dahil).
+          </p>
+
+          <div style={{ position: "relative", marginBottom: 16 }}>
+            <div
+              onClick={() => document.getElementById("adFreeDropdown").style.display = document.getElementById("adFreeDropdown").style.display === "block" ? "none" : "block"}
+              style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "8px 12px", fontSize: 13, cursor: "pointer", minHeight: 36 }}>
+              {(config.adFreeCountries || []).length > 0
+                ? (config.adFreeCountries || []).map(c => { const found = COUNTRY_LIST.find(x => x.code === c); return found ? `${found.code} ${found.name}` : c; }).join(", ")
+                : "Ülke seçin..."}
+            </div>
+            <div id="adFreeDropdown" style={{ display: "none", position: "absolute", top: "100%", left: 0, right: 0, background: "#23232b", border: "1px solid #444", borderRadius: 6, maxHeight: 250, overflowY: "auto", zIndex: 999 }}>
+              {COUNTRY_LIST.map(c => (
+                <label key={c.code} style={{ display: "flex", alignItems: "center", padding: "6px 12px", fontSize: 13, color: "#ccc", cursor: "pointer" }}>
+                  <input type="checkbox" checked={(config.adFreeCountries || []).includes(c.code)}
+                    onChange={e => {
+                      const countries = [...(config.adFreeCountries || [])];
+                      if (e.target.checked) countries.push(c.code);
+                      else countries.splice(countries.indexOf(c.code), 1);
+                      setConfig(prev => ({ ...prev, adFreeCountries: countries }));
+                    }} style={{ marginRight: 10 }} />
+                  {c.code} - {c.name}
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {(config.adFreeCountries || []).length > 0 && (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 16 }}>
+              {(config.adFreeCountries || []).map(c => {
+                const found = COUNTRY_LIST.find(x => x.code === c);
+                return (
+                  <span key={c} style={{ background: "#7c3aed", color: "#fff", borderRadius: 12, padding: "4px 10px", fontSize: 12, display: "flex", alignItems: "center", gap: 6 }}>
+                    {found ? `${found.code} ${found.name}` : c}
+                    <span style={{ cursor: "pointer", fontWeight: 700 }} onClick={() => {
+                      setConfig(prev => ({ ...prev, adFreeCountries: (prev.adFreeCountries || []).filter(x => x !== c) }));
+                    }}>×</span>
+                  </span>
+                );
+              })}
+            </div>
+          )}
+
+          <button onClick={updateConfig}
+            style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed)", color: "#fff", border: "none", borderRadius: 8, padding: "12px 24px", fontSize: 15, fontWeight: 600, cursor: "pointer", width: "100%" }}>
+            Kaydet
           </button>
         </div>}
 
