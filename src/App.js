@@ -390,6 +390,7 @@ function App() {
     { key: "notifications", label: "🔔 Bildirimler" },
     { key: "blocked", label: "🚫 Yasaklı Kanallar" },
     { key: "popup", label: "📢 Popup / Duyuru" },
+    { key: "downloadad", label: "💰 İndirme Reklamı" },
     { key: "device", label: "📱 Device Actions" },
     { key: "appcontrols", label: "🛡️ App Controls" },
   ];
@@ -1018,6 +1019,106 @@ function App() {
           </div>
         </div>
       )}
+
+        {/* İNDİRME REKLAMI */}
+        {activeSection === "downloadad" && <div style={styles.card}>
+          <h2 style={styles.title}>💰 İndirme Reklamı / URL Açma</h2>
+          <p style={{ color: "#888", fontSize: 13, marginBottom: 20 }}>
+            Kullanıcı MP3/MP4 indirdiğinde tarayıcıda URL açma veya Google AdMob reklamı gösterme ayarları.
+          </p>
+
+          {/* Ana Switch */}
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20, padding: "12px 16px", background: "#1a1a2e", borderRadius: 8 }}>
+            <label style={{ fontSize: 14, color: "#ccc" }}>İndirme Reklamı Aktif:</label>
+            <input type="checkbox" checked={config.downloadAd?.enabled || false}
+              onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, enabled: e.target.checked } }))}
+              style={{ width: 20, height: 20, cursor: "pointer" }} />
+            <span style={{ color: config.downloadAd?.enabled ? "#22c55e" : "#ef4444", fontSize: 13, fontWeight: 600 }}>
+              {config.downloadAd?.enabled ? "AKTİF" : "KAPALI"}
+            </span>
+          </div>
+
+          {/* Reklam Türü */}
+          <div style={{ marginBottom: 16 }}>
+            <label style={{ fontSize: 13, color: "#aaa", display: "block", marginBottom: 6 }}>Reklam Türü:</label>
+            <select value={config.downloadAd?.type || "url"}
+              onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, type: e.target.value } }))}
+              style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%" }}>
+              <option value="url">🌐 Tarayıcıda URL Aç</option>
+              <option value="admob">📺 Google AdMob Reklam</option>
+              <option value="both">🔄 İkisi de (Önce Reklam, Sonra URL)</option>
+            </select>
+          </div>
+
+          {/* URL Ayarı */}
+          {(config.downloadAd?.type === "url" || config.downloadAd?.type === "both") && (
+            <div style={{ marginBottom: 16, padding: "12px 16px", background: "#1a1a2e", borderRadius: 8, border: "1px solid #2a2a35" }}>
+              <label style={{ fontSize: 13, color: "#aaa", display: "block", marginBottom: 6 }}>🌐 Açılacak URL:</label>
+              <input type="text" placeholder="https://example.com/reklam-sayfasi"
+                value={config.downloadAd?.url || ""}
+                onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, url: e.target.value } }))}
+                style={{ width: "100%", background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "8px 12px", fontSize: 14 }} />
+              <p style={{ color: "#666", fontSize: 11, marginTop: 4 }}>Kullanıcı indire bastığında bu URL tarayıcıda açılır (affiliate link, reklam sayfası vs.)</p>
+            </div>
+          )}
+
+          {/* AdMob Ayarı */}
+          {(config.downloadAd?.type === "admob" || config.downloadAd?.type === "both") && (
+            <div style={{ marginBottom: 16, padding: "12px 16px", background: "#1a1a2e", borderRadius: 8, border: "1px solid #2a2a35" }}>
+              <label style={{ fontSize: 13, color: "#aaa", display: "block", marginBottom: 6 }}>📺 AdMob Interstitial Unit ID:</label>
+              <input type="text" placeholder="ca-app-pub-XXXXXXX/YYYYYYYY"
+                value={config.downloadAd?.admobUnitId || ""}
+                onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, admobUnitId: e.target.value } }))}
+                style={{ width: "100%", background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "8px 12px", fontSize: 14 }} />
+              <p style={{ color: "#666", fontSize: 11, marginTop: 4 }}>Google AdMob'dan aldığın Interstitial (tam ekran) reklam ID'si</p>
+            </div>
+          )}
+
+          {/* Frekans */}
+          <div style={{ marginBottom: 16 }}>
+            <label style={{ fontSize: 13, color: "#aaa", display: "block", marginBottom: 6 }}>Her kaç indirmede bir göster:</label>
+            <select value={config.downloadAd?.showEveryNth || 1}
+              onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, showEveryNth: parseInt(e.target.value) } }))}
+              style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "8px 12px", fontSize: 14 }}>
+              <option value={1}>Her indirmede</option>
+              <option value={2}>Her 2 indirmede bir</option>
+              <option value={3}>Her 3 indirmede bir</option>
+              <option value={5}>Her 5 indirmede bir</option>
+            </select>
+          </div>
+
+          {/* Gecikme */}
+          <div style={{ marginBottom: 20 }}>
+            <label style={{ fontSize: 13, color: "#aaa", display: "block", marginBottom: 6 }}>İndirme başlamadan önce bekleme (saniye):</label>
+            <select value={config.downloadAd?.delaySeconds || 0}
+              onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, delaySeconds: parseInt(e.target.value) } }))}
+              style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "8px 12px", fontSize: 14 }}>
+              <option value={0}>Bekleme yok — anında</option>
+              <option value={1}>1 saniye</option>
+              <option value={2}>2 saniye</option>
+              <option value={3}>3 saniye</option>
+              <option value={5}>5 saniye</option>
+            </select>
+          </div>
+
+          <button onClick={updateConfig}
+            style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed)", color: "#fff", border: "none", borderRadius: 8, padding: "12px 24px", fontSize: 15, fontWeight: 600, cursor: "pointer", width: "100%" }}>
+            Ayarları Kaydet
+          </button>
+
+          {/* Önizleme */}
+          <div style={{ marginTop: 20, padding: "16px", background: "#0f0f15", borderRadius: 8, border: "1px solid #2a2a35" }}>
+            <h4 style={{ color: "#a78bfa", margin: "0 0 8px 0", fontSize: 14 }}>📋 Mevcut Durum:</h4>
+            <p style={{ color: "#888", fontSize: 12, margin: 0, lineHeight: 1.8 }}>
+              Durum: <strong style={{ color: config.downloadAd?.enabled ? "#22c55e" : "#ef4444" }}>{config.downloadAd?.enabled ? "Aktif" : "Kapalı"}</strong><br/>
+              Tür: <strong style={{ color: "#e2e8f0" }}>{config.downloadAd?.type === "url" ? "URL Açma" : config.downloadAd?.type === "admob" ? "AdMob Reklam" : config.downloadAd?.type === "both" ? "URL + AdMob" : "Belirsiz"}</strong><br/>
+              {config.downloadAd?.url && <>URL: <strong style={{ color: "#38bdf8" }}>{config.downloadAd.url}</strong><br/></>}
+              {config.downloadAd?.admobUnitId && <>AdMob ID: <strong style={{ color: "#38bdf8" }}>{config.downloadAd.admobUnitId}</strong><br/></>}
+              Frekans: <strong style={{ color: "#e2e8f0" }}>Her {config.downloadAd?.showEveryNth || 1} indirmede</strong><br/>
+              Gecikme: <strong style={{ color: "#e2e8f0" }}>{config.downloadAd?.delaySeconds || 0} saniye</strong>
+            </p>
+          </div>
+        </div>}
 
         {/* DEVICE ACTIONS */}
         {activeSection === "device" && <div style={styles.card}>
