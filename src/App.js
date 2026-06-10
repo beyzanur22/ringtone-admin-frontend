@@ -1026,100 +1026,194 @@ function App() {
         {activeSection === "downloadad" && <div style={styles.card}>
           <h2 style={styles.title}>💰 İndirme Reklamı / URL Açma</h2>
           <p style={{ color: "#888", fontSize: 13, marginBottom: 20 }}>
-            Kullanıcı MP3/MP4 indirdiğinde tarayıcıda URL açma veya Google AdMob reklamı gösterme ayarları.
+            Ülke bazlı reklam kuralları. Kullanıcının ülkesine göre URL açma veya AdMob reklamı gösterilir.
           </p>
 
-          {/* Ana Switch */}
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20, padding: "12px 16px", background: "#1a1a2e", borderRadius: 8 }}>
-            <label style={{ fontSize: 14, color: "#ccc" }}>İndirme Reklamı Aktif:</label>
-            <input type="checkbox" checked={config.downloadAd?.enabled || false}
-              onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, enabled: e.target.checked } }))}
-              style={{ width: 20, height: 20, cursor: "pointer" }} />
-            <span style={{ color: config.downloadAd?.enabled ? "#22c55e" : "#ef4444", fontSize: 13, fontWeight: 600 }}>
-              {config.downloadAd?.enabled ? "AKTİF" : "KAPALI"}
-            </span>
-          </div>
-
-          {/* Reklam Türü */}
-          <div style={{ marginBottom: 16 }}>
-            <label style={{ fontSize: 13, color: "#aaa", display: "block", marginBottom: 6 }}>Reklam Türü:</label>
-            <select value={config.downloadAd?.type || "url"}
-              onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, type: e.target.value } }))}
-              style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%" }}>
-              <option value="url">🌐 Tarayıcıda URL Aç</option>
-              <option value="admob">📺 Google AdMob Reklam</option>
-              <option value="both">🔄 İkisi de (Önce Reklam, Sonra URL)</option>
-            </select>
-          </div>
-
-          {/* URL Ayarı */}
-          {(config.downloadAd?.type === "url" || config.downloadAd?.type === "both") && (
-            <div style={{ marginBottom: 16, padding: "12px 16px", background: "#1a1a2e", borderRadius: 8, border: "1px solid #2a2a35" }}>
-              <label style={{ fontSize: 13, color: "#aaa", display: "block", marginBottom: 6 }}>🌐 Açılacak URL:</label>
-              <input type="text" placeholder="https://example.com/reklam-sayfasi"
+          {/* Varsayılan (Global) Ayarlar */}
+          <div style={{ padding: "16px", background: "#1a1a2e", borderRadius: 8, border: "1px solid #2a2a35", marginBottom: 20 }}>
+            <h3 style={{ color: "#a78bfa", margin: "0 0 12px 0", fontSize: 15 }}>🌍 Varsayılan Ayar (Kural tanımlı olmayan ülkeler)</h3>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+              <label style={{ fontSize: 13, color: "#ccc" }}>Aktif:</label>
+              <input type="checkbox" checked={config.downloadAd?.enabled || false}
+                onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, enabled: e.target.checked } }))}
+                style={{ width: 18, height: 18, cursor: "pointer" }} />
+              <span style={{ color: config.downloadAd?.enabled ? "#22c55e" : "#ef4444", fontSize: 12, fontWeight: 600 }}>
+                {config.downloadAd?.enabled ? "AKTİF" : "KAPALI"}
+              </span>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+              <div>
+                <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tür:</label>
+                <select value={config.downloadAd?.type || "url"}
+                  onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, type: e.target.value } }))}
+                  style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                  <option value="url">URL Aç</option>
+                  <option value="admob">AdMob</option>
+                  <option value="both">URL + AdMob</option>
+                </select>
+              </div>
+              <div>
+                <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Frekans:</label>
+                <select value={config.downloadAd?.showEveryNth || 1}
+                  onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, showEveryNth: parseInt(e.target.value) } }))}
+                  style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                  <option value={1}>Her indirmede</option>
+                  <option value={2}>Her 2</option>
+                  <option value={3}>Her 3</option>
+                  <option value={5}>Her 5</option>
+                </select>
+              </div>
+            </div>
+            <div style={{ marginTop: 10 }}>
+              <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>URL:</label>
+              <input type="text" placeholder="https://..."
                 value={config.downloadAd?.url || ""}
                 onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, url: e.target.value } }))}
-                style={{ width: "100%", background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "8px 12px", fontSize: 14 }} />
-              <p style={{ color: "#666", fontSize: 11, marginTop: 4 }}>Kullanıcı indire bastığında bu URL tarayıcıda açılır (affiliate link, reklam sayfası vs.)</p>
+                style={{ width: "100%", background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
             </div>
-          )}
-
-          {/* AdMob Ayarı */}
-          {(config.downloadAd?.type === "admob" || config.downloadAd?.type === "both") && (
-            <div style={{ marginBottom: 16, padding: "12px 16px", background: "#1a1a2e", borderRadius: 8, border: "1px solid #2a2a35" }}>
-              <label style={{ fontSize: 13, color: "#aaa", display: "block", marginBottom: 6 }}>📺 AdMob Interstitial Unit ID:</label>
-              <input type="text" placeholder="ca-app-pub-XXXXXXX/YYYYYYYY"
+            <div style={{ marginTop: 10 }}>
+              <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>AdMob Unit ID:</label>
+              <input type="text" placeholder="ca-app-pub-xxx/yyy"
                 value={config.downloadAd?.admobUnitId || ""}
                 onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, admobUnitId: e.target.value } }))}
-                style={{ width: "100%", background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "8px 12px", fontSize: 14 }} />
-              <p style={{ color: "#666", fontSize: 11, marginTop: 4 }}>Google AdMob'dan aldığın Interstitial (tam ekran) reklam ID'si</p>
+                style={{ width: "100%", background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
             </div>
-          )}
-
-          {/* Frekans */}
-          <div style={{ marginBottom: 16 }}>
-            <label style={{ fontSize: 13, color: "#aaa", display: "block", marginBottom: 6 }}>Her kaç indirmede bir göster:</label>
-            <select value={config.downloadAd?.showEveryNth || 1}
-              onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, showEveryNth: parseInt(e.target.value) } }))}
-              style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "8px 12px", fontSize: 14 }}>
-              <option value={1}>Her indirmede</option>
-              <option value={2}>Her 2 indirmede bir</option>
-              <option value={3}>Her 3 indirmede bir</option>
-              <option value={5}>Her 5 indirmede bir</option>
-            </select>
           </div>
 
-          {/* Gecikme */}
+          {/* Ülke Kuralları */}
           <div style={{ marginBottom: 20 }}>
-            <label style={{ fontSize: 13, color: "#aaa", display: "block", marginBottom: 6 }}>İndirme başlamadan önce bekleme (saniye):</label>
-            <select value={config.downloadAd?.delaySeconds || 0}
-              onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, delaySeconds: parseInt(e.target.value) } }))}
-              style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "8px 12px", fontSize: 14 }}>
-              <option value={0}>Bekleme yok — anında</option>
-              <option value={1}>1 saniye</option>
-              <option value={2}>2 saniye</option>
-              <option value={3}>3 saniye</option>
-              <option value={5}>5 saniye</option>
-            </select>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+              <h3 style={{ color: "#f59e0b", margin: 0, fontSize: 15 }}>🏳️ Ülke Bazlı Kurallar</h3>
+              <button onClick={() => {
+                const rules = [...(config.downloadAd?.rules || [])];
+                rules.push({ countries: [], enabled: true, type: "url", url: "", admobUnitId: "", showEveryNth: 1, delaySeconds: 0 });
+                setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
+              }} style={{ background: "#f59e0b", color: "#000", border: "none", borderRadius: 6, padding: "6px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+                + Kural Ekle
+              </button>
+            </div>
+
+            {(config.downloadAd?.rules || []).length === 0 && (
+              <p style={{ color: "#666", fontSize: 13, textAlign: "center", padding: 20 }}>
+                Ülke kuralı yok — tüm ülkelere varsayılan ayar uygulanır.
+              </p>
+            )}
+
+            {(config.downloadAd?.rules || []).map((rule, idx) => (
+              <div key={idx} style={{ padding: "14px", background: "#1a1a2e", borderRadius: 8, border: `1px solid ${rule.enabled ? "#f59e0b" : "#2a2a35"}`, marginBottom: 12 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <input type="checkbox" checked={rule.enabled}
+                      onChange={e => {
+                        const rules = [...(config.downloadAd?.rules || [])];
+                        rules[idx] = { ...rules[idx], enabled: e.target.checked };
+                        setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
+                      }} style={{ width: 16, height: 16 }} />
+                    <span style={{ fontSize: 13, fontWeight: 600, color: rule.enabled ? "#f59e0b" : "#666" }}>
+                      Kural #{idx + 1} {rule.enabled ? "● AKTİF" : "● PASİF"}
+                    </span>
+                  </div>
+                  <button onClick={() => {
+                    const rules = [...(config.downloadAd?.rules || [])];
+                    rules.splice(idx, 1);
+                    setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
+                  }} style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer", fontSize: 13 }}>Sil</button>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
+                  <div>
+                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Ülkeler (virgülle):</label>
+                    <input type="text" placeholder="TR, US, DE"
+                      value={(rule.countries || []).join(", ")}
+                      onChange={e => {
+                        const rules = [...(config.downloadAd?.rules || [])];
+                        rules[idx] = { ...rules[idx], countries: e.target.value.split(",").map(c => c.trim().toUpperCase()).filter(c => c) };
+                        setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
+                      }}
+                      style={{ width: "100%", background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tür:</label>
+                    <select value={rule.type || "url"}
+                      onChange={e => {
+                        const rules = [...(config.downloadAd?.rules || [])];
+                        rules[idx] = { ...rules[idx], type: e.target.value };
+                        setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
+                      }}
+                      style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      <option value="url">URL Aç</option>
+                      <option value="admob">AdMob</option>
+                      <option value="both">URL + AdMob</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
+                  <div>
+                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>URL:</label>
+                    <input type="text" placeholder="https://..."
+                      value={rule.url || ""}
+                      onChange={e => {
+                        const rules = [...(config.downloadAd?.rules || [])];
+                        rules[idx] = { ...rules[idx], url: e.target.value };
+                        setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
+                      }}
+                      style={{ width: "100%", background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>AdMob ID:</label>
+                    <input type="text" placeholder="ca-app-pub-xxx/yyy"
+                      value={rule.admobUnitId || ""}
+                      onChange={e => {
+                        const rules = [...(config.downloadAd?.rules || [])];
+                        rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
+                        setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
+                      }}
+                      style={{ width: "100%", background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                  </div>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                  <div>
+                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Frekans:</label>
+                    <select value={rule.showEveryNth || 1}
+                      onChange={e => {
+                        const rules = [...(config.downloadAd?.rules || [])];
+                        rules[idx] = { ...rules[idx], showEveryNth: parseInt(e.target.value) };
+                        setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
+                      }}
+                      style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      <option value={1}>Her indirmede</option>
+                      <option value={2}>Her 2</option>
+                      <option value={3}>Her 3</option>
+                      <option value={5}>Her 5</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Gecikme:</label>
+                    <select value={rule.delaySeconds || 0}
+                      onChange={e => {
+                        const rules = [...(config.downloadAd?.rules || [])];
+                        rules[idx] = { ...rules[idx], delaySeconds: parseInt(e.target.value) };
+                        setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
+                      }}
+                      style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      <option value={0}>Anında</option>
+                      <option value={1}>1 sn</option>
+                      <option value={2}>2 sn</option>
+                      <option value={3}>3 sn</option>
+                      <option value={5}>5 sn</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
 
           <button onClick={updateConfig}
             style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed)", color: "#fff", border: "none", borderRadius: 8, padding: "12px 24px", fontSize: 15, fontWeight: 600, cursor: "pointer", width: "100%" }}>
             Ayarları Kaydet
           </button>
-
-          {/* Önizleme */}
-          <div style={{ marginTop: 20, padding: "16px", background: "#0f0f15", borderRadius: 8, border: "1px solid #2a2a35" }}>
-            <h4 style={{ color: "#a78bfa", margin: "0 0 8px 0", fontSize: 14 }}>📋 Mevcut Durum:</h4>
-            <p style={{ color: "#888", fontSize: 12, margin: 0, lineHeight: 1.8 }}>
-              Durum: <strong style={{ color: config.downloadAd?.enabled ? "#22c55e" : "#ef4444" }}>{config.downloadAd?.enabled ? "Aktif" : "Kapalı"}</strong><br/>
-              Tür: <strong style={{ color: "#e2e8f0" }}>{config.downloadAd?.type === "url" ? "URL Açma" : config.downloadAd?.type === "admob" ? "AdMob Reklam" : config.downloadAd?.type === "both" ? "URL + AdMob" : "Belirsiz"}</strong><br/>
-              {config.downloadAd?.url && <>URL: <strong style={{ color: "#38bdf8" }}>{config.downloadAd.url}</strong><br/></>}
-              {config.downloadAd?.admobUnitId && <>AdMob ID: <strong style={{ color: "#38bdf8" }}>{config.downloadAd.admobUnitId}</strong><br/></>}
-              Frekans: <strong style={{ color: "#e2e8f0" }}>Her {config.downloadAd?.showEveryNth || 1} indirmede</strong><br/>
-              Gecikme: <strong style={{ color: "#e2e8f0" }}>{config.downloadAd?.delaySeconds || 0} saniye</strong>
-            </p>
-          </div>
         </div>}
 
         {/* DEVICE ACTIONS */}
