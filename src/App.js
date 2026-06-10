@@ -1121,16 +1121,31 @@ function App() {
                 </div>
 
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
-                  <div>
-                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Ülkeler (virgülle):</label>
-                    <input type="text" placeholder="TR, US, DE"
-                      value={(rule.countries || []).join(", ")}
-                      onChange={e => {
-                        const rules = [...(config.downloadAd?.rules || [])];
-                        rules[idx] = { ...rules[idx], countries: e.target.value.split(",").map(c => c.trim().toUpperCase()).filter(c => c) };
-                        setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
-                      }}
-                      style={{ width: "100%", background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                  <div style={{ position: "relative" }}>
+                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Ülkeler:</label>
+                    <div
+                      onClick={e => { e.currentTarget.nextSibling.style.display = e.currentTarget.nextSibling.style.display === "block" ? "none" : "block"; }}
+                      style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, cursor: "pointer", minHeight: 30 }}>
+                      {(rule.countries || []).length > 0
+                        ? (rule.countries || []).map(c => { const found = COUNTRY_LIST.find(x => x.code === c); return found ? `${found.code} ${found.name}` : c; }).join(", ")
+                        : "Tüm ülkeler (varsayılan)"}
+                    </div>
+                    <div style={{ display: "none", position: "absolute", top: "100%", left: 0, right: 0, background: "#23232b", border: "1px solid #444", borderRadius: 6, maxHeight: 200, overflowY: "auto", zIndex: 999 }}>
+                      {COUNTRY_LIST.map(c => (
+                        <label key={c.code} style={{ display: "flex", alignItems: "center", padding: "4px 10px", fontSize: 12, color: "#ccc", cursor: "pointer" }}>
+                          <input type="checkbox" checked={(rule.countries || []).includes(c.code)}
+                            onChange={e => {
+                              const rules = [...(config.downloadAd?.rules || [])];
+                              const countries = [...(rules[idx].countries || [])];
+                              if (e.target.checked) countries.push(c.code);
+                              else countries.splice(countries.indexOf(c.code), 1);
+                              rules[idx] = { ...rules[idx], countries };
+                              setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
+                            }} style={{ marginRight: 8 }} />
+                          {c.code} - {c.name}
+                        </label>
+                      ))}
+                    </div>
                   </div>
                   <div>
                     <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tür:</label>
