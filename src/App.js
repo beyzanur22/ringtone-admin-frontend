@@ -90,6 +90,8 @@ function App() {
   const [apiProviders, setApiProviders] = useState(null);
   const [apiHealth, setApiHealth] = useState([]);
   const [smartCache, setSmartCache] = useState({ enabled: true, minRequests: 3 });
+  const [youtubeData, setYoutubeData] = useState(null);
+  const [newRegion, setNewRegion] = useState("");
 
   const API_URL = window.location.hostname === "localhost" ? "http://173.212.249.105" : "";
 
@@ -101,7 +103,15 @@ function App() {
     fetchAnnouncements();
     fetchDeviceActions();
     fetchApiProviders();
+    fetchYoutubeData();
   }, []);
+
+  const fetchYoutubeData = () => {
+    fetch(`${API_URL}/admin/youtube`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (data) setYoutubeData(data); })
+      .catch(() => {});
+  };
 
   const fetchApiProviders = () => {
     fetch(`${API_URL}/admin/api-providers`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
@@ -414,6 +424,7 @@ function App() {
     { key: "appcontrols", label: "🛡️ App Controls" },
     { key: "apiproviders", label: "🔌 API Durumu" },
     { key: "smartcache", label: "📦 Cache Yönetimi" },
+    { key: "youtube", label: "🎬 YouTube & Top50" },
   ];
 
   if (!config) return <div style={{ color: "white", padding: 50, backgroundColor: "#14151a", minHeight: "100vh" }}>Yükleniyor...</div>;
@@ -1983,6 +1994,122 @@ function App() {
                   alert(`Disk: ${d.diskUsage || "N/A"}\nR2: ${d.r2Usage || "N/A"}\nMin İstek: ${d.smartCache?.minRequests || 3}`);
                 }).catch(() => alert("İstatistik alınamadı"));
             }}>📊 İstatistikleri Getir</button>
+          </div>
+        </div>}
+
+        {/* YOUTUBE & TOP50 */}
+        {activeSection === "youtube" && <div style={styles.card}>
+          <h2 style={styles.title}>🎬 YouTube & Top50</h2>
+          <p style={{ color: "#888", fontSize: 13, marginBottom: 24 }}>
+            YouTube Data API durumu, Top50 ısıtma ve ülke yönetimi
+          </p>
+
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+            <span style={{ color: "#94a3b8", fontSize: 13 }}>
+              API Durumu: <span style={{ color: youtubeData?.status === "ok" ? "#4ade80" : "#ef4444", fontWeight: 600 }}>
+                {youtubeData?.status === "ok" ? "✅ Aktif" : "❌ Quota Aşıldı"}
+              </span>
+            </span>
+            <button style={{ ...styles.primaryBtn, backgroundColor: "#0ea5e9" }} onClick={fetchYoutubeData}>🔄 Yenile</button>
+          </div>
+
+          {/* API Key & Quota */}
+          <div style={{ background: "#1a1a2e", border: "1px solid #2a2a3a", borderRadius: 10, padding: 20, marginBottom: 20 }}>
+            <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 16px 0" }}>🔑 YouTube API</h3>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+              <div style={{ background: "#14151a", borderRadius: 8, padding: 14 }}>
+                <div style={{ color: "#666", fontSize: 11, marginBottom: 4 }}>API Key</div>
+                <div style={{ color: "#f8fafc", fontSize: 14, fontFamily: "monospace" }}>{youtubeData?.youtubeApiKey || "—"}</div>
+              </div>
+              <div style={{ background: "#14151a", borderRadius: 8, padding: 14 }}>
+                <div style={{ color: "#666", fontSize: 11, marginBottom: 4 }}>API Çağrısı (restart'tan beri)</div>
+                <div style={{ color: "#f8fafc", fontSize: 14 }}>{youtubeData?.apiCallCount || 0}</div>
+              </div>
+              <div style={{ background: "#14151a", borderRadius: 8, padding: 14 }}>
+                <div style={{ color: "#666", fontSize: 11, marginBottom: 4 }}>Quota Aşım Sayısı</div>
+                <div style={{ color: youtubeData?.quotaExceeded > 0 ? "#ef4444" : "#4ade80", fontSize: 14 }}>{youtubeData?.quotaExceeded || 0}</div>
+              </div>
+              <div style={{ background: "#14151a", borderRadius: 8, padding: 14 }}>
+                <div style={{ color: "#666", fontSize: 11, marginBottom: 4 }}>Cache Süresi</div>
+                <div style={{ color: "#f8fafc", fontSize: 14 }}>{youtubeData?.cacheDurationMin || 60} dk</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Warmup Ayarları */}
+          <div style={{ background: "#1a1a2e", border: "1px solid #2a2a3a", borderRadius: 10, padding: 20, marginBottom: 20 }}>
+            <h3 style={{ color: "#f59e0b", fontSize: 16, margin: "0 0 16px 0" }}>⏱️ Warmup Ayarları</h3>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+              <span style={{ color: "#94a3b8", fontSize: 13 }}>Güncelleme aralığı:</span>
+              <input type="number" min="10" max="1440"
+                style={{ ...styles.input, width: 80, textAlign: "center" }}
+                defaultValue={youtubeData?.warmupIntervalMin || 50}
+                id="warmupInterval" />
+              <span style={{ color: "#666", fontSize: 12 }}>dakika</span>
+              <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 14px" }} onClick={() => {
+                const val = parseInt(document.getElementById("warmupInterval").value);
+                if (val < 10 || val > 1440) return alert("10-1440 dakika arası olmalı");
+                fetch(`${API_URL}/admin/youtube`, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+                  body: JSON.stringify({ warmupInterval: val })
+                }).then(r => r.json()).then(d => {
+                  if (d.success) { alert(`✅ Warmup aralığı ${val} dakika olarak ayarlandı`); fetchYoutubeData(); }
+                }).catch(() => alert("Hata!"));
+              }}>Uygula</button>
+            </div>
+            <button style={{ ...styles.primaryBtn, backgroundColor: "#10b981" }} onClick={() => {
+              fetch(`${API_URL}/admin/youtube`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+                body: JSON.stringify({ forceWarmup: true })
+              }).then(r => r.json()).then(d => {
+                if (d.success) alert("✅ Top50 manuel ısıtma başlatıldı!");
+              }).catch(() => alert("Hata!"));
+            }}>🔥 Şimdi Isıt (Manuel)</button>
+          </div>
+
+          {/* Aktif Ülkeler */}
+          <div style={{ background: "#1a1a2e", border: "1px solid #2a2a3a", borderRadius: 10, padding: 20 }}>
+            <h3 style={{ color: "#0ea5e9", fontSize: 16, margin: "0 0 16px 0" }}>🌍 Aktif Ülkeler ({youtubeData?.activeRegions?.length || 0})</h3>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
+              {(youtubeData?.activeRegions || []).map((r, i) => (
+                <div key={i} style={{ background: "#14151a", border: "1px solid #2a2a3a", borderRadius: 8, padding: "8px 14px", display: "flex", alignItems: "center", gap: 8 }}>
+                  <span style={{ fontSize: 18 }}>{String.fromCodePoint(...r.region.split("").map(c => 127397 + c.charCodeAt(0)))}</span>
+                  <span style={{ color: "#f8fafc", fontSize: 13, fontWeight: 500 }}>{r.region}</span>
+                  <span style={{ color: r.cached ? "#4ade80" : "#ef4444", fontSize: 11 }}>
+                    {r.cached ? `${r.trackCount} şarkı` : "cache yok"}
+                  </span>
+                  <button style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer", fontSize: 14, padding: "0 4px" }}
+                    onClick={() => {
+                      if (!window.confirm(`${r.region} ülkesini kaldırmak istediğine emin misin?`)) return;
+                      fetch(`${API_URL}/admin/youtube`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+                        body: JSON.stringify({ removeRegion: r.region })
+                      }).then(res => res.json()).then(d => { if (d.success) fetchYoutubeData(); }).catch(() => {});
+                    }}>✕</button>
+                </div>
+              ))}
+            </div>
+            <div style={{ display: "flex", gap: 8 }}>
+              <input type="text" placeholder="Ülke kodu (ör: DE, FR)" maxLength={2}
+                style={{ ...styles.input, width: 160, textTransform: "uppercase" }}
+                value={newRegion} onChange={e => setNewRegion(e.target.value.toUpperCase())} />
+              <button style={{ ...styles.primaryBtn, backgroundColor: "#10b981" }} onClick={() => {
+                if (newRegion.length !== 2) return alert("2 harfli ülke kodu girin (ör: DE, FR, GB)");
+                fetch(`${API_URL}/admin/youtube`, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+                  body: JSON.stringify({ addRegion: newRegion })
+                }).then(r => r.json()).then(d => {
+                  if (d.success) { setNewRegion(""); fetchYoutubeData(); }
+                }).catch(() => alert("Hata!"));
+              }}>➕ Ülke Ekle</button>
+            </div>
+            <p style={{ color: "#666", fontSize: 11, marginTop: 12 }}>
+              Kullanıcılar bir ülkeden istek attığında o ülke otomatik eklenir. Burada manuel ekleme/kaldırma yapabilirsin.
+            </p>
           </div>
         </div>}
 
