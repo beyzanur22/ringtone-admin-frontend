@@ -434,7 +434,6 @@ function App() {
     { key: "apiproviders", label: "🔌 API Durumu" },
     { key: "smartcache", label: "📦 Cache Yönetimi" },
     { key: "youtube", label: "🎬 YouTube & Top50" },
-    { key: "autoringtone", label: "🔔 Zil Sesi Modu" },
   ];
 
   if (!config) return <div style={{ color: "white", padding: 50, backgroundColor: "#14151a", minHeight: "100vh" }}>Yükleniyor...</div>;
@@ -478,6 +477,29 @@ function App() {
             </select>
           </div>
           <button style={styles.primaryBtn} onClick={updateConfig}>Ayarları Kaydet</button>
+
+          <div style={{ marginTop: 24, borderTop: "1px solid #2a2a2a", paddingTop: 16 }}>
+            <h3 style={{ color: "#e2e8f0", fontSize: 15, marginBottom: 8 }}>🔔 Otomatik Zil Sesi</h3>
+            <p style={{ color: "#94a3b8", fontSize: 12, marginBottom: 12 }}>
+              Telefon dili ile cihaz ülkesi farklıysa, indirilen MP3 otomatik zil sesi yapılır.
+            </p>
+            {autoRingtone ? (
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <span style={{ color: autoRingtone.enabled ? "#22c55e" : "#ef4444", fontWeight: "bold", fontSize: 13 }}>
+                  {autoRingtone.enabled ? "Açık" : "Kapalı"}
+                </span>
+                <button style={{ ...styles.primaryBtn, padding: "6px 16px", fontSize: 12, backgroundColor: autoRingtone.enabled ? "#ef4444" : "#22c55e" }} onClick={() => {
+                  fetch(`${API_URL}/admin/auto-ringtone`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+                    body: JSON.stringify({ enabled: !autoRingtone.enabled })
+                  }).then(r => r.json()).then(d => {
+                    if (d.success) fetchAutoRingtone();
+                  }).catch(() => alert("Hata!"));
+                }}>{autoRingtone.enabled ? "Kapat" : "Aç"}</button>
+              </div>
+            ) : <span style={{ color: "#666", fontSize: 12 }}>Yükleniyor...</span>}
+          </div>
         </div>}
 
         {/* MP3 İNDİRME PROVIDER KONTROL */}
@@ -2123,34 +2145,6 @@ function App() {
           </div>
         </div>}
 
-        {activeSection === "autoringtone" && <div style={styles.card}>
-          <h2>🔔 Otomatik Zil Sesi Modu</h2>
-          <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 16 }}>
-            Telefon dili Türkçe ama cihaz ülkesi Türkiye dışındaysa, indirilen ses dosyası otomatik olarak zil sesi yapılır.
-          </p>
-          {autoRingtone ? (
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-                <span style={{ color: "#e2e8f0", fontSize: 14 }}>Durum:</span>
-                <span style={{ color: autoRingtone.enabled ? "#22c55e" : "#ef4444", fontWeight: "bold", fontSize: 14 }}>
-                  {autoRingtone.enabled ? "✅ Açık" : "❌ Kapalı"}
-                </span>
-              </div>
-              <button style={{ ...styles.primaryBtn, backgroundColor: autoRingtone.enabled ? "#ef4444" : "#22c55e" }} onClick={() => {
-                fetch(`${API_URL}/admin/auto-ringtone`, {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
-                  body: JSON.stringify({ enabled: !autoRingtone.enabled })
-                }).then(r => r.json()).then(d => {
-                  if (d.success) { fetchAutoRingtone(); alert(`Otomatik zil sesi ${d.autoRingtone.enabled ? "açıldı" : "kapatıldı"}`); }
-                }).catch(() => alert("Hata!"));
-              }}>{autoRingtone.enabled ? "🔕 Kapat" : "🔔 Aç"}</button>
-              <p style={{ color: "#666", fontSize: 11, marginTop: 16 }}>
-                Bu özellik açıkken: Telefon dili = Türkçe ve Cihaz ülkesi ≠ TR olan kullanıcılar MP3 indirdiğinde otomatik zil sesi yapılır.
-              </p>
-            </div>
-          ) : <p style={{ color: "#666" }}>Yükleniyor...</p>}
-        </div>}
 
     </div>
     </div>
