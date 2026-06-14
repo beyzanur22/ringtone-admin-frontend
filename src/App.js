@@ -91,6 +91,7 @@ function App() {
   const [apiHealth, setApiHealth] = useState([]);
   const [smartCache, setSmartCache] = useState({ enabled: true, minRequests: 3 });
   const [youtubeData, setYoutubeData] = useState(null);
+  const [autoRingtone, setAutoRingtone] = useState(null);
   const [newRegion, setNewRegion] = useState("");
 
   const API_URL = window.location.hostname === "localhost" ? "http://173.212.249.105" : "";
@@ -104,7 +105,15 @@ function App() {
     fetchDeviceActions();
     fetchApiProviders();
     fetchYoutubeData();
+    fetchAutoRingtone();
   }, []);
+
+  const fetchAutoRingtone = () => {
+    fetch(`${API_URL}/admin/auto-ringtone`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (data) setAutoRingtone(data); })
+      .catch(() => {});
+  };
 
   const fetchYoutubeData = () => {
     fetch(`${API_URL}/admin/youtube`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
@@ -425,6 +434,7 @@ function App() {
     { key: "apiproviders", label: "🔌 API Durumu" },
     { key: "smartcache", label: "📦 Cache Yönetimi" },
     { key: "youtube", label: "🎬 YouTube & Top50" },
+    { key: "autoringtone", label: "🔔 Zil Sesi Modu" },
   ];
 
   if (!config) return <div style={{ color: "white", padding: 50, backgroundColor: "#14151a", minHeight: "100vh" }}>Yükleniyor...</div>;
@@ -2111,6 +2121,35 @@ function App() {
               Kullanıcılar bir ülkeden istek attığında o ülke otomatik eklenir. Burada manuel ekleme/kaldırma yapabilirsin.
             </p>
           </div>
+        </div>}
+
+        {activeSection === "autoringtone" && <div style={styles.card}>
+          <h2>🔔 Otomatik Zil Sesi Modu</h2>
+          <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 16 }}>
+            Telefon dili Türkçe ama cihaz ülkesi Türkiye dışındaysa, indirilen ses dosyası otomatik olarak zil sesi yapılır.
+          </p>
+          {autoRingtone ? (
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                <span style={{ color: "#e2e8f0", fontSize: 14 }}>Durum:</span>
+                <span style={{ color: autoRingtone.enabled ? "#22c55e" : "#ef4444", fontWeight: "bold", fontSize: 14 }}>
+                  {autoRingtone.enabled ? "✅ Açık" : "❌ Kapalı"}
+                </span>
+              </div>
+              <button style={{ ...styles.primaryBtn, backgroundColor: autoRingtone.enabled ? "#ef4444" : "#22c55e" }} onClick={() => {
+                fetch(`${API_URL}/admin/auto-ringtone`, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+                  body: JSON.stringify({ enabled: !autoRingtone.enabled })
+                }).then(r => r.json()).then(d => {
+                  if (d.success) { fetchAutoRingtone(); alert(`Otomatik zil sesi ${d.autoRingtone.enabled ? "açıldı" : "kapatıldı"}`); }
+                }).catch(() => alert("Hata!"));
+              }}>{autoRingtone.enabled ? "🔕 Kapat" : "🔔 Aç"}</button>
+              <p style={{ color: "#666", fontSize: 11, marginTop: 16 }}>
+                Bu özellik açıkken: Telefon dili = Türkçe ve Cihaz ülkesi ≠ TR olan kullanıcılar MP3 indirdiğinde otomatik zil sesi yapılır.
+              </p>
+            </div>
+          ) : <p style={{ color: "#666" }}>Yükleniyor...</p>}
         </div>}
 
     </div>
