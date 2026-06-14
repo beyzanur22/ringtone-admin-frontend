@@ -87,6 +87,9 @@ function App() {
   const [daMode, setDaMode] = useState("direct");
   const [daValue, setDaValue] = useState("");
   const [daLabel, setDaLabel] = useState("");
+  const [apiProviders, setApiProviders] = useState(null);
+  const [apiHealth, setApiHealth] = useState([]);
+  const [smartCache, setSmartCache] = useState({ enabled: true, minRequests: 3 });
 
   const API_URL = window.location.hostname === "localhost" ? "http://173.212.249.105" : "";
 
@@ -97,7 +100,20 @@ function App() {
     fetchBlocked();
     fetchAnnouncements();
     fetchDeviceActions();
+    fetchApiProviders();
   }, []);
+
+  const fetchApiProviders = () => {
+    fetch(`${API_URL}/admin/api-providers`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (data) {
+          setApiProviders(data);
+          setApiHealth(data.providerHealth || []);
+          if (data.smartCache) setSmartCache(data.smartCache);
+        }
+      }).catch(() => {});
+  };
 
   const fetchBlocked = () => {
     fetch(`${API_URL}/blocked-channels`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
@@ -396,6 +412,8 @@ function App() {
     { key: "adfree", label: "🚫 Reklamsız Ülkeler" },
     { key: "device", label: "📱 Device Actions" },
     { key: "appcontrols", label: "🛡️ App Controls" },
+    { key: "apiproviders", label: "🔌 API Durumu" },
+    { key: "smartcache", label: "📦 Cache Yönetimi" },
   ];
 
   if (!config) return <div style={{ color: "white", padding: 50, backgroundColor: "#14151a", minHeight: "100vh" }}>Yükleniyor...</div>;
@@ -1823,6 +1841,148 @@ function App() {
                 🔄 Anlık Güncelleme Gönder
               </button>
             </div>
+          </div>
+        </div>}
+
+        {/* API PROVIDERS */}
+        {activeSection === "apiproviders" && <div style={styles.card}>
+          <h2 style={styles.title}>🔌 API Durumu</h2>
+          <p style={{ color: "#888", fontSize: 13, marginBottom: 24 }}>
+            İndirme için kullanılan üçüncü parti servislerin canlı durumu
+          </p>
+
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+            <span style={{ color: "#94a3b8", fontSize: 13 }}>{apiHealth.length}/3 API direkt erişilebilir</span>
+            <button style={{ ...styles.primaryBtn, backgroundColor: "#0ea5e9" }} onClick={() => {
+              fetch(`${API_URL}/admin/api-health`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+                .then(r => r.json())
+                .then(d => setApiHealth(d.providers || []))
+                .catch(() => alert("Sağlık kontrolü başarısız"));
+            }}>🔄 Yenile</button>
+          </div>
+
+          {(apiHealth.length > 0 ? apiHealth : (apiProviders?.providers || [])).map((p, i) => (
+            <div key={p.id || i} style={{ background: "#1a1a2e", border: "1px solid #2a2a3a", borderRadius: 10, padding: 20, marginBottom: 12 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div>
+                  <span style={{ color: "#f8fafc", fontSize: 15, fontWeight: 500 }}>{p.name || p.id}</span>
+                  <span style={{ color: "#666", fontSize: 12, marginLeft: 10 }}>
+                    {p.priority === 1 ? "— Birincil" : p.priority === 2 ? `— İkincil${p.dailyLimit ? `, ${p.dailyLimit}/gün limit` : ""}` : "— Üçüncül (yedek)"}
+                  </span>
+                  {p.httpStatus && <div style={{ color: "#666", fontSize: 12, marginTop: 4 }}>HTTP {p.httpStatus}</div>}
+                </div>
+                <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                  <span style={{
+                    backgroundColor: p.status === "online" || p.enabled ? "#065f4620" : "#7f1d1d20",
+                    color: p.status === "online" || p.enabled ? "#4ade80" : "#ef4444",
+                    padding: "4px 12px", borderRadius: 6, fontSize: 12, fontWeight: 600
+                  }}>
+                    {p.status === "online" ? "✅ Çalışıyor" : p.enabled ? "✅ Aktif" : "❌ Kapalı"}
+                  </span>
+                  <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 14px", backgroundColor: "#f59e0b" }}>
+                    Proxy Aktif Et
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          <div style={{ background: "#1a1a2e", border: "1px solid #2a2a3a", borderRadius: 10, padding: 20, marginTop: 20 }}>
+            <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 12px 0" }}>🔑 API Ayarları</h3>
+            <div style={{ marginBottom: 12 }}>
+              <label style={styles.label}>API Key</label>
+              <input type="text" style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
+                value={apiProviders?.apiKey || "bzc_7mK2pXr9Qw1Lz4Ny"}
+                onChange={e => setApiProviders({ ...apiProviders, apiKey: e.target.value })} />
+            </div>
+            <div style={{ marginBottom: 16 }}>
+              <label style={styles.label}>Base URL</label>
+              <input type="text" style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
+                value={apiProviders?.baseUrl || "https://bazocam.net"}
+                onChange={e => setApiProviders({ ...apiProviders, baseUrl: e.target.value })} />
+            </div>
+            <button style={{ ...styles.primaryBtn, backgroundColor: "#0ea5e9" }} onClick={() => {
+              fetch(`${API_URL}/admin/api-providers`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+                body: JSON.stringify({ apiKey: apiProviders?.apiKey, baseUrl: apiProviders?.baseUrl, providers: apiProviders?.providers })
+              }).then(r => r.json()).then(d => {
+                if (d.success) alert("✅ API ayarları kaydedildi!");
+                else alert("Hata: " + (d.error || "Kaydedilemedi"));
+              }).catch(() => alert("Sunucuya bağlanılamadı!"));
+            }}>💾 Kaydet</button>
+          </div>
+
+          <div style={{ background: "#1a1a2e", border: "1px solid #2a2a3a", borderRadius: 10, padding: 20, marginTop: 20 }}>
+            <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 12px 0" }}>📡 Uygulama API'leri</h3>
+            <p style={{ color: "#888", fontSize: 12, marginBottom: 12 }}>Mobil/harici uygulamadan kullanılabilecek endpoint'ler</p>
+            {[
+              { label: "🎵 MP3 İndir", method: "GET", path: `/mp3download.php?id=VIDEO_ID&key=API_KEY&b=320` },
+              { label: "🎬 MP4 İndir", method: "GET", path: `/mp4download.php?id=VIDEO_ID&key=API_KEY&q=720` },
+              { label: "🔍 Arama", method: "GET", path: `/searchapi.php?search=SORGU&key=API_KEY` },
+              { label: "⬛ Otomatik Tamamlama", method: "GET", path: `/ototamamlamaapi.php?search=SORGU&key=API_KEY` },
+            ].map((ep, i) => (
+              <div key={i} style={{ background: "#14151a", borderRadius: 8, padding: "10px 14px", marginBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div>
+                  <span style={{ color: "#f8fafc", fontSize: 13 }}>{ep.label}</span>
+                  <span style={{ backgroundColor: "#065f4620", color: "#4ade80", padding: "2px 8px", borderRadius: 4, fontSize: 11, marginLeft: 8 }}>{ep.method}</span>
+                  <div style={{ color: "#666", fontSize: 11, marginTop: 4, fontFamily: "monospace" }}>{ep.path}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>}
+
+        {/* SMART CACHE */}
+        {activeSection === "smartcache" && <div style={styles.card}>
+          <h2 style={styles.title}>📦 Cache Yönetimi</h2>
+          <p style={{ color: "#888", fontSize: 13, marginBottom: 24 }}>
+            Akıllı cache sistemi — sadece popüler şarkıları cache'le
+          </p>
+
+          <div style={{ background: "#1a1a2e", border: "1px solid #2a2a3a", borderRadius: 10, padding: 20, marginBottom: 20 }}>
+            <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 16px 0" }}>⚡ Akıllı Cache Ayarları</h3>
+            <label style={styles.labelCheckbox}>
+              <input type="checkbox" checked={smartCache.enabled}
+                onChange={e => setSmartCache({ ...smartCache, enabled: e.target.checked })}
+                style={{ marginRight: 10 }} />
+              <span style={{ color: smartCache.enabled ? "#4ade80" : "#888" }}>Akıllı Cache Aktif</span>
+            </label>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 16 }}>
+              <span style={{ color: "#94a3b8", fontSize: 13 }}>Minimum istek sayısı:</span>
+              <input type="number" min="1" max="100"
+                style={{ ...styles.input, width: 80, textAlign: "center" }}
+                value={smartCache.minRequests}
+                onChange={e => setSmartCache({ ...smartCache, minRequests: parseInt(e.target.value) || 3 })} />
+            </div>
+            <p style={{ color: "#666", fontSize: 12, marginTop: 12 }}>
+              Bir şarkıya bu kadar istek gelmeden cache'lenmez. Düşük değer = daha fazla disk kullanımı, yüksek değer = daha az cache.
+            </p>
+            <button style={{ ...styles.primaryBtn, backgroundColor: "#0ea5e9", marginTop: 16 }} onClick={() => {
+              fetch(`${API_URL}/admin/smart-cache`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+                body: JSON.stringify(smartCache)
+              }).then(r => r.json()).then(d => {
+                if (d.success) alert("✅ Cache ayarları kaydedildi!");
+                else alert("Hata: " + (d.error || "Kaydedilemedi"));
+              }).catch(() => alert("Sunucuya bağlanılamadı!"));
+            }}>💾 Cache Ayarlarını Kaydet</button>
+          </div>
+
+          <div style={{ background: "#1a1a2e", border: "1px solid #2a2a3a", borderRadius: 10, padding: 20 }}>
+            <h3 style={{ color: "#f59e0b", fontSize: 16, margin: "0 0 12px 0" }}>📊 Cache İstatistikleri</h3>
+            <p style={{ color: "#666", fontSize: 12 }}>
+              Cache durumu sunucudan alınır. Yenilemek için butona basın.
+            </p>
+            <button style={{ ...styles.primaryBtn, backgroundColor: "#3f3f46", marginTop: 12 }} onClick={() => {
+              fetch(`${API_URL}/admin/smart-cache`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+                .then(r => r.json())
+                .then(d => {
+                  if (d.smartCache) setSmartCache(d.smartCache);
+                  alert(`Disk: ${d.diskUsage || "N/A"}\nR2: ${d.r2Usage || "N/A"}\nMin İstek: ${d.smartCache?.minRequests || 3}`);
+                }).catch(() => alert("İstatistik alınamadı"));
+            }}>📊 İstatistikleri Getir</button>
           </div>
         </div>}
 
