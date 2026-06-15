@@ -1957,13 +1957,70 @@ function App() {
           </div>
 
           <div style={{ background: "#1a1a2e", border: "1px solid #2a2a3a", borderRadius: 10, padding: 20, marginTop: 20 }}>
-            <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 12px 0" }}>📡 Uygulama API'leri</h3>
-            <p style={{ color: "#888", fontSize: 12, marginBottom: 12 }}>Mobil/harici uygulamadan kullanılabilecek endpoint'ler</p>
+            <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 16px 0" }}>🗺️ API Haritası — Kim Neyi Kullanıyor?</h3>
+            <p style={{ color: "#888", fontSize: 12, marginBottom: 16 }}>Uygulamanın her özelliği hangi API kaynağını kullandığını gösterir</p>
+            {[
+              { feature: "🎵 MP3 Dinleme", source: "Bazocam API", detail: "gamma → cnv sırasıyla", fallback: "yt-dlp + Proxy", where: "Backend" },
+              { feature: "🎬 Video İzleme", source: "Bazocam API", detail: "mp4download.php", fallback: "yt-dlp + Proxy", where: "Backend" },
+              { feature: "📥 MP3 İndirme", source: "Bazocam API", detail: "mp3download.php", fallback: "yt-dlp + Proxy", where: "Backend" },
+              { feature: "📥 MP4 İndirme", source: "Bazocam API", detail: "mp4download.php", fallback: "yt-dlp + Proxy", where: "Backend" },
+              { feature: "🔍 Arama", source: "Bazocam API", detail: "searchapi.php", fallback: "YouTube Data API", where: "Backend" },
+              { feature: "🔮 Otomatik Tamamlama", source: config?.autocompleteSource === "bazocam" ? "Bazocam API" : "Google Suggest", detail: config?.autocompleteSource === "bazocam" ? "ototamamlamaapi.php" : "suggestqueries.google.com", fallback: "—", where: config?.autocompleteSource === "bazocam" ? "Backend" : "Cihaz (direkt)" },
+              { feature: "🏆 Top 50", source: "YouTube Data API v3", detail: "mostPopular chart", fallback: "Piped API", where: "Backend" },
+            ].map((api, i) => (
+              <div key={i} style={{ background: "#14151a", borderRadius: 8, padding: "12px 14px", marginBottom: 8 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ color: "#f8fafc", fontSize: 13, fontWeight: 600, minWidth: 160 }}>{api.feature}</span>
+                  <span style={{ color: "#4ade80", fontSize: 12, fontWeight: 600 }}>{api.source}</span>
+                  <span style={{ color: "#666", fontSize: 11, fontFamily: "monospace" }}>{api.detail}</span>
+                  <span style={{ color: "#f59e0b", fontSize: 11 }}>Yedek: {api.fallback}</span>
+                  <span style={{ backgroundColor: api.where === "Cihaz (direkt)" ? "#7c3aed20" : "#0ea5e920", color: api.where === "Cihaz (direkt)" ? "#a78bfa" : "#38bdf8", padding: "2px 8px", borderRadius: 4, fontSize: 10, fontWeight: 600 }}>{api.where}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Autocomplete Kaynak Seçimi */}
+          <div style={{ background: "#1a1a2e", border: "1px solid #2a2a3a", borderRadius: 10, padding: 20, marginTop: 20 }}>
+            <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 12px 0" }}>🔮 Otomatik Tamamlama Kaynağı</h3>
+            <p style={{ color: "#888", fontSize: 12, marginBottom: 16 }}>Arama yazarken önerilerin nereden geleceğini seçin</p>
+            <div style={{ display: "flex", gap: 12 }}>
+              {[
+                { value: "google", label: "Google Suggest", desc: "Ücretsiz, limitsiz, cihazdan direkt", icon: "🌐" },
+                { value: "bazocam", label: "Bazocam API", desc: "Patronun API'si, backend üzerinden", icon: "🔌" },
+              ].map(opt => (
+                <div key={opt.value} onClick={() => setConfig({ ...config, autocompleteSource: opt.value })}
+                  style={{
+                    flex: 1, background: config?.autocompleteSource === opt.value ? "#065f4630" : "#14151a",
+                    border: `2px solid ${config?.autocompleteSource === opt.value ? "#4ade80" : "#2a2a3a"}`,
+                    borderRadius: 10, padding: 16, cursor: "pointer", transition: "all 0.2s"
+                  }}>
+                  <div style={{ fontSize: 24, marginBottom: 8 }}>{opt.icon}</div>
+                  <div style={{ color: "#f8fafc", fontSize: 14, fontWeight: 600, marginBottom: 4 }}>{opt.label}</div>
+                  <div style={{ color: "#888", fontSize: 11 }}>{opt.desc}</div>
+                  {config?.autocompleteSource === opt.value && <div style={{ color: "#4ade80", fontSize: 11, marginTop: 8, fontWeight: 600 }}>✅ Aktif</div>}
+                </div>
+              ))}
+            </div>
+            <button style={{ ...styles.primaryBtn, backgroundColor: "#0ea5e9", marginTop: 16 }} onClick={() => {
+              fetch(`${API_URL}/config`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+                body: JSON.stringify(config)
+              }).then(r => r.json()).then(() => alert("✅ Otomatik tamamlama kaynağı güncellendi!"))
+                .catch(() => alert("Hata!"));
+            }}>💾 Kaydet</button>
+          </div>
+
+          {/* Eski endpoint listesi */}
+          <div style={{ background: "#1a1a2e", border: "1px solid #2a2a3a", borderRadius: 10, padding: 20, marginTop: 20 }}>
+            <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 12px 0" }}>📡 Bazocam API Endpoint'leri</h3>
+            <p style={{ color: "#888", fontSize: 12, marginBottom: 12 }}>Patronun sunucusundaki kullanılabilir endpoint'ler</p>
             {[
               { label: "🎵 MP3 İndir", method: "GET", path: `/mp3download.php?id=VIDEO_ID&key=API_KEY&b=320` },
               { label: "🎬 MP4 İndir", method: "GET", path: `/mp4download.php?id=VIDEO_ID&key=API_KEY&q=720` },
               { label: "🔍 Arama", method: "GET", path: `/searchapi.php?search=SORGU&key=API_KEY` },
-              { label: "⬛ Otomatik Tamamlama", method: "GET", path: `/ototamamlamaapi.php?search=SORGU&key=API_KEY` },
+              { label: "🔮 Otomatik Tamamlama", method: "GET", path: `/ototamamlamaapi.php?search=SORGU&key=API_KEY` },
             ].map((ep, i) => (
               <div key={i} style={{ background: "#14151a", borderRadius: 8, padding: "10px 14px", marginBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div>
