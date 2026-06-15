@@ -137,6 +137,7 @@ function App() {
   const [isPopupCountryDropdownOpen, setIsPopupCountryDropdownOpen] = useState(false);
   const [popupStartTime, setPopupStartTime] = useState("");
   const [popupEndTime, setPopupEndTime] = useState("");
+  const [popupMinLaunches, setPopupMinLaunches] = useState(3);
 
   // Device Actions
   const [deviceActions, setDeviceActions] = useState([]);
@@ -349,6 +350,7 @@ function App() {
       countries: popupCountryMode === "all" ? "all" : popupSelectedCountries,
       startTime: popupStartTime || null,
       endTime: popupEndTime || null,
+      minLaunches: Number(popupMinLaunches) || 3,
     };
 
     fetch(`${API_URL}/popup/create`, {
@@ -1154,6 +1156,17 @@ function App() {
                     )}
                   </div>
                 )}
+              </div>
+
+              {/* Minimum Kullanım */}
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Minimum Kullanım Sayısı</label>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <input type="number" min="0" max="100"
+                    style={{ ...styles.input, width: 80, textAlign: "center" }}
+                    value={popupMinLaunches} onChange={e => setPopupMinLaunches(e.target.value)} />
+                  <span style={{ color: "#888", fontSize: 12 }}>Uygulamayı en az bu kadar kez açmış kullanıcılara gösterilir</span>
+                </div>
               </div>
 
               {/* Zaman Aralığı */}
