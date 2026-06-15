@@ -490,21 +490,21 @@ function App() {
   const [activeSection, setActiveSection] = useState("settings");
 
   const menuItems = [
-    { key: "settings", label: "⚙️ Genel Ayarlar" },
-    { key: "mp3", label: "🎵 MP3 Ayarları" },
-    { key: "countries", label: "🌍 Ülke Ayarları" },
-    { key: "notifications", label: "🔔 Bildirimler" },
-    { key: "blocked", label: "🚫 Yasaklı Kanallar" },
-    { key: "popup", label: "📢 Popup / Duyuru" },
-    { key: "downloadad", label: "💰 İndirme Reklamı" },
-    { key: "bannerad", label: "📢 Arama Reklamı" },
-    { key: "bottombanner", label: "📌 Alt Banner Reklam" },
-    { key: "adfree", label: "🚫 Reklamsız Ülkeler" },
-    { key: "device", label: "📱 Device Actions" },
-    { key: "appcontrols", label: "🛡️ App Controls" },
-    { key: "apiproviders", label: "🔌 API Durumu" },
-    { key: "smartcache", label: "📦 Cache Yönetimi" },
-    { key: "youtube", label: "🎬 YouTube & Top50" },
+    { key: "settings", label: "Genel Ayarlar" },
+    { key: "mp3", label: "MP3 Ayarları" },
+    { key: "countries", label: "Ülke Ayarları" },
+    { key: "notifications", label: "Bildirimler" },
+    { key: "blocked", label: "Yasaklı Kanallar" },
+    { key: "popup", label: "Oylama & Geri Bildirim" },
+    { key: "downloadad", label: "İndirme Reklamı" },
+    { key: "bannerad", label: "Arama Reklamı" },
+    { key: "bottombanner", label: "Alt Banner Reklam" },
+    { key: "adfree", label: "Reklamsız Ülkeler" },
+    { key: "device", label: "Device Actions" },
+    { key: "appcontrols", label: "App Controls" },
+    { key: "apiproviders", label: "API Durumu" },
+    { key: "smartcache", label: "Cache Yönetimi" },
+    { key: "youtube", label: "YouTube & Top50" },
   ];
 
   if (!config) return <div style={{ color: "white", padding: 50, backgroundColor: "#14151a", minHeight: "100vh" }}>Yükleniyor...</div>;
