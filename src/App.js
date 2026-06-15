@@ -150,6 +150,7 @@ function App() {
   const [youtubeData, setYoutubeData] = useState(null);
   const [autoRingtone, setAutoRingtone] = useState(null);
   const [newRegion, setNewRegion] = useState("");
+  const [feedbacks, setFeedbacks] = useState([]);
 
   const API_URL = window.location.hostname === "localhost" ? "http://173.212.249.105" : "";
 
@@ -163,6 +164,7 @@ function App() {
     fetchApiProviders();
     fetchYoutubeData();
     fetchAutoRingtone();
+    fetchFeedbacks();
   }, []);
 
   const fetchAutoRingtone = () => {
@@ -177,6 +179,18 @@ function App() {
       .then(r => r.ok ? r.json() : null)
       .then(data => { if (data) setYoutubeData(data); })
       .catch(() => {});
+  };
+
+  const fetchFeedbacks = () => {
+    fetch(`${API_URL}/feedbacks`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+      .then(r => r.ok ? r.json() : [])
+      .then(data => setFeedbacks(data))
+      .catch(() => {});
+  };
+
+  const deleteFeedback = (id) => {
+    fetch(`${API_URL}/feedback/${id}`, { method: "DELETE", headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+      .then(() => fetchFeedbacks());
   };
 
   const fetchApiProviders = () => {
@@ -491,6 +505,7 @@ function App() {
     { key: "apiproviders", label: "🔌 API Durumu" },
     { key: "smartcache", label: "📦 Cache Yönetimi" },
     { key: "youtube", label: "🎬 YouTube & Top50" },
+    { key: "feedbacks", label: "📝 Geri Bildirimler" },
   ];
 
   if (!config) return <div style={{ color: "white", padding: 50, backgroundColor: "#14151a", minHeight: "100vh" }}>Yükleniyor...</div>;
@@ -2180,6 +2195,41 @@ function App() {
               Kullanıcılar bir ülkeden istek attığında o ülke otomatik eklenir. Burada manuel ekleme/kaldırma yapabilirsin.
             </p>
           </div>
+        </div>}
+
+        {activeSection === "feedbacks" && <div style={styles.card}>
+          <h2 style={styles.title}>📝 Kullanıcı Geri Bildirimleri</h2>
+          <p style={{ color: "#888", fontSize: 13, marginBottom: 24 }}>
+            1-3 yıldız veren kullanıcılardan toplanan geri bildirimler
+          </p>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+            <span style={{ color: "#94a3b8", fontSize: 13 }}>Toplam: <b style={{ color: "#f8fafc" }}>{feedbacks.length}</b> geri bildirim</span>
+            <button style={{ ...styles.primaryBtn, backgroundColor: "#0ea5e9" }} onClick={fetchFeedbacks}>🔄 Yenile</button>
+          </div>
+          {feedbacks.length === 0 ? (
+            <div style={{ textAlign: "center", padding: 40, color: "#666" }}>Henüz geri bildirim yok</div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {feedbacks.map(fb => (
+                <div key={fb.id} style={{ background: "#14151a", border: "1px solid #2a2a3a", borderRadius: 10, padding: 16 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <span style={{ fontSize: 18 }}>{"⭐".repeat(fb.rating)}</span>
+                      <span style={{ color: fb.rating <= 2 ? "#ef4444" : "#f59e0b", fontWeight: 600, fontSize: 14 }}>{fb.rating}/5</span>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                      {fb.country && <span style={{ color: "#666", fontSize: 12 }}>🌍 {fb.country}</span>}
+                      <span style={{ color: "#555", fontSize: 12 }}>{new Date(fb.createdAt).toLocaleString("tr-TR")}</span>
+                      <button onClick={() => { if (window.confirm("Silmek istediğine emin misin?")) deleteFeedback(fb.id); }}
+                        style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer", fontSize: 13 }}>🗑️</button>
+                    </div>
+                  </div>
+                  {fb.text && <p style={{ margin: 0, color: "#cbd5e1", fontSize: 14, lineHeight: 1.5, padding: "8px 0 0 0" }}>{fb.text}</p>}
+                  {fb.deviceId && <div style={{ color: "#444", fontSize: 11, marginTop: 6 }}>Device: {fb.deviceId}</div>}
+                </div>
+              ))}
+            </div>
+          )}
         </div>}
 
 
