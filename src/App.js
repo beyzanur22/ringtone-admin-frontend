@@ -31,6 +31,63 @@ const COUNTRY_LIST = [
   { code: 'UZ', name: 'Uzbekistan' }, { code: 'VE', name: 'Venezuela' }, { code: 'VN', name: 'Vietnam' }
 ];
 
+function CountryRulePicker({ rule, idx, configKey, config, setConfig }) {
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const mode = rule.countryMode || (rule.countries?.length > 0 ? "include" : "all");
+  const filtered = COUNTRY_LIST.filter(c => c.name.toLowerCase().includes(search.toLowerCase()) || c.code.toLowerCase().includes(search.toLowerCase()));
+
+  const updateRule = (patch) => {
+    const rules = [...(config[configKey]?.rules || [])];
+    rules[idx] = { ...rules[idx], ...patch };
+    setConfig(prev => ({ ...prev, [configKey]: { ...prev[configKey], rules } }));
+  };
+
+  const modeLabel = mode === "all" ? "Tüm ülkeler" : mode === "exclude"
+    ? `Hariç: ${(rule.countries || []).length > 0 ? (rule.countries || []).map(c => { const f = COUNTRY_LIST.find(x => x.code === c); return f ? f.code : c; }).join(", ") : "seçim yok"}`
+    : `${(rule.countries || []).length > 0 ? (rule.countries || []).map(c => { const f = COUNTRY_LIST.find(x => x.code === c); return f ? f.code : c; }).join(", ") : "seçim yok"}`;
+
+  return (
+    <div style={{ position: "relative" }}>
+      <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Ülkeler:</label>
+      <select value={mode} onChange={e => {
+        const newMode = e.target.value;
+        updateRule({ countryMode: newMode, countries: newMode === "all" ? [] : (rule.countries || []) });
+      }} style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 12, width: "100%", marginBottom: 6 }}>
+        <option value="all">Tüm ülkeler</option>
+        <option value="include">Sadece seçtiğim ülkeler</option>
+        <option value="exclude">Bu ülkeler HARİÇ</option>
+      </select>
+      {mode !== "all" && (
+        <>
+          <div onClick={() => setOpen(!open)}
+            style={{ background: "#23232b", color: mode === "exclude" ? "#ef4444" : "#fff", border: `1px solid ${mode === "exclude" ? "#ef4444" : "#333"}`, borderRadius: 6, padding: "6px 10px", fontSize: 13, cursor: "pointer", minHeight: 30 }}>
+            {modeLabel}
+          </div>
+          {open && (
+            <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "#23232b", border: "1px solid #444", borderRadius: 6, maxHeight: 250, overflowY: "auto", zIndex: 999, padding: "4px 0" }}>
+              <input type="text" placeholder="Ülke ara..." value={search} onChange={e => setSearch(e.target.value)}
+                style={{ width: "calc(100% - 16px)", margin: "4px 8px", background: "#1a1a2e", color: "#fff", border: "1px solid #444", borderRadius: 4, padding: "4px 8px", fontSize: 12 }} />
+              {filtered.map(c => (
+                <label key={c.code} style={{ display: "flex", alignItems: "center", padding: "4px 10px", fontSize: 12, color: "#ccc", cursor: "pointer" }}>
+                  <input type="checkbox" checked={(rule.countries || []).includes(c.code)}
+                    onChange={e => {
+                      const countries = [...(rule.countries || [])];
+                      if (e.target.checked) countries.push(c.code);
+                      else countries.splice(countries.indexOf(c.code), 1);
+                      updateRule({ countries });
+                    }} style={{ marginRight: 8 }} />
+                  {c.code} - {c.name}
+                </label>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
 function App() {
   const [config, setConfig] = useState(null);
   const [newCountryMode, setNewCountryMode] = useState("youtube");
@@ -1185,32 +1242,7 @@ function App() {
                 </div>
 
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
-                  <div style={{ position: "relative" }}>
-                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Ülkeler:</label>
-                    <div
-                      onClick={e => { e.currentTarget.nextSibling.style.display = e.currentTarget.nextSibling.style.display === "block" ? "none" : "block"; }}
-                      style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, cursor: "pointer", minHeight: 30 }}>
-                      {(rule.countries || []).length > 0
-                        ? (rule.countries || []).map(c => { const found = COUNTRY_LIST.find(x => x.code === c); return found ? `${found.code} ${found.name}` : c; }).join(", ")
-                        : "Tüm ülkeler (varsayılan)"}
-                    </div>
-                    <div style={{ display: "none", position: "absolute", top: "100%", left: 0, right: 0, background: "#23232b", border: "1px solid #444", borderRadius: 6, maxHeight: 200, overflowY: "auto", zIndex: 999 }}>
-                      {COUNTRY_LIST.map(c => (
-                        <label key={c.code} style={{ display: "flex", alignItems: "center", padding: "4px 10px", fontSize: 12, color: "#ccc", cursor: "pointer" }}>
-                          <input type="checkbox" checked={(rule.countries || []).includes(c.code)}
-                            onChange={e => {
-                              const rules = [...(config.downloadAd?.rules || [])];
-                              const countries = [...(rules[idx].countries || [])];
-                              if (e.target.checked) countries.push(c.code);
-                              else countries.splice(countries.indexOf(c.code), 1);
-                              rules[idx] = { ...rules[idx], countries };
-                              setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
-                            }} style={{ marginRight: 8 }} />
-                          {c.code} - {c.name}
-                        </label>
-                      ))}
-                    </div>
-                  </div>
+                  <CountryRulePicker rule={rule} idx={idx} configKey="downloadAd" config={config} setConfig={setConfig} />
                   <div>
                     <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tür:</label>
                     <select value={rule.type || "url"}
@@ -1367,32 +1399,7 @@ function App() {
                 </div>
 
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
-                  <div style={{ position: "relative" }}>
-                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Ülkeler:</label>
-                    <div
-                      onClick={e => { e.currentTarget.nextSibling.style.display = e.currentTarget.nextSibling.style.display === "block" ? "none" : "block"; }}
-                      style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, cursor: "pointer", minHeight: 30 }}>
-                      {(rule.countries || []).length > 0
-                        ? (rule.countries || []).map(c => { const found = COUNTRY_LIST.find(x => x.code === c); return found ? found.code : c; }).join(", ")
-                        : "Tüm ülkeler"}
-                    </div>
-                    <div style={{ display: "none", position: "absolute", top: "100%", left: 0, right: 0, background: "#23232b", border: "1px solid #444", borderRadius: 6, maxHeight: 200, overflowY: "auto", zIndex: 999 }}>
-                      {COUNTRY_LIST.map(c => (
-                        <label key={c.code} style={{ display: "flex", alignItems: "center", padding: "4px 10px", fontSize: 12, color: "#ccc", cursor: "pointer" }}>
-                          <input type="checkbox" checked={(rule.countries || []).includes(c.code)}
-                            onChange={e => {
-                              const rules = [...(config.bannerAd?.rules || [])];
-                              const countries = [...(rules[idx].countries || [])];
-                              if (e.target.checked) countries.push(c.code);
-                              else countries.splice(countries.indexOf(c.code), 1);
-                              rules[idx] = { ...rules[idx], countries };
-                              setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
-                            }} style={{ marginRight: 8 }} />
-                          {c.code} - {c.name}
-                        </label>
-                      ))}
-                    </div>
-                  </div>
+                  <CountryRulePicker rule={rule} idx={idx} configKey="bannerAd" config={config} setConfig={setConfig} />
                   <div>
                     <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tür:</label>
                     <select value={rule.type || "admob"}
@@ -1513,36 +1520,9 @@ function App() {
                 }} style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer", fontSize: 13 }}>Sil</button>
               </div>
 
-              <div style={{ display: "flex", gap: 12, marginBottom: 10 }}>
-                <div style={{ flex: 1 }}>
-                  <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Ülkeler:</label>
-                  <div style={{ position: "relative" }}>
-                    <div
-                      onClick={e => { const d = e.currentTarget.nextSibling; d.style.display = d.style.display === "block" ? "none" : "block"; }}
-                      style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, cursor: "pointer", minHeight: 30 }}>
-                      {(rule.countries || []).length > 0
-                        ? (rule.countries || []).map(c => { const found = COUNTRY_LIST.find(x => x.code === c); return found ? found.code : c; }).join(", ")
-                        : "Tüm ülkeler"}
-                    </div>
-                    <div style={{ display: "none", position: "absolute", top: "100%", left: 0, right: 0, background: "#23232b", border: "1px solid #444", borderRadius: 6, maxHeight: 200, overflowY: "auto", zIndex: 999 }}>
-                      {COUNTRY_LIST.map(c => (
-                        <label key={c.code} style={{ display: "flex", alignItems: "center", padding: "4px 10px", fontSize: 12, color: "#ccc", cursor: "pointer" }}>
-                          <input type="checkbox" checked={(rule.countries || []).includes(c.code)}
-                            onChange={e => {
-                              const rules = [...(config.bottomBannerAd?.rules || [])];
-                              const countries = [...(rules[idx].countries || [])];
-                              if (e.target.checked) countries.push(c.code);
-                              else countries.splice(countries.indexOf(c.code), 1);
-                              rules[idx] = { ...rules[idx], countries };
-                              setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
-                            }} style={{ marginRight: 8 }} />
-                          {c.code} - {c.name}
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <div style={{ flex: 1 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 10 }}>
+                <CountryRulePicker rule={rule} idx={idx} configKey="bottomBannerAd" config={config} setConfig={setConfig} />
+                <div>
                   <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tür:</label>
                   <select value={rule.type || "admob"}
                     onChange={e => {
