@@ -505,7 +505,6 @@ function App() {
     { key: "apiproviders", label: "🔌 API Durumu" },
     { key: "smartcache", label: "📦 Cache Yönetimi" },
     { key: "youtube", label: "🎬 YouTube & Top50" },
-    { key: "feedbacks", label: "📝 Geri Bildirimler" },
   ];
 
   if (!config) return <div style={{ color: "white", padding: 50, backgroundColor: "#14151a", minHeight: "100vh" }}>Yükleniyor...</div>;
@@ -940,6 +939,42 @@ function App() {
               })}
             </div>
           )}
+
+          {/* Geri Bildirimler */}
+          <div style={{ marginTop: 30, borderTop: "1px solid #2a2a3a", paddingTop: 24 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+              <h3 style={{ margin: 0, fontSize: 17, fontWeight: 600, color: "#f8fafc" }}>📝 Kullanıcı Geri Bildirimleri</h3>
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <span style={{ color: "#94a3b8", fontSize: 13 }}>Toplam: <b style={{ color: "#f8fafc" }}>{feedbacks.length}</b></span>
+                <button style={{ ...styles.primaryBtn, backgroundColor: "#0ea5e9", fontSize: 12, padding: "6px 14px" }} onClick={fetchFeedbacks}>🔄</button>
+              </div>
+            </div>
+            <p style={{ color: "#888", fontSize: 12, margin: "-8px 0 16px 0" }}>1-3 yıldız veren kullanıcılardan toplanan geri bildirimler</p>
+            {feedbacks.length === 0 ? (
+              <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Henüz geri bildirim yok</div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {feedbacks.map(fb => (
+                  <div key={fb.id} style={{ background: "#14151a", border: "1px solid #2a2a3a", borderRadius: 10, padding: 14 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <span style={{ fontSize: 16 }}>{"⭐".repeat(fb.rating)}</span>
+                        <span style={{ color: fb.rating <= 2 ? "#ef4444" : "#f59e0b", fontWeight: 600, fontSize: 13 }}>{fb.rating}/5</span>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                        {fb.country && <span style={{ color: "#666", fontSize: 11 }}>🌍 {fb.country}</span>}
+                        <span style={{ color: "#555", fontSize: 11 }}>{new Date(fb.createdAt).toLocaleString("tr-TR")}</span>
+                        <button onClick={() => { if (window.confirm("Silmek istediğine emin misin?")) deleteFeedback(fb.id); }}
+                          style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer", fontSize: 12 }}>🗑️</button>
+                      </div>
+                    </div>
+                    {fb.text && <p style={{ margin: 0, color: "#cbd5e1", fontSize: 13, lineHeight: 1.5, padding: "6px 0 0 0" }}>{fb.text}</p>}
+                    {fb.deviceId && <div style={{ color: "#444", fontSize: 11, marginTop: 4 }}>Device: {fb.deviceId}</div>}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>}
 
       {/* MODAL OVERLAY */}
@@ -2197,40 +2232,6 @@ function App() {
           </div>
         </div>}
 
-        {activeSection === "feedbacks" && <div style={styles.card}>
-          <h2 style={styles.title}>📝 Kullanıcı Geri Bildirimleri</h2>
-          <p style={{ color: "#888", fontSize: 13, marginBottom: 24 }}>
-            1-3 yıldız veren kullanıcılardan toplanan geri bildirimler
-          </p>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-            <span style={{ color: "#94a3b8", fontSize: 13 }}>Toplam: <b style={{ color: "#f8fafc" }}>{feedbacks.length}</b> geri bildirim</span>
-            <button style={{ ...styles.primaryBtn, backgroundColor: "#0ea5e9" }} onClick={fetchFeedbacks}>🔄 Yenile</button>
-          </div>
-          {feedbacks.length === 0 ? (
-            <div style={{ textAlign: "center", padding: 40, color: "#666" }}>Henüz geri bildirim yok</div>
-          ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              {feedbacks.map(fb => (
-                <div key={fb.id} style={{ background: "#14151a", border: "1px solid #2a2a3a", borderRadius: 10, padding: 16 }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <span style={{ fontSize: 18 }}>{"⭐".repeat(fb.rating)}</span>
-                      <span style={{ color: fb.rating <= 2 ? "#ef4444" : "#f59e0b", fontWeight: 600, fontSize: 14 }}>{fb.rating}/5</span>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                      {fb.country && <span style={{ color: "#666", fontSize: 12 }}>🌍 {fb.country}</span>}
-                      <span style={{ color: "#555", fontSize: 12 }}>{new Date(fb.createdAt).toLocaleString("tr-TR")}</span>
-                      <button onClick={() => { if (window.confirm("Silmek istediğine emin misin?")) deleteFeedback(fb.id); }}
-                        style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer", fontSize: 13 }}>🗑️</button>
-                    </div>
-                  </div>
-                  {fb.text && <p style={{ margin: 0, color: "#cbd5e1", fontSize: 14, lineHeight: 1.5, padding: "8px 0 0 0" }}>{fb.text}</p>}
-                  {fb.deviceId && <div style={{ color: "#444", fontSize: 11, marginTop: 6 }}>Device: {fb.deviceId}</div>}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>}
 
 
     </div>
