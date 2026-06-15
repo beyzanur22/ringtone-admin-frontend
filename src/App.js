@@ -932,6 +932,7 @@ function App() {
 
                     <div style={{ marginTop: 10, display: "flex", gap: 20, fontSize: 12, color: "#666" }}>
                       <span>Toplam oy: <strong style={{ color: "#a78bfa" }}>{totalVotes}</strong></span>
+                      {ann.minLaunches > 0 && <span>Min. kullanım: <strong style={{ color: "#f59e0b" }}>{ann.minLaunches}</strong></span>}
                       {ann.startTime && <span>Başlangıç: {new Date(ann.startTime).toLocaleString("tr-TR")}</span>}
                       {ann.endTime && <span>Bitiş: {new Date(ann.endTime).toLocaleString("tr-TR")}</span>}
                       <span>Oluşturulma: {new Date(ann.createdAt).toLocaleString("tr-TR")}</span>
