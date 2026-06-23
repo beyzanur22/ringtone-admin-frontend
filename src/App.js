@@ -1945,7 +1945,7 @@ function App() {
           </p>
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-            <span style={{ color: "#94a3b8", fontSize: 13 }}>{apiHealth.length}/3 API direkt erişilebilir</span>
+            <span style={{ color: "#94a3b8", fontSize: 13 }}>{apiHealth.filter(p => p.status === "online").length}/{apiHealth.length || (apiProviders?.providers?.length || 0)} API erişilebilir</span>
             <button style={{ ...styles.primaryBtn, backgroundColor: "#0ea5e9" }} onClick={() => {
               fetch(`${API_URL}/admin/api-health`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
                 .then(r => r.json())
@@ -1954,57 +1954,115 @@ function App() {
             }}>🔄 Yenile</button>
           </div>
 
-          {(apiHealth.length > 0 ? apiHealth : (apiProviders?.providers || [])).map((p, i) => (
-            <div key={p.id || i} style={{ background: "#1a1a2e", border: "1px solid #2a2a3a", borderRadius: 10, padding: 20, marginBottom: 12 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <div>
-                  <span style={{ color: "#f8fafc", fontSize: 15, fontWeight: 500 }}>{p.name || p.id}</span>
-                  <span style={{ color: "#666", fontSize: 12, marginLeft: 10 }}>
-                    {p.priority === 1 ? "— Birincil" : p.priority === 2 ? `— İkincil${p.dailyLimit ? `, ${p.dailyLimit}/gün limit` : ""}` : "— Üçüncül (yedek)"}
-                  </span>
-                  {p.httpStatus && <div style={{ color: "#666", fontSize: 12, marginTop: 4 }}>HTTP {p.httpStatus}</div>}
-                </div>
-                <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-                  <span style={{
-                    backgroundColor: p.status === "online" || p.enabled ? "#065f4620" : "#7f1d1d20",
-                    color: p.status === "online" || p.enabled ? "#4ade80" : "#ef4444",
-                    padding: "4px 12px", borderRadius: 6, fontSize: 12, fontWeight: 600
-                  }}>
-                    {p.status === "online" ? "✅ Çalışıyor" : p.enabled ? "✅ Aktif" : "❌ Kapalı"}
-                  </span>
-                  <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 14px", backgroundColor: "#f59e0b" }}>
-                    Proxy Aktif Et
-                  </button>
-                </div>
-              </div>
+          {/* Sağlık durumu özeti (salt-okunur) */}
+          {apiHealth.length > 0 && apiHealth.map((p, i) => (
+            <div key={"h" + (p.id || i)} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#15151f", border: "1px solid #2a2a3a", borderRadius: 8, padding: "10px 16px", marginBottom: 8 }}>
+              <span style={{ color: "#cbd5e1", fontSize: 13 }}>{p.name || p.id} <span style={{ color: "#666" }}>· öncelik {p.priority}</span></span>
+              <span style={{
+                backgroundColor: p.status === "online" ? "#065f4620" : "#7f1d1d20",
+                color: p.status === "online" ? "#4ade80" : "#ef4444",
+                padding: "3px 10px", borderRadius: 6, fontSize: 12, fontWeight: 600
+              }}>
+                {p.status === "online" ? `✅ Çalışıyor (HTTP ${p.httpStatus})` : "❌ Erişilemiyor"}{p.enabled === false ? " · pasif" : ""}
+              </span>
             </div>
           ))}
 
-          <div style={{ background: "#1a1a2e", border: "1px solid #2a2a3a", borderRadius: 10, padding: 20, marginTop: 20 }}>
-            <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 12px 0" }}>🔑 API Ayarları</h3>
-            <div style={{ marginBottom: 12 }}>
-              <label style={styles.label}>API Key</label>
-              <input type="text" style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
-                value={apiProviders?.apiKey || "bzc_7mK2pXr9Qw1Lz4Ny"}
-                onChange={e => setApiProviders({ ...apiProviders, apiKey: e.target.value })} />
-            </div>
-            <div style={{ marginBottom: 16 }}>
-              <label style={styles.label}>Base URL</label>
-              <input type="text" style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
-                value={apiProviders?.baseUrl || "https://bazocam.net"}
-                onChange={e => setApiProviders({ ...apiProviders, baseUrl: e.target.value })} />
-            </div>
-            <button style={{ ...styles.primaryBtn, backgroundColor: "#0ea5e9" }} onClick={() => {
-              fetch(`${API_URL}/admin/api-providers`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
-                body: JSON.stringify({ apiKey: apiProviders?.apiKey, baseUrl: apiProviders?.baseUrl, providers: apiProviders?.providers })
-              }).then(r => r.json()).then(d => {
-                if (d.success) alert("✅ API ayarları kaydedildi!");
-                else alert("Hata: " + (d.error || "Kaydedilemedi"));
-              }).catch(() => alert("Sunucuya bağlanılamadı!"));
-            }}>💾 Kaydet</button>
+          {/* PROVIDER YÖNETİMİ — ekle / düzenle / sil */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 24, marginBottom: 12 }}>
+            <h3 style={{ color: "#a78bfa", fontSize: 16, margin: 0 }}>🔌 API Kaynakları</h3>
+            <button style={{ ...styles.primaryBtn, fontSize: 13, padding: "6px 14px", backgroundColor: "#16a34a" }}
+              onClick={() => {
+                const list = [...(apiProviders?.providers || [])];
+                const nextPriority = list.length ? Math.max(...list.map(x => x.priority || 0)) + 1 : 1;
+                list.push({
+                  id: "api_" + Date.now(),
+                  name: "Yeni API",
+                  enabled: true,
+                  priority: nextPriority,
+                  baseUrl: "https://",
+                  apiKey: "",
+                  endpoints: {
+                    mp3: "/mp3download.php?id={id}&key={key}&b={bitrate}",
+                    mp4: "/mp4download.php?id={id}&key={key}&q={quality}",
+                    search: "/searchapi.php?search={query}&key={key}",
+                    autocomplete: "/ototamamlamaapi.php?search={query}&key={key}"
+                  }
+                });
+                setApiProviders({ ...apiProviders, providers: list });
+              }}>+ Yeni API Ekle</button>
           </div>
+
+          <p style={{ color: "#64748b", fontSize: 12, marginBottom: 16 }}>
+            Düşük öncelik = önce denenir. Bir kaynak çökerse sıradakine geçilir. Şablon değişkenleri: <code style={{ color: "#a78bfa" }}>{"{id} {key} {bitrate} {quality} {query}"}</code> — uygulama hiç güncellenmez.
+          </p>
+
+          {(apiProviders?.providers || []).map((p, i) => {
+            const updateField = (field, value) => {
+              const list = [...apiProviders.providers];
+              list[i] = { ...list[i], [field]: value };
+              setApiProviders({ ...apiProviders, providers: list });
+            };
+            const updateEndpoint = (key, value) => {
+              const list = [...apiProviders.providers];
+              list[i] = { ...list[i], endpoints: { ...(list[i].endpoints || {}), [key]: value } };
+              setApiProviders({ ...apiProviders, providers: list });
+            };
+            const ep = p.endpoints || {};
+            return (
+              <div key={p.id || i} style={{ background: "#1a1a2e", border: `1px solid ${p.enabled !== false ? "#2a3a2a" : "#3a2a2a"}`, borderRadius: 10, padding: 18, marginBottom: 14 }}>
+                <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 12 }}>
+                  <input type="text" placeholder="İsim" style={{ ...styles.input, flex: 1 }}
+                    value={p.name || ""} onChange={e => updateField("name", e.target.value)} />
+                  <input type="number" placeholder="Öncelik" title="Öncelik (küçük = önce)" style={{ ...styles.input, width: 80 }}
+                    value={p.priority ?? ""} onChange={e => updateField("priority", parseInt(e.target.value) || 0)} />
+                  <label style={{ display: "flex", alignItems: "center", gap: 6, color: p.enabled !== false ? "#4ade80" : "#ef4444", fontSize: 13, whiteSpace: "nowrap" }}>
+                    <input type="checkbox" checked={p.enabled !== false} onChange={e => updateField("enabled", e.target.checked)} />
+                    {p.enabled !== false ? "Aktif" : "Pasif"}
+                  </label>
+                  <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 12px", backgroundColor: "#dc2626" }}
+                    onClick={() => {
+                      if (!window.confirm(`"${p.name || p.id}" silinsin mi?`)) return;
+                      const list = apiProviders.providers.filter((_, idx) => idx !== i);
+                      setApiProviders({ ...apiProviders, providers: list });
+                    }}>Sil</button>
+                </div>
+                <div style={{ display: "flex", gap: 10, marginBottom: 10 }}>
+                  <div style={{ flex: 2 }}>
+                    <label style={styles.label}>Base URL</label>
+                    <input type="text" placeholder="https://site.com" style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
+                      value={p.baseUrl || ""} onChange={e => updateField("baseUrl", e.target.value)} />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <label style={styles.label}>API Key</label>
+                    <input type="text" placeholder="anahtar (opsiyonel)" style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
+                      value={p.apiKey || ""} onChange={e => updateField("apiKey", e.target.value)} />
+                  </div>
+                </div>
+                <details>
+                  <summary style={{ color: "#94a3b8", fontSize: 12, cursor: "pointer", marginBottom: 8 }}>⚙️ Endpoint şablonları (gelişmiş)</summary>
+                  {[["mp3", "MP3 indirme"], ["mp4", "MP4 indirme"], ["search", "Arama"], ["autocomplete", "Otomatik tamamlama"]].map(([k, lbl]) => (
+                    <div key={k} style={{ marginBottom: 8 }}>
+                      <label style={{ ...styles.label, fontSize: 11 }}>{lbl}</label>
+                      <input type="text" style={{ ...styles.input, width: "100%", boxSizing: "border-box", fontSize: 12, fontFamily: "monospace" }}
+                        value={ep[k] || ""} onChange={e => updateEndpoint(k, e.target.value)} />
+                    </div>
+                  ))}
+                </details>
+              </div>
+            );
+          })}
+
+          <button style={{ ...styles.primaryBtn, backgroundColor: "#0ea5e9", marginTop: 8 }} onClick={() => {
+            fetch(`${API_URL}/admin/api-providers`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+              body: JSON.stringify({ providers: apiProviders?.providers, smartCache: apiProviders?.smartCache })
+            }).then(r => r.json()).then(d => {
+              if (d.success) { alert("✅ API kaynakları kaydedildi!"); fetchApiProviders(); }
+              else alert("Hata: " + (d.error || "Kaydedilemedi"));
+            }).catch(() => alert("Sunucuya bağlanılamadı!"));
+          }}>💾 Tüm API Kaynaklarını Kaydet</button>
 
           <div style={{ background: "#1a1a2e", border: "1px solid #2a2a3a", borderRadius: 10, padding: 20, marginTop: 20 }}>
             <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 16px 0" }}>🗺️ API Haritası — Kim Neyi Kullanıyor?</h3>
