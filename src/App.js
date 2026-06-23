@@ -1271,7 +1271,7 @@ function App() {
               <h3 style={{ color: "#f59e0b", margin: 0, fontSize: 15 }}>🏳️ Ülke Bazlı Kurallar</h3>
               <button onClick={() => {
                 const rules = [...(config.downloadAd?.rules || [])];
-                rules.push({ countries: [], enabled: true, type: "url", url: "", admobUnitId: "", showEveryNth: 1, delaySeconds: 0 });
+                rules.unshift({ countries: [], enabled: true, type: "url", url: "", admobUnitId: "", showEveryNth: 1, delaySeconds: 0 });
                 setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
               }} style={{ background: "#f59e0b", color: "#000", border: "none", borderRadius: 6, padding: "6px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
                 + Kural Ekle
@@ -1288,15 +1288,21 @@ function App() {
               <div key={idx} style={{ padding: "14px", background: "#1a1a2e", borderRadius: 8, border: `1px solid ${rule.enabled ? "#f59e0b" : "#2a2a35"}`, marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <input type="checkbox" checked={rule.enabled}
-                      onChange={e => {
+                    <span style={{ fontSize: 13, fontWeight: 600, color: "#ccc" }}>Kural #{idx + 1}</span>
+                    <div onClick={() => {
                         const rules = [...(config.downloadAd?.rules || [])];
-                        rules[idx] = { ...rules[idx], enabled: e.target.checked };
+                        rules[idx] = { ...rules[idx], enabled: !rules[idx].enabled };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
-                      }} style={{ width: 16, height: 16 }} />
-                    <span style={{ fontSize: 13, fontWeight: 600, color: rule.enabled ? "#f59e0b" : "#666" }}>
-                      Kural #{idx + 1} {rule.enabled ? "● AKTİF" : "● PASİF"}
-                    </span>
+                      }}
+                      style={{ display: "flex", alignItems: "center", gap: 6, cursor: "pointer",
+                        background: rule.enabled ? "#14532d" : "#3f1010",
+                        border: `1px solid ${rule.enabled ? "#22c55e" : "#ef4444"}`,
+                        borderRadius: 20, padding: "3px 10px" }}>
+                      <div style={{ width: 8, height: 8, borderRadius: "50%", background: rule.enabled ? "#22c55e" : "#ef4444" }} />
+                      <span style={{ fontSize: 12, fontWeight: 700, color: rule.enabled ? "#22c55e" : "#ef4444" }}>
+                        {rule.enabled ? "AKTİF" : "PASİF"}
+                      </span>
+                    </div>
                   </div>
                   <button onClick={() => {
                     const rules = [...(config.downloadAd?.rules || [])];
