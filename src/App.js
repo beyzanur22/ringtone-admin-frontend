@@ -1430,6 +1430,27 @@ function App() {
             </div>
           </div>
 
+          {/* Belirli pozisyonlar */}
+          <div style={{ marginBottom: 20, padding: "14px 16px", background: "#1a1a2e", borderRadius: 8, border: "1px solid #2a2a35" }}>
+            <label style={{ fontSize: 13, color: "#ccc", display: "block", marginBottom: 6 }}>
+              📍 Belirli pozisyonlar (virgülle ayır, örn: <b>2, 10</b>)
+            </label>
+            <input type="text"
+              key={JSON.stringify(config.bannerAd?.positions || [])}
+              defaultValue={(config.bannerAd?.positions || []).join(", ")}
+              onChange={e => {
+                const arr = e.target.value.split(",")
+                  .map(s => parseInt(s.trim()))
+                  .filter(n => !isNaN(n) && n > 0);
+                setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, positions: arr } }));
+              }}
+              placeholder="2, 10"
+              style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%", boxSizing: "border-box" }} />
+            <p style={{ fontSize: 11, color: "#777", marginTop: 6, marginBottom: 0 }}>
+              Bu alan doluysa banner <b>tam bu şarkılardan sonra</b> çıkar (örn. 2. ve 10. şarkıdan sonra). Boş bırakırsan yukarıdaki "her kaç şarkıda bir" ayarı kullanılır.
+            </p>
+          </div>
+
           {/* Ülke Kuralları */}
           <div style={{ marginBottom: 20 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
