@@ -145,6 +145,7 @@ function App() {
   const [daMode, setDaMode] = useState("direct");
   const [daValue, setDaValue] = useState("");
   const [daLabel, setDaLabel] = useState("");
+  const [daShowOnce, setDaShowOnce] = useState(true);
   const [apiProviders, setApiProviders] = useState(null);
   const [apiHealth, setApiHealth] = useState([]);
   const [smartCache, setSmartCache] = useState({ enabled: true, minRequests: 3 });
@@ -401,7 +402,8 @@ function App() {
       actionType: daActionType,
       mode: daMode,
       value: daActionType === "review_sheet" ? "" : daValue.trim(),
-      label: daLabel.trim() || null
+      label: daLabel.trim() || null,
+      showOnce: daShowOnce
     };
     fetch(`${API_URL}/device-action/create`, {
       method: "POST",
@@ -1752,6 +1754,28 @@ function App() {
             </button>
           </div>
 
+          {/* Gösterim Sıklığı */}
+          <div style={{ display: "flex", gap: 12, marginBottom: 16, alignItems: "center" }}>
+            <span style={{ color: "#aaa", fontSize: 13 }}>Sıklık:</span>
+            <button onClick={() => setDaShowOnce(true)}
+              style={{
+                padding: "8px 20px", borderRadius: 8, border: daShowOnce ? "2px solid #a855f7" : "1px solid #3f3f46",
+                background: daShowOnce ? "#3b0764" : "#272a33", color: "#fff", cursor: "pointer", fontSize: 13
+              }}>
+              1️⃣ Tek seferlik
+            </button>
+            <button onClick={() => setDaShowOnce(false)}
+              style={{
+                padding: "8px 20px", borderRadius: 8, border: !daShowOnce ? "2px solid #a855f7" : "1px solid #3f3f46",
+                background: !daShowOnce ? "#3b0764" : "#272a33", color: "#fff", cursor: "pointer", fontSize: 13
+              }}>
+              🔁 Her açılışta
+            </button>
+            <span style={{ color: "#666", fontSize: 11 }}>
+              {daShowOnce ? "Cihaz başına 1 kez gösterilir" : "Her uygulama açılışında tekrar gösterilir"}
+            </span>
+          </div>
+
           {/* Value Input */}
           {daActionType !== "review_sheet" && (
             <div style={{ marginBottom: 16 }}>
@@ -1800,8 +1824,12 @@ function App() {
                     </span>
                     <span style={{ color: "#666", fontSize: 12, marginLeft: 10 }}>
                       ({action.mode === "direct" ? "⚡ Direct" : "💬 Popup"})
-                      {action.executedCount > 0 && ` • ${action.executedCount} kez çalıştı`}
+                      {" • "}{action.showOnce === false ? "🔁 Her açılışta" : "1️⃣ Tek seferlik"}
+                      {` • ${action.executedCount || 0} kez gönderildi`}
                     </span>
+                    <div style={{ color: "#475569", fontSize: 11, marginTop: 4, fontFamily: "monospace" }}>
+                      ID: {action.id}
+                    </div>
                   </div>
                   <div style={{ display: "flex", gap: 8 }}>
                     {action.active && (
