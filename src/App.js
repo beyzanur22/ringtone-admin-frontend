@@ -2020,6 +2020,26 @@ function App() {
                     <input type="checkbox" checked={p.enabled !== false} onChange={e => updateField("enabled", e.target.checked)} />
                     {p.enabled !== false ? "Aktif" : "Pasif"}
                   </label>
+                  <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 12px", backgroundColor: "#8b5cf6" }}
+                    onClick={(e) => {
+                      const btn = e.target;
+                      const original = btn.textContent;
+                      btn.textContent = "⏳ Test...";
+                      btn.disabled = true;
+                      fetch(`${API_URL}/admin/test-provider`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+                        body: JSON.stringify({ name: p.name, baseUrl: p.baseUrl, apiKey: p.apiKey, endpoints: p.endpoints })
+                      }).then(r => r.json()).then(d => {
+                        const r2 = d.results || {};
+                        const line = (k, lbl) => `${r2[k]?.ok ? "✅" : "❌"} ${lbl}${r2[k]?.ok ? ` (${r2[k].ms}ms)` : ` — ${r2[k]?.error || "hata"}`}`;
+                        alert(
+                          `🧪 ${d.provider} — ${d.okCount}/4 özellik çalışıyor\n(test video: ${d.videoId})\n\n` +
+                          [line("mp3", "MP3 dinle/indir"), line("mp4", "MP4 izle/indir"), line("search", "Arama"), line("autocomplete", "Otomatik tamamlama")].join("\n")
+                        );
+                      }).catch(() => alert("❌ Test isteği başarısız — sunucuya bağlanılamadı"))
+                        .finally(() => { btn.textContent = original; btn.disabled = false; });
+                    }}>🧪 Test Et</button>
                   <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 12px", backgroundColor: "#dc2626" }}
                     onClick={() => {
                       if (!window.confirm(`"${p.name || p.id}" silinsin mi?`)) return;
