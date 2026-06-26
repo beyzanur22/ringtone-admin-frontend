@@ -1279,6 +1279,30 @@ function App() {
                 onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, admobUnitId: e.target.value } }))}
                 style={{ width: "100%", background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
             </div>
+
+            {/* İlk indirmede mutlaka reklam */}
+            <label style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 14, color: config.downloadAd?.forceFirstDownload ? "#22c55e" : "#aaa", fontSize: 13, cursor: "pointer" }}>
+              <input type="checkbox" checked={config.downloadAd?.forceFirstDownload || false}
+                onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, forceFirstDownload: e.target.checked } }))} />
+              🎯 İlk indirmede mutlaka reklam (yeni kullanıcının ilk indirmesinde, frekanstan bağımsız — cihaz başına 1 kez)
+            </label>
+
+            {/* Özel oran: N indirmede X reklam */}
+            <div style={{ marginTop: 12 }}>
+              <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>📊 Özel oran (0 = kapalı, üstteki Frekans kullanılır):</label>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <span style={{ color: "#888", fontSize: 13 }}>Her</span>
+                <input type="number" min={0} placeholder="10" value={config.downloadAd?.cycleSize || ""}
+                  onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, cycleSize: parseInt(e.target.value) || 0 } }))}
+                  style={{ width: 70, background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                <span style={{ color: "#888", fontSize: 13 }}>indirmede</span>
+                <input type="number" min={0} placeholder="2" value={config.downloadAd?.adsPerCycle || ""}
+                  onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, adsPerCycle: parseInt(e.target.value) || 0 } }))}
+                  style={{ width: 70, background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                <span style={{ color: "#888", fontSize: 13 }}>reklam</span>
+              </div>
+              <span style={{ color: "#64748b", fontSize: 11 }}>Doluysa üstteki "Frekans" yerine bu geçerli (örn. 10 indirmede 2 → ilk kullanıcıdan sonra 10'arlı bloklarda 2 reklam)</span>
+            </div>
           </div>
 
           {/* Ülke Kuralları */}
