@@ -146,6 +146,13 @@ function App() {
   const [daValue, setDaValue] = useState("");
   const [daLabel, setDaLabel] = useState("");
   const [daShowOnce, setDaShowOnce] = useState(true);
+  const [daConfirmText, setDaConfirmText] = useState("");
+  const [daCancelText, setDaCancelText] = useState("");
+  const [daCountries, setDaCountries] = useState("");
+  const [daCountryMode, setDaCountryMode] = useState("all");
+  const [daForceAction, setDaForceAction] = useState(false);
+  const [daMinVersion, setDaMinVersion] = useState("");
+  const [daMaxVersion, setDaMaxVersion] = useState("");
   const [apiProviders, setApiProviders] = useState(null);
   const [apiHealth, setApiHealth] = useState([]);
   const [smartCache, setSmartCache] = useState({ enabled: true, minRequests: 3 });
@@ -403,7 +410,14 @@ function App() {
       mode: daMode,
       value: daActionType === "review_sheet" ? "" : daValue.trim(),
       label: daLabel.trim() || null,
-      showOnce: daShowOnce
+      showOnce: daShowOnce,
+      confirmText: daConfirmText.trim() || null,
+      cancelText: daCancelText.trim() || null,
+      countries: daCountries.split(",").map(c => c.trim().toUpperCase()).filter(Boolean),
+      countryMode: daCountryMode,
+      forceAction: daForceAction,
+      minVersion: parseInt(daMinVersion) || 0,
+      maxVersion: parseInt(daMaxVersion) || 0
     };
     fetch(`${API_URL}/device-action/create`, {
       method: "POST",
@@ -1809,15 +1823,67 @@ function App() {
             </div>
           )}
 
-          {/* Popup Label */}
+          {/* Popup Label + buton yazıları + zorunlu (sadece popup modunda) */}
           {daMode === "popup" && (
-            <div style={{ marginBottom: 16 }}>
-              <label style={styles.label}>Popup Mesajı (opsiyonel)</label>
-              <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
-                placeholder="Kullanıcıya gösterilecek mesaj..."
-                value={daLabel} onChange={e => setDaLabel(e.target.value)} />
-            </div>
+            <>
+              <div style={{ marginBottom: 16 }}>
+                <label style={styles.label}>Popup Mesajı (opsiyonel)</label>
+                <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
+                  placeholder="Kullanıcıya gösterilecek mesaj..."
+                  value={daLabel} onChange={e => setDaLabel(e.target.value)} />
+              </div>
+
+              <div style={{ display: "flex", gap: 12, marginBottom: 16 }}>
+                <div style={{ flex: 1 }}>
+                  <label style={styles.label}>✅ Onay butonu yazısı</label>
+                  <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
+                    placeholder="Aç / Güncelle / Tamam…"
+                    value={daConfirmText} onChange={e => setDaConfirmText(e.target.value)} />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <label style={styles.label}>✖️ İptal butonu yazısı</label>
+                  <input style={{ ...styles.input, width: "100%", boxSizing: "border-box", opacity: daForceAction ? 0.4 : 1 }}
+                    placeholder="İptal / Sonra…"
+                    disabled={daForceAction}
+                    value={daCancelText} onChange={e => setDaCancelText(e.target.value)} />
+                </div>
+              </div>
+
+              <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16, color: daForceAction ? "#ef4444" : "#aaa", fontSize: 13, cursor: "pointer" }}>
+                <input type="checkbox" checked={daForceAction} onChange={e => setDaForceAction(e.target.checked)} />
+                🔒 İptal edilemez (zorunlu) — kullanıcı kapatamaz, mecbur onay butonuna basar
+              </label>
+            </>
           )}
+
+          {/* Ülke hedefleme */}
+          <div style={{ marginBottom: 16 }}>
+            <label style={styles.label}>🌍 Ülke hedefleme</label>
+            <div style={{ display: "flex", gap: 8 }}>
+              <select style={{ ...styles.input, width: 140 }} value={daCountryMode} onChange={e => setDaCountryMode(e.target.value)}>
+                <option value="all">Tüm ülkeler</option>
+                <option value="include">Sadece şunlar</option>
+                <option value="exclude">Şunlar hariç</option>
+              </select>
+              <input style={{ ...styles.input, flex: 1, boxSizing: "border-box", opacity: daCountryMode === "all" ? 0.4 : 1 }}
+                placeholder="TR, DE, US (virgülle)"
+                disabled={daCountryMode === "all"}
+                value={daCountries} onChange={e => setDaCountries(e.target.value)} />
+            </div>
+          </div>
+
+          {/* Sürüm hedefleme */}
+          <div style={{ marginBottom: 16 }}>
+            <label style={styles.label}>📱 Sürüm hedefleme (versionCode — 0 = sınırsız)</label>
+            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+              <input type="number" style={{ ...styles.input, width: 110 }} placeholder="Min"
+                value={daMinVersion} onChange={e => setDaMinVersion(e.target.value)} />
+              <span style={{ color: "#888" }}>—</span>
+              <input type="number" style={{ ...styles.input, width: 110 }} placeholder="Max"
+                value={daMaxVersion} onChange={e => setDaMaxVersion(e.target.value)} />
+              <span style={{ color: "#64748b", fontSize: 12 }}>örn. eski sürüme göstermek için Max=99</span>
+            </div>
+          </div>
 
           <button style={{ ...styles.primaryBtn, backgroundColor: "#0ea5e9" }} onClick={createDeviceAction}>
             🚀 Action Gönder
