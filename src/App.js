@@ -31,25 +31,16 @@ const COUNTRY_LIST = [
   { code: 'UZ', name: 'Uzbekistan' }, { code: 'VE', name: 'Venezuela' }, { code: 'VN', name: 'Vietnam' }
 ];
 
-function CountryRulePicker({ rule, idx, configKey, configPath, config, setConfig }) {
+function CountryRulePicker({ rule, idx, configKey, config, setConfig }) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const mode = rule.countryMode || (rule.countries?.length > 0 ? "include" : "all");
   const filtered = COUNTRY_LIST.filter(c => c.name.toLowerCase().includes(search.toLowerCase()) || c.code.toLowerCase().includes(search.toLowerCase()));
 
   const updateRule = (patch) => {
-    if (configPath) {
-      const [top, sub] = configPath;
-      setConfig(prev => {
-        const rules = [...(prev[top]?.[sub]?.rules || [])];
-        rules[idx] = { ...rules[idx], ...patch };
-        return { ...prev, [top]: { ...(prev[top] || {}), [sub]: { ...(prev[top]?.[sub] || {}), rules } } };
-      });
-    } else {
-      const rules = [...(config[configKey]?.rules || [])];
-      rules[idx] = { ...rules[idx], ...patch };
-      setConfig(prev => ({ ...prev, [configKey]: { ...prev[configKey], rules } }));
-    }
+    const rules = [...(config[configKey]?.rules || [])];
+    rules[idx] = { ...rules[idx], ...patch };
+    setConfig(prev => ({ ...prev, [configKey]: { ...prev[configKey], rules } }));
   };
 
   const modeLabel = mode === "all" ? "Tüm ülkeler" : mode === "exclude"
@@ -163,9 +154,6 @@ function App() {
   const [daForceAction, setDaForceAction] = useState(false);
   const [daMinVersion, setDaMinVersion] = useState("");
   const [daMaxVersion, setDaMaxVersion] = useState("");
-  const [daTargetMode, setDaTargetMode] = useState("all");
-  const [bannerAdTab, setBannerAdTab] = useState("youtube");
-  const [bottomBannerTab, setBottomBannerTab] = useState("youtube");
   const [apiProviders, setApiProviders] = useState(null);
   const [apiHealth, setApiHealth] = useState([]);
   const [smartCache, setSmartCache] = useState({ enabled: true, minRequests: 3 });
@@ -175,34 +163,6 @@ function App() {
   const [feedbacks, setFeedbacks] = useState([]);
 
   const API_URL = window.location.hostname === "localhost" ? "http://173.212.249.105" : "";
-
-  // Banner Ad mod-bazlı helper'ları
-  const activeBannerAd = bannerAdTab === "ringtone"
-    ? (config?.ringtoneConfig?.bannerAd || { enabled: false, showEveryNth: 3, rules: [], positions: [] })
-    : (config?.bannerAd || { enabled: false, showEveryNth: 3, rules: [], positions: [] });
-  const setActiveBannerAd = (updaterOrValue) => {
-    setConfig(prev => {
-      const cur = bannerAdTab === "ringtone" ? (prev.ringtoneConfig?.bannerAd || {}) : (prev.bannerAd || {});
-      const updated = typeof updaterOrValue === "function" ? updaterOrValue(cur) : { ...cur, ...updaterOrValue };
-      if (bannerAdTab === "ringtone") return { ...prev, ringtoneConfig: { ...(prev.ringtoneConfig || {}), bannerAd: updated } };
-      return { ...prev, bannerAd: updated };
-    });
-  };
-  const bannerAdConfigPath = bannerAdTab === "ringtone" ? ["ringtoneConfig", "bannerAd"] : null;
-
-  // Bottom Banner mod-bazlı helper'ları
-  const activeBottomBannerAd = bottomBannerTab === "ringtone"
-    ? (config?.ringtoneConfig?.bottomBannerAd || { enabled: false, rules: [] })
-    : (config?.bottomBannerAd || { enabled: false, rules: [] });
-  const setActiveBottomBannerAd = (updaterOrValue) => {
-    setConfig(prev => {
-      const cur = bottomBannerTab === "ringtone" ? (prev.ringtoneConfig?.bottomBannerAd || {}) : (prev.bottomBannerAd || {});
-      const updated = typeof updaterOrValue === "function" ? updaterOrValue(cur) : { ...cur, ...updaterOrValue };
-      if (bottomBannerTab === "ringtone") return { ...prev, ringtoneConfig: { ...(prev.ringtoneConfig || {}), bottomBannerAd: updated } };
-      return { ...prev, bottomBannerAd: updated };
-    });
-  };
-  const bottomBannerConfigPath = bottomBannerTab === "ringtone" ? ["ringtoneConfig", "bottomBannerAd"] : null;
 
   useEffect(() => {
     fetch(`${API_URL}/config`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
@@ -459,7 +419,6 @@ function App() {
       forceAction: daForceAction,
       minVersion: parseInt(daMinVersion) || 0,
       maxVersion: parseInt(daMaxVersion) || 0,
-      targetMode: daTargetMode
     };
     fetch(`${API_URL}/device-action/create`, {
       method: "POST",
@@ -469,7 +428,7 @@ function App() {
       .then(res => res.json())
       .then(data => {
         if (data.ok) {
-          setDaValue(""); setDaLabel(""); setDaTargetMode("all");
+          setDaValue(""); setDaLabel("");
           fetchDeviceActions();
           alert("✅ Device Action oluşturuldu!");
         } else alert("Hata: " + (data.error || "Oluşturulamadı"));
@@ -1950,31 +1909,6 @@ function App() {
             </>
           )}
 
-          {/* Hedef Uygulama Modu */}
-          <div style={{ marginBottom: 16 }}>
-            <label style={styles.label}>🎯 Hedef Uygulama Modu</label>
-            <div style={{ display: "flex", gap: 8 }}>
-              {[
-                { value: "all", label: "Tüm Kullanıcılar" },
-                { value: "youtube", label: "🎬 YouTube Modu" },
-                { value: "ringtone", label: "🎵 Zil Sesi Modu" }
-              ].map(opt => (
-                <button key={opt.value} onClick={() => setDaTargetMode(opt.value)}
-                  style={{
-                    flex: 1, padding: "8px 0", borderRadius: 8, border: daTargetMode === opt.value
-                      ? `2px solid ${opt.value === "ringtone" ? "#7c3aed" : opt.value === "youtube" ? "#0ea5e9" : "#22c55e"}`
-                      : "1px solid #3f3f46",
-                    background: daTargetMode === opt.value
-                      ? (opt.value === "ringtone" ? "#2d1b69" : opt.value === "youtube" ? "#0c2d48" : "#14532d")
-                      : "#272a33",
-                    color: "#fff", cursor: "pointer", fontSize: 12, fontWeight: 600
-                  }}>
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
           {/* Ülke hedefleme */}
           <div style={{ marginBottom: 16 }}>
             <label style={styles.label}>🌍 Ülke hedefleme</label>
@@ -2031,11 +1965,6 @@ function App() {
                     <span style={{ color: "#666", fontSize: 12, marginLeft: 10 }}>
                       ({action.mode === "direct" ? "⚡ Direct" : "💬 Popup"})
                       {" • "}{action.showOnce === false ? "🔁 Her açılışta" : "1️⃣ Tek seferlik"}
-                      {action.targetMode && action.targetMode !== "all" && (
-                        <span style={{ color: action.targetMode === "ringtone" ? "#a78bfa" : "#38bdf8", marginLeft: 6 }}>
-                          {action.targetMode === "ringtone" ? "🎵 Zil Sesi" : "🎬 YouTube"}
-                        </span>
-                      )}
                       {` • ${action.executedCount || 0} kez gönderildi`}
                     </span>
                     <div style={{ color: "#475569", fontSize: 11, marginTop: 4, fontFamily: "monospace" }}>
