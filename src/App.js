@@ -144,6 +144,7 @@ function App() {
   const [deviceActions, setDeviceActions] = useState([]);
   const [daActionType, setDaActionType] = useState("chrome_url");
   const [daMode, setDaMode] = useState("direct");
+  const [daAppMode, setDaAppMode] = useState("youtube"); // youtube | ringtone | both — hangi uygulama modu
   const [daValue, setDaValue] = useState("");
   const [daLabel, setDaLabel] = useState("");
   const [daShowOnce, setDaShowOnce] = useState(true);
@@ -419,6 +420,7 @@ function App() {
       forceAction: daForceAction,
       minVersion: parseInt(daMinVersion) || 0,
       maxVersion: parseInt(daMaxVersion) || 0,
+      appMode: daAppMode,
     };
     fetch(`${API_URL}/device-action/create`, {
       method: "POST",
@@ -520,6 +522,7 @@ function App() {
     { key: "downloadad", label: "İndirme Reklamı" },
     { key: "bannerad", label: "Arama Reklamı" },
     { key: "bottombanner", label: "Alt Banner Reklam" },
+    { key: "ringtonead", label: "Zil Sesi Reklamı" },
     { key: "adfree", label: "Reklamsız Ülkeler" },
     { key: "device", label: "Device Actions" },
     { key: "appcontrols", label: "App Controls" },
@@ -1746,6 +1749,266 @@ function App() {
           </button>
         </div>}
 
+        {/* ZİL SESİ REKLAMI — YouTube reklamlarından tamamen bağımsız (ringtoneBannerAd / ringtoneBottomBannerAd) */}
+        {activeSection === "ringtonead" && <div style={styles.card}>
+          <h2 style={styles.title}>🔔 Zil Sesi Modu Reklamı</h2>
+          <p style={{ color: "#888", fontSize: 13, marginBottom: 20 }}>
+            Yalnızca <b>Zil Sesi Modu</b> için reklam. YouTube modundaki reklamlardan tamamen bağımsızdır.
+            Liste içinde belirli aralıklarla banner + ekranın en altında sabit banner.
+          </p>
+
+          {/* ===== LİSTE-İÇİ BANNER (ringtoneBannerAd) ===== */}
+          <div style={{ padding: "16px", background: "#10182a", borderRadius: 8, border: "1px solid #1e3a5f", marginBottom: 24 }}>
+            <h3 style={{ color: "#38bdf8", margin: "0 0 14px 0", fontSize: 15 }}>📢 Liste-içi Banner (zil sesleri arasında)</h3>
+
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+              <label style={{ fontSize: 14, color: "#ccc" }}>Liste-içi Banner Aktif:</label>
+              <input type="checkbox" checked={config.ringtoneBannerAd?.enabled || false}
+                onChange={e => setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, enabled: e.target.checked } }))}
+                style={{ width: 18, height: 18, cursor: "pointer" }} />
+              <span style={{ color: config.ringtoneBannerAd?.enabled ? "#22c55e" : "#ef4444", fontSize: 12, fontWeight: 600 }}>
+                {config.ringtoneBannerAd?.enabled ? "AKTİF" : "KAPALI"}
+              </span>
+            </div>
+
+            <div style={{ marginBottom: 12 }}>
+              <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Her kaç zil sesinde bir banner göster:</label>
+              <select value={config.ringtoneBannerAd?.showEveryNth || 3}
+                onChange={e => setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, showEveryNth: parseInt(e.target.value) } }))}
+                style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }}>
+                <option value={2}>Her 2 zilde bir</option>
+                <option value={3}>Her 3 zilde bir</option>
+                <option value={4}>Her 4 zilde bir</option>
+                <option value={5}>Her 5 zilde bir</option>
+              </select>
+            </div>
+
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ fontSize: 13, color: "#ccc", display: "block", marginBottom: 6 }}>
+                📍 Belirli pozisyonlar (virgülle ayır, örn: <b>2, 6</b>)
+              </label>
+              <input type="text"
+                key={JSON.stringify(config.ringtoneBannerAd?.positions || [])}
+                defaultValue={(config.ringtoneBannerAd?.positions || []).join(", ")}
+                onChange={e => {
+                  const arr = e.target.value.split(",").map(s => parseInt(s.trim())).filter(n => !isNaN(n) && n > 0);
+                  setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, positions: arr } }));
+                }}
+                placeholder="2, 6"
+                style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%", boxSizing: "border-box" }} />
+              <p style={{ fontSize: 11, color: "#777", marginTop: 6, marginBottom: 0 }}>
+                Doluysa banner tam bu zillerden sonra çıkar. Boşsa yukarıdaki "her kaç zilde bir" kullanılır.
+              </p>
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+              <h4 style={{ color: "#f59e0b", margin: 0, fontSize: 14 }}>🏳️ Ülke Bazlı Kurallar</h4>
+              <button onClick={() => {
+                const rules = [...(config.ringtoneBannerAd?.rules || [])];
+                rules.push({ countries: [], enabled: true, type: "admob", admobUnitId: "", imageUrl: "", clickUrl: "" });
+                setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
+              }} style={{ background: "#f59e0b", color: "#000", border: "none", borderRadius: 6, padding: "6px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+                + Kural Ekle
+              </button>
+            </div>
+
+            {(config.ringtoneBannerAd?.rules || []).length === 0 && (
+              <p style={{ color: "#666", fontSize: 13, textAlign: "center", padding: 16 }}>Kural yok — banner gösterilmez.</p>
+            )}
+
+            {(config.ringtoneBannerAd?.rules || []).map((rule, idx) => (
+              <div key={idx} style={{ padding: "14px", background: "#1a1a2e", borderRadius: 8, border: `1px solid ${rule.enabled ? "#38bdf8" : "#2a2a35"}`, marginBottom: 12 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <input type="checkbox" checked={rule.enabled}
+                      onChange={e => {
+                        const rules = [...(config.ringtoneBannerAd?.rules || [])];
+                        rules[idx] = { ...rules[idx], enabled: e.target.checked };
+                        setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
+                      }} style={{ width: 16, height: 16 }} />
+                    <span style={{ fontSize: 13, fontWeight: 600, color: rule.enabled ? "#38bdf8" : "#666" }}>
+                      Kural #{idx + 1} {rule.enabled ? "● AKTİF" : "● PASİF"}
+                    </span>
+                  </div>
+                  <button onClick={() => {
+                    const rules = [...(config.ringtoneBannerAd?.rules || [])];
+                    rules.splice(idx, 1);
+                    setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
+                  }} style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer", fontSize: 13 }}>Sil</button>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
+                  <CountryRulePicker rule={rule} idx={idx} configKey="ringtoneBannerAd" config={config} setConfig={setConfig} />
+                  <div>
+                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tür:</label>
+                    <select value={rule.type || "admob"}
+                      onChange={e => {
+                        const rules = [...(config.ringtoneBannerAd?.rules || [])];
+                        rules[idx] = { ...rules[idx], type: e.target.value };
+                        setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
+                      }}
+                      style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      <option value="admob">Google AdMob</option>
+                      <option value="custom">Kendi Görselim (Resim + Link)</option>
+                    </select>
+                  </div>
+                </div>
+
+                {rule.type === "admob" && (
+                  <div style={{ marginBottom: 10 }}>
+                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>AdMob Banner Unit ID:</label>
+                    <input type="text" placeholder="ca-app-pub-xxx/yyy" value={rule.admobUnitId || ""}
+                      onChange={e => {
+                        const rules = [...(config.ringtoneBannerAd?.rules || [])];
+                        rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
+                        setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
+                      }}
+                      style={{ width: "100%", background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                  </div>
+                )}
+
+                {rule.type === "custom" && (
+                  <>
+                    <div style={{ marginBottom: 10 }}>
+                      <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Görsel URL:</label>
+                      <input type="text" placeholder="https://example.com/banner.jpg" value={rule.imageUrl || ""}
+                        onChange={e => {
+                          const rules = [...(config.ringtoneBannerAd?.rules || [])];
+                          rules[idx] = { ...rules[idx], imageUrl: e.target.value };
+                          setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
+                        }}
+                        style={{ width: "100%", background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
+                      <input type="text" placeholder="https://example.com/landing" value={rule.clickUrl || ""}
+                        onChange={e => {
+                          const rules = [...(config.ringtoneBannerAd?.rules || [])];
+                          rules[idx] = { ...rules[idx], clickUrl: e.target.value };
+                          setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
+                        }}
+                        style={{ width: "100%", background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                    </div>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* ===== SABİT ALT BANNER (ringtoneBottomBannerAd) ===== */}
+          <div style={{ padding: "16px", background: "#10182a", borderRadius: 8, border: "1px solid #1e3a5f", marginBottom: 24 }}>
+            <h3 style={{ color: "#38bdf8", margin: "0 0 14px 0", fontSize: 15 }}>📌 Sabit Alt Banner</h3>
+
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+              <label style={{ fontSize: 14, color: "#ccc" }}>Alt Banner Aktif:</label>
+              <input type="checkbox" checked={config.ringtoneBottomBannerAd?.enabled || false}
+                onChange={e => setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, enabled: e.target.checked } }))}
+                style={{ width: 18, height: 18, cursor: "pointer" }} />
+              <span style={{ color: config.ringtoneBottomBannerAd?.enabled ? "#22c55e" : "#ef4444", fontSize: 12, fontWeight: 600 }}>
+                {config.ringtoneBottomBannerAd?.enabled ? "AKTİF" : "KAPALI"}
+              </span>
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+              <h4 style={{ color: "#f59e0b", margin: 0, fontSize: 14 }}>🏳️ Ülke Bazlı Kurallar</h4>
+              <button onClick={() => {
+                const rules = [...(config.ringtoneBottomBannerAd?.rules || [])];
+                rules.push({ countries: [], enabled: true, type: "admob", admobUnitId: "", imageUrl: "", clickUrl: "" });
+                setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
+              }} style={{ background: "#f59e0b", color: "#000", border: "none", borderRadius: 6, padding: "6px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+                + Kural Ekle
+              </button>
+            </div>
+
+            {(config.ringtoneBottomBannerAd?.rules || []).length === 0 && (
+              <p style={{ color: "#666", fontSize: 13, textAlign: "center", padding: 16 }}>Kural yok — alt banner gösterilmez.</p>
+            )}
+
+            {(config.ringtoneBottomBannerAd?.rules || []).map((rule, idx) => (
+              <div key={idx} style={{ padding: "14px", background: "#1a1a2e", borderRadius: 8, border: `1px solid ${rule.enabled ? "#38bdf8" : "#2a2a35"}`, marginBottom: 12 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <input type="checkbox" checked={rule.enabled}
+                      onChange={e => {
+                        const rules = [...(config.ringtoneBottomBannerAd?.rules || [])];
+                        rules[idx] = { ...rules[idx], enabled: e.target.checked };
+                        setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
+                      }} style={{ width: 16, height: 16 }} />
+                    <span style={{ fontSize: 13, fontWeight: 600, color: rule.enabled ? "#38bdf8" : "#666" }}>
+                      Kural #{idx + 1} {rule.enabled ? "● AKTİF" : "● PASİF"}
+                    </span>
+                  </div>
+                  <button onClick={() => {
+                    const rules = [...(config.ringtoneBottomBannerAd?.rules || [])];
+                    rules.splice(idx, 1);
+                    setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
+                  }} style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer", fontSize: 13 }}>Sil</button>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 10 }}>
+                  <CountryRulePicker rule={rule} idx={idx} configKey="ringtoneBottomBannerAd" config={config} setConfig={setConfig} />
+                  <div>
+                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tür:</label>
+                    <select value={rule.type || "admob"}
+                      onChange={e => {
+                        const rules = [...(config.ringtoneBottomBannerAd?.rules || [])];
+                        rules[idx] = { ...rules[idx], type: e.target.value };
+                        setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
+                      }}
+                      style={{ background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      <option value="admob">Google AdMob</option>
+                      <option value="custom">Kendi Görselim (Resim + Link)</option>
+                    </select>
+                  </div>
+                </div>
+
+                {rule.type === "admob" && (
+                  <div style={{ marginBottom: 8 }}>
+                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>AdMob Banner Unit ID:</label>
+                    <input type="text" placeholder="ca-app-pub-xxx/yyy" value={rule.admobUnitId || ""}
+                      onChange={e => {
+                        const rules = [...(config.ringtoneBottomBannerAd?.rules || [])];
+                        rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
+                        setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
+                      }}
+                      style={{ width: "100%", background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                  </div>
+                )}
+
+                {rule.type === "custom" && (
+                  <>
+                    <div style={{ marginBottom: 8 }}>
+                      <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Görsel URL:</label>
+                      <input type="text" placeholder="https://example.com/banner.jpg" value={rule.imageUrl || ""}
+                        onChange={e => {
+                          const rules = [...(config.ringtoneBottomBannerAd?.rules || [])];
+                          rules[idx] = { ...rules[idx], imageUrl: e.target.value };
+                          setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
+                        }}
+                        style={{ width: "100%", background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                    </div>
+                    <div style={{ marginBottom: 8 }}>
+                      <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
+                      <input type="text" placeholder="https://example.com/landing" value={rule.clickUrl || ""}
+                        onChange={e => {
+                          const rules = [...(config.ringtoneBottomBannerAd?.rules || [])];
+                          rules[idx] = { ...rules[idx], clickUrl: e.target.value };
+                          setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
+                        }}
+                        style={{ width: "100%", background: "#23232b", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                    </div>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <button onClick={updateConfig}
+            style={{ background: "linear-gradient(135deg, #38bdf8, #0ea5e9)", color: "#fff", border: "none", borderRadius: 8, padding: "12px 24px", fontSize: 15, fontWeight: 600, cursor: "pointer", width: "100%" }}>
+            Zil Sesi Reklam Ayarlarını Kaydet
+          </button>
+        </div>}
+
         {/* REKLAMSIZ ÜLKELER */}
         {activeSection === "adfree" && <div style={styles.card}>
           <h2 style={styles.title}>🚫 Reklamsız Ülkeler</h2>
@@ -1839,6 +2102,32 @@ function App() {
                 background: daMode === "popup" ? "#451a03" : "#272a33", color: "#fff", cursor: "pointer", fontSize: 13
               }}>
               💬 Popup (Onaylı)
+            </button>
+          </div>
+
+          {/* App Modu — hangi uygulama moduna gönderilecek (YouTube / Ringtone izole) */}
+          <div style={{ display: "flex", gap: 12, marginBottom: 16, alignItems: "center", flexWrap: "wrap" }}>
+            <span style={{ color: "#aaa", fontSize: 13 }}>Uygulama Modu:</span>
+            <button onClick={() => setDaAppMode("youtube")}
+              style={{
+                padding: "8px 20px", borderRadius: 8, border: daAppMode === "youtube" ? "2px solid #ef4444" : "1px solid #3f3f46",
+                background: daAppMode === "youtube" ? "#450a0a" : "#272a33", color: "#fff", cursor: "pointer", fontSize: 13
+              }}>
+              ▶️ YouTube Modu
+            </button>
+            <button onClick={() => setDaAppMode("ringtone")}
+              style={{
+                padding: "8px 20px", borderRadius: 8, border: daAppMode === "ringtone" ? "2px solid #0ea5e9" : "1px solid #3f3f46",
+                background: daAppMode === "ringtone" ? "#0c2d48" : "#272a33", color: "#fff", cursor: "pointer", fontSize: 13
+              }}>
+              🔔 Zil Sesi Modu
+            </button>
+            <button onClick={() => setDaAppMode("both")}
+              style={{
+                padding: "8px 20px", borderRadius: 8, border: daAppMode === "both" ? "2px solid #a855f7" : "1px solid #3f3f46",
+                background: daAppMode === "both" ? "#3b0764" : "#272a33", color: "#fff", cursor: "pointer", fontSize: 13
+              }}>
+              🌐 Her İkisi
             </button>
           </div>
 
@@ -1955,6 +2244,13 @@ function App() {
                   <div>
                     <span style={{ color: action.active ? "#0ea5e9" : "#666", fontSize: 12, marginRight: 8 }}>
                       {action.active ? "● AKTİF" : "○ Pasif"}
+                    </span>
+                    <span style={{
+                      fontSize: 11, fontWeight: 700, marginRight: 8, padding: "2px 8px", borderRadius: 6,
+                      background: (action.appMode || "youtube") === "ringtone" ? "#0c2d48" : ((action.appMode === "both") ? "#3b0764" : "#450a0a"),
+                      color: (action.appMode || "youtube") === "ringtone" ? "#0ea5e9" : ((action.appMode === "both") ? "#c084fc" : "#f87171")
+                    }}>
+                      {(action.appMode || "youtube") === "ringtone" ? "🔔 RINGTONE" : ((action.appMode === "both") ? "🌐 HER İKİSİ" : "▶️ YOUTUBE")}
                     </span>
                     <span style={{ color: "#fff", fontSize: 13 }}>
                       {action.actionType === "chrome_url" && "🌐 "}
