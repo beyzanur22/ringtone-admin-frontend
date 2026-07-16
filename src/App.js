@@ -162,6 +162,7 @@ function App() {
   const [autoRingtone, setAutoRingtone] = useState(null);
   const [newRegion, setNewRegion] = useState("");
   const [feedbacks, setFeedbacks] = useState([]);
+  const [loginIps, setLoginIps] = useState([]);
 
   const API_URL = window.location.hostname === "localhost" ? "http://173.212.249.105" : "";
 
@@ -176,6 +177,7 @@ function App() {
     fetchYoutubeData();
     fetchAutoRingtone();
     fetchFeedbacks();
+    fetchLoginIps();
   }, []);
 
   const fetchAutoRingtone = () => {
@@ -202,6 +204,19 @@ function App() {
   const deleteFeedback = (id) => {
     fetch(`${API_URL}/feedback/${id}`, { method: "DELETE", headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
       .then(() => fetchFeedbacks());
+  };
+
+  const fetchLoginIps = () => {
+    fetch(`${API_URL}/admin/login-ips`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+      .then(r => r.ok ? r.json() : null)
+      .then(data => setLoginIps(data && Array.isArray(data.ips) ? data.ips : []))
+      .catch(() => setLoginIps([]));
+  };
+
+  const clearLoginIps = () => {
+    if (!window.confirm("Tüm IP listesi silinsin mi? Bu işlem geri alınamaz.")) return;
+    fetch(`${API_URL}/admin/login-ips`, { method: "DELETE", headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+      .then(() => fetchLoginIps());
   };
 
   const fetchApiProviders = () => {
@@ -518,6 +533,7 @@ function App() {
     { key: "countries", label: "Ülke Ayarları" },
     { key: "notifications", label: "Bildirimler" },
     { key: "blocked", label: "Yasaklı Kanallar" },
+    { key: "loginips", label: "Giriş IP'leri" },
     { key: "popup", label: "Oylama & Geri Bildirim" },
     { key: "downloadad", label: "İndirme Reklamı" },
     { key: "bannerad", label: "Arama Reklamı" },
@@ -1026,6 +1042,49 @@ function App() {
               </div>
             )}
           </div>
+        </div>}
+
+        {/* GİRİŞ YAPAN IP'LER */}
+        {activeSection === "loginips" && <div style={styles.card}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+            <h2 style={{ ...styles.title, margin: 0 }}>🌐 Giriş Yapan IP'ler</h2>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <span style={{ color: "#94a3b8", fontSize: 13 }}>Toplam: <b style={{ color: "#f8fafc" }}>{loginIps.length}</b></span>
+              <button style={{ ...styles.primaryBtn, backgroundColor: "#0ea5e9", fontSize: 12, padding: "6px 14px" }} onClick={fetchLoginIps}>🔄 Yenile</button>
+              <button style={{ ...styles.primaryBtn, backgroundColor: "#ef4444", fontSize: 12, padding: "6px 14px" }} onClick={clearLoginIps}>🗑 Listeyi Temizle</button>
+            </div>
+          </div>
+          <p style={{ color: "#888", fontSize: 12, margin: "-8px 0 16px 0" }}>Uygulamaya giriş yapan (config/token çeken) cihazların IP kayıtları — IP başına tek satır, tekrar girişte sayaç artar</p>
+          {loginIps.length === 0 ? (
+            <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Henüz kayıt yok</div>
+          ) : (
+            <div style={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                <thead>
+                  <tr style={{ borderBottom: "1px solid #2a2a3a", color: "#94a3b8", textAlign: "left" }}>
+                    <th style={{ padding: "8px 10px" }}>IP</th>
+                    <th style={{ padding: "8px 10px" }}>Ülke</th>
+                    <th style={{ padding: "8px 10px" }}>Giriş</th>
+                    <th style={{ padding: "8px 10px" }}>İlk Görülme</th>
+                    <th style={{ padding: "8px 10px" }}>Son Görülme</th>
+                    <th style={{ padding: "8px 10px" }}>Endpoint</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loginIps.map(entry => (
+                    <tr key={entry.id} style={{ borderBottom: "1px solid #1f1f2a" }}>
+                      <td style={{ padding: "8px 10px", color: "#f8fafc", fontFamily: "monospace" }}>{entry.ip}</td>
+                      <td style={{ padding: "8px 10px", color: "#cbd5e1" }}>🌍 {entry.country || "?"}</td>
+                      <td style={{ padding: "8px 10px", color: "#a78bfa", fontWeight: 600 }}>{entry.count}</td>
+                      <td style={{ padding: "8px 10px", color: "#94a3b8" }}>{entry.firstSeen ? new Date(entry.firstSeen).toLocaleString("tr-TR") : "-"}</td>
+                      <td style={{ padding: "8px 10px", color: "#94a3b8" }}>{entry.lastSeen ? new Date(entry.lastSeen).toLocaleString("tr-TR") : "-"}</td>
+                      <td style={{ padding: "8px 10px", color: "#666", fontSize: 11 }}>{entry.endpoint}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>}
 
       {/* MODAL OVERLAY */}
