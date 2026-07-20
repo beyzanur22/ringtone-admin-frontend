@@ -163,6 +163,8 @@ function App() {
   const [newRegion, setNewRegion] = useState("");
   const [feedbacks, setFeedbacks] = useState([]);
   const [loginIps, setLoginIps] = useState([]);
+  const [liveUsers, setLiveUsers] = useState(null);
+  const [liveWindow, setLiveWindow] = useState(5);
 
   const API_URL = window.location.hostname === "localhost" ? "http://173.212.249.105" : "";
 
@@ -217,6 +219,13 @@ function App() {
     if (!window.confirm("Tüm IP listesi silinsin mi? Bu işlem geri alınamaz.")) return;
     fetch(`${API_URL}/admin/login-ips`, { method: "DELETE", headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
       .then(() => fetchLoginIps());
+  };
+
+  const fetchLiveUsers = (win) => {
+    fetch(`${API_URL}/admin/active-users?window=${win || 5}`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (data && !data.error) setLiveUsers(data); })
+      .catch(() => {});
   };
 
   const fetchApiProviders = () => {
@@ -533,6 +542,7 @@ function App() {
     { key: "countries", label: "Ülke Ayarları" },
     { key: "notifications", label: "Bildirimler" },
     { key: "blocked", label: "Yasaklı Kanallar" },
+    { key: "live", label: "Canlı Kullanıcılar" },
     { key: "loginips", label: "Giriş IP'leri" },
     { key: "popup", label: "Oylama & Geri Bildirim" },
     { key: "downloadad", label: "İndirme Reklamı" },
@@ -547,13 +557,30 @@ function App() {
     { key: "youtube", label: "YouTube & Top50" },
   ];
 
+  // Canlı kullanıcılar: bölüm açıkken 5 sn'de bir, kapalıyken 30 sn'de bir (sidebar rozeti için)
+  useEffect(() => {
+    fetchLiveUsers(liveWindow);
+    const id = setInterval(() => fetchLiveUsers(liveWindow), activeSection === "live" ? 5000 : 30000);
+    return () => clearInterval(id);
+  }, [liveWindow, activeSection]); // eslint-disable-line react-hooks/exhaustive-deps
+
   if (!config) return <div style={{ color: "white", padding: 50, backgroundColor: "#14151a", minHeight: "100vh" }}>Yükleniyor...</div>;
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", backgroundColor: "#14151a", color: "#e2e8f0", fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif" }}>
       {/* SIDEBAR */}
       <div style={{ width: 220, minWidth: 220, backgroundColor: "#1a1a22", borderRight: "1px solid #2a2a35", padding: "20px 0", position: "sticky", top: 0, height: "100vh", overflowY: "auto" }}>
-        <h2 style={{ textAlign: "center", color: "#a78bfa", fontSize: 20, margin: "0 0 24px 0" }}>🎵 Melodia</h2>
+        <h2 style={{ textAlign: "center", color: "#a78bfa", fontSize: 20, margin: "0 0 12px 0" }}>🎵 Melodia</h2>
+        {/* CANLI KULLANICI ROZETİ — her bölümde görünür */}
+        <div onClick={() => setActiveSection("live")}
+          style={{ margin: "0 14px 18px 14px", padding: "10px 12px", borderRadius: 10, cursor: "pointer",
+            backgroundColor: "#15271d", border: "1px solid #1f5133", display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ width: 9, height: 9, borderRadius: "50%", backgroundColor: "#22c55e", boxShadow: "0 0 8px #22c55e", flexShrink: 0 }} />
+          <div style={{ lineHeight: 1.2 }}>
+            <div style={{ color: "#4ade80", fontSize: 18, fontWeight: 700 }}>{liveUsers ? liveUsers.online5m : "—"}</div>
+            <div style={{ color: "#5f8b70", fontSize: 10 }}>şu an aktif</div>
+          </div>
+        </div>
         {menuItems.map(item => (
           <div key={item.key} onClick={() => setActiveSection(item.key)}
             style={{
@@ -1042,6 +1069,138 @@ function App() {
               </div>
             )}
           </div>
+        </div>}
+
+        {/* CANLI KULLANICILAR */}
+        {activeSection === "live" && <div style={styles.card}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+            <h2 style={{ ...styles.title, margin: 0 }}>🟢 Canlı Kullanıcılar</h2>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <span style={{ color: "#4ade80", fontSize: 11 }}>● canlı — 5 sn'de bir yenilenir</span>
+              <select style={{ ...styles.selectDark, width: "auto", padding: "6px 10px", fontSize: 12 }}
+                value={liveWindow} onChange={e => setLiveWindow(Number(e.target.value))}>
+                <option value={5}>Son 5 dakika</option>
+                <option value={15}>Son 15 dakika</option>
+                <option value={30}>Son 30 dakika</option>
+                <option value={60}>Son 1 saat</option>
+              </select>
+              <button style={{ ...styles.primaryBtn, backgroundColor: "#0ea5e9", fontSize: 12, padding: "6px 14px" }} onClick={() => fetchLiveUsers(liveWindow)}>🔄 Yenile</button>
+            </div>
+          </div>
+          <p style={{ color: "#888", fontSize: 12, margin: "0 0 20px 0" }}>
+            Uygulamada "aktif" = seçilen süre içinde backend'e istek atmış benzersiz cihaz. Cihaz kimliği: X-Device-Id → token → IP.
+          </p>
+
+          {!liveUsers ? (
+            <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Yükleniyor...</div>
+          ) : (
+            <>
+              {/* SAYAÇLAR */}
+              <div style={{ display: "flex", gap: 14, marginBottom: 24, flexWrap: "wrap" }}>
+                <div style={{ flex: "1 1 200px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#15271d", border: "1px solid #1f5133" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <span style={{ width: 10, height: 10, borderRadius: "50%", backgroundColor: "#22c55e", boxShadow: "0 0 10px #22c55e" }} />
+                    <span style={{ color: "#5f8b70", fontSize: 12 }}>ŞU AN AKTİF (son 5 dk)</span>
+                  </div>
+                  <div style={{ color: "#4ade80", fontSize: 46, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{liveUsers.online5m}</div>
+                </div>
+                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#1a1a22", border: "1px solid #2a2a35" }}>
+                  <div style={{ color: "#94a3b8", fontSize: 12 }}>SON 15 DAKİKA</div>
+                  <div style={{ color: "#f8fafc", fontSize: 32, fontWeight: 700, marginTop: 6 }}>{liveUsers.online15m}</div>
+                </div>
+                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#1a1a22", border: "1px solid #2a2a35" }}>
+                  <div style={{ color: "#94a3b8", fontSize: 12 }}>SON 1 SAAT</div>
+                  <div style={{ color: "#f8fafc", fontSize: 32, fontWeight: 700, marginTop: 6 }}>{liveUsers.online1h}</div>
+                </div>
+              </div>
+
+              {/* SON 60 DAKİKA GRAFİĞİ */}
+              {liveUsers.timeline && liveUsers.timeline.length > 0 && (() => {
+                const max = Math.max(1, ...liveUsers.timeline.map(p => p.count));
+                return (
+                  <div style={{ marginBottom: 26 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", color: "#94a3b8", fontSize: 12, marginBottom: 8 }}>
+                      <span>Son 60 dakika (dakikalık benzersiz cihaz)</span>
+                      <span style={{ color: "#666" }}>zirve: {max}</span>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "flex-end", gap: 2, height: 90, padding: "0 2px",
+                      backgroundColor: "#14151a", border: "1px solid #2a2a35", borderRadius: 8 }}>
+                      {liveUsers.timeline.map((p, i) => (
+                        <div key={i} title={`${p.t} — ${p.count} cihaz`}
+                          style={{ flex: 1, height: `${Math.max(2, (p.count / max) * 100)}%`,
+                            backgroundColor: i === liveUsers.timeline.length - 1 ? "#4ade80" : "#22c55e",
+                            opacity: i === liveUsers.timeline.length - 1 ? 1 : 0.55, borderRadius: "2px 2px 0 0" }} />
+                      ))}
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between", color: "#555", fontSize: 10, marginTop: 4 }}>
+                      <span>{liveUsers.timeline[0].t} (UTC)</span>
+                      <span>{liveUsers.timeline[liveUsers.timeline.length - 1].t} (UTC)</span>
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* ÜLKELER */}
+              {liveUsers.byCountry && liveUsers.byCountry.length > 0 && (
+                <div style={{ marginBottom: 26 }}>
+                  <div style={{ color: "#94a3b8", fontSize: 12, marginBottom: 10 }}>ÜLKELERE GÖRE (son {liveUsers.window} dk)</div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                    {liveUsers.byCountry.slice(0, 20).map(c => (
+                      <span key={c.country} style={{ padding: "6px 12px", borderRadius: 20, backgroundColor: "#1f1f2a",
+                        border: "1px solid #2a2a35", fontSize: 12, color: "#cbd5e1" }}>
+                        🌍 {c.country} <b style={{ color: "#a78bfa" }}>{c.count}</b>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* CANLI IP LİSTESİ */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                <span style={{ color: "#94a3b8", fontSize: 12 }}>ŞU AN AKTİF CİHAZLAR (son {liveUsers.window} dk)</span>
+                <span style={{ color: "#666", fontSize: 11 }}>
+                  {liveUsers.windowCount} cihaz{liveUsers.listed < liveUsers.windowCount ? ` — ilk ${liveUsers.listed} tanesi gösteriliyor` : ""}
+                </span>
+              </div>
+              {liveUsers.users.length === 0 ? (
+                <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Şu an aktif kullanıcı yok</div>
+              ) : (
+                <div style={{ overflowX: "auto" }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                    <thead>
+                      <tr style={{ borderBottom: "1px solid #2a2a3a", color: "#94a3b8", textAlign: "left" }}>
+                        <th style={{ padding: "8px 10px" }}>IP</th>
+                        <th style={{ padding: "8px 10px" }}>Ülke</th>
+                        <th style={{ padding: "8px 10px" }}>Son Aktivite</th>
+                        <th style={{ padding: "8px 10px" }}>İstek</th>
+                        <th style={{ padding: "8px 10px" }}>Endpoint</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {liveUsers.users.map(u => (
+                        <tr key={u.uid} style={{ borderBottom: "1px solid #1f1f2a" }}>
+                          <td style={{ padding: "8px 10px", color: "#f8fafc", fontFamily: "monospace" }}>
+                            <span style={{ display: "inline-block", width: 7, height: 7, borderRadius: "50%", marginRight: 8,
+                              backgroundColor: u.secondsAgo < 120 ? "#22c55e" : "#eab308" }} />
+                            {u.ip}
+                          </td>
+                          <td style={{ padding: "8px 10px", color: "#cbd5e1" }}>🌍 {u.country}</td>
+                          <td style={{ padding: "8px 10px", color: "#94a3b8" }}>
+                            {u.secondsAgo < 60 ? `${u.secondsAgo} sn önce` : `${Math.round(u.secondsAgo / 60)} dk önce`}
+                          </td>
+                          <td style={{ padding: "8px 10px", color: "#a78bfa", fontWeight: 600 }}>{u.hits}</td>
+                          <td style={{ padding: "8px 10px", color: "#666", fontSize: 11 }}>{u.endpoint}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+              <div style={{ color: "#555", fontSize: 11, marginTop: 14 }}>
+                Son güncelleme: {new Date(liveUsers.updatedAt).toLocaleTimeString("tr-TR")}
+              </div>
+            </>
+          )}
         </div>}
 
         {/* GİRİŞ YAPAN IP'LER */}
