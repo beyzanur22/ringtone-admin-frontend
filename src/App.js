@@ -123,6 +123,9 @@ function App() {
   // Popup / Duyuru sistemi
   const [announcements, setAnnouncements] = useState([]);
   const [isPopupModalOpen, setIsPopupModalOpen] = useState(false);
+  // "vote" = yıldız oylaması | "review" = tek butonlu Google değerlendirme daveti
+  const [popupType, setPopupType] = useState("vote");
+  const [popupReviewBtnLabel, setPopupReviewBtnLabel] = useState("⭐ Değerlendir");
   const [popupTitle, setPopupTitle] = useState("");
   const [popupMessage, setPopupMessage] = useState("");
   const [popupButtons, setPopupButtons] = useState([
@@ -386,13 +389,20 @@ function App() {
 
   const createAnnouncement = () => {
     if (!popupTitle.trim() || !popupMessage.trim()) return alert("Başlık ve mesaj zorunlu!");
-    if (popupButtons.length === 0) return alert("En az bir buton ekleyin!");
+    if (popupType === "vote" && popupButtons.length === 0) return alert("En az bir buton ekleyin!");
+    if (popupType === "review" && !popupReviewBtnLabel.trim()) return alert("Buton yazısı zorunlu!");
     if (popupCountryMode === "selected" && popupSelectedCountries.length === 0) return alert("En az bir ülke seçin!");
 
+    // review tipinde tek buton gönderilir; uygulama yıldız ayrımı yapmadan Google kartını açar
+    const buttons = popupType === "review"
+      ? [{ label: popupReviewBtnLabel.trim(), value: "review" }]
+      : popupButtons;
+
     const payload = {
+      type: popupType,
       title: popupTitle.trim(),
       message: popupMessage.trim(),
-      buttons: popupButtons,
+      buttons,
       countries: popupCountryMode === "all" ? "all" : popupSelectedCountries,
       startTime: popupStartTime || null,
       endTime: popupEndTime || null,
@@ -1007,6 +1017,14 @@ function App() {
                           }}>
                             {isActive ? "● AKTİF" : "● PASİF"}
                           </span>
+                          <span style={{
+                            fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 20,
+                            background: ann.type === "review" ? "#0f2230" : "#2a2113",
+                            color: ann.type === "review" ? "#38bdf8" : "#f59e0b",
+                            border: `1px solid ${ann.type === "review" ? "#1e4a63" : "#5c4318"}`
+                          }}>
+                            {ann.type === "review" ? "🙋 Değerlendirme Daveti" : "⭐ Yıldız Oylaması"}
+                          </span>
                           <span style={{ fontSize: 11, color: "#666" }}>
                             {ann.countries === "all" ? "Tüm ülkeler" : (Array.isArray(ann.countries) ? ann.countries.join(", ") : ann.countries)}
                           </span>
@@ -1452,6 +1470,31 @@ function App() {
             </div>
 
             <div style={styles.modalBody}>
+              {/* POPUP TİPİ */}
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Popup Tipi</label>
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                  {[
+                    { key: "vote", title: "⭐ Yıldız Oylaması", desc: "Kullanıcı 1-5 yıldız seçer. 4-5 verenlere Google kartı açılır, 1-3 verenlerin yorumu panele düşer." },
+                    { key: "review", title: "🙋 Değerlendirme Daveti", desc: "Tek buton. Yıldız ayrımı yapılmadan Google kartı herkese açılır. Play politikasına uygun olan yöntem." },
+                  ].map(t => (
+                    <div key={t.key} onClick={() => setPopupType(t.key)}
+                      style={{ flex: "1 1 260px", padding: "14px 16px", borderRadius: 10, cursor: "pointer",
+                        backgroundColor: popupType === t.key ? "#2d1f4e" : "#1a1a22",
+                        border: `1px solid ${popupType === t.key ? "#7c3aed" : "#2a2a35"}` }}>
+                      <div style={{ color: popupType === t.key ? "#c4b5fd" : "#cbd5e1", fontSize: 14, fontWeight: 600 }}>{t.title}</div>
+                      <div style={{ color: "#94a3b8", fontSize: 11, marginTop: 6, lineHeight: 1.5 }}>{t.desc}</div>
+                    </div>
+                  ))}
+                </div>
+                {popupType === "vote" && (
+                  <p style={{ color: "#f59e0b", fontSize: 11, margin: "10px 0 0 0", lineHeight: 1.5 }}>
+                    ⚠️ Google, yorum isteğini kullanıcının puanına göre filtrelemeyi (review gating) yasaklıyor.
+                    Bu tip politika ihlali sayılabilir. Güvenli olan "Değerlendirme Daveti".
+                  </p>
+                )}
+              </div>
+
               {/* Başlık & Mesaj */}
               <div style={styles.formGroup}>
                 <label style={styles.label}>Başlık</label>
@@ -1464,7 +1507,19 @@ function App() {
                   placeholder="Kullanıcılara gösterilecek mesaj..." value={popupMessage} onChange={e => setPopupMessage(e.target.value)} />
               </div>
 
-              {/* Butonlar */}
+              {/* Buton — review tipinde tek alan */}
+              {popupType === "review" ? (
+                <div style={styles.formGroup}>
+                  <label style={styles.label}>Buton Yazısı</label>
+                  <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
+                    placeholder="⭐ Değerlendir" value={popupReviewBtnLabel}
+                    onChange={e => setPopupReviewBtnLabel(e.target.value)} />
+                  <p style={{ color: "#888", fontSize: 11, margin: "8px 0 0 0", lineHeight: 1.5 }}>
+                    Kullanıcı bu butona basınca Google'ın değerlendirme kartı uygulamanın içinde açılır.
+                    Puanı Google'ın kartında verir — bu popup puan toplamaz.
+                  </p>
+                </div>
+              ) : (
               <div style={styles.formGroup}>
                 <label style={styles.label}>Butonlar (oy seçenekleri)</label>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
@@ -1482,6 +1537,7 @@ function App() {
                   <button style={{ ...styles.primaryBtn, whiteSpace: "nowrap" }} onClick={addPopupButton}>Ekle +</button>
                 </div>
               </div>
+              )}
 
               {/* Hedef Ülkeler */}
               <div style={styles.formGroup}>
