@@ -93,6 +93,7 @@ function App() {
   const [newCountryMode, setNewCountryMode] = useState("youtube");
   const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
   const [countrySearch, setCountrySearch] = useState("");
+  const [asnInput, setAsnInput] = useState("");
   const [blockedChannels, setBlockedChannels] = useState([]);
   
   // Modals state
@@ -255,6 +256,15 @@ function App() {
     })
     .then(res => res.json())
     .then(() => alert("Config Updated"));
+  };
+
+  // "AS15169" / "15169" / " 15169 " -> 15169. Gecersiz veya tekrar eden deger eklenmez.
+  const addAsn = () => {
+    const n = parseInt(String(asnInput).replace(/\D/g, ""), 10);
+    if (!Number.isInteger(n) || n <= 0) { alert("Geçerli bir ASN girin (ör. 15169)"); return; }
+    if ((config.ringtoneAsns || []).includes(n)) { alert(`AS${n} zaten listede`); return; }
+    setConfig(prev => ({ ...prev, ringtoneAsns: [...(prev.ringtoneAsns || []), n] }));
+    setAsnInput("");
   };
 
   const addCountry = (code) => {
@@ -550,6 +560,7 @@ function App() {
     { key: "bottombanner", label: "Alt Banner Reklam" },
     { key: "ringtonead", label: "Zil Sesi Reklamı" },
     { key: "adfree", label: "Reklamsız Ülkeler" },
+    { key: "asn", label: "ASN Ayarları" },
     { key: "device", label: "Device Actions" },
     { key: "appcontrols", label: "App Controls" },
     { key: "apiproviders", label: "API Durumu" },
@@ -2272,6 +2283,53 @@ function App() {
                 );
               })}
             </div>
+          )}
+
+          <button onClick={updateConfig}
+            style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed)", color: "#fff", border: "none", borderRadius: 8, padding: "12px 24px", fontSize: 15, fontWeight: 600, cursor: "pointer", width: "100%" }}>
+            Kaydet
+          </button>
+        </div>}
+
+        {/* ASN AYARLARI */}
+        {activeSection === "asn" && <div style={styles.card}>
+          <h2 style={styles.title}>🌐 ASN Ayarları (Zorunlu Zil Sesi)</h2>
+          <p style={{ color: "#888", fontSize: 13, marginBottom: 20 }}>
+            Buraya eklenen ASN'lerden gelen cihazlar <b>ülke ayarına ve global moda bakılmadan</b> doğrudan
+            zil sesi modunda açılır. ASN, cihazın IP'sinden tespit edilir.
+            <br />
+            <span style={{ color: "#f59e0b" }}>
+              Değişiklik cihazlara bir sonraki uygulama açılışında ulaşır.
+            </span>
+          </p>
+
+          <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>
+            <input
+              value={asnInput}
+              onChange={e => setAsnInput(e.target.value)}
+              onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); addAsn(); } }}
+              placeholder="ASN girin (ör. 15169 veya AS15169)"
+              style={{ ...styles.input, flex: 1 }}
+            />
+            <button onClick={addAsn} style={{ ...styles.primaryBtn, backgroundColor: "#0ea5e9" }}>
+              Ekle
+            </button>
+          </div>
+
+          {(config.ringtoneAsns || []).length > 0 ? (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 20 }}>
+              {(config.ringtoneAsns || []).map(a => (
+                <span key={a} style={{ background: "#7c3aed", color: "#fff", borderRadius: 12, padding: "6px 12px", fontSize: 13, display: "flex", alignItems: "center", gap: 8 }}>
+                  AS{a}
+                  <span style={{ cursor: "pointer", fontWeight: 700 }}
+                    onClick={() => setConfig(prev => ({ ...prev, ringtoneAsns: (prev.ringtoneAsns || []).filter(x => x !== a) }))}>×</span>
+                </span>
+              ))}
+            </div>
+          ) : (
+            <p style={{ color: "#64748b", fontSize: 13, marginBottom: 20 }}>
+              Henüz ASN eklenmedi — mod kararı tamamen ülke/global ayarına göre veriliyor.
+            </p>
           )}
 
           <button onClick={updateConfig}
