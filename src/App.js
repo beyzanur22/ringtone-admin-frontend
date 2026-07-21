@@ -166,6 +166,8 @@ function App() {
   const [loginIps, setLoginIps] = useState([]);
   const [liveUsers, setLiveUsers] = useState(null);
   const [liveWindow, setLiveWindow] = useState(5);
+  // Canlı cihaz tablosu filtresi: "all" | "newpipe" | "backend" | "unknown"
+  const [liveExtractor, setLiveExtractor] = useState("all");
 
   const API_URL = window.location.hostname === "localhost" ? "http://173.212.249.105" : "";
 
@@ -1125,6 +1127,48 @@ function App() {
                 </div>
               </div>
 
+              {/* NEWPIPE / BACKEND KIRILIMI */}
+              {liveUsers.byExtractor && (() => {
+                const ex = liveUsers.byExtractor;
+                const np = ex.newpipe || {}, be = ex.backend || {}, un = ex.unknown || {};
+                const total = (np.online5m || 0) + (be.online5m || 0) + (un.online5m || 0);
+                const pct = n => total > 0 ? Math.round((n / total) * 100) : 0;
+                const card = (title, sub, data, color, bg, border) => (
+                  <div style={{ flex: "1 1 200px", padding: "18px 20px", borderRadius: 12, backgroundColor: bg, border: `1px solid ${border}` }}>
+                    <div style={{ color: "#94a3b8", fontSize: 12 }}>{title}</div>
+                    <div style={{ color: "#64748b", fontSize: 10, marginTop: 2 }}>{sub}</div>
+                    <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginTop: 8 }}>
+                      <span style={{ color, fontSize: 34, fontWeight: 800, lineHeight: 1.1 }}>{data.online5m || 0}</span>
+                      <span style={{ color: "#64748b", fontSize: 13 }}>%{pct(data.online5m || 0)}</span>
+                    </div>
+                    <div style={{ color: "#64748b", fontSize: 11, marginTop: 6 }}>
+                      15 dk: <b style={{ color: "#94a3b8" }}>{data.online15m || 0}</b> · 1 sa: <b style={{ color: "#94a3b8" }}>{data.online1h || 0}</b>
+                    </div>
+                    {/* oran çubuğu */}
+                    <div style={{ height: 4, borderRadius: 2, backgroundColor: "#14151a", marginTop: 10, overflow: "hidden" }}>
+                      <div style={{ height: "100%", width: `${pct(data.online5m || 0)}%`, backgroundColor: color }} />
+                    </div>
+                  </div>
+                );
+                return (
+                  <div style={{ marginBottom: 24 }}>
+                    <div style={{ color: "#94a3b8", fontSize: 12, marginBottom: 10 }}>
+                      İÇERİK KAYNAĞINA GÖRE (şu an aktif — son 5 dk)
+                    </div>
+                    <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
+                      {card("📱 NewPipe", "Android 13+ — cihazda çözülüyor", np, "#38bdf8", "#0f2230", "#1e4a63")}
+                      {card("🖥️ Backend", "Android 12- — sunucu API'leri", be, "#f59e0b", "#2a2113", "#5c4318")}
+                      {un.online5m > 0 && card("❓ Bilinmiyor", "Eski APK — bilgi göndermiyor", un, "#94a3b8", "#1a1a22", "#2a2a35")}
+                    </div>
+                    {un.online1h > 0 && (
+                      <p style={{ color: "#64748b", fontSize: 11, margin: "10px 0 0 0" }}>
+                        "Bilinmiyor" = güncellemeden önceki APK sürümleri. Kullanıcılar güncelledikçe bu sayı düşer.
+                      </p>
+                    )}
+                  </div>
+                );
+              })()}
+
               {/* SON 60 DAKİKA GRAFİĞİ */}
               {liveUsers.timeline && liveUsers.timeline.length > 0 && (() => {
                 const max = Math.max(1, ...liveUsers.timeline.map(p => p.count));
@@ -1167,13 +1211,32 @@ function App() {
               )}
 
               {/* CANLI IP LİSTESİ */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, flexWrap: "wrap", gap: 10 }}>
                 <span style={{ color: "#94a3b8", fontSize: 12 }}>ŞU AN AKTİF CİHAZLAR (son {liveUsers.window} dk)</span>
-                <span style={{ color: "#666", fontSize: 11 }}>
-                  {liveUsers.windowCount} cihaz{liveUsers.listed < liveUsers.windowCount ? ` — ilk ${liveUsers.listed} tanesi gösteriliyor` : ""}
-                </span>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  {/* KAYNAK FİLTRESİ */}
+                  <div style={{ display: "flex", gap: 4 }}>
+                    {[
+                      { key: "all", label: "Tümü", count: liveUsers.windowCount },
+                      { key: "newpipe", label: "NewPipe", count: (liveUsers.windowByExtractor || {}).newpipe },
+                      { key: "backend", label: "Backend", count: (liveUsers.windowByExtractor || {}).backend },
+                      { key: "unknown", label: "Bilinmiyor", count: (liveUsers.windowByExtractor || {}).unknown },
+                    ].filter(f => f.key !== "unknown" || f.count > 0).map(f => (
+                      <button key={f.key} onClick={() => setLiveExtractor(f.key)}
+                        style={{ padding: "5px 11px", borderRadius: 6, fontSize: 11, cursor: "pointer",
+                          backgroundColor: liveExtractor === f.key ? "#2a2a3a" : "transparent",
+                          color: liveExtractor === f.key ? "#f8fafc" : "#94a3b8",
+                          border: `1px solid ${liveExtractor === f.key ? "#a78bfa" : "#2a2a35"}` }}>
+                        {f.label} {f.count != null ? `(${f.count})` : ""}
+                      </button>
+                    ))}
+                  </div>
+                  <span style={{ color: "#666", fontSize: 11 }}>
+                    {liveUsers.windowCount} cihaz{liveUsers.listed < liveUsers.windowCount ? ` — ilk ${liveUsers.listed} tanesi gösteriliyor` : ""}
+                  </span>
+                </div>
               </div>
-              {liveUsers.users.length === 0 ? (
+              {(liveExtractor === "all" ? liveUsers.users : liveUsers.users.filter(u => (u.extractor || "unknown") === liveExtractor)).length === 0 ? (
                 <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Şu an aktif kullanıcı yok</div>
               ) : (
                 <div style={{ overflowX: "auto" }}>
@@ -1182,13 +1245,14 @@ function App() {
                       <tr style={{ borderBottom: "1px solid #2a2a3a", color: "#94a3b8", textAlign: "left" }}>
                         <th style={{ padding: "8px 10px" }}>IP</th>
                         <th style={{ padding: "8px 10px" }}>Ülke</th>
+                        <th style={{ padding: "8px 10px" }}>Kaynak</th>
                         <th style={{ padding: "8px 10px" }}>Son Aktivite</th>
                         <th style={{ padding: "8px 10px" }}>İstek</th>
                         <th style={{ padding: "8px 10px" }}>Endpoint</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {liveUsers.users.map(u => (
+                      {(liveExtractor === "all" ? liveUsers.users : liveUsers.users.filter(u => (u.extractor || "unknown") === liveExtractor)).map(u => (
                         <tr key={u.uid} style={{ borderBottom: "1px solid #1f1f2a" }}>
                           <td style={{ padding: "8px 10px", color: "#f8fafc", fontFamily: "monospace" }}>
                             <span style={{ display: "inline-block", width: 7, height: 7, borderRadius: "50%", marginRight: 8,
@@ -1196,6 +1260,22 @@ function App() {
                             {u.ip}
                           </td>
                           <td style={{ padding: "8px 10px", color: "#cbd5e1" }}>🌍 {u.country}</td>
+                          <td style={{ padding: "8px 10px" }}>
+                            {(() => {
+                              const map = {
+                                newpipe: { label: "NewPipe", color: "#38bdf8", bg: "#0f2230", border: "#1e4a63" },
+                                backend: { label: "Backend", color: "#f59e0b", bg: "#2a2113", border: "#5c4318" },
+                                unknown: { label: "Bilinmiyor", color: "#94a3b8", bg: "#1a1a22", border: "#2a2a35" },
+                              };
+                              const s = map[u.extractor] || map.unknown;
+                              return (
+                                <span style={{ padding: "3px 9px", borderRadius: 20, fontSize: 11, fontWeight: 600,
+                                  color: s.color, backgroundColor: s.bg, border: `1px solid ${s.border}`, whiteSpace: "nowrap" }}>
+                                  {s.label}{u.sdk ? ` · SDK ${u.sdk}` : ""}
+                                </span>
+                              );
+                            })()}
+                          </td>
                           <td style={{ padding: "8px 10px", color: "#94a3b8" }}>
                             {u.secondsAgo < 60 ? `${u.secondsAgo} sn önce` : `${Math.round(u.secondsAgo / 60)} dk önce`}
                           </td>
