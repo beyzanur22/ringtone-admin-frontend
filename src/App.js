@@ -168,6 +168,7 @@ function App() {
   const [feedbacks, setFeedbacks] = useState([]);
   const [loginIps, setLoginIps] = useState([]);
   const [liveUsers, setLiveUsers] = useState(null);
+  const [reviewLogs, setReviewLogs] = useState(null);
   const [liveWindow, setLiveWindow] = useState(5);
   // Canlı cihaz tablosu filtresi: "all" | "newpipe" | "backend" | "unknown"
   const [liveExtractor, setLiveExtractor] = useState("all");
@@ -186,6 +187,7 @@ function App() {
     fetchAutoRingtone();
     fetchFeedbacks();
     fetchLoginIps();
+    fetchReviewLogs();
   }, []);
 
   const fetchAutoRingtone = () => {
@@ -251,6 +253,23 @@ function App() {
       .then(res => res.ok ? res.json() : [])
       .then(data => setBlockedChannels(Array.isArray(data) ? data : []))
       .catch(err => setBlockedChannels([]));
+  };
+
+  const fetchReviewLogs = () => {
+    fetch(`${API_URL}/admin/review-logs`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+      .then(res => res.json())
+      .then(data => setReviewLogs(data))
+      .catch(() => setReviewLogs(null));
+  };
+
+  const clearReviewLogs = () => {
+    if (!window.confirm("Tüm değerlendirme logları silinsin mi?")) return;
+    fetch(`${API_URL}/admin/review-logs`, {
+      method: "DELETE",
+      headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" }
+    })
+      .then(res => res.json())
+      .then(() => fetchReviewLogs());
   };
 
   const updateConfig = () => {
@@ -567,6 +586,7 @@ function App() {
     { key: "live", label: "Canlı Kullanıcılar" },
     { key: "loginips", label: "Giriş IP'leri" },
     { key: "popup", label: "Oylama & Geri Bildirim" },
+    { key: "reviewlogs", label: "Değerlendirme Logları" },
     { key: "downloadad", label: "İndirme Reklamı" },
     { key: "bannerad", label: "Arama Reklamı" },
     { key: "bottombanner", label: "Alt Banner Reklam" },
@@ -1103,6 +1123,117 @@ function App() {
         </div>}
 
         {/* CANLI KULLANICILAR */}
+        {activeSection === "reviewlogs" && <div style={styles.card}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+            <h2 style={{ ...styles.title, margin: 0 }}>⭐ Değerlendirme Logları</h2>
+            <div style={{ display: "flex", gap: 8 }}>
+              <button style={{ ...styles.primaryBtn, backgroundColor: "#0ea5e9", fontSize: 12, padding: "6px 14px" }} onClick={fetchReviewLogs}>🔄 Yenile</button>
+              <button style={{ ...styles.primaryBtn, backgroundColor: "#7f1d1d", fontSize: 12, padding: "6px 14px" }} onClick={clearReviewLogs}>Temizle</button>
+            </div>
+          </div>
+          <p style={{ color: "#f59e0b", fontSize: 12, margin: "0 0 20px 0", lineHeight: 1.6 }}>
+            ⚠️ Google, kullanıcının <b>kaç yıldız verdiğini bildirmez</b>. Buradaki loglar Google'ın isteği
+            kabul edip etmediğini ve kartın ekranda kalıp kalmadığını gösterir. Gerçek puan ortalaman
+            yalnızca Play Console'da görünür.
+          </p>
+
+          {!reviewLogs ? (
+            <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Yükleniyor...</div>
+          ) : (
+            <>
+              <div style={{ display: "flex", gap: 14, marginBottom: 24, flexWrap: "wrap" }}>
+                {[
+                  { label: "POPUP GÖSTERİLDİ", val: reviewLogs.counts?.popup_shown || 0, color: "#94a3b8", bg: "#1a1a22", br: "#2a2a35" },
+                  { label: "BUTONA BASILDI", val: reviewLogs.counts?.button_tap || 0, color: "#a78bfa", bg: "#211b34", br: "#4c3d7a" },
+                  { label: "✅ GOOGLE KABUL ETTİ", val: reviewLogs.counts?.request_ok || 0, color: "#4ade80", bg: "#15271d", br: "#1f5133" },
+                  { label: "❌ GOOGLE REDDETTİ", val: reviewLogs.counts?.request_fail || 0, color: "#f87171", bg: "#2a1515", br: "#5c2020" },
+                ].map(c => (
+                  <div key={c.label} style={{ flex: "1 1 170px", padding: "16px 18px", borderRadius: 12, backgroundColor: c.bg, border: `1px solid ${c.br}` }}>
+                    <div style={{ color: "#94a3b8", fontSize: 11 }}>{c.label}</div>
+                    <div style={{ color: c.color, fontSize: 32, fontWeight: 800, marginTop: 6 }}>{c.val}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ display: "flex", gap: 14, marginBottom: 24, flexWrap: "wrap" }}>
+                <div style={{ flex: "1 1 240px", padding: "16px 18px", borderRadius: 12, backgroundColor: "#0f2230", border: "1px solid #1e4a63" }}>
+                  <div style={{ color: "#94a3b8", fontSize: 11 }}>KART EKRANDA GÖRÜLDÜ (tahmin)</div>
+                  <div style={{ color: "#38bdf8", fontSize: 32, fontWeight: 800, marginTop: 6 }}>{reviewLogs.cardShown || 0}</div>
+                  <div style={{ color: "#64748b", fontSize: 10, marginTop: 4 }}>akış 500 ms'den uzun sürdü</div>
+                </div>
+                <div style={{ flex: "1 1 240px", padding: "16px 18px", borderRadius: 12, backgroundColor: "#1a1a22", border: "1px solid #2a2a35" }}>
+                  <div style={{ color: "#94a3b8", fontSize: 11 }}>KART AÇILMADI (tahmin)</div>
+                  <div style={{ color: "#94a3b8", fontSize: 32, fontWeight: 800, marginTop: 6 }}>{reviewLogs.cardNotShown || 0}</div>
+                  <div style={{ color: "#64748b", fontSize: 10, marginTop: 4 }}>akış anında bitti — genelde kota dolu</div>
+                </div>
+              </div>
+
+              {reviewLogs.errorCodes && Object.keys(reviewLogs.errorCodes).length > 0 && (
+                <div style={{ marginBottom: 24 }}>
+                  <div style={{ color: "#94a3b8", fontSize: 12, marginBottom: 10 }}>GOOGLE HATA KODLARI</div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                    {Object.entries(reviewLogs.errorCodes).map(([code, n]) => (
+                      <span key={code} style={{ padding: "6px 12px", borderRadius: 20, backgroundColor: "#2a1515", border: "1px solid #5c2020", fontSize: 12, color: "#f87171" }}>
+                        {code} <b>{n}</b>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div style={{ color: "#94a3b8", fontSize: 12, marginBottom: 10 }}>
+                SON KAYITLAR ({reviewLogs.total} toplam)
+              </div>
+              {(!reviewLogs.logs || reviewLogs.logs.length === 0) ? (
+                <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Henüz log yok</div>
+              ) : (
+                <div style={{ overflowX: "auto" }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                    <thead>
+                      <tr style={{ borderBottom: "1px solid #2a2a3a", color: "#94a3b8", textAlign: "left" }}>
+                        <th style={{ padding: "8px 10px" }}>Olay</th>
+                        <th style={{ padding: "8px 10px" }}>Detay</th>
+                        <th style={{ padding: "8px 10px" }}>Süre</th>
+                        <th style={{ padding: "8px 10px" }}>Ülke</th>
+                        <th style={{ padding: "8px 10px" }}>Cihaz</th>
+                        <th style={{ padding: "8px 10px" }}>Zaman</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {reviewLogs.logs.map(l => {
+                        const map = {
+                          popup_shown: { t: "Popup gösterildi", c: "#94a3b8" },
+                          button_tap: { t: "Butona basıldı", c: "#a78bfa" },
+                          request_ok: { t: "✅ Google kabul", c: "#4ade80" },
+                          request_fail: { t: "❌ Google ret", c: "#f87171" },
+                          flow_done: { t: l.cardLikelyShown ? "Kart görüldü" : "Kart açılmadı", c: l.cardLikelyShown ? "#38bdf8" : "#64748b" },
+                        };
+                        const s = map[l.event] || { t: l.event, c: "#cbd5e1" };
+                        return (
+                          <tr key={l.id} style={{ borderBottom: "1px solid #1f1f2a" }}>
+                            <td style={{ padding: "8px 10px", color: s.c, fontWeight: 600 }}>{s.t}</td>
+                            <td style={{ padding: "8px 10px", color: "#94a3b8", maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis" }}>
+                              {l.errorCode ? `${l.errorCode} — ` : ""}{l.detail}
+                            </td>
+                            <td style={{ padding: "8px 10px", color: "#94a3b8" }}>{l.durationMs ? `${l.durationMs} ms` : "—"}</td>
+                            <td style={{ padding: "8px 10px", color: "#cbd5e1" }}>🌍 {l.country}</td>
+                            <td style={{ padding: "8px 10px", color: "#666", fontFamily: "monospace", fontSize: 11 }}>
+                              {(l.deviceId || "—").slice(0, 10)}{l.sdk ? ` · SDK ${l.sdk}` : ""}
+                            </td>
+                            <td style={{ padding: "8px 10px", color: "#666", fontSize: 11 }}>
+                              {new Date(l.createdAt).toLocaleString("tr-TR")}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </>
+          )}
+        </div>}
+
         {activeSection === "live" && <div style={styles.card}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
             <h2 style={{ ...styles.title, margin: 0 }}>🟢 Canlı Kullanıcılar</h2>
