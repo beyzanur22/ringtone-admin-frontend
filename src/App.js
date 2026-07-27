@@ -583,6 +583,7 @@ function App() {
     { key: "countries", label: "Ülke Ayarları" },
     { key: "notifications", label: "Bildirimler" },
     { key: "blocked", label: "Yasaklı Kanallar" },
+    { key: "contentfilter", label: "İçerik Filtresi" },
     { key: "live", label: "Canlı Kullanıcılar" },
     { key: "loginips", label: "Giriş IP'leri" },
     { key: "popup", label: "Oylama & Geri Bildirim" },
@@ -712,6 +713,49 @@ function App() {
             {(config.mp3Provider?.bazocam === false) && (config.mp3Provider?.backend === false) && "🚫 MP3 indirme tamamen kapalı!"}
           </div>
           <button style={{ ...styles.primaryBtn, marginTop: 16 }} onClick={updateConfig}>MP3 Ayarlarını Kaydet</button>
+        </div>}
+
+        {/* İÇERİK FİLTRESİ — canlı yayın engeli + süre limiti */}
+        {activeSection === "contentfilter" && <div style={styles.card}>
+          <h2 style={styles.title}>İçerik Filtresi</h2>
+          <p style={{ color: "#888", fontSize: 13, marginBottom: 16 }}>
+            Arama sonuçlarında <b>canlı yayınları</b> ve <b>çok uzun videoları</b> eler. Elenen içerikler aramada görünmez, indirilemez.
+          </p>
+
+          <label style={{ ...styles.labelCheckbox, display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: 8, border: "1px solid #333", background: (config.contentFilter?.enabled !== false) ? "#1a3a1a" : "#1a1a1d", marginBottom: 12 }}>
+            <input type="checkbox" checked={config.contentFilter?.enabled !== false}
+              onChange={e => setConfig({ ...config, contentFilter: { ...(config.contentFilter || {}), enabled: e.target.checked } })}
+              style={{ marginRight: 10 }}
+            />
+            <span style={{ color: (config.contentFilter?.enabled !== false) ? "#4ade80" : "#888" }}>Filtre aktif</span>
+          </label>
+
+          <label style={{ ...styles.labelCheckbox, display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: 8, border: "1px solid #333", background: (config.contentFilter?.blockLive !== false) ? "#3a1a1a" : "#1a1a1d", marginBottom: 16 }}>
+            <input type="checkbox" checked={config.contentFilter?.blockLive !== false}
+              onChange={e => setConfig({ ...config, contentFilter: { ...(config.contentFilter || {}), blockLive: e.target.checked } })}
+              style={{ marginRight: 10 }}
+            />
+            <span style={{ color: (config.contentFilter?.blockLive !== false) ? "#f87171" : "#888" }}>📡 Canlı yayınları engelle</span>
+          </label>
+
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
+            <span style={{ color: "#e2e8f0", fontSize: 14 }}>Maksimum süre:</span>
+            <input type="number" min={1} max={600} step={1}
+              value={config.contentFilter?.maxDurationMinutes ?? 35}
+              onChange={e => setConfig({ ...config, contentFilter: { ...(config.contentFilter || {}), maxDurationMinutes: parseInt(e.target.value, 10) || 0 } })}
+              style={{ ...styles.select, flex: "unset", width: 90, textAlign: "center" }}
+            />
+            <span style={{ color: "#94a3b8", fontSize: 13 }}>dakika ve üstü elenir</span>
+          </div>
+          <div style={{ padding: "10px 14px", borderRadius: 6, background: "#111", fontSize: 12, color: "#aaa", marginBottom: 16 }}>
+            Örn: <b>{config.contentFilter?.maxDurationMinutes ?? 35}</b> → {config.contentFilter?.maxDurationMinutes ?? 35} dk ve üzeri videolar aramada çıkmaz.
+          </div>
+
+          <div style={{ padding: "10px 14px", borderRadius: 6, background: "#2a2200", border: "1px solid #4a3a00", fontSize: 12, color: "#d4b062", marginBottom: 16 }}>
+            ⚠️ Bu filtre <b>backend araması</b> (Android 12 ve altı + fallback) için geçerlidir. Android 13+ cihazlar aramayı telefonda NewPipe ile yaptığından bu filtreden etkilenmez.
+          </div>
+
+          <button style={{ ...styles.primaryBtn }} onClick={updateConfig}>İçerik Filtresini Kaydet</button>
         </div>}
 
         {activeSection === "countries" && <div style={styles.card}>
