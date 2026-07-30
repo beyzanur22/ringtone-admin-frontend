@@ -1,5 +1,34 @@
 import React, { useEffect, useState } from "react";
 
+/* =========================================================================
+   ÇOK UYGULAMALI PANEL — appId enjeksiyonu
+   Tüm admin çağrıları "X-App-Key" header'ı taşır ve ${API_URL}/... adresine
+   gider. Seçili uygulamanın appId'sini bu çağrılara TEK NOKTADAN ekliyoruz —
+   böylece 36 fetch'i tek tek düzenlemeye gerek kalmadan hepsi izole olur.
+   Global (tüm-uygulama) yollar hariç tutulur.
+========================================================================= */
+let PANEL_APP_ID = (typeof localStorage !== "undefined" && localStorage.getItem("panelAppId")) || "default";
+function setPanelAppId(id) {
+  PANEL_APP_ID = id || "default";
+  try { localStorage.setItem("panelAppId", PANEL_APP_ID); } catch (e) {}
+}
+// Bu yollar tüm uygulamalar için ortaktır → appId eklenmez
+const PANEL_GLOBAL_RE = /\/admin\/(api-|smart-cache|youtube|stats|media-stats|apps)|\/proxy-panel|\/cache-panel/;
+if (typeof window !== "undefined" && !window.__panelFetchPatched) {
+  window.__panelFetchPatched = true;
+  const _origFetch = window.fetch.bind(window);
+  window.fetch = (input, init = {}) => {
+    try {
+      const h = (init && init.headers) || {};
+      const hasKey = h["X-App-Key"] || h["x-app-key"];
+      if (hasKey && typeof input === "string" && !PANEL_GLOBAL_RE.test(input) && !/[?&]appId=/.test(input)) {
+        input += (input.includes("?") ? "&" : "?") + "appId=" + encodeURIComponent(PANEL_APP_ID);
+      }
+    } catch (e) {}
+    return _origFetch(input, init);
+  };
+}
+
 const COUNTRY_LIST = [
   { code: 'AF', name: 'Afghanistan' }, { code: 'AL', name: 'Albania' }, { code: 'DZ', name: 'Algeria' },
   { code: 'AS', name: 'American Samoa' }, { code: 'AD', name: 'Andorra' }, { code: 'AO', name: 'Angola' },
@@ -576,6 +605,14 @@ function App() {
   };
 
   const [activeSection, setActiveSection] = useState("settings");
+  // Çok uygulamalı: kayıtlı uygulamalar + seçili appId (üstteki dropdown)
+  const [apps, setApps] = useState({});
+  const [appId] = useState(PANEL_APP_ID);
+  useEffect(() => {
+    fetch(`${API_URL}/admin/apps`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+      .then(r => r.json()).then(setApps).catch(() => {});
+  }, [API_URL]);
+  const currentApp = apps[appId] || { name: appId, brandPrimary: "#a78bfa" };
 
   const menuItems = [
     { key: "settings", label: "Genel Ayarlar" },
@@ -615,6 +652,27 @@ function App() {
       {/* SIDEBAR */}
       <div style={{ width: 220, minWidth: 220, backgroundColor: "#1a1a22", borderRight: "1px solid #2a2a35", padding: "20px 0", position: "sticky", top: 0, height: "100vh", overflowY: "auto" }}>
         <h2 style={{ textAlign: "center", color: "#a78bfa", fontSize: 20, margin: "0 0 12px 0" }}>🎵 Melodia</h2>
+        {/* UYGULAMA SEÇİCİ — hangi uygulamayı yönettiğini gösterir (yanlış-app koruması) */}
+        <div style={{ margin: "0 14px 14px 14px" }}>
+          <div style={{ fontSize: 10, color: "#64748b", marginBottom: 4, textTransform: "uppercase", letterSpacing: 0.5 }}>Uygulama</div>
+          <select
+            value={appId}
+            onChange={(e) => { setPanelAppId(e.target.value); window.location.reload(); }}
+            style={{
+              width: "100%", padding: "9px 10px", borderRadius: 8, fontSize: 14, fontWeight: 700,
+              color: "#fff", cursor: "pointer",
+              backgroundColor: currentApp.brandPrimary || "#a78bfa",
+              border: `2px solid ${currentApp.brandPrimary || "#a78bfa"}`
+            }}>
+            {Object.values(apps).length === 0 && <option value={appId}>{appId}</option>}
+            {Object.values(apps).map(a => (
+              <option key={a.id} value={a.id} style={{ backgroundColor: "#1a1a22", color: "#fff" }}>
+                {a.name}
+              </option>
+            ))}
+          </select>
+          <div style={{ height: 4, borderRadius: 2, marginTop: 6, backgroundColor: currentApp.brandPrimary || "#a78bfa" }} />
+        </div>
         {/* CANLI KULLANICI ROZETİ — her bölümde görünür */}
         <div onClick={() => setActiveSection("live")}
           style={{ margin: "0 14px 18px 14px", padding: "10px 12px", borderRadius: 10, cursor: "pointer",
