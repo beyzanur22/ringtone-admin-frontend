@@ -7,8 +7,18 @@ import React, { useEffect, useState } from "react";
    böylece 36 fetch'i tek tek düzenlemeye gerek kalmadan hepsi izole olur.
    Global (tüm-uygulama) yollar hariç tutulur.
 ========================================================================= */
-let PANEL_APP_ID = (typeof localStorage !== "undefined" && localStorage.getItem("panelAppId")) || "default";
+/* İZOLE PANEL: backend, /admin/<appId>/panel isteğinde index.html'e
+   window.__APP_ID__ ve window.__APP_KEY__ enjekte eder. Bunlar varsa panel
+   O uygulamaya KİLİTLİDİR (dropdown gizli, appId değiştirilemez). Yoksa
+   (süper panel) eski davranış: localStorage + dropdown. */
+const PANEL_LOCKED = typeof window !== "undefined" && !!window.__APP_ID__;
+// Tüm admin çağrılarının X-App-Key'i artık buradan gelir (bundle'a gömülü değil).
+const APP_KEY = (typeof window !== "undefined" && window.__APP_KEY__) || "";
+let PANEL_APP_ID = (typeof window !== "undefined" && window.__APP_ID__)
+  || (typeof localStorage !== "undefined" && localStorage.getItem("panelAppId"))
+  || "default";
 function setPanelAppId(id) {
+  if (PANEL_LOCKED) return; // kilitli izole panelde uygulama değiştirilemez
   PANEL_APP_ID = id || "default";
   try { localStorage.setItem("panelAppId", PANEL_APP_ID); } catch (e) {}
 }
@@ -205,7 +215,7 @@ function App() {
   const API_URL = window.location.hostname === "localhost" ? "http://173.212.249.105" : "";
 
   useEffect(() => {
-    fetch(`${API_URL}/config`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+    fetch(`${API_URL}/config`, { headers: { "X-App-Key": APP_KEY } })
       .then(res => res.json())
       .then(data => setConfig(data));
     fetchBlocked();
@@ -220,33 +230,33 @@ function App() {
   }, []);
 
   const fetchAutoRingtone = () => {
-    fetch(`${API_URL}/admin/auto-ringtone`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+    fetch(`${API_URL}/admin/auto-ringtone`, { headers: { "X-App-Key": APP_KEY } })
       .then(r => r.ok ? r.json() : null)
       .then(data => { if (data) setAutoRingtone(data); })
       .catch(() => {});
   };
 
   const fetchYoutubeData = () => {
-    fetch(`${API_URL}/admin/youtube`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+    fetch(`${API_URL}/admin/youtube`, { headers: { "X-App-Key": APP_KEY } })
       .then(r => r.ok ? r.json() : null)
       .then(data => { if (data) setYoutubeData(data); })
       .catch(() => {});
   };
 
   const fetchFeedbacks = () => {
-    fetch(`${API_URL}/feedbacks`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+    fetch(`${API_URL}/feedbacks`, { headers: { "X-App-Key": APP_KEY } })
       .then(r => r.ok ? r.json() : [])
       .then(data => setFeedbacks(data))
       .catch(() => {});
   };
 
   const deleteFeedback = (id) => {
-    fetch(`${API_URL}/feedback/${id}`, { method: "DELETE", headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+    fetch(`${API_URL}/feedback/${id}`, { method: "DELETE", headers: { "X-App-Key": APP_KEY } })
       .then(() => fetchFeedbacks());
   };
 
   const fetchLoginIps = () => {
-    fetch(`${API_URL}/admin/login-ips`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+    fetch(`${API_URL}/admin/login-ips`, { headers: { "X-App-Key": APP_KEY } })
       .then(r => r.ok ? r.json() : null)
       .then(data => setLoginIps(data && Array.isArray(data.ips) ? data.ips : []))
       .catch(() => setLoginIps([]));
@@ -254,19 +264,19 @@ function App() {
 
   const clearLoginIps = () => {
     if (!window.confirm("Tüm IP listesi silinsin mi? Bu işlem geri alınamaz.")) return;
-    fetch(`${API_URL}/admin/login-ips`, { method: "DELETE", headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+    fetch(`${API_URL}/admin/login-ips`, { method: "DELETE", headers: { "X-App-Key": APP_KEY } })
       .then(() => fetchLoginIps());
   };
 
   const fetchLiveUsers = (win) => {
-    fetch(`${API_URL}/admin/active-users?window=${win || 5}`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+    fetch(`${API_URL}/admin/active-users?window=${win || 5}`, { headers: { "X-App-Key": APP_KEY } })
       .then(r => r.ok ? r.json() : null)
       .then(data => { if (data && !data.error) setLiveUsers(data); })
       .catch(() => {});
   };
 
   const fetchApiProviders = () => {
-    fetch(`${API_URL}/admin/api-providers`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+    fetch(`${API_URL}/admin/api-providers`, { headers: { "X-App-Key": APP_KEY } })
       .then(r => r.ok ? r.json() : null)
       .then(data => {
         if (data) {
@@ -278,14 +288,14 @@ function App() {
   };
 
   const fetchBlocked = () => {
-    fetch(`${API_URL}/blocked-channels`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+    fetch(`${API_URL}/blocked-channels`, { headers: { "X-App-Key": APP_KEY } })
       .then(res => res.ok ? res.json() : [])
       .then(data => setBlockedChannels(Array.isArray(data) ? data : []))
       .catch(err => setBlockedChannels([]));
   };
 
   const fetchReviewLogs = () => {
-    fetch(`${API_URL}/admin/review-logs`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+    fetch(`${API_URL}/admin/review-logs`, { headers: { "X-App-Key": APP_KEY } })
       .then(res => res.json())
       .then(data => setReviewLogs(data))
       .catch(() => setReviewLogs(null));
@@ -295,7 +305,7 @@ function App() {
     if (!window.confirm("Tüm değerlendirme logları silinsin mi?")) return;
     fetch(`${API_URL}/admin/review-logs`, {
       method: "DELETE",
-      headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" }
+      headers: { "X-App-Key": APP_KEY }
     })
       .then(res => res.json())
       .then(() => fetchReviewLogs());
@@ -304,7 +314,7 @@ function App() {
   const updateConfig = () => {
     fetch(`${API_URL}/config`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+      headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
       body: JSON.stringify(config)
     })
     .then(res => res.json())
@@ -401,7 +411,7 @@ function App() {
     };
     fetch(`${API_URL}/blocked-channels`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+      headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
       body: JSON.stringify(payload)
     }).then(() => {
       setIsModalOpen(false);
@@ -413,12 +423,12 @@ function App() {
     if (!window.confirm("Bu grubu tamamen silmek istiyor musunuz?")) return;
     fetch(`${API_URL}/blocked-channels/${id}`, {
       method: "DELETE",
-      headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" }
+      headers: { "X-App-Key": APP_KEY }
     }).then(() => fetchBlocked());
   };
 
   const fetchAnnouncements = () => {
-    fetch(`${API_URL}/announcements`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+    fetch(`${API_URL}/announcements`, { headers: { "X-App-Key": APP_KEY } })
       .then(res => res.ok ? res.json() : [])
       .then(data => setAnnouncements(Array.isArray(data) ? data : []))
       .catch(() => setAnnouncements([]));
@@ -459,7 +469,7 @@ function App() {
 
     fetch(`${API_URL}/popup/create`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+      headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
       body: JSON.stringify(payload)
     })
       .then(res => res.json())
@@ -488,12 +498,12 @@ function App() {
     if (!window.confirm("Bu duyuruyu silmek istiyor musunuz?")) return;
     fetch(`${API_URL}/popup/${id}`, {
       method: "DELETE",
-      headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" }
+      headers: { "X-App-Key": APP_KEY }
     }).then(() => fetchAnnouncements());
   };
 
   const fetchDeviceActions = () => {
-    fetch(`${API_URL}/device-actions`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+    fetch(`${API_URL}/device-actions`, { headers: { "X-App-Key": APP_KEY } })
       .then(res => res.ok ? res.json() : [])
       .then(data => setDeviceActions(Array.isArray(data) ? data : []))
       .catch(() => setDeviceActions([]));
@@ -518,7 +528,7 @@ function App() {
     };
     fetch(`${API_URL}/device-action/create`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+      headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
       body: JSON.stringify(payload)
     })
       .then(res => res.json())
@@ -536,14 +546,14 @@ function App() {
     if (!window.confirm("Bu action'ı silmek istiyor musunuz?")) return;
     fetch(`${API_URL}/device-action/${id}`, {
       method: "DELETE",
-      headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" }
+      headers: { "X-App-Key": APP_KEY }
     }).then(() => fetchDeviceActions());
   };
 
   const deactivateDeviceAction = (id) => {
     fetch(`${API_URL}/device-action/${id}/deactivate`, {
       method: "POST",
-      headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" }
+      headers: { "X-App-Key": APP_KEY }
     }).then(() => fetchDeviceActions());
   };
 
@@ -575,7 +585,7 @@ function App() {
 
     fetch(`${API_URL}/send-notification`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+      headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
       body: JSON.stringify(payload)
     })
     .then(res => res.json())
@@ -609,7 +619,7 @@ function App() {
   const [apps, setApps] = useState({});
   const [appId] = useState(PANEL_APP_ID);
   useEffect(() => {
-    fetch(`${API_URL}/admin/apps`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+    fetch(`${API_URL}/admin/apps`, { headers: { "X-App-Key": APP_KEY } })
       .then(r => r.json()).then(setApps).catch(() => {});
   }, [API_URL]);
   const currentApp = apps[appId] || { name: appId, brandPrimary: "#a78bfa" };
@@ -655,22 +665,34 @@ function App() {
         {/* UYGULAMA SEÇİCİ — hangi uygulamayı yönettiğini gösterir (yanlış-app koruması) */}
         <div style={{ margin: "0 14px 14px 14px" }}>
           <div style={{ fontSize: 10, color: "#64748b", marginBottom: 4, textTransform: "uppercase", letterSpacing: 0.5 }}>Uygulama</div>
-          <select
-            value={appId}
-            onChange={(e) => { setPanelAppId(e.target.value); window.location.reload(); }}
-            style={{
+          {PANEL_LOCKED ? (
+            /* İzole panel: uygulama sabit — sadece göster, değiştirilemez */
+            <div style={{
               width: "100%", padding: "9px 10px", borderRadius: 8, fontSize: 14, fontWeight: 700,
-              color: "#fff", cursor: "pointer",
+              color: "#fff", boxSizing: "border-box",
               backgroundColor: currentApp.brandPrimary || "#a78bfa",
               border: `2px solid ${currentApp.brandPrimary || "#a78bfa"}`
             }}>
-            {Object.values(apps).length === 0 && <option value={appId}>{appId}</option>}
-            {Object.values(apps).map(a => (
-              <option key={a.id} value={a.id} style={{ backgroundColor: "#1a1a22", color: "#fff" }}>
-                {a.name}
-              </option>
-            ))}
-          </select>
+              {currentApp.name || appId} 🔒
+            </div>
+          ) : (
+            <select
+              value={appId}
+              onChange={(e) => { setPanelAppId(e.target.value); window.location.reload(); }}
+              style={{
+                width: "100%", padding: "9px 10px", borderRadius: 8, fontSize: 14, fontWeight: 700,
+                color: "#fff", cursor: "pointer",
+                backgroundColor: currentApp.brandPrimary || "#a78bfa",
+                border: `2px solid ${currentApp.brandPrimary || "#a78bfa"}`
+              }}>
+              {Object.values(apps).length === 0 && <option value={appId}>{appId}</option>}
+              {Object.values(apps).map(a => (
+                <option key={a.id} value={a.id} style={{ backgroundColor: "#1a1a22", color: "#fff" }}>
+                  {a.name}
+                </option>
+              ))}
+            </select>
+          )}
           <div style={{ height: 4, borderRadius: 2, marginTop: 6, backgroundColor: currentApp.brandPrimary || "#a78bfa" }} />
         </div>
         {/* CANLI KULLANICI ROZETİ — her bölümde görünür */}
@@ -731,7 +753,7 @@ function App() {
                 <button style={{ ...styles.primaryBtn, padding: "6px 16px", fontSize: 12, backgroundColor: autoRingtone.enabled ? "#ef4444" : "#22c55e" }} onClick={() => {
                   fetch(`${API_URL}/admin/auto-ringtone`, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+                    headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
                     body: JSON.stringify({ enabled: !autoRingtone.enabled })
                   }).then(r => r.json()).then(d => {
                     if (d.success) fetchAutoRingtone();
@@ -3020,7 +3042,7 @@ function App() {
               <button style={{ ...styles.primaryBtn, backgroundColor: "#7c3aed" }} onClick={() => {
                 fetch(`${API_URL}/device-action/create`, {
                   method: "POST",
-                  headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+                  headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
                   body: JSON.stringify({ actionType: "review_sheet", mode: "popup", value: "", label: "Rate us on Play Store! ⭐" })
                 }).then(r => r.json()).then(d => {
                   if (d.ok) alert("✅ Review tetiklendi! Tüm kullanıcılara gönderildi.");
@@ -3033,7 +3055,7 @@ function App() {
                 const pkg = config.appControls?.packageName || "com.example.ringtonemasterv2";
                 fetch(`${API_URL}/device-action/create`, {
                   method: "POST",
-                  headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+                  headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
                   body: JSON.stringify({ actionType: "package_name", mode: "popup", value: pkg, label: "A new version is available! Please update. 🔄" })
                 }).then(r => r.json()).then(d => {
                   if (d.ok) alert("✅ Güncelleme tetiklendi! Tüm kullanıcılara gönderildi.");
@@ -3056,7 +3078,7 @@ function App() {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
             <span style={{ color: "#94a3b8", fontSize: 13 }}>{apiHealth.filter(p => p.status === "online").length}/{apiHealth.length || (apiProviders?.providers?.length || 0)} API erişilebilir</span>
             <button style={{ ...styles.primaryBtn, backgroundColor: "#0ea5e9" }} onClick={() => {
-              fetch(`${API_URL}/admin/api-health`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+              fetch(`${API_URL}/admin/api-health`, { headers: { "X-App-Key": APP_KEY } })
                 .then(r => r.json())
                 .then(d => setApiHealth(d.providers || []))
                 .catch(() => alert("Sağlık kontrolü başarısız"));
@@ -3137,7 +3159,7 @@ function App() {
                       btn.disabled = true;
                       fetch(`${API_URL}/admin/test-provider`, {
                         method: "POST",
-                        headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+                        headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
                         body: JSON.stringify({ name: p.name, baseUrl: p.baseUrl, apiKey: p.apiKey, endpoints: p.endpoints })
                       }).then(r => r.json()).then(d => {
                         const r2 = d.results || {};
@@ -3185,7 +3207,7 @@ function App() {
           <button style={{ ...styles.primaryBtn, backgroundColor: "#0ea5e9", marginTop: 8 }} onClick={() => {
             fetch(`${API_URL}/admin/api-providers`, {
               method: "POST",
-              headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+              headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
               body: JSON.stringify({ providers: apiProviders?.providers, smartCache: apiProviders?.smartCache })
             }).then(r => r.json()).then(d => {
               if (d.success) { alert("✅ API kaynakları kaydedildi!"); fetchApiProviders(); }
@@ -3242,7 +3264,7 @@ function App() {
             <button style={{ ...styles.primaryBtn, backgroundColor: "#0ea5e9", marginTop: 16 }} onClick={() => {
               fetch(`${API_URL}/config`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+                headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
                 body: JSON.stringify(config)
               }).then(r => r.json()).then(() => alert("✅ Otomatik tamamlama kaynağı güncellendi!"))
                 .catch(() => alert("Hata!"));
@@ -3298,7 +3320,7 @@ function App() {
             <button style={{ ...styles.primaryBtn, backgroundColor: "#0ea5e9", marginTop: 16 }} onClick={() => {
               fetch(`${API_URL}/admin/smart-cache`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+                headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
                 body: JSON.stringify(smartCache)
               }).then(r => r.json()).then(d => {
                 if (d.success) alert("✅ Cache ayarları kaydedildi!");
@@ -3313,7 +3335,7 @@ function App() {
               Cache durumu sunucudan alınır. Yenilemek için butona basın.
             </p>
             <button style={{ ...styles.primaryBtn, backgroundColor: "#3f3f46", marginTop: 12 }} onClick={() => {
-              fetch(`${API_URL}/admin/smart-cache`, { headers: { "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" } })
+              fetch(`${API_URL}/admin/smart-cache`, { headers: { "X-App-Key": APP_KEY } })
                 .then(r => r.json())
                 .then(d => {
                   if (d.smartCache) setSmartCache(d.smartCache);
@@ -3377,7 +3399,7 @@ function App() {
                 if (val < 10 || val > 1440) return alert("10-1440 dakika arası olmalı");
                 fetch(`${API_URL}/admin/youtube`, {
                   method: "POST",
-                  headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+                  headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
                   body: JSON.stringify({ warmupInterval: val })
                 }).then(r => r.json()).then(d => {
                   if (d.success) { alert(`✅ Warmup aralığı ${val} dakika olarak ayarlandı`); fetchYoutubeData(); }
@@ -3387,7 +3409,7 @@ function App() {
             <button style={{ ...styles.primaryBtn, backgroundColor: "#10b981" }} onClick={() => {
               fetch(`${API_URL}/admin/youtube`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+                headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
                 body: JSON.stringify({ forceWarmup: true })
               }).then(r => r.json()).then(d => {
                 if (d.success) alert("✅ Top50 manuel ısıtma başlatıldı!");
@@ -3411,7 +3433,7 @@ function App() {
                       if (!window.confirm(`${r.region} ülkesini kaldırmak istediğine emin misin?`)) return;
                       fetch(`${API_URL}/admin/youtube`, {
                         method: "POST",
-                        headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+                        headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
                         body: JSON.stringify({ removeRegion: r.region })
                       }).then(res => res.json()).then(d => { if (d.success) fetchYoutubeData(); }).catch(() => {});
                     }}>✕</button>
@@ -3426,7 +3448,7 @@ function App() {
                 if (newRegion.length !== 2) return alert("2 harfli ülke kodu girin (ör: DE, FR, GB)");
                 fetch(`${API_URL}/admin/youtube`, {
                   method: "POST",
-                  headers: { "Content-Type": "application/json", "X-App-Key": "RINGTONE_MASTER_V2_SECRET_2026" },
+                  headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
                   body: JSON.stringify({ addRegion: newRegion })
                 }).then(r => r.json()).then(d => {
                   if (d.success) { setNewRegion(""); fetchYoutubeData(); }
