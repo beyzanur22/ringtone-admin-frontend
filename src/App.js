@@ -695,8 +695,52 @@ function App() {
       .catch(() => { setAppBusy(false); alert("Sunucuya bağlanılamadı!"); });
   };
 
+  // === KULLANICILAR (kişisel giriş hesapları) — sadece süper panel ===
+  const [userList, setUserList] = useState([]);
+  const [newUserName, setNewUserName] = useState("");
+  const [newUserPass, setNewUserPass] = useState("");
+  const [newUserScope, setNewUserScope] = useState("all"); // "all" veya appId
+  const [userBusy, setUserBusy] = useState(false);
+
+  const fetchUsers = () => {
+    fetch(`${API_URL}/admin/users`, { headers: { "X-App-Key": APP_KEY } })
+      .then(r => r.json())
+      .then(d => setUserList(Array.isArray(d.users) ? d.users : []))
+      .catch(() => {});
+  };
+  useEffect(() => {
+    if (!PANEL_LOCKED && activeSection === "users") fetchUsers();
+  }, [activeSection]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const saveUser = () => {
+    const username = newUserName.trim().toLowerCase();
+    if (!username || !newUserPass) return alert("Kullanıcı adı ve şifre zorunlu!");
+    const body = { username, password: newUserPass };
+    body.apps = newUserScope === "all" ? "all" : [newUserScope];
+    setUserBusy(true);
+    fetch(`${API_URL}/admin/users`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
+      body: JSON.stringify(body)
+    })
+      .then(r => r.json())
+      .then(d => {
+        setUserBusy(false);
+        if (d.ok) { setNewUserName(""); setNewUserPass(""); setNewUserScope("all"); fetchUsers(); alert("Kullanıcı kaydedildi ✓"); }
+        else alert("Hata: " + (d.error || "Kaydedilemedi"));
+      })
+      .catch(() => { setUserBusy(false); alert("Sunucuya bağlanılamadı!"); });
+  };
+
+  const deleteUser = (u) => {
+    if (!window.confirm(`"${u}" kullanıcısını sil? Bir daha giriş yapamaz.`)) return;
+    fetch(`${API_URL}/admin/users/${encodeURIComponent(u)}`, { method: "DELETE", headers: { "X-App-Key": APP_KEY } })
+      .then(() => fetchUsers())
+      .catch(() => alert("Sunucuya bağlanılamadı!"));
+  };
+
   const menuItems = [
-    ...(!PANEL_LOCKED ? [{ key: "apps", label: "🗂️ Uygulamalar" }] : []),
+    ...(!PANEL_LOCKED ? [{ key: "users", label: "👤 Kullanıcılar" }, { key: "apps", label: "🗂️ Uygulamalar" }] : []),
     { key: "settings", label: "Genel Ayarlar" },
     { key: "mp3", label: "MP3 Ayarları" },
     { key: "countries", label: "Ülke Ayarları" },
@@ -789,11 +833,70 @@ function App() {
             {item.label}
           </div>
         ))}
+        {/* ÇIKIŞ — kişisel oturumu kapatır, giriş ekranına döner */}
+        <a href="/admin/logout" style={{ display: "block", margin: "16px 14px 0", padding: "10px 14px", borderRadius: 8, textAlign: "center", fontSize: 13, fontWeight: 600, color: "#f87171", background: "#2a1216", border: "1px solid #5b2130", textDecoration: "none" }}>
+          Çıkış Yap
+        </a>
       </div>
       {/* MAIN CONTENT */}
       <div style={{ flex: 1, padding: "40px 40px", maxWidth: 900, margin: "0 auto" }}>
       <div style={{ display: "flex", flexDirection: "column", gap: 30 }}>
         
+        {/* KULLANICILAR — kişisel giriş hesapları (sadece süper panel) */}
+        {activeSection === "users" && !PANEL_LOCKED && <div style={styles.card}>
+          <h2 style={styles.title}>👤 Kullanıcılar</h2>
+          <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 20 }}>
+            Kişisel giriş hesapları. Herkes kendi kullanıcı adı + şifresiyle <code>/admin/panel</code>'e girer;
+            yetkisine göre ya <b>tüm uygulamaları</b> ya da <b>sadece belirli bir uygulamayı</b> görür.
+          </p>
+
+          <div style={{ background: "#15151f", border: "1px solid #2a2a35", borderRadius: 12, padding: 18, marginBottom: 24 }}>
+            <h3 style={{ color: "#e2e8f0", fontSize: 15, margin: "0 0 14px 0" }}>➕ Kullanıcı Ekle / Şifre Güncelle</h3>
+            <div style={{ display: "grid", gap: 12 }}>
+              <div>
+                <label style={{ color: "#94a3b8", fontSize: 12, display: "block", marginBottom: 4 }}>Kullanıcı Adı</label>
+                <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Örn: oguz" value={newUserName} onChange={e => setNewUserName(e.target.value)} />
+              </div>
+              <div>
+                <label style={{ color: "#94a3b8", fontSize: 12, display: "block", marginBottom: 4 }}>Şifre</label>
+                <input type="text" style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Yeni şifre" value={newUserPass} onChange={e => setNewUserPass(e.target.value)} />
+              </div>
+              <div>
+                <label style={{ color: "#94a3b8", fontSize: 12, display: "block", marginBottom: 4 }}>Yetki (hangi uygulamayı görsün)</label>
+                <select style={{ ...styles.input, width: "100%", boxSizing: "border-box", cursor: "pointer" }} value={newUserScope} onChange={e => setNewUserScope(e.target.value)}>
+                  <option value="all">⭐ Tüm Uygulamalar (Süper Admin)</option>
+                  {Object.values(apps).filter(a => a.id !== "default").map(a => (
+                    <option key={a.id} value={a.id}>🔒 Sadece {a.name}</option>
+                  ))}
+                </select>
+              </div>
+              <button style={{ ...styles.primaryBtn, opacity: userBusy ? 0.6 : 1 }} disabled={userBusy} onClick={saveUser}>
+                {userBusy ? "Kaydediliyor..." : "Kaydet"}
+              </button>
+              <p style={{ color: "#64748b", fontSize: 11, margin: 0 }}>Var olan bir kullanıcı adını yazarsan şifresi/yetkisi güncellenir.</p>
+            </div>
+          </div>
+
+          <h3 style={{ color: "#e2e8f0", fontSize: 15, margin: "0 0 12px 0" }}>Mevcut Kullanıcılar</h3>
+          {userList.length === 0 ? (
+            <p style={{ color: "#64748b", fontSize: 13 }}>Henüz kullanıcı yok.</p>
+          ) : (
+            <div style={{ display: "grid", gap: 10 }}>
+              {userList.map(u => (
+                <div key={u.username} style={{ background: "#15151f", border: "1px solid #2a2a35", borderRadius: 10, padding: "12px 14px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
+                  <div>
+                    <div style={{ color: "#f8fafc", fontWeight: 700 }}>{u.username}</div>
+                    <div style={{ color: "#94a3b8", fontSize: 12 }}>
+                      {u.apps === "all" || u.super ? "⭐ Tüm uygulamalar" : `🔒 ${(Array.isArray(u.apps) ? u.apps : []).map(id => (apps[id] && apps[id].name) || id).join(", ")}`}
+                    </div>
+                  </div>
+                  <button onClick={() => deleteUser(u.username)} style={{ padding: "6px 12px", fontSize: 12, borderRadius: 6, border: "1px solid #5b2130", background: "#2a1216", color: "#f87171", cursor: "pointer" }}>Sil</button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>}
+
         {/* UYGULAMALAR — yeni paket ekle + izole panel giriş bilgileri (sadece süper panel) */}
         {activeSection === "apps" && !PANEL_LOCKED && <div style={styles.card}>
           <h2 style={styles.title}>🗂️ Uygulamalar</h2>
