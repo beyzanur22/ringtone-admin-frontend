@@ -127,6 +127,25 @@ function CountryRulePicker({ rule, idx, configKey, config, setConfig }) {
   );
 }
 
+// Giriş bilgisi satırı — kopyala butonlu (Uygulamalar ekranı)
+function CredRow({ label, value }) {
+  const [copied, setCopied] = useState(false);
+  const copy = () => {
+    try {
+      navigator.clipboard.writeText(value);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1200);
+    } catch (e) {}
+  };
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+      <span style={{ color: "#64748b", fontSize: 12, minWidth: 72 }}>{label}</span>
+      <code style={{ flex: 1, color: "#e2e8f0", fontSize: 13, background: "#0b0b12", padding: "6px 10px", borderRadius: 6, overflowX: "auto", whiteSpace: "nowrap" }}>{value}</code>
+      <button onClick={copy} style={{ padding: "5px 10px", fontSize: 12, borderRadius: 6, border: "1px solid #2a2a35", background: copied ? "#1f5133" : "#1a1a22", color: copied ? "#4ade80" : "#94a3b8", cursor: "pointer", flexShrink: 0 }}>{copied ? "✓ Kopyalandı" : "Kopyala"}</button>
+    </div>
+  );
+}
+
 function App() {
   const [config, setConfig] = useState(null);
   const [newCountryMode, setNewCountryMode] = useState("youtube");
@@ -624,7 +643,60 @@ function App() {
   }, [API_URL]);
   const currentApp = apps[appId] || { name: appId, brandPrimary: "#a78bfa" };
 
+  // === UYGULAMALAR (yeni uygulama ekle + izole panel giriş bilgileri) — sadece süper panel ===
+  const [appList, setAppList] = useState([]);
+  const [newAppName, setNewAppName] = useState("");
+  const [newAppPackage, setNewAppPackage] = useState("");
+  const [newAppId, setNewAppId] = useState("");
+  const [newAppColor, setNewAppColor] = useState("#1DB954");
+  const [newAppResult, setNewAppResult] = useState(null);
+  const [appBusy, setAppBusy] = useState(false);
+
+  const fetchAppCredentials = () => {
+    fetch(`${API_URL}/admin/app-credentials`, { headers: { "X-App-Key": APP_KEY } })
+      .then(r => r.json())
+      .then(d => setAppList(Array.isArray(d.apps) ? d.apps : []))
+      .catch(() => {});
+  };
+  useEffect(() => {
+    if (!PANEL_LOCKED && activeSection === "apps") fetchAppCredentials();
+  }, [activeSection]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Paket adından panel kısa adı (id) türet: com.ogz.music → ogzmusic (son 2 parça)
+  const deriveAppId = (pkg) => {
+    const parts = String(pkg).split(".").filter(Boolean);
+    const base = parts.length >= 2 ? parts.slice(-2).join("") : parts.join("");
+    return base.toLowerCase().replace(/[^a-z0-9_-]/g, "");
+  };
+
+  const createApp = () => {
+    const name = newAppName.trim();
+    const pkg = newAppPackage.trim();
+    if (!name || !pkg) return alert("Uygulama adı ve paket adı zorunlu!");
+    let slug = newAppId.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "") || deriveAppId(pkg);
+    if (!slug) return alert("Panel kısa adı türetilemedi, elle girin.");
+    setAppBusy(true);
+    fetch(`${API_URL}/admin/apps`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
+      body: JSON.stringify({ id: slug, name, packageName: pkg, brandPrimary: newAppColor })
+    })
+      .then(r => r.json())
+      .then(d => {
+        setAppBusy(false);
+        if (d.ok) {
+          setNewAppResult(d.credentials || null);
+          setNewAppName(""); setNewAppPackage(""); setNewAppId("");
+          fetchAppCredentials();
+        } else {
+          alert("Hata: " + (d.error || "Oluşturulamadı"));
+        }
+      })
+      .catch(() => { setAppBusy(false); alert("Sunucuya bağlanılamadı!"); });
+  };
+
   const menuItems = [
+    ...(!PANEL_LOCKED ? [{ key: "apps", label: "🗂️ Uygulamalar" }] : []),
     { key: "settings", label: "Genel Ayarlar" },
     { key: "mp3", label: "MP3 Ayarları" },
     { key: "countries", label: "Ülke Ayarları" },
@@ -722,6 +794,71 @@ function App() {
       <div style={{ flex: 1, padding: "40px 40px", maxWidth: 900, margin: "0 auto" }}>
       <div style={{ display: "flex", flexDirection: "column", gap: 30 }}>
         
+        {/* UYGULAMALAR — yeni paket ekle + izole panel giriş bilgileri (sadece süper panel) */}
+        {activeSection === "apps" && !PANEL_LOCKED && <div style={styles.card}>
+          <h2 style={styles.title}>🗂️ Uygulamalar</h2>
+          <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 20 }}>
+            Yeni paket adı ekle → panel sana o uygulamanın <b>ayrı panel linkini ve şifresini</b> verir.
+            Sonra tek yapman gereken <code>app_config.json</code>'da paket adını bu değere ayarlayıp build almak. Android kodu değişmez.
+          </p>
+
+          <div style={{ background: "#15151f", border: "1px solid #2a2a35", borderRadius: 12, padding: 18, marginBottom: 24 }}>
+            <h3 style={{ color: "#e2e8f0", fontSize: 15, margin: "0 0 14px 0" }}>➕ Yeni Uygulama Ekle</h3>
+            <div style={{ display: "grid", gap: 12 }}>
+              <div>
+                <label style={{ color: "#94a3b8", fontSize: 12, display: "block", marginBottom: 4 }}>Uygulama Adı</label>
+                <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Örn: OGZ Music" value={newAppName} onChange={e => setNewAppName(e.target.value)} />
+              </div>
+              <div>
+                <label style={{ color: "#94a3b8", fontSize: 12, display: "block", marginBottom: 4 }}>Paket Adı (applicationId)</label>
+                <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Örn: com.ogz.music" value={newAppPackage} onChange={e => setNewAppPackage(e.target.value)} />
+              </div>
+              <div>
+                <label style={{ color: "#94a3b8", fontSize: 12, display: "block", marginBottom: 4 }}>
+                  Panel Kısa Adı (opsiyonel){newAppPackage.trim() && !newAppId.trim() ? <span style={{ color: "#64748b" }}> — otomatik: <b style={{ color: "#a78bfa" }}>{deriveAppId(newAppPackage)}</b></span> : null}
+                </label>
+                <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder={newAppPackage.trim() ? deriveAppId(newAppPackage) : "boş bırak → otomatik"} value={newAppId} onChange={e => setNewAppId(e.target.value)} />
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <label style={{ color: "#94a3b8", fontSize: 12 }}>Marka Rengi</label>
+                <input type="color" value={newAppColor} onChange={e => setNewAppColor(e.target.value)} style={{ width: 44, height: 30, border: "none", background: "none", cursor: "pointer" }} />
+              </div>
+              <button style={{ ...styles.primaryBtn, opacity: appBusy ? 0.6 : 1 }} disabled={appBusy} onClick={createApp}>
+                {appBusy ? "Ekleniyor..." : "Uygulama Ekle + Panel Oluştur"}
+              </button>
+            </div>
+
+            {newAppResult && (
+              <div style={{ marginTop: 16, background: "#0f2a17", border: "1px solid #1f5133", borderRadius: 10, padding: 16 }}>
+                <div style={{ color: "#4ade80", fontWeight: 700, marginBottom: 4 }}>✅ Panel oluşturuldu — bu bilgileri kaydet!</div>
+                <div style={{ color: "#94a3b8", fontSize: 12, marginBottom: 12 }}>Şifre master anahtardan türetilir; kaybolmaz, bu ekranda hep görebilirsin.</div>
+                <CredRow label="Panel Linki" value={window.location.origin + newAppResult.panelPath} />
+                <CredRow label="Kullanıcı" value={newAppResult.user} />
+                <CredRow label="Şifre" value={newAppResult.pass} />
+              </div>
+            )}
+          </div>
+
+          <h3 style={{ color: "#e2e8f0", fontSize: 15, margin: "0 0 12px 0" }}>Mevcut İzole Paneller</h3>
+          {appList.length === 0 ? (
+            <p style={{ color: "#64748b", fontSize: 13 }}>Henüz ek uygulama yok.</p>
+          ) : (
+            <div style={{ display: "grid", gap: 12 }}>
+              {appList.map(a => (
+                <div key={a.id} style={{ background: "#15151f", border: "1px solid #2a2a35", borderRadius: 10, padding: 14 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8, gap: 8 }}>
+                    <div style={{ color: "#f8fafc", fontWeight: 700 }}>{a.name}</div>
+                    <div style={{ color: "#64748b", fontSize: 12 }}>{a.packageName}</div>
+                  </div>
+                  <CredRow label="Link" value={window.location.origin + a.panelPath} />
+                  <CredRow label="Kullanıcı" value={a.user} />
+                  <CredRow label="Şifre" value={a.pass} />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>}
+
         {/* GLOBAL & COUNTRY CONFIG (Styled for Dark Theme) */}
         {activeSection === "settings" && <div style={styles.card}>
           <h2 style={styles.title}>Genel Ayarlar</h2>
