@@ -453,9 +453,28 @@ function App() {
       .catch(() => setAnnouncements([]));
   };
 
+  // Uygulama kaç yıldız verildiğini SADECE value'nun "N_star" formatından anlar
+  // (PopupManager.kt → value.startsWith("1")...). Value bu formatta değilse
+  // starCount 0 kalır, 1-3 için geri bildirim kutusu ve 4-5 için Google kartı
+  // HİÇ açılmaz — oy kaydedilir ama popup sessizce kapanır.
+  // 2026-08 olayı: İspanyolca butonlar value'suz eklendi, etiketten slug üretildi
+  // ("⭐_muy_decepcionado") ve 57 kullanıcı yıldız verip hiçbir şey görmedi.
+  const STAR_VALUE_RE = /^[1-5]_star$/;
+  const starCountFromLabel = (label) => (label.match(/⭐/g) || []).length;
+  const isStarButtonsValid = (buttons) =>
+    (buttons || []).every(b => STAR_VALUE_RE.test(b.value || ""));
+
   const addPopupButton = () => {
     if (!popupBtnLabel.trim()) return;
-    setPopupButtons(prev => [...prev, { label: popupBtnLabel.trim(), value: popupBtnValue.trim() || popupBtnLabel.trim().toLowerCase().replace(/\s+/g, "_") }]);
+    const label = popupBtnLabel.trim();
+    const typed = popupBtnValue.trim();
+    const stars = starCountFromLabel(label);
+    // Etikette 1-5 yıldız varsa value'yu yıldız sayısından türet — elle yazılan
+    // (ya da boş bırakılan) değer uygulamayı bozamasın.
+    const value = stars >= 1 && stars <= 5
+      ? `${stars}_star`
+      : (typed || label.toLowerCase().replace(/\s+/g, "_"));
+    setPopupButtons(prev => [...prev, { label, value }]);
     setPopupBtnLabel("");
     setPopupBtnValue("");
   };
@@ -467,6 +486,17 @@ function App() {
   const createAnnouncement = () => {
     if (!popupTitle.trim() || !popupMessage.trim()) return alert("Başlık ve mesaj zorunlu!");
     if (popupType === "vote" && popupButtons.length === 0) return alert("En az bir buton ekleyin!");
+    if (popupType === "vote" && !isStarButtonsValid(popupButtons)) {
+      const bad = popupButtons.filter(b => !STAR_VALUE_RE.test(b.value || ""));
+      return alert(
+        "Bu popup uygulamada ÇALIŞMAZ.\n\n" +
+        "Yıldız oylamasında her butonun değeri 1_star, 2_star, 3_star, 4_star veya 5_star olmalı. " +
+        "Uygulama kaç yıldız verildiğini buradan anlıyor; başka bir değer yazarsa " +
+        "geri bildirim kutusu ve Google değerlendirme kartı açılmaz.\n\n" +
+        "Hatalı buton(lar):\n" + bad.map(b => `  ${b.label}  →  ${b.value}`).join("\n") +
+        "\n\nButonu silip etiketinde 1-5 arası ⭐ olacak şekilde yeniden ekleyin; değer otomatik doğru yazılır."
+      );
+    }
     if (popupType === "review" && !popupReviewBtnLabel.trim()) return alert("Buton yazısı zorunlu!");
     if (popupCountryMode === "selected" && popupSelectedCountries.length === 0) return alert("En az bir ülke seçin!");
 
@@ -1409,6 +1439,21 @@ function App() {
                           }}>
                             {ann.type === "review" ? "🙋 Değerlendirme Daveti" : "⭐ Yıldız Oylaması"}
                           </span>
+                          {ann.type !== "review" && !isStarButtonsValid(ann.buttons) && (
+                            <span
+                              title={
+                                "Buton değerleri 1_star…5_star formatında değil. Uygulama kaç yıldız verildiğini anlayamıyor: " +
+                                "oy kaydediliyor ama 1-3 için geri bildirim kutusu, 4-5 için Google kartı açılmıyor. " +
+                                "Bu popup'ı silip butonları yeniden ekleyin."
+                              }
+                              style={{
+                                fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 20,
+                                background: "#3b1416", color: "#fca5a5", border: "1px solid #7f1d1d", cursor: "help"
+                              }}
+                            >
+                              ⚠ BOZUK — yıldız algılanmıyor
+                            </span>
+                          )}
                           <span style={{ fontSize: 11, color: "#666" }}>
                             {ann.countries === "all" ? "Tüm ülkeler" : (Array.isArray(ann.countries) ? ann.countries.join(", ") : ann.countries)}
                           </span>
@@ -2027,10 +2072,16 @@ function App() {
                   ))}
                 </div>
                 <div style={{ display: "flex", gap: 8 }}>
-                  <input style={{ ...styles.input, flex: 2 }} placeholder="Buton etiketi (örn: 👍 İyi)" value={popupBtnLabel} onChange={e => setPopupBtnLabel(e.target.value)} />
-                  <input style={{ ...styles.input, flex: 1 }} placeholder="Değer (örn: good)" value={popupBtnValue} onChange={e => setPopupBtnValue(e.target.value)} />
+                  <input style={{ ...styles.input, flex: 2 }} placeholder="Buton etiketi (örn: ⭐⭐⭐ Regular)" value={popupBtnLabel} onChange={e => setPopupBtnLabel(e.target.value)} />
+                  <input style={{ ...styles.input, flex: 1 }} placeholder="Değer (⭐ varsa otomatik)" value={popupBtnValue} onChange={e => setPopupBtnValue(e.target.value)} />
                   <button style={{ ...styles.primaryBtn, whiteSpace: "nowrap" }} onClick={addPopupButton}>Ekle +</button>
                 </div>
+                <p style={{ color: "#888", fontSize: 12, margin: "8px 0 0 0", lineHeight: 1.5 }}>
+                  Etiketi istediğiniz dilde yazın, yeter ki <b style={{ color: "#c4b5fd" }}>1-5 arası ⭐</b> içersin —
+                  değer otomatik <code style={{ color: "#c4b5fd" }}>1_star…5_star</code> olarak yazılır.
+                  Uygulama kaç yıldız verildiğini buradan anlıyor; yanlışsa
+                  1-3'te geri bildirim kutusu, 4-5'te Google değerlendirme kartı açılmaz.
+                </p>
               </div>
               )}
 
