@@ -725,6 +725,20 @@ function App() {
       .catch(() => { setAppBusy(false); alert("Sunucuya bağlanılamadı!"); });
   };
 
+  const deleteApp = (a) => {
+    if (!window.confirm(`"${a.name}" panelini silmek istediğine emin misin?\n\nBu işlem geri alınamaz — uygulamanın izole paneli ve tüm ayar verileri silinir.`)) return;
+    fetch(`${API_URL}/admin/apps/${encodeURIComponent(a.id)}`, {
+      method: "DELETE",
+      headers: { "X-App-Key": APP_KEY }
+    })
+      .then(r => r.json())
+      .then(d => {
+        if (d.ok) fetchAppCredentials();
+        else alert("Hata: " + (d.error || "Silinemedi"));
+      })
+      .catch(() => alert("Sunucuya bağlanılamadı!"));
+  };
+
   // === KULLANICILAR (kişisel giriş hesapları) — sadece süper panel ===
   const [userList, setUserList] = useState([]);
   const [newUserName, setNewUserName] = useState("");
@@ -981,7 +995,11 @@ function App() {
                 <div key={a.id} style={{ background: "#15151f", border: "1px solid #2a2a35", borderRadius: 10, padding: 14 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8, gap: 8 }}>
                     <div style={{ color: "#f8fafc", fontWeight: 700 }}>{a.name}</div>
-                    <div style={{ color: "#64748b", fontSize: 12 }}>{a.packageName}</div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <div style={{ color: "#64748b", fontSize: 12 }}>{a.packageName}</div>
+                      <button onClick={() => deleteApp(a)} title="Paneli sil"
+                        style={{ background: "transparent", border: "1px solid #3a2230", color: "#ef4444", borderRadius: 6, padding: "4px 8px", cursor: "pointer", fontSize: 14, lineHeight: 1, flexShrink: 0 }}>🗑️</button>
+                    </div>
                   </div>
                   <CredRow label="Link" value={window.location.origin + a.panelPath} />
                   <CredRow label="Kullanıcı" value={a.user} />
