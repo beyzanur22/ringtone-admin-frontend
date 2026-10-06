@@ -230,6 +230,9 @@ function App() {
   const [liveWindow, setLiveWindow] = useState(5);
   // Canlı cihaz tablosu filtresi: "all" | "newpipe" | "backend" | "unknown"
   const [liveExtractor, setLiveExtractor] = useState("all");
+  // Zil sesi modu bölümü — aynı uçtan ?mode=ringtone ile beslenir
+  const [rtUsers, setRtUsers] = useState(null);
+  const [rtWindow, setRtWindow] = useState(15);
 
   const API_URL = window.location.hostname === "localhost" ? "http://173.212.249.105" : "";
 
@@ -291,6 +294,15 @@ function App() {
     fetch(`${API_URL}/admin/active-users?window=${win || 5}`, { headers: { "X-App-Key": APP_KEY } })
       .then(r => r.ok ? r.json() : null)
       .then(data => { if (data && !data.error) setLiveUsers(data); })
+      .catch(() => {});
+  };
+
+  // Zil sesi modundaki cihazlar. byMode tüm modları kapsar (pay hesabı için),
+  // users/byCountry SADECE ringtone kitlesidir.
+  const fetchRtUsers = (win) => {
+    fetch(`${API_URL}/admin/active-users?window=${win || 15}&mode=ringtone`, { headers: { "X-App-Key": APP_KEY } })
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (data && !data.error) setRtUsers(data); })
       .catch(() => {});
   };
 
@@ -792,6 +804,7 @@ function App() {
     { key: "blocked", label: "Yasaklı Kanallar" },
     { key: "contentfilter", label: "İçerik Filtresi" },
     { key: "live", label: "Canlı Kullanıcılar" },
+    { key: "ringtonemode", label: "🔔 Zil Sesi Modu" },
     { key: "loginips", label: "Giriş IP'leri" },
     { key: "popup", label: "Oylama & Geri Bildirim" },
     { key: "reviewlogs", label: "Değerlendirme Logları" },
@@ -814,6 +827,14 @@ function App() {
     const id = setInterval(() => fetchLiveUsers(liveWindow), activeSection === "live" ? 5000 : 30000);
     return () => clearInterval(id);
   }, [liveWindow, activeSection]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Zil sesi modu: yalnız bölüm açıkken yoklanır (teşhis ekranı, rozeti yok)
+  useEffect(() => {
+    if (activeSection !== "ringtonemode") return;
+    fetchRtUsers(rtWindow);
+    const id = setInterval(() => fetchRtUsers(rtWindow), 10000);
+    return () => clearInterval(id);
+  }, [rtWindow, activeSection]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!config) return <div style={{ color: "white", padding: 50, backgroundColor: "#14151a", minHeight: "100vh" }}>Yükleniyor...</div>;
 
@@ -1745,6 +1766,45 @@ function App() {
                 );
               })()}
 
+              {/* MOD KIRILIMI — müzik / zil sesi */}
+              {liveUsers.byMode && (() => {
+                const m = liveUsers.byMode;
+                const yt = m.youtube || {}, rt = m.ringtone || {}, un = m.unknown || {};
+                const total = (yt.online5m || 0) + (rt.online5m || 0) + (un.online5m || 0);
+                const pct = n => total > 0 ? Math.round((n / total) * 100) : 0;
+                const card = (title, sub, data, color, bg, border) => (
+                  <div style={{ flex: "1 1 200px", padding: "18px 20px", borderRadius: 12, backgroundColor: bg, border: `1px solid ${border}` }}>
+                    <div style={{ color: "#94a3b8", fontSize: 12 }}>{title}</div>
+                    <div style={{ color: "#64748b", fontSize: 10, marginTop: 2 }}>{sub}</div>
+                    <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginTop: 8 }}>
+                      <span style={{ color, fontSize: 34, fontWeight: 800, lineHeight: 1.1 }}>{data.online5m || 0}</span>
+                      <span style={{ color: "#64748b", fontSize: 13 }}>%{pct(data.online5m || 0)}</span>
+                    </div>
+                    <div style={{ color: "#64748b", fontSize: 11, marginTop: 6 }}>
+                      15 dk: <b style={{ color: "#94a3b8" }}>{data.online15m || 0}</b> · 1 sa: <b style={{ color: "#94a3b8" }}>{data.online1h || 0}</b>
+                    </div>
+                    <div style={{ height: 4, borderRadius: 2, backgroundColor: "#14151a", marginTop: 10, overflow: "hidden" }}>
+                      <div style={{ height: "100%", width: `${pct(data.online5m || 0)}%`, backgroundColor: color }} />
+                    </div>
+                  </div>
+                );
+                return (
+                  <div style={{ marginBottom: 24 }}>
+                    <div style={{ color: "#94a3b8", fontSize: 12, marginBottom: 10 }}>
+                      UYGULAMA MODUNA GÖRE (şu an aktif — son 5 dk)
+                    </div>
+                    <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
+                      {card("▶️ Müzik", "Normal arayüz", yt, "#4ade80", "#15271d", "#1f5133")}
+                      {card("🔔 Zil Sesi", "ASN / ülke kuralı ile", rt, "#0ea5e9", "#0c2d48", "#1e4a63")}
+                      {un.online5m > 0 && card("❓ Bilinmiyor", "Eski APK — mod bildirmiyor", un, "#94a3b8", "#1a1a22", "#2a2a35")}
+                    </div>
+                    <p style={{ color: "#64748b", fontSize: 11, margin: "10px 0 0 0" }}>
+                      Zil sesi modundakiler de bu toplamın içindedir — detay için soldaki "🔔 Zil Sesi Modu" bölümü.
+                    </p>
+                  </div>
+                );
+              })()}
+
               {/* SON 60 DAKİKA GRAFİĞİ */}
               {liveUsers.timeline && liveUsers.timeline.length > 0 && (() => {
                 const max = Math.max(1, ...liveUsers.timeline.map(p => p.count));
@@ -1868,6 +1928,186 @@ function App() {
               </div>
             </>
           )}
+        </div>}
+
+        {/* ZİL SESİ MODU — kim, nereden, hangi kural yüzünden */}
+        {activeSection === "ringtonemode" && <div style={styles.card}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6, flexWrap: "wrap", gap: 10 }}>
+            <h2 style={{ ...styles.title, margin: 0 }}>🔔 Zil Sesi Modu</h2>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <span style={{ color: "#0ea5e9", fontSize: 11 }}>● 10 sn'de bir yenilenir</span>
+              <select style={{ ...styles.selectDark, width: "auto", padding: "6px 10px", fontSize: 12 }}
+                value={rtWindow} onChange={e => setRtWindow(Number(e.target.value))}>
+                <option value={5}>Son 5 dakika</option>
+                <option value={15}>Son 15 dakika</option>
+                <option value={30}>Son 30 dakika</option>
+                <option value={60}>Son 1 saat</option>
+              </select>
+              <button style={{ ...styles.primaryBtn, backgroundColor: "#0ea5e9", fontSize: 12, padding: "6px 14px" }}
+                onClick={() => fetchRtUsers(rtWindow)}>🔄 Yenile</button>
+            </div>
+          </div>
+          <p style={{ color: "#888", fontSize: 12, margin: "0 0 20px 0" }}>
+            Zil sesi arayüzünde olan cihazlar. Modu cihaz kendisi seçer (ASN &gt; ülke &gt; global)
+            ve her yoklamada sunucuya bildirir. Bu moddayken arama/çalma trafiği olmadığı için
+            bu cihazlar "Canlı Kullanıcılar" toplamının içindedir ama orada ayırt edilemez.
+          </p>
+
+          {!rtUsers ? (
+            <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Yükleniyor...</div>
+          ) : (() => {
+            const bm = rtUsers.byMode || {};
+            const rt = bm.ringtone || {}, yt = bm.youtube || {}, un = bm.unknown || {};
+            const tot5 = (rt.online5m || 0) + (yt.online5m || 0) + (un.online5m || 0);
+            const share = tot5 > 0 ? Math.round(((rt.online5m || 0) / tot5) * 100) : 0;
+            const seg = (n) => tot5 > 0 ? (n / tot5) * 100 : 0;
+            const ruleCountries = Object.entries(config.countries || {}).filter(([, m]) => m === "ringtone");
+            const ruleAsns = config.ringtoneAsns || [];
+            return (
+            <>
+              {/* SAYAÇLAR */}
+              <div style={{ display: "flex", gap: 14, marginBottom: 24, flexWrap: "wrap" }}>
+                <div style={{ flex: "1 1 200px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#0c2d48", border: "1px solid #1e4a63" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <span style={{ width: 10, height: 10, borderRadius: "50%", backgroundColor: "#0ea5e9", boxShadow: "0 0 10px #0ea5e9" }} />
+                    <span style={{ color: "#5b8aa6", fontSize: 12 }}>ZİL SESİNDE (son 5 dk)</span>
+                  </div>
+                  <div style={{ color: "#38bdf8", fontSize: 46, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{rt.online5m || 0}</div>
+                  <div style={{ color: "#5b8aa6", fontSize: 11, marginTop: 4 }}>tüm aktiflerin %{share}'i</div>
+                </div>
+                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#1a1a22", border: "1px solid #2a2a35" }}>
+                  <div style={{ color: "#94a3b8", fontSize: 12 }}>SON 15 DAKİKA</div>
+                  <div style={{ color: "#f8fafc", fontSize: 32, fontWeight: 700, marginTop: 6 }}>{rt.online15m || 0}</div>
+                </div>
+                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#1a1a22", border: "1px solid #2a2a35" }}>
+                  <div style={{ color: "#94a3b8", fontSize: 12 }}>SON 1 SAAT</div>
+                  <div style={{ color: "#f8fafc", fontSize: 32, fontWeight: 700, marginTop: 6 }}>{rt.online1h || 0}</div>
+                </div>
+              </div>
+
+              {/* DAĞILIM ÇUBUĞU */}
+              <div style={{ marginBottom: 26 }}>
+                <div style={{ color: "#94a3b8", fontSize: 12, marginBottom: 8 }}>DAĞILIM (son 5 dk — toplam {tot5})</div>
+                <div style={{ display: "flex", height: 14, borderRadius: 7, overflow: "hidden", backgroundColor: "#14151a", border: "1px solid #2a2a35" }}>
+                  <div title={`Müzik: ${yt.online5m || 0}`} style={{ width: `${seg(yt.online5m || 0)}%`, backgroundColor: "#22c55e" }} />
+                  <div title={`Zil sesi: ${rt.online5m || 0}`} style={{ width: `${seg(rt.online5m || 0)}%`, backgroundColor: "#0ea5e9" }} />
+                  <div title={`Bilinmiyor: ${un.online5m || 0}`} style={{ width: `${seg(un.online5m || 0)}%`, backgroundColor: "#475569" }} />
+                </div>
+                <div style={{ display: "flex", gap: 16, marginTop: 8, fontSize: 11, color: "#94a3b8", flexWrap: "wrap" }}>
+                  <span><b style={{ color: "#22c55e" }}>●</b> Müzik {yt.online5m || 0}</span>
+                  <span><b style={{ color: "#0ea5e9" }}>●</b> Zil sesi {rt.online5m || 0}</span>
+                  <span><b style={{ color: "#475569" }}>●</b> Bilinmiyor {un.online5m || 0}</span>
+                </div>
+                {(un.online1h || 0) > 0 && (
+                  <p style={{ color: "#64748b", fontSize: 11, margin: "10px 0 0 0" }}>
+                    "Bilinmiyor" = modunu bildirmeyen eski APK sürümleri. Bu cihazların bir kısmı zil sesi
+                    modunda olabilir; kullanıcılar güncelledikçe sayı düşer.
+                  </p>
+                )}
+              </div>
+
+              {/* ÜLKELER — asıl soru: hangi ülkeler zil sesine düşüyor */}
+              <div style={{ marginBottom: 26 }}>
+                <div style={{ color: "#94a3b8", fontSize: 12, marginBottom: 10 }}>
+                  ÜLKELERE GÖRE (zil sesindekiler — son {rtUsers.window} dk)
+                </div>
+                {(!rtUsers.byCountry || rtUsers.byCountry.length === 0) ? (
+                  <div style={{ color: "#666", fontSize: 12 }}>Bu pencerede zil sesi modunda cihaz yok.</div>
+                ) : (
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                    {rtUsers.byCountry.map(c => (
+                      <span key={c.country} style={{ padding: "6px 12px", borderRadius: 20, backgroundColor: "#0c2d48",
+                        border: "1px solid #1e4a63", fontSize: 12, color: "#cbd5e1" }}>
+                        🌍 {c.country} <b style={{ color: "#38bdf8" }}>{c.count}</b>
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <p style={{ color: "#64748b", fontSize: 11, margin: "10px 0 0 0" }}>
+                  Buradaki ülke IP'den gelir. Mod kararı ise SIM → şebeke → IP sırasıyla verilir;
+                  VPN/roaming'deki cihazda ikisi farklı çıkabilir.
+                </p>
+              </div>
+
+              {/* KURAL ↔ GERÇEK */}
+              <div style={{ marginBottom: 26, padding: "14px 16px", borderRadius: 10, backgroundColor: "#1a1a22", border: "1px solid #2a2a35" }}>
+                <div style={{ color: "#94a3b8", fontSize: 12, marginBottom: 10 }}>YÜRÜRLÜKTEKİ KURALLAR</div>
+                <div style={{ fontSize: 12, color: "#cbd5e1", marginBottom: 8 }}>
+                  Ülke kuralı:{" "}
+                  {ruleCountries.length === 0
+                    ? <span style={{ color: "#64748b" }}>yok — hiçbir ülke zil sesine ayarlı değil</span>
+                    : ruleCountries.map(([code]) => (
+                        <span key={code} style={{ padding: "3px 9px", borderRadius: 20, backgroundColor: "#0c2d48",
+                          border: "1px solid #1e4a63", fontSize: 11, color: "#38bdf8", marginRight: 6 }}>{code}</span>
+                      ))}
+                </div>
+                <div style={{ fontSize: 12, color: "#cbd5e1" }}>
+                  ASN kuralı:{" "}
+                  {ruleAsns.length === 0
+                    ? <span style={{ color: "#64748b" }}>yok</span>
+                    : ruleAsns.map(a => (
+                        <span key={a} style={{ padding: "3px 9px", borderRadius: 20, backgroundColor: "#2a2113",
+                          border: "1px solid #5c4318", fontSize: 11, color: "#f59e0b", marginRight: 6 }}>AS{a}</span>
+                      ))}
+                </div>
+                <p style={{ color: "#64748b", fontSize: 11, margin: "10px 0 0 0" }}>
+                  Ülke kuralı boşken zil sesine yalnızca ASN listesindeki ağlar (Google altyapısı /
+                  inceleme sunucuları) düşer — o yüzden sayının düşük olması normaldir.
+                </p>
+              </div>
+
+              {/* CİHAZ LİSTESİ */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, flexWrap: "wrap", gap: 10 }}>
+                <span style={{ color: "#94a3b8", fontSize: 12 }}>ZİL SESİNDEKİ CİHAZLAR (son {rtUsers.window} dk)</span>
+                <span style={{ color: "#666", fontSize: 11 }}>
+                  {rtUsers.windowCount} cihaz{rtUsers.listed < rtUsers.windowCount ? ` — ilk ${rtUsers.listed} tanesi gösteriliyor` : ""}
+                </span>
+              </div>
+              {(!rtUsers.users || rtUsers.users.length === 0) ? (
+                <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Zil sesi modunda cihaz yok</div>
+              ) : (
+                <div style={{ overflowX: "auto" }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                    <thead>
+                      <tr style={{ borderBottom: "1px solid #2a2a3a", color: "#94a3b8", textAlign: "left" }}>
+                        <th style={{ padding: "8px 10px" }}>IP</th>
+                        <th style={{ padding: "8px 10px" }}>Ülke</th>
+                        <th style={{ padding: "8px 10px" }}>Kaynak</th>
+                        <th style={{ padding: "8px 10px" }}>Son Aktivite</th>
+                        <th style={{ padding: "8px 10px" }}>İstek</th>
+                        <th style={{ padding: "8px 10px" }}>Endpoint</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {rtUsers.users.map(u => (
+                        <tr key={u.uid} style={{ borderBottom: "1px solid #1f1f2a" }}>
+                          <td style={{ padding: "8px 10px", color: "#f8fafc", fontFamily: "monospace" }}>
+                            <span style={{ display: "inline-block", width: 7, height: 7, borderRadius: "50%", marginRight: 8,
+                              backgroundColor: u.secondsAgo < 120 ? "#0ea5e9" : "#eab308" }} />
+                            {u.ip}
+                          </td>
+                          <td style={{ padding: "8px 10px", color: "#cbd5e1" }}>🌍 {u.country}</td>
+                          <td style={{ padding: "8px 10px", color: "#94a3b8", fontSize: 11 }}>
+                            {u.extractor === "newpipe" ? "NewPipe" : u.extractor === "backend" ? "Backend" : "Bilinmiyor"}
+                            {u.sdk ? ` · SDK ${u.sdk}` : ""}
+                          </td>
+                          <td style={{ padding: "8px 10px", color: "#94a3b8" }}>
+                            {u.secondsAgo < 60 ? `${u.secondsAgo} sn önce` : `${Math.round(u.secondsAgo / 60)} dk önce`}
+                          </td>
+                          <td style={{ padding: "8px 10px", color: "#38bdf8", fontWeight: 600 }}>{u.hits}</td>
+                          <td style={{ padding: "8px 10px", color: "#666", fontSize: 11 }}>{u.endpoint}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+              <div style={{ color: "#555", fontSize: 11, marginTop: 14 }}>
+                Son güncelleme: {new Date(rtUsers.updatedAt).toLocaleTimeString("tr-TR")}
+              </div>
+            </>
+            );
+          })()}
         </div>}
 
         {/* GİRİŞ YAPAN IP'LER */}
