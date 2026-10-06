@@ -2006,6 +2006,42 @@ function App() {
                 )}
               </div>
 
+              {/* PAKETE GÖRE — hangi uygulamadan kaç kişi zil sesinde */}
+              {rtUsers.byApp && rtUsers.byApp.length > 0 && (
+                <div style={{ marginBottom: 26 }}>
+                  <div style={{ color: "#94a3b8", fontSize: 12, marginBottom: 10 }}>PAKETE GÖRE (şu an aktif — son 5 dk)</div>
+                  <div style={{ overflowX: "auto" }}>
+                    <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                      <thead>
+                        <tr style={{ borderBottom: "1px solid #2a2a3a", color: "#94a3b8", textAlign: "left" }}>
+                          <th style={{ padding: "8px 10px" }}>Uygulama</th>
+                          <th style={{ padding: "8px 10px" }}>Paket adı</th>
+                          <th style={{ padding: "8px 10px" }}>Zil sesi</th>
+                          <th style={{ padding: "8px 10px" }}>Müzik</th>
+                          <th style={{ padding: "8px 10px" }}>Toplam</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {rtUsers.byApp.map(a => (
+                          <tr key={a.id} style={{ borderBottom: "1px solid #1f1f2a" }}>
+                            <td style={{ padding: "8px 10px", color: "#f8fafc" }}>{a.name}</td>
+                            <td style={{ padding: "8px 10px", color: "#666", fontFamily: "monospace", fontSize: 11 }}>{a.packageName || "—"}</td>
+                            <td style={{ padding: "8px 10px", color: a.ringtone > 0 ? "#38bdf8" : "#475569", fontWeight: 600 }}>{a.ringtone}</td>
+                            <td style={{ padding: "8px 10px", color: "#4ade80" }}>{a.youtube}</td>
+                            <td style={{ padding: "8px 10px", color: "#cbd5e1" }}>{a.total}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <p style={{ color: "#64748b", fontSize: 11, margin: "10px 0 0 0" }}>
+                    Paket ayrımı cihazın gönderdiği uygulama paketine göre yapılır. "Uygulamalar"
+                    bölümünde kayıtlı olmayan bir paket tanınmaz ve ilk satıra (default) düşer —
+                    orada beklediğinden fazla cihaz varsa eksik kayıt olabilir.
+                  </p>
+                </div>
+              )}
+
               {/* ÜLKELER — asıl soru: hangi ülkeler zil sesine düşüyor */}
               <div style={{ marginBottom: 26 }}>
                 <div style={{ color: "#94a3b8", fontSize: 12, marginBottom: 10 }}>
