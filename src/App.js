@@ -795,8 +795,55 @@ function App() {
       .catch(() => alert("Sunucuya bağlanılamadı!"));
   };
 
+  // === GİZLİLİK POLİTİKALARI — ad + paket + e-posta → hazır sayfa linki (sadece süper panel) ===
+  const [policyList, setPolicyList] = useState([]);
+  const [policyName, setPolicyName] = useState("");
+  const [policyPackage, setPolicyPackage] = useState("");
+  const [policyEmail, setPolicyEmail] = useState("");
+  const [policyResult, setPolicyResult] = useState(null);
+  const [policyBusy, setPolicyBusy] = useState(false);
+
+  const fetchPolicies = () => {
+    fetch(`${API_URL}/admin/privacy-policies`, { headers: { "X-App-Key": APP_KEY } })
+      .then(r => r.json())
+      .then(d => setPolicyList(Array.isArray(d.policies) ? d.policies : []))
+      .catch(() => {});
+  };
+  useEffect(() => {
+    if (!PANEL_LOCKED && activeSection === "privacy") fetchPolicies();
+  }, [activeSection]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const savePolicy = () => {
+    const appName = policyName.trim(), packageName = policyPackage.trim(), email = policyEmail.trim();
+    if (!appName || !packageName || !email) return alert("Uygulama adı, paket adı ve e-posta zorunlu!");
+    setPolicyBusy(true);
+    fetch(`${API_URL}/admin/privacy-policies`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
+      body: JSON.stringify({ appName, packageName, email })
+    })
+      .then(r => r.json())
+      .then(d => {
+        setPolicyBusy(false);
+        if (d.ok) {
+          setPolicyResult(d.policy);
+          setPolicyName(""); setPolicyPackage(""); setPolicyEmail("");
+          fetchPolicies();
+        } else alert("Hata: " + (d.error || "Kaydedilemedi"));
+      })
+      .catch(() => { setPolicyBusy(false); alert("Sunucuya bağlanılamadı!"); });
+  };
+
+  const deletePolicy = (p) => {
+    if (!window.confirm(`"${p.appName}" gizlilik politikasını sil? Link çalışmayı bırakır.`)) return;
+    fetch(`${API_URL}/admin/privacy-policies/${encodeURIComponent(p.packageName)}`, { method: "DELETE", headers: { "X-App-Key": APP_KEY } })
+      .then(r => r.json())
+      .then(d => { if (d.ok) fetchPolicies(); else alert("Hata: " + (d.error || "Silinemedi")); })
+      .catch(() => alert("Sunucuya bağlanılamadı!"));
+  };
+
   const menuItems = [
-    ...(!PANEL_LOCKED ? [{ key: "users", label: "👤 Kullanıcılar" }, { key: "apps", label: "🗂️ Uygulamalar" }] : []),
+    ...(!PANEL_LOCKED ? [{ key: "users", label: "👤 Kullanıcılar" }, { key: "apps", label: "🗂️ Uygulamalar" }, { key: "privacy", label: "🔒 Gizlilik Politikaları" }] : []),
     { key: "settings", label: "Genel Ayarlar" },
     { key: "mp3", label: "MP3 Ayarları" },
     { key: "countries", label: "Ülke Ayarları" },
@@ -1025,6 +1072,65 @@ function App() {
                   <CredRow label="Link" value={window.location.origin + a.panelPath} />
                   <CredRow label="Kullanıcı" value={a.user} />
                   <CredRow label="Şifre" value={a.pass} />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>}
+
+        {/* GİZLİLİK POLİTİKALARI — paket + e-posta gir, link al (sadece süper panel) */}
+        {activeSection === "privacy" && !PANEL_LOCKED && <div style={styles.card}>
+          <h2 style={styles.title}>🔒 Gizlilik Politikaları</h2>
+          <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 20 }}>
+            Uygulama adı, paket adı ve iletişim e-postasını gir → hazır gizlilik politikası sayfasının <b>linkini</b> verir.
+            Aynı paket adını tekrar kaydedersen sayfa güncellenir, link değişmez.
+          </p>
+
+          <div style={{ background: "#15151f", border: "1px solid #2a2a35", borderRadius: 12, padding: 18, marginBottom: 24 }}>
+            <h3 style={{ color: "#e2e8f0", fontSize: 15, margin: "0 0 14px 0" }}>➕ Politika Oluştur / Güncelle</h3>
+            <div style={{ display: "grid", gap: 12 }}>
+              <div>
+                <label style={{ color: "#94a3b8", fontSize: 12, display: "block", marginBottom: 4 }}>Uygulama Adı</label>
+                <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Örn: VupVup Music Player - MP3 Player" value={policyName} onChange={e => setPolicyName(e.target.value)} />
+              </div>
+              <div>
+                <label style={{ color: "#94a3b8", fontSize: 12, display: "block", marginBottom: 4 }}>Paket Adı</label>
+                <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Örn: app.vupvup.descargamusica" value={policyPackage} onChange={e => setPolicyPackage(e.target.value)} />
+              </div>
+              <div>
+                <label style={{ color: "#94a3b8", fontSize: 12, display: "block", marginBottom: 4 }}>İletişim E-postası</label>
+                <input type="email" style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Örn: destek@gmail.com" value={policyEmail} onChange={e => setPolicyEmail(e.target.value)} />
+              </div>
+              <button style={{ ...styles.primaryBtn, opacity: policyBusy ? 0.6 : 1 }} disabled={policyBusy} onClick={savePolicy}>
+                {policyBusy ? "Kaydediliyor..." : "Kaydet + Link Oluştur"}
+              </button>
+            </div>
+
+            {policyResult && (
+              <div style={{ marginTop: 16, background: "#0f2a17", border: "1px solid #1f5133", borderRadius: 10, padding: 16 }}>
+                <div style={{ color: "#4ade80", fontWeight: 700, marginBottom: 12 }}>✅ {policyResult.appName} politikası hazır</div>
+                <CredRow label="Link" value={policyResult.url} />
+              </div>
+            )}
+          </div>
+
+          <h3 style={{ color: "#e2e8f0", fontSize: 15, margin: "0 0 12px 0" }}>Mevcut Politikalar</h3>
+          {policyList.length === 0 ? (
+            <p style={{ color: "#64748b", fontSize: 13 }}>Henüz politika yok.</p>
+          ) : (
+            <div style={{ display: "grid", gap: 12 }}>
+              {policyList.map(p => (
+                <div key={p.packageName} style={{ background: "#15151f", border: "1px solid #2a2a35", borderRadius: 10, padding: 14 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8, gap: 8 }}>
+                    <div style={{ color: "#f8fafc", fontWeight: 700 }}>{p.appName}</div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <div style={{ color: "#64748b", fontSize: 12 }}>{p.email}</div>
+                      <button onClick={() => deletePolicy(p)} title="Politikayı sil"
+                        style={{ background: "transparent", border: "1px solid #3a2230", color: "#ef4444", borderRadius: 6, padding: "4px 8px", cursor: "pointer", fontSize: 14, lineHeight: 1, flexShrink: 0 }}>🗑️</button>
+                    </div>
+                  </div>
+                  <CredRow label="Paket" value={p.packageName} />
+                  <CredRow label="Link" value={p.url} />
                 </div>
               ))}
             </div>
