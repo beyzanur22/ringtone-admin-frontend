@@ -921,29 +921,29 @@ function App() {
   };
 
   const menuItems = [
-    ...(!PANEL_LOCKED ? [{ key: "users", label: "👤 Kullanıcılar" }, { key: "apps", label: "🗂️ Uygulamalar" }, { key: "privacy", label: "🔒 Gizlilik Politikaları" }] : []),
-    { key: "settings", label: "Genel Ayarlar" },
-    { key: "countries", label: "Ülke Ayarları" },
-    { key: "ringtonemode", label: "🔔 Zil Sesi Modu" },
-    { key: "device", label: "Popup Gönder" },
-    { key: "mp3", label: "MP3 Ayarları" },
-    { key: "notifications", label: "Bildirimler" },
-    { key: "blocked", label: "Yasaklı Kanallar" },
-    { key: "contentfilter", label: "İçerik Filtresi" },
-    { key: "live", label: "Canlı Kullanıcılar" },
-    { key: "loginips", label: "Giriş IP'leri" },
-    { key: "popup", label: "Oylama & Geri Bildirim" },
-    { key: "reviewlogs", label: "Değerlendirme Logları" },
-    { key: "downloadad", label: "İndirme Reklamı" },
-    { key: "bannerad", label: "Arama Reklamı" },
-    { key: "bottombanner", label: "Alt Banner Reklam" },
-    { key: "ringtonead", label: "Zil Sesi Reklamı" },
-    { key: "adfree", label: "Reklamsız Ülkeler" },
-    { key: "asn", label: "ASN Ayarları" },
-    { key: "appcontrols", label: "App Controls" },
-    { key: "apiproviders", label: "API Durumu" },
-    { key: "smartcache", label: "Cache Yönetimi" },
-    { key: "youtube", label: "YouTube & Top50" },
+    ...(!PANEL_LOCKED ? [{ key: "users", icon: "👤", label: "Kullanıcılar" }, { key: "apps", icon: "🗂️", label: "Uygulamalar" }, { key: "privacy", icon: "🔒", label: "Gizlilik Politikaları" }] : []),
+    { key: "settings", icon: "⚙️", label: "Genel Ayarlar" },
+    { key: "countries", icon: "🌍", label: "Ülke Ayarları" },
+    { key: "ringtonemode", icon: "🔔", label: "Zil Sesi Modu" },
+    { key: "device", icon: "💬", label: "Popup Gönder" },
+    { key: "mp3", icon: "🎧", label: "MP3 Ayarları" },
+    { key: "notifications", icon: "📣", label: "Bildirimler" },
+    { key: "blocked", icon: "⛔", label: "Yasaklı Kanallar" },
+    { key: "contentfilter", icon: "🎚️", label: "İçerik Filtresi" },
+    { key: "live", icon: "🟢", label: "Canlı Kullanıcılar" },
+    { key: "loginips", icon: "🔑", label: "Giriş IP'leri" },
+    { key: "popup", icon: "🗳️", label: "Oylama & Geri Bildirim" },
+    { key: "reviewlogs", icon: "⭐", label: "Değerlendirme Logları" },
+    { key: "downloadad", icon: "⬇️", label: "İndirme Reklamı" },
+    { key: "bannerad", icon: "🔎", label: "Arama Reklamı" },
+    { key: "bottombanner", icon: "📰", label: "Alt Banner Reklam" },
+    { key: "ringtonead", icon: "📢", label: "Zil Sesi Reklamı" },
+    { key: "adfree", icon: "🚫", label: "Reklamsız Ülkeler" },
+    { key: "asn", icon: "🛰️", label: "ASN Ayarları" },
+    { key: "appcontrols", icon: "🛡️", label: "App Controls" },
+    { key: "apiproviders", icon: "📊", label: "API Durumu" },
+    { key: "smartcache", icon: "💾", label: "Cache Yönetimi" },
+    { key: "youtube", icon: "▶️", label: "YouTube & Top50" },
   ];
 
   // Canlı kullanıcılar: bölüm açıkken 5 sn'de bir, kapalıyken 30 sn'de bir (sidebar rozeti için)
@@ -966,11 +966,22 @@ function App() {
   return (
     <div style={{ display: "flex", minHeight: "100vh", backgroundColor: "#14151a", color: "#e2e8f0", fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif" }}>
       {/* SIDEBAR */}
-      <div style={{ width: 220, minWidth: 220, backgroundColor: "#1a1a22", borderRight: "1px solid #2a2a35", padding: "20px 0", position: "sticky", top: 0, height: "100vh", overflowY: "auto" }}>
-        <h2 style={{ textAlign: "center", color: "#a78bfa", fontSize: 20, margin: "0 0 12px 0" }}>🎵 Melodia</h2>
+      <div className="sb" style={{ width: 240, minWidth: 240, backgroundColor: "#000", borderRight: "1px solid rgba(255,255,255,0.12)", padding: "22px 0", position: "sticky", top: 0, height: "100vh", overflowY: "auto", boxSizing: "border-box" }}>
+        <style>{`
+          .sb::-webkit-scrollbar { width: 6px; }
+          .sb::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+          .sb-menu { margin: 0 12px; border-top: 1px solid rgba(255,255,255,0.12); }
+          .sb-item { display: flex; align-items: center; gap: 12px; padding: 13px 12px; cursor: pointer; font-size: 14px; font-weight: 600;
+            color: rgba(255,255,255,0.82); border-bottom: 1px solid rgba(255,255,255,0.12); border-radius: 0; position: relative;
+            transition: background 0.15s, color 0.15s, padding-left 0.15s; user-select: none; }
+          .sb-item:hover { background: rgba(255,255,255,0.07); color: #fff; padding-left: 16px; }
+          .sb-item.active { background: #fff; color: #000; border-radius: 10px; border-bottom-color: transparent; }
+          .sb-ico { width: 22px; text-align: center; font-size: 15px; flex-shrink: 0; }
+        `}</style>
+        <h2 style={{ textAlign: "center", color: "#fff", fontSize: 21, fontWeight: 800, letterSpacing: 0.3, margin: "0 0 16px 0" }}>🎵 Melodia</h2>
         {/* UYGULAMA SEÇİCİ — hangi uygulamayı yönettiğini gösterir (yanlış-app koruması) */}
         <div style={{ margin: "0 14px 14px 14px" }}>
-          <div style={{ fontSize: 10, color: "#64748b", marginBottom: 4, textTransform: "uppercase", letterSpacing: 0.5 }}>Uygulama</div>
+          <div style={{ fontSize: 10, color: "rgba(255,255,255,0.55)", fontWeight: 700, marginBottom: 6, textTransform: "uppercase", letterSpacing: 1 }}>Uygulama</div>
           {PANEL_LOCKED ? (
             /* İzole panel: uygulama sabit — sadece göster, değiştirilemez */
             <div style={{
@@ -993,7 +1004,7 @@ function App() {
               }}>
               {Object.values(apps).length === 0 && <option value={appId}>{appId}</option>}
               {Object.values(apps).map(a => (
-                <option key={a.id} value={a.id} style={{ backgroundColor: "#1a1a22", color: "#fff" }}>
+                <option key={a.id} value={a.id} style={{ backgroundColor: "#000", color: "#fff" }}>
                   {a.name}
                 </option>
               ))}
@@ -1011,18 +1022,15 @@ function App() {
             <div style={{ color: "#5f8b70", fontSize: 10 }}>şu an aktif</div>
           </div>
         </div>
-        {menuItems.map(item => (
-          <div key={item.key} onClick={() => setActiveSection(item.key)}
-            style={{
-              padding: "12px 20px", cursor: "pointer", fontSize: 14,
-              backgroundColor: activeSection === item.key ? "#2a2a3a" : "transparent",
-              borderLeft: activeSection === item.key ? "3px solid #a78bfa" : "3px solid transparent",
-              color: activeSection === item.key ? "#f8fafc" : "#94a3b8",
-              transition: "all 0.15s"
-            }}>
-            {item.label}
-          </div>
-        ))}
+        <div className="sb-menu">
+          {menuItems.map(item => (
+            <div key={item.key} onClick={() => setActiveSection(item.key)}
+              className={"sb-item" + (activeSection === item.key ? " active" : "")}>
+              <span className="sb-ico">{item.icon}</span>
+              <span>{item.label}</span>
+            </div>
+          ))}
+        </div>
         {/* ÇIKIŞ — kişisel oturumu kapatır, giriş ekranına döner */}
         <a href="/admin/logout" style={{ display: "block", margin: "16px 14px 0", padding: "10px 14px", borderRadius: 8, textAlign: "center", fontSize: 13, fontWeight: 600, color: "#f87171", background: "#2a1216", border: "1px solid #5b2130", textDecoration: "none" }}>
           Çıkış Yap
