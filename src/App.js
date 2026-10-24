@@ -923,13 +923,14 @@ function App() {
   const menuItems = [
     ...(!PANEL_LOCKED ? [{ key: "users", label: "👤 Kullanıcılar" }, { key: "apps", label: "🗂️ Uygulamalar" }, { key: "privacy", label: "🔒 Gizlilik Politikaları" }] : []),
     { key: "settings", label: "Genel Ayarlar" },
-    { key: "mp3", label: "MP3 Ayarları" },
     { key: "countries", label: "Ülke Ayarları" },
+    { key: "ringtonemode", label: "🔔 Zil Sesi Modu" },
+    { key: "device", label: "Popup Gönder" },
+    { key: "mp3", label: "MP3 Ayarları" },
     { key: "notifications", label: "Bildirimler" },
     { key: "blocked", label: "Yasaklı Kanallar" },
     { key: "contentfilter", label: "İçerik Filtresi" },
     { key: "live", label: "Canlı Kullanıcılar" },
-    { key: "ringtonemode", label: "🔔 Zil Sesi Modu" },
     { key: "loginips", label: "Giriş IP'leri" },
     { key: "popup", label: "Oylama & Geri Bildirim" },
     { key: "reviewlogs", label: "Değerlendirme Logları" },
@@ -939,7 +940,6 @@ function App() {
     { key: "ringtonead", label: "Zil Sesi Reklamı" },
     { key: "adfree", label: "Reklamsız Ülkeler" },
     { key: "asn", label: "ASN Ayarları" },
-    { key: "device", label: "Device Actions" },
     { key: "appcontrols", label: "App Controls" },
     { key: "apiproviders", label: "API Durumu" },
     { key: "smartcache", label: "Cache Yönetimi" },
@@ -3500,7 +3500,7 @@ function App() {
 
         {/* DEVICE ACTIONS */}
         {activeSection === "device" && <div style={styles.card}>
-          <h2 style={styles.title}>📱 Device Actions (Cihaz Komutları)</h2>
+          <h2 style={styles.title}>📱 Popup Gönder</h2>
           <p style={{ color: "#888", fontSize: 13, marginBottom: 20 }}>
             Android cihazlara uzaktan komut gönderin. Aktif action cihaz tarafından otomatik algılanır.
           </p>
@@ -3859,7 +3859,7 @@ function App() {
           <div style={{ background: "#1a1a2e", border: "1px solid #2a2a3a", borderRadius: 10, padding: 20, marginTop: 20 }}>
             <h3 style={{ color: "#ef4444", fontSize: 16, margin: "0 0 12px 0" }}>🚀 Anlık Tetikle</h3>
             <p style={{ color: "#666", fontSize: 12, marginBottom: 16 }}>
-              Butona basınca tüm aktif kullanıcılara anında gönderilir (Device Actions üzerinden).
+              Butona basınca tüm aktif kullanıcılara anında gönderilir (Popup Gönder üzerinden).
             </p>
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
               <button style={{ ...styles.primaryBtn, backgroundColor: "#7c3aed" }} onClick={() => {
