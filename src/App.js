@@ -949,7 +949,7 @@ function App() {
   ];
   const menuItems = [
     ...(!PANEL_LOCKED ? [{ key: "users", icon: "👤", label: "Kullanıcılar" }, { key: "apps", icon: "🗂️", label: "Uygulamalar" }, { key: "privacy", icon: "🔒", label: "Gizlilik Politikaları" }] : []),
-    { key: "settings", icon: "⚙️", label: "Genel Ayarlar" },
+    { key: "settings", icon: "⚙️", label: "Genel Ülke Modu" },
     { key: "countries", icon: "🌍", label: "Ülke Ayarları" },
     { key: "ringtonemode", icon: "🔔", label: "Zil Sesi Modu" },
     { key: "device", icon: "💬", label: "Popup Gönder" },
@@ -1290,7 +1290,7 @@ function App() {
 
         {/* GLOBAL & COUNTRY CONFIG (Styled for Dark Theme) */}
         {activeSection === "settings" && <div style={styles.card}>
-          <h2 style={styles.title}>Genel Ayarlar</h2>
+          <h2 style={styles.title}>Genel Ülke Modu</h2>
           <div style={styles.inputGroup}>
             <label style={styles.labelCheckbox}>
               <input type="checkbox" checked={config.global.enabled}
