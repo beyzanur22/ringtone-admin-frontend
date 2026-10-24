@@ -127,6 +127,81 @@ function CountryRulePicker({ rule, idx, configKey, config, setConfig }) {
   );
 }
 
+// Tüm ISO ülke kodları — adlar tarayıcının Intl'inden Türkçe gelir
+const ISO_CODES = "AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS XK YE YT ZA ZM ZW".split(" ");
+const countryName = (() => {
+  let dn = null;
+  try { dn = new Intl.DisplayNames(["tr"], { type: "region" }); } catch (e) {}
+  return (code) => {
+    if (dn) { try { return dn.of(code) || code; } catch (e) {} }
+    const f = COUNTRY_LIST.find(x => x.code === code);
+    return f ? f.name : code;
+  };
+})();
+const countryFlag = (code) => /^[A-Z]{2}$/.test(code || "")
+  ? String.fromCodePoint(...[...code].map(ch => 0x1F1E6 + ch.charCodeAt(0) - 65)) : "🏳️";
+const ALL_COUNTRIES = ISO_CODES.map(code => ({ code, name: countryName(code) }))
+  .sort((a, b) => a.name.localeCompare(b.name, "tr"));
+// Sık kullanılanlar listenin başında
+const TOP_COUNTRIES = ["TR", "US", "DE", "GB", "FR", "BR", "IN", "ID", "MX", "ES", "IT", "RU", "SA", "EG"];
+
+// Device Actions ülke seçici — tıklayınca aranabilir liste açılır
+function DaCountryPicker({ mode, countries, onChange, disabled }) {
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const q = search.trim().toLocaleLowerCase("tr");
+  const match = c => !q || c.name.toLocaleLowerCase("tr").includes(q) || c.code.toLowerCase().includes(q);
+  const top = ALL_COUNTRIES.filter(c => TOP_COUNTRIES.includes(c.code) && match(c))
+    .sort((a, b) => TOP_COUNTRIES.indexOf(a.code) - TOP_COUNTRIES.indexOf(b.code));
+  const rest = ALL_COUNTRIES.filter(c => !TOP_COUNTRIES.includes(c.code) && match(c));
+  const toggle = code => onChange(countries.includes(code) ? countries.filter(x => x !== code) : [...countries, code]);
+  const accent = mode === "exclude" ? "#ef4444" : "#0ea5e9";
+
+  const row = c => (
+    <label key={c.code} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 14px", cursor: "pointer", fontSize: 13, color: "#cbd5e1", borderBottom: "1px solid #272a33", background: countries.includes(c.code) ? "#0c2d48" : "transparent" }}>
+      <input type="checkbox" checked={countries.includes(c.code)} onChange={() => toggle(c.code)} />
+      <span style={{ fontSize: 16 }}>{countryFlag(c.code)}</span>
+      <span style={{ flex: 1 }}>{c.name}</span>
+      <span style={{ color: "#64748b", fontFamily: "monospace", fontSize: 12 }}>{c.code}</span>
+    </label>
+  );
+
+  return (
+    <div style={{ position: "relative", flex: 1, opacity: disabled ? 0.4 : 1, pointerEvents: disabled ? "none" : "auto" }}>
+      <div onClick={() => setOpen(!open)}
+        style={{ background: "#1e1e24", border: `1px solid ${open ? accent : "#3f3f46"}`, borderRadius: 8, padding: "8px 12px", minHeight: 42, boxSizing: "border-box", cursor: "pointer", display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
+        {countries.length === 0 && <span style={{ color: "#64748b", fontSize: 14 }}>{disabled ? "Tüm ülkelere gönderilir" : "Ülke seçmek için tıkla..."}</span>}
+        {countries.map(code => (
+          <span key={code} onClick={e => { e.stopPropagation(); toggle(code); }} title="Kaldır"
+            style={{ background: mode === "exclude" ? "#450a0a" : "#0c2d48", color: "#fff", border: `1px solid ${accent}`, borderRadius: 999, padding: "2px 10px", fontSize: 12, cursor: "pointer" }}>
+            {countryFlag(code)} {countryName(code)} ✕
+          </span>
+        ))}
+        <span style={{ marginLeft: "auto", color: "#888", fontSize: 12 }}>{open ? "▲" : "▼"}</span>
+      </div>
+      {open && (
+        <div style={{ position: "absolute", top: "100%", left: 0, right: 0, marginTop: 4, background: "#1e1e24", border: "1px solid #3f3f46", borderRadius: 8, zIndex: 50, boxShadow: "0 12px 32px rgba(0,0,0,.5)" }}>
+          <div style={{ display: "flex", gap: 8, padding: 8, borderBottom: "1px solid #272a33" }}>
+            <input autoFocus type="text" placeholder="Ülke ara (Türkiye, TR...)" value={search} onChange={e => setSearch(e.target.value)}
+              style={{ flex: 1, background: "#15151a", color: "#fff", border: "1px solid #3f3f46", borderRadius: 6, padding: "8px 10px", fontSize: 13 }} />
+            {countries.length > 0 && <button type="button" onClick={() => onChange([])}
+              style={{ background: "none", border: "1px solid #3f3f46", color: "#f87171", borderRadius: 6, padding: "0 10px", cursor: "pointer", fontSize: 12 }}>Temizle</button>}
+            <button type="button" onClick={() => setOpen(false)}
+              style={{ background: "#0ea5e9", border: "none", color: "#fff", borderRadius: 6, padding: "0 14px", cursor: "pointer", fontSize: 12 }}>Tamam</button>
+          </div>
+          <div style={{ maxHeight: 300, overflowY: "auto" }}>
+            {top.length > 0 && <div style={{ padding: "6px 14px", fontSize: 11, color: "#64748b", background: "#18181d" }}>SIK KULLANILANLAR</div>}
+            {top.map(row)}
+            {rest.length > 0 && <div style={{ padding: "6px 14px", fontSize: 11, color: "#64748b", background: "#18181d" }}>TÜM ÜLKELER</div>}
+            {rest.map(row)}
+            {top.length + rest.length === 0 && <div style={{ padding: 14, color: "#64748b", fontSize: 13 }}>Sonuç yok</div>}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // Giriş bilgisi satırı — kopyala butonlu (Uygulamalar ekranı)
 function CredRow({ label, value }) {
   const [copied, setCopied] = useState(false);
@@ -212,11 +287,12 @@ function App() {
   const [daShowOnce, setDaShowOnce] = useState(true);
   const [daConfirmText, setDaConfirmText] = useState("");
   const [daCancelText, setDaCancelText] = useState("");
-  const [daCountries, setDaCountries] = useState("");
+  const [daCountries, setDaCountries] = useState([]);
   const [daCountryMode, setDaCountryMode] = useState("all");
   const [daForceAction, setDaForceAction] = useState(false);
   const [daMinVersion, setDaMinVersion] = useState("");
   const [daMaxVersion, setDaMaxVersion] = useState("");
+  const [daMinLaunches, setDaMinLaunches] = useState(0); // 0 = şart yok
   const [apiProviders, setApiProviders] = useState(null);
   const [apiHealth, setApiHealth] = useState([]);
   const [smartCache, setSmartCache] = useState({ enabled: true, minRequests: 3 });
@@ -572,6 +648,7 @@ function App() {
 
   const createDeviceAction = () => {
     if (daActionType !== "review_sheet" && !daValue.trim()) return alert("Değer alanı zorunlu!");
+    if (daCountryMode !== "all" && daCountries.length === 0) return alert("En az bir ülke seçin!");
     const payload = {
       actionType: daActionType,
       mode: daMode,
@@ -580,11 +657,12 @@ function App() {
       showOnce: daShowOnce,
       confirmText: daConfirmText.trim() || null,
       cancelText: daCancelText.trim() || null,
-      countries: daCountries.split(",").map(c => c.trim().toUpperCase()).filter(Boolean),
+      countries: daCountryMode === "all" ? [] : daCountries,
       countryMode: daCountryMode,
       forceAction: daForceAction,
       minVersion: parseInt(daMinVersion) || 0,
       maxVersion: parseInt(daMaxVersion) || 0,
+      minLaunches: Math.max(0, parseInt(daMinLaunches) || 0),
       appMode: daAppMode,
     };
     fetch(`${API_URL}/device-action/create`, {
@@ -3511,6 +3589,27 @@ function App() {
             </span>
           </div>
 
+          {/* Kullanım şartı — bu uygulamanın cihazdaki açılış sayısı (paket başına ayrı) */}
+          <div style={{ display: "flex", gap: 12, marginBottom: 16, alignItems: "center", flexWrap: "wrap" }}>
+            <span style={{ color: "#aaa", fontSize: 13 }}>Kullanım şartı:</span>
+            {[0, 3, 5, 10].map(n => (
+              <button key={n} onClick={() => setDaMinLaunches(n)}
+                style={{
+                  padding: "8px 16px", borderRadius: 8, border: Number(daMinLaunches) === n ? "2px solid #f59e0b" : "1px solid #3f3f46",
+                  background: Number(daMinLaunches) === n ? "#451a03" : "#272a33", color: "#fff", cursor: "pointer", fontSize: 13
+                }}>
+                {n === 0 ? "Şart yok" : `${n}+ kullanım`}
+              </button>
+            ))}
+            <input type="number" min="0" max="1000" style={{ ...styles.input, width: 90 }} placeholder="Özel"
+              value={daMinLaunches || ""} onChange={e => setDaMinLaunches(Math.max(0, parseInt(e.target.value) || 0))} />
+            <span style={{ color: "#666", fontSize: 11 }}>
+              {Number(daMinLaunches) > 0
+                ? `Uygulamayı en az ${daMinLaunches} kez açmış kullanıcılara gösterilir`
+                : "Kaç kez açtığına bakılmaz"}
+            </span>
+          </div>
+
           {/* Value Input */}
           {daActionType !== "review_sheet" && (
             <div style={{ marginBottom: 16 }}>
@@ -3560,15 +3659,13 @@ function App() {
           <div style={{ marginBottom: 16 }}>
             <label style={styles.label}>🌍 Ülke hedefleme</label>
             <div style={{ display: "flex", gap: 8 }}>
-              <select style={{ ...styles.input, width: 140 }} value={daCountryMode} onChange={e => setDaCountryMode(e.target.value)}>
+              <select style={{ ...styles.input, width: 140, alignSelf: "flex-start" }} value={daCountryMode} onChange={e => setDaCountryMode(e.target.value)}>
                 <option value="all">Tüm ülkeler</option>
                 <option value="include">Sadece şunlar</option>
                 <option value="exclude">Şunlar hariç</option>
               </select>
-              <input style={{ ...styles.input, flex: 1, boxSizing: "border-box", opacity: daCountryMode === "all" ? 0.4 : 1 }}
-                placeholder="TR, DE, US (virgülle)"
-                disabled={daCountryMode === "all"}
-                value={daCountries} onChange={e => setDaCountries(e.target.value)} />
+              <DaCountryPicker mode={daCountryMode} countries={daCountries} onChange={setDaCountries}
+                disabled={daCountryMode === "all"} />
             </div>
           </div>
 
@@ -3593,48 +3690,83 @@ function App() {
           {deviceActions.length > 0 && (
             <div style={{ marginTop: 24 }}>
               <h3 style={{ color: "#94a3b8", fontSize: 14, marginBottom: 12 }}>Geçmiş Actions</h3>
-              {deviceActions.map(action => (
+              {deviceActions.map(action => {
+                const am = action.appMode || "youtube";
+                const cList = Array.isArray(action.countries) ? action.countries : [];
+                const cMode = action.countryMode || "all";
+                const countryText = cMode === "all" || cList.length === 0
+                  ? "🌍 Tüm ülkeler"
+                  : (cMode === "exclude" ? "🚫 Hariç: " : "✅ Sadece: ") + cList.map(c => `${countryFlag(c)} ${countryName(c)}`).join(", ");
+                const verText = !action.minVersion && !action.maxVersion
+                  ? "Tüm sürümler"
+                  : `${action.minVersion || "—"} → ${action.maxVersion || "—"}`;
+                const created = action.createdAt
+                  ? new Date(action.createdAt).toLocaleString("tr-TR", { day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })
+                  : "—";
+                const typeText = action.actionType === "chrome_url" ? "🌐 Chrome URL"
+                  : action.actionType === "package_name" ? "📦 Package Name" : "⭐ Review Sheet";
+                const details = [
+                  ["Komut", typeText],
+                  ["Gönderim", action.mode === "direct" ? "⚡ Direct (Sessiz)" : "💬 Popup (Onaylı)"],
+                  ["Uygulama modu", am === "ringtone" ? "🔔 Zil Sesi Modu" : am === "both" ? "🌐 Her İkisi" : "▶️ YouTube Modu"],
+                  ["Sıklık", action.showOnce === false ? "🔁 Her açılışta" : "1️⃣ Tek seferlik"],
+                  ["Kullanım şartı", action.minLaunches > 0 ? `🔢 En az ${action.minLaunches} kullanım` : "Şart yok"],
+                  ["Sürüm (versionCode)", verText],
+                  ["Ülkeler", countryText],
+                ];
+                if (action.mode === "popup") {
+                  details.push(["Popup mesajı", action.label || "Varsayılan"]);
+                  details.push(["Butonlar", `✅ ${action.confirmText || "Varsayılan"}${action.forceAction ? "" : ` · ✖️ ${action.cancelText || "Varsayılan"}`}`]);
+                  details.push(["Zorunlu", action.forceAction ? "🔒 Evet, kapatılamaz" : "Hayır"]);
+                }
+                return (
                 <div key={action.id} style={{
-                  display: "flex", justifyContent: "space-between", alignItems: "center",
-                  background: action.active ? "#0c2d48" : "#1a1a1d", padding: "12px 16px",
-                  borderRadius: 8, marginBottom: 8, border: action.active ? "1px solid #0ea5e9" : "1px solid #272a33"
+                  background: action.active ? "#0c2d48" : "#1a1a1d", padding: "14px 16px",
+                  borderRadius: 8, marginBottom: 10, border: action.active ? "1px solid #0ea5e9" : "1px solid #272a33"
                 }}>
-                  <div>
-                    <span style={{ color: action.active ? "#0ea5e9" : "#666", fontSize: 12, marginRight: 8 }}>
-                      {action.active ? "● AKTİF" : "○ Pasif"}
-                    </span>
-                    <span style={{
-                      fontSize: 11, fontWeight: 700, marginRight: 8, padding: "2px 8px", borderRadius: 6,
-                      background: (action.appMode || "youtube") === "ringtone" ? "#0c2d48" : ((action.appMode === "both") ? "#3b0764" : "#450a0a"),
-                      color: (action.appMode || "youtube") === "ringtone" ? "#0ea5e9" : ((action.appMode === "both") ? "#c084fc" : "#f87171")
-                    }}>
-                      {(action.appMode || "youtube") === "ringtone" ? "🔔 RINGTONE" : ((action.appMode === "both") ? "🌐 HER İKİSİ" : "▶️ YOUTUBE")}
-                    </span>
-                    <span style={{ color: "#fff", fontSize: 13 }}>
-                      {action.actionType === "chrome_url" && "🌐 "}
-                      {action.actionType === "package_name" && "📦 "}
-                      {action.actionType === "review_sheet" && "⭐ "}
-                      {action.value}
-                    </span>
-                    <span style={{ color: "#666", fontSize: 12, marginLeft: 10 }}>
-                      ({action.mode === "direct" ? "⚡ Direct" : "💬 Popup"})
-                      {" • "}{action.showOnce === false ? "🔁 Her açılışta" : "1️⃣ Tek seferlik"}
-                      {` • ${action.executedCount || 0} kez gönderildi`}
-                    </span>
-                    <div style={{ color: "#475569", fontSize: 11, marginTop: 4, fontFamily: "monospace" }}>
-                      ID: {action.id}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+                    <div style={{ minWidth: 0 }}>
+                      <span style={{ color: action.active ? "#0ea5e9" : "#666", fontSize: 12, marginRight: 8 }}>
+                        {action.active ? "● AKTİF" : "○ Pasif"}
+                      </span>
+                      <span style={{
+                        fontSize: 11, fontWeight: 700, marginRight: 8, padding: "2px 8px", borderRadius: 6,
+                        background: am === "ringtone" ? "#0c2d48" : (am === "both" ? "#3b0764" : "#450a0a"),
+                        color: am === "ringtone" ? "#0ea5e9" : (am === "both" ? "#c084fc" : "#f87171")
+                      }}>
+                        {am === "ringtone" ? "🔔 RINGTONE" : (am === "both" ? "🌐 HER İKİSİ" : "▶️ YOUTUBE")}
+                      </span>
+                      <span style={{ color: "#fff", fontSize: 13, wordBreak: "break-all" }}>
+                        {action.actionType === "chrome_url" && "🌐 "}
+                        {action.actionType === "package_name" && "📦 "}
+                        {action.actionType === "review_sheet" && "⭐ "}
+                        {action.value}
+                      </span>
+                    </div>
+                    <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                      <span style={{ color: "#4ade80", fontSize: 12, fontWeight: 600 }}>{action.executedCount || 0} kez gönderildi</span>
+                      {action.active && (
+                        <button onClick={() => deactivateDeviceAction(action.id)}
+                          style={{ ...styles.textBtn, color: "#f59e0b", fontSize: 12 }}>Durdur</button>
+                      )}
+                      <button onClick={() => deleteDeviceAction(action.id)}
+                        style={{ ...styles.textBtn, fontSize: 12 }}>Sil</button>
                     </div>
                   </div>
-                  <div style={{ display: "flex", gap: 8 }}>
-                    {action.active && (
-                      <button onClick={() => deactivateDeviceAction(action.id)}
-                        style={{ ...styles.textBtn, color: "#f59e0b", fontSize: 12 }}>Durdur</button>
-                    )}
-                    <button onClick={() => deleteDeviceAction(action.id)}
-                      style={{ ...styles.textBtn, fontSize: 12 }}>Sil</button>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "8px 16px", marginTop: 12, paddingTop: 12, borderTop: "1px solid #272a33" }}>
+                    {details.map(([k, v]) => (
+                      <div key={k} style={{ fontSize: 12, gridColumn: k === "Ülkeler" ? "1 / -1" : undefined }}>
+                        <div style={{ color: "#64748b", marginBottom: 2 }}>{k}</div>
+                        <div style={{ color: "#e2e8f0" }}>{v}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ color: "#475569", fontSize: 11, marginTop: 10, fontFamily: "monospace" }}>
+                    📅 {created} · ID: {action.id}
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>}
