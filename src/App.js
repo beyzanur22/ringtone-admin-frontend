@@ -92,7 +92,7 @@ function CountryRulePicker({ rule, idx, configKey, config, setConfig }) {
       <select value={mode} onChange={e => {
         const newMode = e.target.value;
         updateRule({ countryMode: newMode, countries: newMode === "all" ? [] : (rule.countries || []) });
-      }} style={{ background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 12, width: "100%", marginBottom: 6 }}>
+      }} style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 12, width: "100%", marginBottom: 6 }}>
         <option value="all">Tüm ülkeler</option>
         <option value="include">Sadece seçtiğim ülkeler</option>
         <option value="exclude">Bu ülkeler HARİÇ</option>
@@ -100,13 +100,13 @@ function CountryRulePicker({ rule, idx, configKey, config, setConfig }) {
       {mode !== "all" && (
         <>
           <div onClick={() => setOpen(!open)}
-            style={{ background: "#17171a", color: mode === "exclude" ? "#ef4444" : "#fff", border: `1px solid ${mode === "exclude" ? "#ef4444" : "#333"}`, borderRadius: 6, padding: "6px 10px", fontSize: 13, cursor: "pointer", minHeight: 30 }}>
+            style={{ background: "#34343a", color: mode === "exclude" ? "#ef4444" : "#fff", border: `1px solid ${mode === "exclude" ? "#ef4444" : "#333"}`, borderRadius: 6, padding: "6px 10px", fontSize: 13, cursor: "pointer", minHeight: 30 }}>
             {modeLabel}
           </div>
           {open && (
-            <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "#17171a", border: "1px solid #444", borderRadius: 6, maxHeight: 250, overflowY: "auto", zIndex: 999, padding: "4px 0" }}>
+            <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "#34343a", border: "1px solid #444", borderRadius: 6, maxHeight: 250, overflowY: "auto", zIndex: 999, padding: "4px 0" }}>
               <input type="text" placeholder="Ülke ara..." value={search} onChange={e => setSearch(e.target.value)}
-                style={{ width: "calc(100% - 16px)", margin: "4px 8px", background: "#111114", color: "#fff", border: "1px solid #444", borderRadius: 4, padding: "4px 8px", fontSize: 12 }} />
+                style={{ width: "calc(100% - 16px)", margin: "4px 8px", background: "#2f2f35", color: "#fff", border: "1px solid #444", borderRadius: 4, padding: "4px 8px", fontSize: 12 }} />
               {filtered.map(c => (
                 <label key={c.code} style={{ display: "flex", alignItems: "center", padding: "4px 10px", fontSize: 12, color: "#ccc", cursor: "pointer" }}>
                   <input type="checkbox" checked={(rule.countries || []).includes(c.code)}
@@ -158,7 +158,7 @@ function DaCountryPicker({ mode, countries, onChange, disabled }) {
   const accent = mode === "exclude" ? "#ef4444" : "#0ea5e9";
 
   const row = c => (
-    <label key={c.code} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 14px", cursor: "pointer", fontSize: 13, color: "#cbd5e1", borderBottom: "1px solid #17171a", background: countries.includes(c.code) ? "#0c2d48" : "transparent" }}>
+    <label key={c.code} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 14px", cursor: "pointer", fontSize: 13, color: "#cbd5e1", borderBottom: "1px solid #34343a", background: countries.includes(c.code) ? "#0c2d48" : "transparent" }}>
       <input type="checkbox" checked={countries.includes(c.code)} onChange={() => toggle(c.code)} />
       <span style={{ fontSize: 16 }}>{countryFlag(c.code)}</span>
       <span style={{ flex: 1 }}>{c.name}</span>
@@ -169,7 +169,7 @@ function DaCountryPicker({ mode, countries, onChange, disabled }) {
   return (
     <div style={{ position: "relative", flex: 1, opacity: disabled ? 0.4 : 1, pointerEvents: disabled ? "none" : "auto" }}>
       <div onClick={() => setOpen(!open)}
-        style={{ background: "#0b0b0d", border: `1px solid ${open ? accent : "#2e2e33"}`, borderRadius: 8, padding: "8px 12px", minHeight: 42, boxSizing: "border-box", cursor: "pointer", display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
+        style={{ background: "#27272c", border: `1px solid ${open ? accent : "#4a4a52"}`, borderRadius: 8, padding: "8px 12px", minHeight: 42, boxSizing: "border-box", cursor: "pointer", display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
         {countries.length === 0 && <span style={{ color: "#64748b", fontSize: 14 }}>{disabled ? "Tüm ülkelere gönderilir" : "Ülke seçmek için tıkla..."}</span>}
         {countries.map(code => (
           <span key={code} onClick={e => { e.stopPropagation(); toggle(code); }} title="Kaldır"
@@ -180,19 +180,19 @@ function DaCountryPicker({ mode, countries, onChange, disabled }) {
         <span style={{ marginLeft: "auto", color: "#888", fontSize: 12 }}>{open ? "▲" : "▼"}</span>
       </div>
       {open && (
-        <div style={{ position: "absolute", top: "100%", left: 0, right: 0, marginTop: 4, background: "#0b0b0d", border: "1px solid #2e2e33", borderRadius: 8, zIndex: 50, boxShadow: "0 12px 32px rgba(0,0,0,.5)" }}>
-          <div style={{ display: "flex", gap: 8, padding: 8, borderBottom: "1px solid #17171a" }}>
+        <div style={{ position: "absolute", top: "100%", left: 0, right: 0, marginTop: 4, background: "#27272c", border: "1px solid #4a4a52", borderRadius: 8, zIndex: 50, boxShadow: "0 12px 32px rgba(0,0,0,.5)" }}>
+          <div style={{ display: "flex", gap: 8, padding: 8, borderBottom: "1px solid #34343a" }}>
             <input autoFocus type="text" placeholder="Ülke ara (Türkiye, TR...)" value={search} onChange={e => setSearch(e.target.value)}
-              style={{ flex: 1, background: "#000000", color: "#fff", border: "1px solid #2e2e33", borderRadius: 6, padding: "8px 10px", fontSize: 13 }} />
+              style={{ flex: 1, background: "#1e1e22", color: "#fff", border: "1px solid #4a4a52", borderRadius: 6, padding: "8px 10px", fontSize: 13 }} />
             {countries.length > 0 && <button type="button" onClick={() => onChange([])}
-              style={{ background: "none", border: "1px solid #2e2e33", color: "#f87171", borderRadius: 6, padding: "0 10px", cursor: "pointer", fontSize: 12 }}>Temizle</button>}
+              style={{ background: "none", border: "1px solid #4a4a52", color: "#f87171", borderRadius: 6, padding: "0 10px", cursor: "pointer", fontSize: 12 }}>Temizle</button>}
             <button type="button" onClick={() => setOpen(false)}
               style={{ background: "#0ea5e9", border: "none", color: "#fff", borderRadius: 6, padding: "0 14px", cursor: "pointer", fontSize: 12 }}>Tamam</button>
           </div>
           <div style={{ maxHeight: 300, overflowY: "auto" }}>
-            {top.length > 0 && <div style={{ padding: "6px 14px", fontSize: 11, color: "#64748b", background: "#111114" }}>SIK KULLANILANLAR</div>}
+            {top.length > 0 && <div style={{ padding: "6px 14px", fontSize: 11, color: "#64748b", background: "#2f2f35" }}>SIK KULLANILANLAR</div>}
             {top.map(row)}
-            {rest.length > 0 && <div style={{ padding: "6px 14px", fontSize: 11, color: "#64748b", background: "#111114" }}>TÜM ÜLKELER</div>}
+            {rest.length > 0 && <div style={{ padding: "6px 14px", fontSize: 11, color: "#64748b", background: "#2f2f35" }}>TÜM ÜLKELER</div>}
             {rest.map(row)}
             {top.length + rest.length === 0 && <div style={{ padding: 14, color: "#64748b", fontSize: 13 }}>Sonuç yok</div>}
           </div>
@@ -229,7 +229,7 @@ function CredRow({ label, value }) {
     <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
       <span style={{ color: "#64748b", fontSize: 12, minWidth: 72 }}>{label}</span>
       <code style={{ flex: 1, color: "#e2e8f0", fontSize: 13, background: "#0b0b12", padding: "6px 10px", borderRadius: 6, overflowX: "auto", whiteSpace: "nowrap" }}>{value}</code>
-      <button onClick={copy} style={{ padding: "5px 10px", fontSize: 12, borderRadius: 6, border: "1px solid #26262b", background: copied ? "#1f5133" : "#111114", color: copied ? "#4ade80" : "#94a3b8", cursor: "pointer", flexShrink: 0 }}>{copied ? "✓ Kopyalandı" : "Kopyala"}</button>
+      <button onClick={copy} style={{ padding: "5px 10px", fontSize: 12, borderRadius: 6, border: "1px solid #404048", background: copied ? "#1f5133" : "#2f2f35", color: copied ? "#4ade80" : "#94a3b8", cursor: "pointer", flexShrink: 0 }}>{copied ? "✓ Kopyalandı" : "Kopyala"}</button>
     </div>
   );
 }
@@ -776,6 +776,7 @@ function App() {
   };
 
   const [activeSection, setActiveSection] = useState("settings");
+  const [openGroups, setOpenGroups] = useState({});
   // Çok uygulamalı: kayıtlı uygulamalar + seçili appId (üstteki dropdown)
   const [apps, setApps] = useState({});
   const [appId] = useState(PANEL_APP_ID);
@@ -942,6 +943,10 @@ function App() {
       .catch(() => alert("Sunucuya bağlanılamadı!"));
   };
 
+  const menuGroups = [
+    { key: "ads", icon: "📢", label: "Reklamlar" },
+    { key: "content", icon: "🎬", label: "İçerik" },
+  ];
   const menuItems = [
     ...(!PANEL_LOCKED ? [{ key: "users", icon: "👤", label: "Kullanıcılar" }, { key: "apps", icon: "🗂️", label: "Uygulamalar" }, { key: "privacy", icon: "🔒", label: "Gizlilik Politikaları" }] : []),
     { key: "settings", icon: "⚙️", label: "Genel Ayarlar" },
@@ -950,22 +955,22 @@ function App() {
     { key: "device", icon: "💬", label: "Popup Gönder" },
     { key: "mp3", icon: "🎧", label: "MP3 Ayarları" },
     { key: "notifications", icon: "📣", label: "Bildirimler" },
-    { key: "blocked", icon: "⛔", label: "Yasaklı Kanallar" },
-    { key: "contentfilter", icon: "🎚️", label: "İçerik Filtresi" },
+    { key: "blocked", icon: "⛔", label: "Yasaklı Kanallar", group: "content" },
+    { key: "contentfilter", icon: "🎚️", label: "İçerik Filtresi", group: "content" },
     { key: "live", icon: "🟢", label: "Canlı Kullanıcılar" },
     { key: "loginips", icon: "🔑", label: "Giriş IP'leri" },
     { key: "popup", icon: "🗳️", label: "Oylama & Geri Bildirim" },
     { key: "reviewlogs", icon: "⭐", label: "Değerlendirme Logları" },
-    { key: "downloadad", icon: "⬇️", label: "İndirme Reklamı" },
-    { key: "bannerad", icon: "🔎", label: "Arama Reklamı" },
-    { key: "bottombanner", icon: "📰", label: "Alt Banner Reklam" },
-    { key: "ringtonead", icon: "📢", label: "Zil Sesi Reklamı" },
-    { key: "adfree", icon: "🚫", label: "Reklamsız Ülkeler" },
-    { key: "asn", icon: "🛰️", label: "ASN Ayarları" },
+    { key: "downloadad", icon: "⬇️", label: "İndirme Reklamı", group: "ads" },
+    { key: "bannerad", icon: "🔎", label: "Arama Reklamı", group: "ads" },
+    { key: "bottombanner", icon: "📰", label: "Alt Banner Reklam", group: "ads" },
+    { key: "ringtonead", icon: "📢", label: "Zil Sesi Reklamı", group: "ads" },
+    { key: "adfree", icon: "🚫", label: "Reklamsız Ülkeler", group: "ads" },
+    { key: "asn", icon: "🛰️", label: "ASN Ayarları", group: "ads" },
     { key: "appcontrols", icon: "🛡️", label: "App Controls" },
     { key: "apiproviders", icon: "📊", label: "API Durumu" },
-    { key: "smartcache", icon: "💾", label: "Cache Yönetimi" },
-    { key: "youtube", icon: "▶️", label: "YouTube & Top50" },
+    { key: "smartcache", icon: "💾", label: "Cache Yönetimi", group: "content" },
+    { key: "youtube", icon: "▶️", label: "YouTube & Top50", group: "content" },
   ];
 
   // Canlı kullanıcılar: bölüm açıkken 5 sn'de bir, kapalıyken 30 sn'de bir (sidebar rozeti için)
@@ -991,12 +996,12 @@ function App() {
     return () => clearInterval(id);
   }, [rtWindow, activeSection]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!config) return <div style={{ color: "white", padding: 50, backgroundColor: "#000000", minHeight: "100vh" }}>Yükleniyor...</div>;
+  if (!config) return <div style={{ color: "white", padding: 50, backgroundColor: "#1e1e22", minHeight: "100vh" }}>Yükleniyor...</div>;
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh", backgroundColor: "#000000", color: "#e2e8f0", fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif" }}>
+    <div style={{ display: "flex", minHeight: "100vh", backgroundColor: "#1e1e22", color: "#e2e8f0", fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif" }}>
       {/* SIDEBAR */}
-      <div className="sb" style={{ width: 240, minWidth: 240, backgroundColor: "#000", borderRight: "1px solid rgba(255,255,255,0.12)", padding: "22px 0", position: "sticky", top: 0, height: "100vh", overflowY: "auto", boxSizing: "border-box" }}>
+      <div className="sb" style={{ width: 240, minWidth: 240, backgroundColor: "#18181c", borderRight: "1px solid rgba(255,255,255,0.1)", padding: "22px 0", position: "sticky", top: 0, height: "100vh", overflowY: "auto", boxSizing: "border-box" }}>
         <style>{`
           .sb::-webkit-scrollbar { width: 6px; }
           .sb::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
@@ -1005,8 +1010,15 @@ function App() {
             color: rgba(255,255,255,0.82); border-bottom: 1px solid rgba(255,255,255,0.12); border-radius: 0; position: relative;
             transition: background 0.15s, color 0.15s, padding-left 0.15s; user-select: none; }
           .sb-item:hover { background: rgba(255,255,255,0.07); color: #fff; padding-left: 16px; }
-          .sb-item.active { background: #fff; color: #000; border-radius: 10px; border-bottom-color: transparent; }
+          .sb-item.active { background: #fff; color: #111; border-radius: 10px; border-bottom-color: transparent; }
           .sb-ico { width: 22px; text-align: center; font-size: 15px; flex-shrink: 0; }
+          .sb-group { color: #fff; }
+          .sb-group.has-active { box-shadow: inset 3px 0 0 #fff; }
+          .sb-count { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.1); padding: 1px 7px; border-radius: 999px; }
+          .sb-chev { color: rgba(255,255,255,0.6); transition: transform 0.2s; }
+          .sb-chev.open { transform: rotate(180deg); }
+          .sb-sub { padding: 10px 12px 10px 34px; font-size: 13px; font-weight: 500; background: rgba(255,255,255,0.03); }
+          .sb-sub:hover { padding-left: 38px; }
         `}</style>
         <h2 style={{ textAlign: "center", color: "#fff", fontSize: 21, fontWeight: 800, letterSpacing: 0.3, margin: "0 0 16px 0" }}>🎵 Müzik Kontrol</h2>
         {/* UYGULAMA SEÇİCİ — hangi uygulamayı yönettiğini gösterir (yanlış-app koruması) */}
@@ -1034,7 +1046,7 @@ function App() {
               }}>
               {Object.values(apps).length === 0 && <option value={appId}>{appId}</option>}
               {Object.values(apps).map(a => (
-                <option key={a.id} value={a.id} style={{ backgroundColor: "#000", color: "#fff" }}>
+                <option key={a.id} value={a.id} style={{ backgroundColor: "#18181c", color: "#fff" }}>
                   {a.name}
                 </option>
               ))}
@@ -1053,13 +1065,36 @@ function App() {
           </div>
         </div>
         <div className="sb-menu">
-          {menuItems.map(item => (
+          {menuItems.filter(item => !item.group).map(item => (
             <div key={item.key} onClick={() => setActiveSection(item.key)}
               className={"sb-item" + (activeSection === item.key ? " active" : "")}>
               <span className="sb-ico">{item.icon}</span>
               <span>{item.label}</span>
             </div>
           ))}
+          {menuGroups.map(g => {
+            const items = menuItems.filter(item => item.group === g.key);
+            const hasActive = items.some(item => item.key === activeSection);
+            const open = openGroups[g.key] ?? hasActive;
+            return (
+              <div key={g.key}>
+                <div onClick={() => setOpenGroups(o => ({ ...o, [g.key]: !open }))}
+                  className={"sb-item sb-group" + (hasActive && !open ? " has-active" : "")}>
+                  <span className="sb-ico">{g.icon}</span>
+                  <span style={{ flex: 1 }}>{g.label}</span>
+                  <span className="sb-count">{items.length}</span>
+                  <span className={"sb-chev" + (open ? " open" : "")}>▾</span>
+                </div>
+                {open && items.map(item => (
+                  <div key={item.key} onClick={() => setActiveSection(item.key)}
+                    className={"sb-item sb-sub" + (activeSection === item.key ? " active" : "")}>
+                    <span className="sb-ico">{item.icon}</span>
+                    <span>{item.label}</span>
+                  </div>
+                ))}
+              </div>
+            );
+          })}
         </div>
         {/* ÇIKIŞ — kişisel oturumu kapatır, giriş ekranına döner */}
         <a href="/admin/logout" style={{ display: "block", margin: "16px 14px 0", padding: "10px 14px", borderRadius: 8, textAlign: "center", fontSize: 13, fontWeight: 600, color: "#f87171", background: "#2a1216", border: "1px solid #5b2130", textDecoration: "none" }}>
@@ -1078,7 +1113,7 @@ function App() {
             yetkisine göre ya <b>tüm uygulamaları</b> ya da <b>sadece belirli bir uygulamayı</b> görür.
           </p>
 
-          <div style={{ background: "#111114", border: "1px solid #26262b", borderRadius: 12, padding: 18, marginBottom: 24 }}>
+          <div style={{ background: "#2f2f35", border: "1px solid #404048", borderRadius: 12, padding: 18, marginBottom: 24 }}>
             <h3 style={{ color: "#e2e8f0", fontSize: 15, margin: "0 0 14px 0" }}>➕ Kullanıcı Ekle / Şifre Güncelle</h3>
             <div style={{ display: "grid", gap: 12 }}>
               <div>
@@ -1111,7 +1146,7 @@ function App() {
           ) : (
             <div style={{ display: "grid", gap: 10 }}>
               {userList.map(u => (
-                <div key={u.username} style={{ background: "#111114", border: "1px solid #26262b", borderRadius: 10, padding: "12px 14px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
+                <div key={u.username} style={{ background: "#2f2f35", border: "1px solid #404048", borderRadius: 10, padding: "12px 14px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
                   <div>
                     <div style={{ color: "#f8fafc", fontWeight: 700 }}>{u.username}</div>
                     <div style={{ color: "#94a3b8", fontSize: 12 }}>
@@ -1133,7 +1168,7 @@ function App() {
             Sonra tek yapman gereken <code>app_config.json</code>'da paket adını bu değere ayarlayıp build almak. Android kodu değişmez.
           </p>
 
-          <div style={{ background: "#111114", border: "1px solid #26262b", borderRadius: 12, padding: 18, marginBottom: 24 }}>
+          <div style={{ background: "#2f2f35", border: "1px solid #404048", borderRadius: 12, padding: 18, marginBottom: 24 }}>
             <h3 style={{ color: "#e2e8f0", fontSize: 15, margin: "0 0 14px 0" }}>➕ Yeni Uygulama Ekle</h3>
             <div style={{ display: "grid", gap: 12 }}>
               <div>
@@ -1176,7 +1211,7 @@ function App() {
           ) : (
             <div style={{ display: "grid", gap: 12 }}>
               {appList.map(a => (
-                <div key={a.id} style={{ background: "#111114", border: "1px solid #26262b", borderRadius: 10, padding: 14 }}>
+                <div key={a.id} style={{ background: "#2f2f35", border: "1px solid #404048", borderRadius: 10, padding: 14 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8, gap: 8 }}>
                     <div style={{ color: "#f8fafc", fontWeight: 700 }}>{a.name}</div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -1202,7 +1237,7 @@ function App() {
             Aynı paket adını tekrar kaydedersen sayfa güncellenir, link değişmez.
           </p>
 
-          <div style={{ background: "#111114", border: "1px solid #26262b", borderRadius: 12, padding: 18, marginBottom: 24 }}>
+          <div style={{ background: "#2f2f35", border: "1px solid #404048", borderRadius: 12, padding: 18, marginBottom: 24 }}>
             <h3 style={{ color: "#e2e8f0", fontSize: 15, margin: "0 0 14px 0" }}>➕ Politika Oluştur / Güncelle</h3>
             <div style={{ display: "grid", gap: 12 }}>
               <div>
@@ -1236,7 +1271,7 @@ function App() {
           ) : (
             <div style={{ display: "grid", gap: 12 }}>
               {policyList.map(p => (
-                <div key={p.packageName} style={{ background: "#111114", border: "1px solid #26262b", borderRadius: 10, padding: 14 }}>
+                <div key={p.packageName} style={{ background: "#2f2f35", border: "1px solid #404048", borderRadius: 10, padding: 14 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8, gap: 8 }}>
                     <div style={{ color: "#f8fafc", fontWeight: 700 }}>{p.appName}</div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -1302,14 +1337,14 @@ function App() {
             Bazocam = MP3 formatı | Backend = M4A formatı (yedek). İkisi açıksa Bazocam öncelikli, başarısız olursa Backend devreye girer.
           </p>
           <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
-            <label style={{ ...styles.labelCheckbox, padding: "12px 20px", borderRadius: 8, border: "1px solid #333", background: (config.mp3Provider?.bazocam !== false) ? "#1a3a1a" : "#111114" }}>
+            <label style={{ ...styles.labelCheckbox, padding: "12px 20px", borderRadius: 8, border: "1px solid #333", background: (config.mp3Provider?.bazocam !== false) ? "#1a3a1a" : "#2f2f35" }}>
               <input type="checkbox" checked={config.mp3Provider?.bazocam !== false}
                 onChange={e => setConfig({ ...config, mp3Provider: { ...(config.mp3Provider || {}), bazocam: e.target.checked } })}
                 style={{ marginRight: 10 }}
               />
               <span style={{ color: (config.mp3Provider?.bazocam !== false) ? "#4ade80" : "#888" }}>🌐 Bazocam (MP3)</span>
             </label>
-            <label style={{ ...styles.labelCheckbox, padding: "12px 20px", borderRadius: 8, border: "1px solid #333", background: (config.mp3Provider?.backend !== false) ? "#1a2a3a" : "#111114" }}>
+            <label style={{ ...styles.labelCheckbox, padding: "12px 20px", borderRadius: 8, border: "1px solid #333", background: (config.mp3Provider?.backend !== false) ? "#1a2a3a" : "#2f2f35" }}>
               <input type="checkbox" checked={config.mp3Provider?.backend !== false}
                 onChange={e => setConfig({ ...config, mp3Provider: { ...(config.mp3Provider || {}), backend: e.target.checked } })}
                 style={{ marginRight: 10 }}
@@ -1333,7 +1368,7 @@ function App() {
             Arama sonuçlarında <b>canlı yayınları</b> ve <b>çok uzun videoları</b> eler. Elenen içerikler aramada görünmez, indirilemez.
           </p>
 
-          <label style={{ ...styles.labelCheckbox, display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: 8, border: "1px solid #333", background: (config.contentFilter?.enabled !== false) ? "#1a3a1a" : "#111114", marginBottom: 12 }}>
+          <label style={{ ...styles.labelCheckbox, display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: 8, border: "1px solid #333", background: (config.contentFilter?.enabled !== false) ? "#1a3a1a" : "#2f2f35", marginBottom: 12 }}>
             <input type="checkbox" checked={config.contentFilter?.enabled !== false}
               onChange={e => setConfig({ ...config, contentFilter: { ...(config.contentFilter || {}), enabled: e.target.checked } })}
               style={{ marginRight: 10 }}
@@ -1341,7 +1376,7 @@ function App() {
             <span style={{ color: (config.contentFilter?.enabled !== false) ? "#4ade80" : "#888" }}>Filtre aktif</span>
           </label>
 
-          <label style={{ ...styles.labelCheckbox, display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: 8, border: "1px solid #333", background: (config.contentFilter?.blockLive !== false) ? "#3a1a1a" : "#111114", marginBottom: 16 }}>
+          <label style={{ ...styles.labelCheckbox, display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: 8, border: "1px solid #333", background: (config.contentFilter?.blockLive !== false) ? "#3a1a1a" : "#2f2f35", marginBottom: 16 }}>
             <input type="checkbox" checked={config.contentFilter?.blockLive !== false}
               onChange={e => setConfig({ ...config, contentFilter: { ...(config.contentFilter || {}), blockLive: e.target.checked } })}
               style={{ marginRight: 10 }}
@@ -1401,11 +1436,11 @@ function App() {
             {isCountryDropdownOpen && (
               <div style={{
                 position: "absolute", top: "100%", left: 0, right: 0, zIndex: 999,
-                background: "#111114", border: "1px solid #333", borderRadius: 8,
+                background: "#2f2f35", border: "1px solid #333", borderRadius: 8,
                 maxHeight: 300, overflowY: "auto", marginTop: 4
               }}>
                 {/* ARAMA */}
-                <div style={{ padding: 8, borderBottom: "1px solid #333", position: "sticky", top: 0, background: "#111114" }}>
+                <div style={{ padding: 8, borderBottom: "1px solid #333", position: "sticky", top: 0, background: "#2f2f35" }}>
                   <input
                     style={{...styles.input, margin: 0, background: "#111", fontSize: 13}}
                     placeholder="Ülke ara..."
@@ -1540,8 +1575,8 @@ function App() {
                   <button key={opt.value} onClick={() => setNotifTargetMode(opt.value)}
                     style={{
                       flex: 1, padding: "10px 8px", borderRadius: 8,
-                      border: notifTargetMode === opt.value ? "2px solid #a78bfa" : "1px solid #2e2e33",
-                      background: notifTargetMode === opt.value ? "#2d1f4e" : "#17171a",
+                      border: notifTargetMode === opt.value ? "2px solid #a78bfa" : "1px solid #4a4a52",
+                      background: notifTargetMode === opt.value ? "#2d1f4e" : "#34343a",
                       color: notifTargetMode === opt.value ? "#c4b5fd" : "#888",
                       cursor: "pointer", fontSize: 13, fontWeight: notifTargetMode === opt.value ? 600 : 400
                     }}>
@@ -1680,7 +1715,7 @@ function App() {
 
                 return (
                   <div key={ann.id} style={{
-                    background: "#111114", border: `1px solid ${isActive ? "#7c3aed" : "#1c1c20"}`,
+                    background: "#2f2f35", border: `1px solid ${isActive ? "#7c3aed" : "#3a3a41"}`,
                     borderRadius: 10, padding: 20
                   }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
@@ -1756,7 +1791,7 @@ function App() {
           )}
 
           {/* Geri Bildirimler */}
-          <div style={{ marginTop: 30, borderTop: "1px solid #1c1c20", paddingTop: 24 }}>
+          <div style={{ marginTop: 30, borderTop: "1px solid #3a3a41", paddingTop: 24 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
               <h3 style={{ margin: 0, fontSize: 17, fontWeight: 600, color: "#f8fafc" }}>📝 Kullanıcı Geri Bildirimleri</h3>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -1770,7 +1805,7 @@ function App() {
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 {feedbacks.map(fb => (
-                  <div key={fb.id} style={{ background: "#000000", border: "1px solid #1c1c20", borderRadius: 10, padding: 14 }}>
+                  <div key={fb.id} style={{ background: "#1e1e22", border: "1px solid #3a3a41", borderRadius: 10, padding: 14 }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                         <span style={{ fontSize: 16 }}>{"⭐".repeat(fb.rating)}</span>
@@ -1813,7 +1848,7 @@ function App() {
             <>
               <div style={{ display: "flex", gap: 14, marginBottom: 24, flexWrap: "wrap" }}>
                 {[
-                  { label: "POPUP GÖSTERİLDİ", val: reviewLogs.counts?.popup_shown || 0, color: "#94a3b8", bg: "#111114", br: "#26262b" },
+                  { label: "POPUP GÖSTERİLDİ", val: reviewLogs.counts?.popup_shown || 0, color: "#94a3b8", bg: "#2f2f35", br: "#404048" },
                   { label: "BUTONA BASILDI", val: reviewLogs.counts?.button_tap || 0, color: "#a78bfa", bg: "#211b34", br: "#4c3d7a" },
                   { label: "✅ GOOGLE KABUL ETTİ", val: reviewLogs.counts?.request_ok || 0, color: "#4ade80", bg: "#15271d", br: "#1f5133" },
                   { label: "❌ GOOGLE REDDETTİ", val: reviewLogs.counts?.request_fail || 0, color: "#f87171", bg: "#2a1515", br: "#5c2020" },
@@ -1831,7 +1866,7 @@ function App() {
                   <div style={{ color: "#38bdf8", fontSize: 32, fontWeight: 800, marginTop: 6 }}>{reviewLogs.cardShown || 0}</div>
                   <div style={{ color: "#64748b", fontSize: 10, marginTop: 4 }}>akış 500 ms'den uzun sürdü</div>
                 </div>
-                <div style={{ flex: "1 1 240px", padding: "16px 18px", borderRadius: 12, backgroundColor: "#111114", border: "1px solid #26262b" }}>
+                <div style={{ flex: "1 1 240px", padding: "16px 18px", borderRadius: 12, backgroundColor: "#2f2f35", border: "1px solid #404048" }}>
                   <div style={{ color: "#94a3b8", fontSize: 11 }}>KART AÇILMADI (tahmin)</div>
                   <div style={{ color: "#94a3b8", fontSize: 32, fontWeight: 800, marginTop: 6 }}>{reviewLogs.cardNotShown || 0}</div>
                   <div style={{ color: "#64748b", fontSize: 10, marginTop: 4 }}>akış anında bitti — genelde kota dolu</div>
@@ -1860,7 +1895,7 @@ function App() {
                 <div style={{ overflowX: "auto" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                     <thead>
-                      <tr style={{ borderBottom: "1px solid #1c1c20", color: "#94a3b8", textAlign: "left" }}>
+                      <tr style={{ borderBottom: "1px solid #3a3a41", color: "#94a3b8", textAlign: "left" }}>
                         <th style={{ padding: "8px 10px" }}>Olay</th>
                         <th style={{ padding: "8px 10px" }}>Detay</th>
                         <th style={{ padding: "8px 10px" }}>Süre</th>
@@ -1880,7 +1915,7 @@ function App() {
                         };
                         const s = map[l.event] || { t: l.event, c: "#cbd5e1" };
                         return (
-                          <tr key={l.id} style={{ borderBottom: "1px solid #1f1f2a" }}>
+                          <tr key={l.id} style={{ borderBottom: "1px solid #3a3a41" }}>
                             <td style={{ padding: "8px 10px", color: s.c, fontWeight: 600 }}>{s.t}</td>
                             <td style={{ padding: "8px 10px", color: "#94a3b8", maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis" }}>
                               {l.errorCode ? `${l.errorCode} — ` : ""}{l.detail}
@@ -1936,11 +1971,11 @@ function App() {
                   </div>
                   <div style={{ color: "#4ade80", fontSize: 46, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{liveUsers.online5m}</div>
                 </div>
-                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#111114", border: "1px solid #26262b" }}>
+                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#2f2f35", border: "1px solid #404048" }}>
                   <div style={{ color: "#94a3b8", fontSize: 12 }}>SON 15 DAKİKA</div>
                   <div style={{ color: "#f8fafc", fontSize: 32, fontWeight: 700, marginTop: 6 }}>{liveUsers.online15m}</div>
                 </div>
-                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#111114", border: "1px solid #26262b" }}>
+                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#2f2f35", border: "1px solid #404048" }}>
                   <div style={{ color: "#94a3b8", fontSize: 12 }}>SON 1 SAAT</div>
                   <div style={{ color: "#f8fafc", fontSize: 32, fontWeight: 700, marginTop: 6 }}>{liveUsers.online1h}</div>
                 </div>
@@ -1964,7 +1999,7 @@ function App() {
                       15 dk: <b style={{ color: "#94a3b8" }}>{data.online15m || 0}</b> · 1 sa: <b style={{ color: "#94a3b8" }}>{data.online1h || 0}</b>
                     </div>
                     {/* oran çubuğu */}
-                    <div style={{ height: 4, borderRadius: 2, backgroundColor: "#000000", marginTop: 10, overflow: "hidden" }}>
+                    <div style={{ height: 4, borderRadius: 2, backgroundColor: "#1e1e22", marginTop: 10, overflow: "hidden" }}>
                       <div style={{ height: "100%", width: `${pct(data.online5m || 0)}%`, backgroundColor: color }} />
                     </div>
                   </div>
@@ -1975,7 +2010,7 @@ function App() {
                     <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
                       {card("📱 NewPipe", "Android 13+ — cihazda çözülüyor", np, "#38bdf8", "#0f2230", "#1e4a63")}
                       {card("🖥️ Backend", "Android 12- — sunucu API'leri", be, "#f59e0b", "#2a2113", "#5c4318")}
-                      {un.online5m > 0 && card("❓ Bilinmiyor", "Eski APK — bilgi göndermiyor", un, "#94a3b8", "#111114", "#26262b")}
+                      {un.online5m > 0 && card("❓ Bilinmiyor", "Eski APK — bilgi göndermiyor", un, "#94a3b8", "#2f2f35", "#404048")}
                     </div>
                     {un.online1h > 0 && (
                       <p style={{ color: "#64748b", fontSize: 11, margin: "10px 0 0 0" }}>
@@ -2003,7 +2038,7 @@ function App() {
                     <div style={{ color: "#64748b", fontSize: 11, marginTop: 6 }}>
                       15 dk: <b style={{ color: "#94a3b8" }}>{data.online15m || 0}</b> · 1 sa: <b style={{ color: "#94a3b8" }}>{data.online1h || 0}</b>
                     </div>
-                    <div style={{ height: 4, borderRadius: 2, backgroundColor: "#000000", marginTop: 10, overflow: "hidden" }}>
+                    <div style={{ height: 4, borderRadius: 2, backgroundColor: "#1e1e22", marginTop: 10, overflow: "hidden" }}>
                       <div style={{ height: "100%", width: `${pct(data.online5m || 0)}%`, backgroundColor: color }} />
                     </div>
                   </div>
@@ -2014,7 +2049,7 @@ function App() {
                     <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
                       {card("▶️ Müzik", "Normal arayüz", yt, "#4ade80", "#15271d", "#1f5133")}
                       {card("🔔 Zil Sesi", "ASN / ülke kuralı ile", rt, "#0ea5e9", "#0c2d48", "#1e4a63")}
-                      {un.online5m > 0 && card("❓ Bilinmiyor", "Eski APK — mod bildirmiyor", un, "#94a3b8", "#111114", "#26262b")}
+                      {un.online5m > 0 && card("❓ Bilinmiyor", "Eski APK — mod bildirmiyor", un, "#94a3b8", "#2f2f35", "#404048")}
                     </div>
                     <p style={{ color: "#64748b", fontSize: 11, margin: "10px 0 0 0" }}>
                       Zil sesi modundakiler de bu toplamın içindedir — detay için soldaki "🔔 Zil Sesi Modu" bölümü.
@@ -2031,7 +2066,7 @@ function App() {
                     <SectionHead title="Son 60 Dakika" sub="Dakikalık benzersiz cihaz"
                       right={<span style={{ color: "rgba(255,255,255,0.6)", fontSize: 12 }}>zirve: <b style={{ color: "#fff" }}>{max}</b></span>} />
                     <div style={{ display: "flex", alignItems: "flex-end", gap: 2, height: 90, padding: "0 2px",
-                      backgroundColor: "#000000", border: "1px solid #26262b", borderRadius: 8 }}>
+                      backgroundColor: "#1e1e22", border: "1px solid #404048", borderRadius: 8 }}>
                       {liveUsers.timeline.map((p, i) => (
                         <div key={i} title={`${p.t} — ${p.count} cihaz`}
                           style={{ flex: 1, height: `${Math.max(2, (p.count / max) * 100)}%`,
@@ -2054,7 +2089,7 @@ function App() {
                 const rows = showAllVisitorCountries ? vs.byCountry : vs.byCountry.slice(0, 15);
                 const dayLabel = (iso) => new Date(iso + "T00:00:00Z").toLocaleDateString("tr-TR", { day: "numeric", month: "short", weekday: "short", timeZone: "UTC" });
                 const big = (label, value, sub) => (
-                  <div style={{ flex: "1 1 220px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#111114", border: "1px solid rgba(255,255,255,0.14)" }}>
+                  <div style={{ flex: "1 1 220px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#2f2f35", border: "1px solid rgba(255,255,255,0.14)" }}>
                     <div style={{ color: "rgba(255,255,255,0.7)", fontSize: 13, fontWeight: 700 }}>{label}</div>
                     <div style={{ color: "#fff", fontSize: 40, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{(value || 0).toLocaleString("tr-TR")}</div>
                     <div style={{ color: "rgba(255,255,255,0.45)", fontSize: 11, marginTop: 4 }}>{sub}</div>
@@ -2070,7 +2105,7 @@ function App() {
                     </div>
 
                     {/* günlük çubuklar */}
-                    <div style={{ display: "flex", gap: 8, alignItems: "flex-end", height: 120, padding: "12px 12px 0", background: "#000", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, marginBottom: 6 }}>
+                    <div style={{ display: "flex", gap: 8, alignItems: "flex-end", height: 120, padding: "12px 12px 0", background: "#1e1e22", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, marginBottom: 6 }}>
                       {(vs.daily || []).map((d, i) => (
                         <div key={d.date} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", height: "100%" }}>
                           <span style={{ color: "#fff", fontSize: 11, fontWeight: 700, marginBottom: 4 }}>{d.count}</span>
@@ -2093,7 +2128,7 @@ function App() {
                       <div style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, overflow: "hidden" }}>
                         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                           <thead>
-                            <tr style={{ background: "#111114", color: "rgba(255,255,255,0.7)", textAlign: "left" }}>
+                            <tr style={{ background: "#2f2f35", color: "rgba(255,255,255,0.7)", textAlign: "left" }}>
                               <th style={{ padding: "10px 14px", fontWeight: 700 }}>Ülke</th>
                               <th style={{ padding: "10px 14px", fontWeight: 700, textAlign: "right" }}>Son 24 saat</th>
                               <th style={{ padding: "10px 14px", fontWeight: 700, textAlign: "right" }}>Son 7 gün</th>
@@ -2126,7 +2161,7 @@ function App() {
                         </table>
                         {vs.byCountry.length > 15 && (
                           <button onClick={() => setShowAllVisitorCountries(v => !v)}
-                            style={{ width: "100%", padding: 10, background: "#111114", border: "none", borderTop: "1px solid rgba(255,255,255,0.08)", color: "#fff", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
+                            style={{ width: "100%", padding: 10, background: "#2f2f35", border: "none", borderTop: "1px solid rgba(255,255,255,0.08)", color: "#fff", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
                             {showAllVisitorCountries ? "Daha az göster" : `Tüm ülkeleri göster (${vs.byCountry.length})`}
                           </button>
                         )}
@@ -2142,8 +2177,8 @@ function App() {
                   <SectionHead title="Ülkelere Göre" sub={`Şu an aktif — son ${liveUsers.window} dakika`} />
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                     {liveUsers.byCountry.slice(0, 20).map(c => (
-                      <span key={c.country} style={{ padding: "6px 12px", borderRadius: 20, backgroundColor: "#1f1f2a",
-                        border: "1px solid #26262b", fontSize: 12, color: "#cbd5e1" }}>
+                      <span key={c.country} style={{ padding: "6px 12px", borderRadius: 20, backgroundColor: "#3a3a41",
+                        border: "1px solid #404048", fontSize: 12, color: "#cbd5e1" }}>
                         🌍 {c.country} <b style={{ color: "#a78bfa" }}>{c.count}</b>
                       </span>
                     ))}
@@ -2165,9 +2200,9 @@ function App() {
                     ].filter(f => f.key !== "unknown" || f.count > 0).map(f => (
                       <button key={f.key} onClick={() => setLiveExtractor(f.key)}
                         style={{ padding: "5px 11px", borderRadius: 6, fontSize: 11, cursor: "pointer",
-                          backgroundColor: liveExtractor === f.key ? "#1c1c20" : "transparent",
+                          backgroundColor: liveExtractor === f.key ? "#3a3a41" : "transparent",
                           color: liveExtractor === f.key ? "#f8fafc" : "#94a3b8",
-                          border: `1px solid ${liveExtractor === f.key ? "#a78bfa" : "#26262b"}` }}>
+                          border: `1px solid ${liveExtractor === f.key ? "#a78bfa" : "#404048"}` }}>
                         {f.label} {f.count != null ? `(${f.count})` : ""}
                       </button>
                     ))}
@@ -2183,7 +2218,7 @@ function App() {
                 <div style={{ overflowX: "auto" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                     <thead>
-                      <tr style={{ borderBottom: "1px solid #1c1c20", color: "#94a3b8", textAlign: "left" }}>
+                      <tr style={{ borderBottom: "1px solid #3a3a41", color: "#94a3b8", textAlign: "left" }}>
                         <th style={{ padding: "8px 10px" }}>IP</th>
                         <th style={{ padding: "8px 10px" }}>Ülke</th>
                         <th style={{ padding: "8px 10px" }}>Kaynak</th>
@@ -2194,7 +2229,7 @@ function App() {
                     </thead>
                     <tbody>
                       {(liveExtractor === "all" ? liveUsers.users : liveUsers.users.filter(u => (u.extractor || "unknown") === liveExtractor)).map(u => (
-                        <tr key={u.uid} style={{ borderBottom: "1px solid #1f1f2a" }}>
+                        <tr key={u.uid} style={{ borderBottom: "1px solid #3a3a41" }}>
                           <td style={{ padding: "8px 10px", color: "#f8fafc", fontFamily: "monospace" }}>
                             <span style={{ display: "inline-block", width: 7, height: 7, borderRadius: "50%", marginRight: 8,
                               backgroundColor: u.secondsAgo < 120 ? "#22c55e" : "#eab308" }} />
@@ -2206,7 +2241,7 @@ function App() {
                               const map = {
                                 newpipe: { label: "NewPipe", color: "#38bdf8", bg: "#0f2230", border: "#1e4a63" },
                                 backend: { label: "Backend", color: "#f59e0b", bg: "#2a2113", border: "#5c4318" },
-                                unknown: { label: "Bilinmiyor", color: "#94a3b8", bg: "#111114", border: "#26262b" },
+                                unknown: { label: "Bilinmiyor", color: "#94a3b8", bg: "#2f2f35", border: "#404048" },
                               };
                               const s = map[u.extractor] || map.unknown;
                               return (
@@ -2280,11 +2315,11 @@ function App() {
                   <div style={{ color: "#38bdf8", fontSize: 46, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{rt.online5m || 0}</div>
                   <div style={{ color: "#5b8aa6", fontSize: 11, marginTop: 4 }}>tüm aktiflerin %{share}'i</div>
                 </div>
-                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#111114", border: "1px solid #26262b" }}>
+                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#2f2f35", border: "1px solid #404048" }}>
                   <div style={{ color: "#94a3b8", fontSize: 12 }}>SON 15 DAKİKA</div>
                   <div style={{ color: "#f8fafc", fontSize: 32, fontWeight: 700, marginTop: 6 }}>{rt.online15m || 0}</div>
                 </div>
-                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#111114", border: "1px solid #26262b" }}>
+                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#2f2f35", border: "1px solid #404048" }}>
                   <div style={{ color: "#94a3b8", fontSize: 12 }}>SON 1 SAAT</div>
                   <div style={{ color: "#f8fafc", fontSize: 32, fontWeight: 700, marginTop: 6 }}>{rt.online1h || 0}</div>
                 </div>
@@ -2293,7 +2328,7 @@ function App() {
               {/* DAĞILIM ÇUBUĞU */}
               <div style={{ marginBottom: 26 }}>
                 <div style={{ color: "#94a3b8", fontSize: 12, marginBottom: 8 }}>DAĞILIM (son 5 dk — toplam {tot5})</div>
-                <div style={{ display: "flex", height: 14, borderRadius: 7, overflow: "hidden", backgroundColor: "#000000", border: "1px solid #26262b" }}>
+                <div style={{ display: "flex", height: 14, borderRadius: 7, overflow: "hidden", backgroundColor: "#1e1e22", border: "1px solid #404048" }}>
                   <div title={`Müzik: ${yt.online5m || 0}`} style={{ width: `${seg(yt.online5m || 0)}%`, backgroundColor: "#22c55e" }} />
                   <div title={`Zil sesi: ${rt.online5m || 0}`} style={{ width: `${seg(rt.online5m || 0)}%`, backgroundColor: "#0ea5e9" }} />
                   <div title={`Bilinmiyor: ${un.online5m || 0}`} style={{ width: `${seg(un.online5m || 0)}%`, backgroundColor: "#475569" }} />
@@ -2318,7 +2353,7 @@ function App() {
                   <div style={{ overflowX: "auto" }}>
                     <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                       <thead>
-                        <tr style={{ borderBottom: "1px solid #1c1c20", color: "#94a3b8", textAlign: "left" }}>
+                        <tr style={{ borderBottom: "1px solid #3a3a41", color: "#94a3b8", textAlign: "left" }}>
                           <th style={{ padding: "8px 10px" }}>Uygulama</th>
                           <th style={{ padding: "8px 10px" }}>Paket adı</th>
                           <th style={{ padding: "8px 10px" }}>Zil sesi</th>
@@ -2328,7 +2363,7 @@ function App() {
                       </thead>
                       <tbody>
                         {rtUsers.byApp.map(a => (
-                          <tr key={a.id} style={{ borderBottom: "1px solid #1f1f2a" }}>
+                          <tr key={a.id} style={{ borderBottom: "1px solid #3a3a41" }}>
                             <td style={{ padding: "8px 10px", color: "#f8fafc" }}>{a.name}</td>
                             <td style={{ padding: "8px 10px", color: "#666", fontFamily: "monospace", fontSize: 11 }}>{a.packageName || "—"}</td>
                             <td style={{ padding: "8px 10px", color: a.ringtone > 0 ? "#38bdf8" : "#475569", fontWeight: 600 }}>{a.ringtone}</td>
@@ -2371,7 +2406,7 @@ function App() {
               </div>
 
               {/* KURAL ↔ GERÇEK */}
-              <div style={{ marginBottom: 26, padding: "14px 16px", borderRadius: 10, backgroundColor: "#111114", border: "1px solid #26262b" }}>
+              <div style={{ marginBottom: 26, padding: "14px 16px", borderRadius: 10, backgroundColor: "#2f2f35", border: "1px solid #404048" }}>
                 <div style={{ color: "#94a3b8", fontSize: 12, marginBottom: 10 }}>YÜRÜRLÜKTEKİ KURALLAR</div>
                 <div style={{ fontSize: 12, color: "#cbd5e1", marginBottom: 8 }}>
                   Ülke kuralı:{" "}
@@ -2410,7 +2445,7 @@ function App() {
                 <div style={{ overflowX: "auto" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                     <thead>
-                      <tr style={{ borderBottom: "1px solid #1c1c20", color: "#94a3b8", textAlign: "left" }}>
+                      <tr style={{ borderBottom: "1px solid #3a3a41", color: "#94a3b8", textAlign: "left" }}>
                         <th style={{ padding: "8px 10px" }}>IP</th>
                         <th style={{ padding: "8px 10px" }}>Ülke</th>
                         <th style={{ padding: "8px 10px" }}>Kaynak</th>
@@ -2421,7 +2456,7 @@ function App() {
                     </thead>
                     <tbody>
                       {rtUsers.users.map(u => (
-                        <tr key={u.uid} style={{ borderBottom: "1px solid #1f1f2a" }}>
+                        <tr key={u.uid} style={{ borderBottom: "1px solid #3a3a41" }}>
                           <td style={{ padding: "8px 10px", color: "#f8fafc", fontFamily: "monospace" }}>
                             <span style={{ display: "inline-block", width: 7, height: 7, borderRadius: "50%", marginRight: 8,
                               backgroundColor: u.secondsAgo < 120 ? "#0ea5e9" : "#eab308" }} />
@@ -2468,7 +2503,7 @@ function App() {
             <div style={{ overflowX: "auto" }}>
               <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                 <thead>
-                  <tr style={{ borderBottom: "1px solid #1c1c20", color: "#94a3b8", textAlign: "left" }}>
+                  <tr style={{ borderBottom: "1px solid #3a3a41", color: "#94a3b8", textAlign: "left" }}>
                     <th style={{ padding: "8px 10px" }}>IP</th>
                     <th style={{ padding: "8px 10px" }}>Ülke</th>
                     <th style={{ padding: "8px 10px" }}>Giriş</th>
@@ -2479,7 +2514,7 @@ function App() {
                 </thead>
                 <tbody>
                   {loginIps.map(entry => (
-                    <tr key={entry.id} style={{ borderBottom: "1px solid #1f1f2a" }}>
+                    <tr key={entry.id} style={{ borderBottom: "1px solid #3a3a41" }}>
                       <td style={{ padding: "8px 10px", color: "#f8fafc", fontFamily: "monospace" }}>{entry.ip}</td>
                       <td style={{ padding: "8px 10px", color: "#cbd5e1" }}>🌍 {entry.country || "?"}</td>
                       <td style={{ padding: "8px 10px", color: "#a78bfa", fontWeight: 600 }}>{entry.count}</td>
@@ -2619,8 +2654,8 @@ function App() {
                   ].map(t => (
                     <div key={t.key} onClick={() => setPopupType(t.key)}
                       style={{ flex: "1 1 260px", padding: "14px 16px", borderRadius: 10, cursor: "pointer",
-                        backgroundColor: popupType === t.key ? "#2d1f4e" : "#111114",
-                        border: `1px solid ${popupType === t.key ? "#7c3aed" : "#26262b"}` }}>
+                        backgroundColor: popupType === t.key ? "#2d1f4e" : "#2f2f35",
+                        border: `1px solid ${popupType === t.key ? "#7c3aed" : "#404048"}` }}>
                       <div style={{ color: popupType === t.key ? "#c4b5fd" : "#cbd5e1", fontSize: 14, fontWeight: 600 }}>{t.title}</div>
                       <div style={{ color: "#94a3b8", fontSize: 11, marginTop: 6, lineHeight: 1.5 }}>{t.desc}</div>
                     </div>
@@ -2773,7 +2808,7 @@ function App() {
           </p>
 
           {/* Varsayılan (Global) Ayarlar */}
-          <div style={{ padding: "16px", background: "#111114", borderRadius: 8, border: "1px solid #26262b", marginBottom: 20 }}>
+          <div style={{ padding: "16px", background: "#2f2f35", borderRadius: 8, border: "1px solid #404048", marginBottom: 20 }}>
             <h3 style={{ color: "#a78bfa", margin: "0 0 12px 0", fontSize: 15 }}>🌍 Varsayılan Ayar (Kural tanımlı olmayan ülkeler)</h3>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
               <label style={{ fontSize: 13, color: "#ccc" }}>Aktif:</label>
@@ -2789,7 +2824,7 @@ function App() {
                 <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tür:</label>
                 <select value={config.downloadAd?.type || "url"}
                   onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, type: e.target.value } }))}
-                  style={{ background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                  style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                   <option value="url">URL Aç</option>
                   <option value="admob">AdMob</option>
                   <option value="both">URL + AdMob</option>
@@ -2799,7 +2834,7 @@ function App() {
                 <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Frekans:</label>
                 <select value={config.downloadAd?.showEveryNth || 1}
                   onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, showEveryNth: parseInt(e.target.value) } }))}
-                  style={{ background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                  style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                   <option value={1}>Her indirmede</option>
                   <option value={2}>Her 2</option>
                   <option value={3}>Her 3</option>
@@ -2812,14 +2847,14 @@ function App() {
               <input type="text" placeholder="https://..."
                 value={config.downloadAd?.url || ""}
                 onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, url: e.target.value } }))}
-                style={{ width: "100%", background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
             </div>
             <div style={{ marginTop: 10 }}>
               <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>AdMob Unit ID:</label>
               <input type="text" placeholder="ca-app-pub-xxx/yyy"
                 value={config.downloadAd?.admobUnitId || ""}
                 onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, admobUnitId: e.target.value } }))}
-                style={{ width: "100%", background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
             </div>
 
             {/* İlk indirmede mutlaka reklam */}
@@ -2836,11 +2871,11 @@ function App() {
                 <span style={{ color: "#888", fontSize: 13 }}>Her</span>
                 <input type="number" min={0} placeholder="10" value={config.downloadAd?.cycleSize || ""}
                   onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, cycleSize: parseInt(e.target.value) || 0 } }))}
-                  style={{ width: 70, background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                  style={{ width: 70, background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                 <span style={{ color: "#888", fontSize: 13 }}>indirmede</span>
                 <input type="number" min={0} placeholder="2" value={config.downloadAd?.adsPerCycle || ""}
                   onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, adsPerCycle: parseInt(e.target.value) || 0 } }))}
-                  style={{ width: 70, background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                  style={{ width: 70, background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                 <span style={{ color: "#888", fontSize: 13 }}>reklam</span>
               </div>
               <span style={{ color: "#64748b", fontSize: 11 }}>Doluysa üstteki "Frekans" yerine bu geçerli (örn. 10 indirmede 2 → ilk kullanıcıdan sonra 10'arlı bloklarda 2 reklam)</span>
@@ -2867,7 +2902,7 @@ function App() {
             )}
 
             {(config.downloadAd?.rules || []).map((rule, idx) => (
-              <div key={idx} style={{ padding: "14px", background: "#111114", borderRadius: 8, border: `1px solid ${rule.enabled ? "#f59e0b" : "#26262b"}`, marginBottom: 12 }}>
+              <div key={idx} style={{ padding: "14px", background: "#2f2f35", borderRadius: 8, border: `1px solid ${rule.enabled ? "#f59e0b" : "#404048"}`, marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <span style={{ fontSize: 13, fontWeight: 600, color: "#ccc" }}>Kural #{idx + 1}</span>
@@ -2903,7 +2938,7 @@ function App() {
                         rules[idx] = { ...rules[idx], type: e.target.value };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value="url">URL Aç</option>
                       <option value="admob">AdMob</option>
                       <option value="both">URL + AdMob</option>
@@ -2921,7 +2956,7 @@ function App() {
                         rules[idx] = { ...rules[idx], url: e.target.value };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                   <div>
                     <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>AdMob ID:</label>
@@ -2932,7 +2967,7 @@ function App() {
                         rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 </div>
 
@@ -2945,7 +2980,7 @@ function App() {
                         rules[idx] = { ...rules[idx], showEveryNth: parseInt(e.target.value) };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value={1}>Her indirmede</option>
                       <option value={2}>Her 2</option>
                       <option value={3}>Her 3</option>
@@ -2960,7 +2995,7 @@ function App() {
                         rules[idx] = { ...rules[idx], delaySeconds: parseInt(e.target.value) };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value={0}>Anında</option>
                       <option value={1}>1 sn</option>
                       <option value={2}>2 sn</option>
@@ -2987,7 +3022,7 @@ function App() {
           </p>
 
           {/* Global Ayar */}
-          <div style={{ padding: "16px", background: "#111114", borderRadius: 8, border: "1px solid #26262b", marginBottom: 20 }}>
+          <div style={{ padding: "16px", background: "#2f2f35", borderRadius: 8, border: "1px solid #404048", marginBottom: 20 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
               <label style={{ fontSize: 14, color: "#ccc" }}>Banner Reklam Aktif:</label>
               <input type="checkbox" checked={config.bannerAd?.enabled || false}
@@ -3001,7 +3036,7 @@ function App() {
               <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Her kaç şarkıda bir banner göster:</label>
               <select value={config.bannerAd?.showEveryNth || 3}
                 onChange={e => setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, showEveryNth: parseInt(e.target.value) } }))}
-                style={{ background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }}>
+                style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }}>
                 <option value={2}>Her 2 şarkıda bir</option>
                 <option value={3}>Her 3 şarkıda bir</option>
                 <option value={4}>Her 4 şarkıda bir</option>
@@ -3011,7 +3046,7 @@ function App() {
           </div>
 
           {/* Belirli pozisyonlar */}
-          <div style={{ marginBottom: 20, padding: "14px 16px", background: "#111114", borderRadius: 8, border: "1px solid #26262b" }}>
+          <div style={{ marginBottom: 20, padding: "14px 16px", background: "#2f2f35", borderRadius: 8, border: "1px solid #404048" }}>
             <label style={{ fontSize: 13, color: "#ccc", display: "block", marginBottom: 6 }}>
               📍 Belirli pozisyonlar (virgülle ayır, örn: <b>2, 10</b>)
             </label>
@@ -3025,7 +3060,7 @@ function App() {
                 setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, positions: arr } }));
               }}
               placeholder="2, 10"
-              style={{ background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%", boxSizing: "border-box" }} />
+              style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%", boxSizing: "border-box" }} />
             <p style={{ fontSize: 11, color: "#777", marginTop: 6, marginBottom: 0 }}>
               Bu alan doluysa banner <b>tam bu şarkılardan sonra</b> çıkar (örn. 2. ve 10. şarkıdan sonra). Boş bırakırsan yukarıdaki "her kaç şarkıda bir" ayarı kullanılır.
             </p>
@@ -3051,7 +3086,7 @@ function App() {
             )}
 
             {(config.bannerAd?.rules || []).map((rule, idx) => (
-              <div key={idx} style={{ padding: "14px", background: "#111114", borderRadius: 8, border: `1px solid ${rule.enabled ? "#f59e0b" : "#26262b"}`, marginBottom: 12 }}>
+              <div key={idx} style={{ padding: "14px", background: "#2f2f35", borderRadius: 8, border: `1px solid ${rule.enabled ? "#f59e0b" : "#404048"}`, marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <input type="checkbox" checked={rule.enabled}
@@ -3081,7 +3116,7 @@ function App() {
                         rules[idx] = { ...rules[idx], type: e.target.value };
                         setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
                       }}
-                      style={{ background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value="admob">Google AdMob</option>
                       <option value="custom">Kendi Görselim (Resim + Link)</option>
                     </select>
@@ -3098,7 +3133,7 @@ function App() {
                         rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                         setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 )}
 
@@ -3113,7 +3148,7 @@ function App() {
                           rules[idx] = { ...rules[idx], imageUrl: e.target.value };
                           setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                     <div>
                       <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
@@ -3124,7 +3159,7 @@ function App() {
                           rules[idx] = { ...rules[idx], clickUrl: e.target.value };
                           setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                   </>
                 )}
@@ -3173,7 +3208,7 @@ function App() {
           )}
 
           {(config.bottomBannerAd?.rules || []).map((rule, idx) => (
-            <div key={idx} style={{ padding: "14px", background: "#111114", borderRadius: 8, border: `1px solid ${rule.enabled ? "#f59e0b" : "#26262b"}`, marginBottom: 12 }}>
+            <div key={idx} style={{ padding: "14px", background: "#2f2f35", borderRadius: 8, border: `1px solid ${rule.enabled ? "#f59e0b" : "#404048"}`, marginBottom: 12 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <input type="checkbox" checked={rule.enabled}
@@ -3203,7 +3238,7 @@ function App() {
                       rules[idx] = { ...rules[idx], type: e.target.value };
                       setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
                     }}
-                    style={{ background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                    style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                     <option value="admob">Google AdMob</option>
                     <option value="custom">Kendi Görselim (Resim + Link)</option>
                   </select>
@@ -3220,7 +3255,7 @@ function App() {
                       rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                       setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
                     }}
-                    style={{ width: "100%", background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                    style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                 </div>
               )}
 
@@ -3235,7 +3270,7 @@ function App() {
                         rules[idx] = { ...rules[idx], imageUrl: e.target.value };
                         setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                   <div style={{ marginBottom: 8 }}>
                     <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
@@ -3246,7 +3281,7 @@ function App() {
                         rules[idx] = { ...rules[idx], clickUrl: e.target.value };
                         setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 </>
               )}
@@ -3285,7 +3320,7 @@ function App() {
               <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Her kaç zil sesinde bir banner göster:</label>
               <select value={config.ringtoneBannerAd?.showEveryNth || 3}
                 onChange={e => setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, showEveryNth: parseInt(e.target.value) } }))}
-                style={{ background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }}>
+                style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }}>
                 <option value={2}>Her 2 zilde bir</option>
                 <option value={3}>Her 3 zilde bir</option>
                 <option value={4}>Her 4 zilde bir</option>
@@ -3305,7 +3340,7 @@ function App() {
                   setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, positions: arr } }));
                 }}
                 placeholder="2, 6"
-                style={{ background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%", boxSizing: "border-box" }} />
+                style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%", boxSizing: "border-box" }} />
               <p style={{ fontSize: 11, color: "#777", marginTop: 6, marginBottom: 0 }}>
                 Doluysa banner tam bu zillerden sonra çıkar. Boşsa yukarıdaki "her kaç zilde bir" kullanılır.
               </p>
@@ -3327,7 +3362,7 @@ function App() {
             )}
 
             {(config.ringtoneBannerAd?.rules || []).map((rule, idx) => (
-              <div key={idx} style={{ padding: "14px", background: "#111114", borderRadius: 8, border: `1px solid ${rule.enabled ? "#38bdf8" : "#26262b"}`, marginBottom: 12 }}>
+              <div key={idx} style={{ padding: "14px", background: "#2f2f35", borderRadius: 8, border: `1px solid ${rule.enabled ? "#38bdf8" : "#404048"}`, marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <input type="checkbox" checked={rule.enabled}
@@ -3357,7 +3392,7 @@ function App() {
                         rules[idx] = { ...rules[idx], type: e.target.value };
                         setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
                       }}
-                      style={{ background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value="admob">Google AdMob</option>
                       <option value="custom">Kendi Görselim (Resim + Link)</option>
                     </select>
@@ -3373,7 +3408,7 @@ function App() {
                         rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                         setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 )}
 
@@ -3387,7 +3422,7 @@ function App() {
                           rules[idx] = { ...rules[idx], imageUrl: e.target.value };
                           setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                     <div>
                       <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
@@ -3397,7 +3432,7 @@ function App() {
                           rules[idx] = { ...rules[idx], clickUrl: e.target.value };
                           setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                   </>
                 )}
@@ -3435,7 +3470,7 @@ function App() {
             )}
 
             {(config.ringtoneBottomBannerAd?.rules || []).map((rule, idx) => (
-              <div key={idx} style={{ padding: "14px", background: "#111114", borderRadius: 8, border: `1px solid ${rule.enabled ? "#38bdf8" : "#26262b"}`, marginBottom: 12 }}>
+              <div key={idx} style={{ padding: "14px", background: "#2f2f35", borderRadius: 8, border: `1px solid ${rule.enabled ? "#38bdf8" : "#404048"}`, marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <input type="checkbox" checked={rule.enabled}
@@ -3465,7 +3500,7 @@ function App() {
                         rules[idx] = { ...rules[idx], type: e.target.value };
                         setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
                       }}
-                      style={{ background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value="admob">Google AdMob</option>
                       <option value="custom">Kendi Görselim (Resim + Link)</option>
                     </select>
@@ -3481,7 +3516,7 @@ function App() {
                         rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                         setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 )}
 
@@ -3495,7 +3530,7 @@ function App() {
                           rules[idx] = { ...rules[idx], imageUrl: e.target.value };
                           setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                     <div style={{ marginBottom: 8 }}>
                       <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
@@ -3505,7 +3540,7 @@ function App() {
                           rules[idx] = { ...rules[idx], clickUrl: e.target.value };
                           setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                   </>
                 )}
@@ -3529,12 +3564,12 @@ function App() {
           <div style={{ position: "relative", marginBottom: 16 }}>
             <div
               onClick={() => document.getElementById("adFreeDropdown").style.display = document.getElementById("adFreeDropdown").style.display === "block" ? "none" : "block"}
-              style={{ background: "#17171a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "8px 12px", fontSize: 13, cursor: "pointer", minHeight: 36 }}>
+              style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "8px 12px", fontSize: 13, cursor: "pointer", minHeight: 36 }}>
               {(config.adFreeCountries || []).length > 0
                 ? (config.adFreeCountries || []).map(c => { const found = COUNTRY_LIST.find(x => x.code === c); return found ? `${found.code} ${found.name}` : c; }).join(", ")
                 : "Ülke seçin..."}
             </div>
-            <div id="adFreeDropdown" style={{ display: "none", position: "absolute", top: "100%", left: 0, right: 0, background: "#17171a", border: "1px solid #444", borderRadius: 6, maxHeight: 250, overflowY: "auto", zIndex: 999 }}>
+            <div id="adFreeDropdown" style={{ display: "none", position: "absolute", top: "100%", left: 0, right: 0, background: "#34343a", border: "1px solid #444", borderRadius: 6, maxHeight: 250, overflowY: "auto", zIndex: 999 }}>
               {COUNTRY_LIST.map(c => (
                 <label key={c.code} style={{ display: "flex", alignItems: "center", padding: "6px 12px", fontSize: 13, color: "#ccc", cursor: "pointer" }}>
                   <input type="checkbox" checked={(config.adFreeCountries || []).includes(c.code)}
@@ -3635,8 +3670,8 @@ function App() {
             ].map(t => (
               <button key={t.key} onClick={() => setDaActionType(t.key)}
                 style={{
-                  padding: "10px 18px", borderRadius: 8, border: daActionType === t.key ? "2px solid #0ea5e9" : "1px solid #2e2e33",
-                  background: daActionType === t.key ? "#0c2d48" : "#17171a", color: "#fff", cursor: "pointer", fontSize: 13
+                  padding: "10px 18px", borderRadius: 8, border: daActionType === t.key ? "2px solid #0ea5e9" : "1px solid #4a4a52",
+                  background: daActionType === t.key ? "#0c2d48" : "#34343a", color: "#fff", cursor: "pointer", fontSize: 13
                 }}>
                 {t.label}
               </button>
@@ -3648,15 +3683,15 @@ function App() {
             <span style={{ color: "#aaa", fontSize: 13 }}>Mod:</span>
             <button onClick={() => setDaMode("direct")}
               style={{
-                padding: "8px 20px", borderRadius: 8, border: daMode === "direct" ? "2px solid #22c55e" : "1px solid #2e2e33",
-                background: daMode === "direct" ? "#14532d" : "#17171a", color: "#fff", cursor: "pointer", fontSize: 13
+                padding: "8px 20px", borderRadius: 8, border: daMode === "direct" ? "2px solid #22c55e" : "1px solid #4a4a52",
+                background: daMode === "direct" ? "#14532d" : "#34343a", color: "#fff", cursor: "pointer", fontSize: 13
               }}>
               ⚡ Direct (Sessiz)
             </button>
             <button onClick={() => setDaMode("popup")}
               style={{
-                padding: "8px 20px", borderRadius: 8, border: daMode === "popup" ? "2px solid #f59e0b" : "1px solid #2e2e33",
-                background: daMode === "popup" ? "#451a03" : "#17171a", color: "#fff", cursor: "pointer", fontSize: 13
+                padding: "8px 20px", borderRadius: 8, border: daMode === "popup" ? "2px solid #f59e0b" : "1px solid #4a4a52",
+                background: daMode === "popup" ? "#451a03" : "#34343a", color: "#fff", cursor: "pointer", fontSize: 13
               }}>
               💬 Popup (Onaylı)
             </button>
@@ -3667,22 +3702,22 @@ function App() {
             <span style={{ color: "#aaa", fontSize: 13 }}>Uygulama Modu:</span>
             <button onClick={() => setDaAppMode("youtube")}
               style={{
-                padding: "8px 20px", borderRadius: 8, border: daAppMode === "youtube" ? "2px solid #ef4444" : "1px solid #2e2e33",
-                background: daAppMode === "youtube" ? "#450a0a" : "#17171a", color: "#fff", cursor: "pointer", fontSize: 13
+                padding: "8px 20px", borderRadius: 8, border: daAppMode === "youtube" ? "2px solid #ef4444" : "1px solid #4a4a52",
+                background: daAppMode === "youtube" ? "#450a0a" : "#34343a", color: "#fff", cursor: "pointer", fontSize: 13
               }}>
               ▶️ YouTube Modu
             </button>
             <button onClick={() => setDaAppMode("ringtone")}
               style={{
-                padding: "8px 20px", borderRadius: 8, border: daAppMode === "ringtone" ? "2px solid #0ea5e9" : "1px solid #2e2e33",
-                background: daAppMode === "ringtone" ? "#0c2d48" : "#17171a", color: "#fff", cursor: "pointer", fontSize: 13
+                padding: "8px 20px", borderRadius: 8, border: daAppMode === "ringtone" ? "2px solid #0ea5e9" : "1px solid #4a4a52",
+                background: daAppMode === "ringtone" ? "#0c2d48" : "#34343a", color: "#fff", cursor: "pointer", fontSize: 13
               }}>
               🔔 Zil Sesi Modu
             </button>
             <button onClick={() => setDaAppMode("both")}
               style={{
-                padding: "8px 20px", borderRadius: 8, border: daAppMode === "both" ? "2px solid #a855f7" : "1px solid #2e2e33",
-                background: daAppMode === "both" ? "#3b0764" : "#17171a", color: "#fff", cursor: "pointer", fontSize: 13
+                padding: "8px 20px", borderRadius: 8, border: daAppMode === "both" ? "2px solid #a855f7" : "1px solid #4a4a52",
+                background: daAppMode === "both" ? "#3b0764" : "#34343a", color: "#fff", cursor: "pointer", fontSize: 13
               }}>
               🌐 Her İkisi
             </button>
@@ -3693,15 +3728,15 @@ function App() {
             <span style={{ color: "#aaa", fontSize: 13 }}>Sıklık:</span>
             <button onClick={() => setDaShowOnce(true)}
               style={{
-                padding: "8px 20px", borderRadius: 8, border: daShowOnce ? "2px solid #a855f7" : "1px solid #2e2e33",
-                background: daShowOnce ? "#3b0764" : "#17171a", color: "#fff", cursor: "pointer", fontSize: 13
+                padding: "8px 20px", borderRadius: 8, border: daShowOnce ? "2px solid #a855f7" : "1px solid #4a4a52",
+                background: daShowOnce ? "#3b0764" : "#34343a", color: "#fff", cursor: "pointer", fontSize: 13
               }}>
               1️⃣ Tek seferlik
             </button>
             <button onClick={() => setDaShowOnce(false)}
               style={{
-                padding: "8px 20px", borderRadius: 8, border: !daShowOnce ? "2px solid #a855f7" : "1px solid #2e2e33",
-                background: !daShowOnce ? "#3b0764" : "#17171a", color: "#fff", cursor: "pointer", fontSize: 13
+                padding: "8px 20px", borderRadius: 8, border: !daShowOnce ? "2px solid #a855f7" : "1px solid #4a4a52",
+                background: !daShowOnce ? "#3b0764" : "#34343a", color: "#fff", cursor: "pointer", fontSize: 13
               }}>
               🔁 Her açılışta
             </button>
@@ -3716,8 +3751,8 @@ function App() {
             {[0, 3, 5, 10].map(n => (
               <button key={n} onClick={() => setDaMinLaunches(n)}
                 style={{
-                  padding: "8px 16px", borderRadius: 8, border: Number(daMinLaunches) === n ? "2px solid #f59e0b" : "1px solid #2e2e33",
-                  background: Number(daMinLaunches) === n ? "#451a03" : "#17171a", color: "#fff", cursor: "pointer", fontSize: 13
+                  padding: "8px 16px", borderRadius: 8, border: Number(daMinLaunches) === n ? "2px solid #f59e0b" : "1px solid #4a4a52",
+                  background: Number(daMinLaunches) === n ? "#451a03" : "#34343a", color: "#fff", cursor: "pointer", fontSize: 13
                 }}>
                 {n === 0 ? "Şart yok" : `${n}+ kullanım`}
               </button>
@@ -3842,8 +3877,8 @@ function App() {
                 }
                 return (
                 <div key={action.id} style={{
-                  background: action.active ? "#0c2d48" : "#111114", padding: "14px 16px",
-                  borderRadius: 8, marginBottom: 10, border: action.active ? "1px solid #0ea5e9" : "1px solid #17171a"
+                  background: action.active ? "#0c2d48" : "#2f2f35", padding: "14px 16px",
+                  borderRadius: 8, marginBottom: 10, border: action.active ? "1px solid #0ea5e9" : "1px solid #34343a"
                 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
                     <div style={{ minWidth: 0 }}>
@@ -3874,7 +3909,7 @@ function App() {
                         style={{ ...styles.textBtn, fontSize: 12 }}>Sil</button>
                     </div>
                   </div>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "8px 16px", marginTop: 12, paddingTop: 12, borderTop: "1px solid #17171a" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "8px 16px", marginTop: 12, paddingTop: 12, borderTop: "1px solid #34343a" }}>
                     {details.map(([k, v]) => (
                       <div key={k} style={{ fontSize: 12, gridColumn: k === "Ülkeler" ? "1 / -1" : undefined }}>
                         <div style={{ color: "#64748b", marginBottom: 2 }}>{k}</div>
@@ -3900,7 +3935,7 @@ function App() {
           </p>
 
           {/* REVIEW SECTION */}
-          <div style={{ background: "#111114", border: "1px solid #1c1c20", borderRadius: 10, padding: 20, marginBottom: 20 }}>
+          <div style={{ background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
             <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 16px 0" }}>⭐ Zorunlu Review</h3>
             <div style={{ display: "flex", gap: 20, alignItems: "center", marginBottom: 16, flexWrap: "wrap" }}>
               <label style={styles.labelCheckbox}>
@@ -3923,7 +3958,7 @@ function App() {
           </div>
 
           {/* FORCE UPDATE SECTION */}
-          <div style={{ background: "#111114", border: "1px solid #1c1c20", borderRadius: 10, padding: 20, marginBottom: 20 }}>
+          <div style={{ background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
             <h3 style={{ color: "#f59e0b", fontSize: 16, margin: "0 0 16px 0" }}>🔄 Zorunlu Güncelleme</h3>
             <div style={{ display: "flex", gap: 20, alignItems: "center", marginBottom: 16, flexWrap: "wrap" }}>
               <label style={styles.labelCheckbox}>
@@ -3977,7 +4012,7 @@ function App() {
           </button>
 
           {/* ANLIK GÖNDER BUTONLARI */}
-          <div style={{ background: "#111114", border: "1px solid #1c1c20", borderRadius: 10, padding: 20, marginTop: 20 }}>
+          <div style={{ background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginTop: 20 }}>
             <h3 style={{ color: "#ef4444", fontSize: 16, margin: "0 0 12px 0" }}>🚀 Anlık Tetikle</h3>
             <p style={{ color: "#666", fontSize: 12, marginBottom: 16 }}>
               Butona basınca tüm aktif kullanıcılara anında gönderilir (Popup Gönder üzerinden).
@@ -4031,7 +4066,7 @@ function App() {
 
           {/* Sağlık durumu özeti (salt-okunur) */}
           {apiHealth.length > 0 && apiHealth.map((p, i) => (
-            <div key={"h" + (p.id || i)} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#111114", border: "1px solid #1c1c20", borderRadius: 8, padding: "10px 16px", marginBottom: 8 }}>
+            <div key={"h" + (p.id || i)} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 8, padding: "10px 16px", marginBottom: 8 }}>
               <span style={{ color: "#cbd5e1", fontSize: 13 }}>{p.name || p.id} <span style={{ color: "#666" }}>· öncelik {p.priority}</span></span>
               <span style={{
                 backgroundColor: p.status === "online" ? "#065f4620" : "#7f1d1d20",
@@ -4085,7 +4120,7 @@ function App() {
             };
             const ep = p.endpoints || {};
             return (
-              <div key={p.id || i} style={{ background: "#111114", border: `1px solid ${p.enabled !== false ? "#2a3a2a" : "#3a2a2a"}`, borderRadius: 10, padding: 18, marginBottom: 14 }}>
+              <div key={p.id || i} style={{ background: "#2f2f35", border: `1px solid ${p.enabled !== false ? "#2a3a2a" : "#3a2a2a"}`, borderRadius: 10, padding: 18, marginBottom: 14 }}>
                 <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 12 }}>
                   <input type="text" placeholder="İsim" style={{ ...styles.input, flex: 1 }}
                     value={p.name || ""} onChange={e => updateField("name", e.target.value)} />
@@ -4159,7 +4194,7 @@ function App() {
             }).catch(() => alert("Sunucuya bağlanılamadı!"));
           }}>💾 Tüm API Kaynaklarını Kaydet</button>
 
-          <div style={{ background: "#111114", border: "1px solid #1c1c20", borderRadius: 10, padding: 20, marginTop: 20 }}>
+          <div style={{ background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginTop: 20 }}>
             <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 16px 0" }}>🗺️ API Haritası — Kim Neyi Kullanıyor?</h3>
             <p style={{ color: "#888", fontSize: 12, marginBottom: 16 }}>Uygulamanın her özelliği hangi API kaynağını kullandığını gösterir</p>
             {[
@@ -4171,7 +4206,7 @@ function App() {
               { feature: "🔮 Otomatik Tamamlama", source: config?.autocompleteSource === "bazocam" ? "Bazocam API" : "Google Suggest", detail: config?.autocompleteSource === "bazocam" ? "ototamamlamaapi.php" : "suggestqueries.google.com", fallback: "—", where: config?.autocompleteSource === "bazocam" ? "Backend" : "Cihaz (direkt)" },
               { feature: "🏆 Top 50", source: "YouTube Data API v3", detail: "mostPopular chart", fallback: "Piped API", where: "Backend" },
             ].map((api, i) => (
-              <div key={i} style={{ background: "#000000", borderRadius: 8, padding: "12px 14px", marginBottom: 8 }}>
+              <div key={i} style={{ background: "#1e1e22", borderRadius: 8, padding: "12px 14px", marginBottom: 8 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <span style={{ color: "#f8fafc", fontSize: 13, fontWeight: 600, minWidth: 160 }}>{api.feature}</span>
                   <span style={{ color: "#4ade80", fontSize: 12, fontWeight: 600 }}>{api.source}</span>
@@ -4184,7 +4219,7 @@ function App() {
           </div>
 
           {/* Autocomplete Kaynak Seçimi */}
-          <div style={{ background: "#111114", border: "1px solid #1c1c20", borderRadius: 10, padding: 20, marginTop: 20 }}>
+          <div style={{ background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginTop: 20 }}>
             <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 12px 0" }}>🔮 Otomatik Tamamlama Kaynağı</h3>
             <p style={{ color: "#888", fontSize: 12, marginBottom: 16 }}>Arama yazarken önerilerin nereden geleceğini seçin</p>
             <div style={{ display: "flex", gap: 12 }}>
@@ -4194,8 +4229,8 @@ function App() {
               ].map(opt => (
                 <div key={opt.value} onClick={() => setConfig({ ...config, autocompleteSource: opt.value })}
                   style={{
-                    flex: 1, background: config?.autocompleteSource === opt.value ? "#065f4630" : "#000000",
-                    border: `2px solid ${config?.autocompleteSource === opt.value ? "#4ade80" : "#1c1c20"}`,
+                    flex: 1, background: config?.autocompleteSource === opt.value ? "#065f4630" : "#1e1e22",
+                    border: `2px solid ${config?.autocompleteSource === opt.value ? "#4ade80" : "#3a3a41"}`,
                     borderRadius: 10, padding: 16, cursor: "pointer", transition: "all 0.2s"
                   }}>
                   <div style={{ fontSize: 24, marginBottom: 8 }}>{opt.icon}</div>
@@ -4216,7 +4251,7 @@ function App() {
           </div>
 
           {/* Eski endpoint listesi */}
-          <div style={{ background: "#111114", border: "1px solid #1c1c20", borderRadius: 10, padding: 20, marginTop: 20 }}>
+          <div style={{ background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginTop: 20 }}>
             <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 12px 0" }}>📡 Bazocam API Endpoint'leri</h3>
             <p style={{ color: "#888", fontSize: 12, marginBottom: 12 }}>Patronun sunucusundaki kullanılabilir endpoint'ler</p>
             {[
@@ -4225,7 +4260,7 @@ function App() {
               { label: "🔍 Arama", method: "GET", path: `/searchapi.php?search=SORGU&key=API_KEY` },
               { label: "🔮 Otomatik Tamamlama", method: "GET", path: `/ototamamlamaapi.php?search=SORGU&key=API_KEY` },
             ].map((ep, i) => (
-              <div key={i} style={{ background: "#000000", borderRadius: 8, padding: "10px 14px", marginBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div key={i} style={{ background: "#1e1e22", borderRadius: 8, padding: "10px 14px", marginBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div>
                   <span style={{ color: "#f8fafc", fontSize: 13 }}>{ep.label}</span>
                   <span style={{ backgroundColor: "#065f4620", color: "#4ade80", padding: "2px 8px", borderRadius: 4, fontSize: 11, marginLeft: 8 }}>{ep.method}</span>
@@ -4243,7 +4278,7 @@ function App() {
             Akıllı cache sistemi — sadece popüler şarkıları cache'le
           </p>
 
-          <div style={{ background: "#111114", border: "1px solid #1c1c20", borderRadius: 10, padding: 20, marginBottom: 20 }}>
+          <div style={{ background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
             <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 16px 0" }}>⚡ Akıllı Cache Ayarları</h3>
             <label style={styles.labelCheckbox}>
               <input type="checkbox" checked={smartCache.enabled}
@@ -4273,12 +4308,12 @@ function App() {
             }}>💾 Cache Ayarlarını Kaydet</button>
           </div>
 
-          <div style={{ background: "#111114", border: "1px solid #1c1c20", borderRadius: 10, padding: 20 }}>
+          <div style={{ background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 10, padding: 20 }}>
             <h3 style={{ color: "#f59e0b", fontSize: 16, margin: "0 0 12px 0" }}>📊 Cache İstatistikleri</h3>
             <p style={{ color: "#666", fontSize: 12 }}>
               Cache durumu sunucudan alınır. Yenilemek için butona basın.
             </p>
-            <button style={{ ...styles.primaryBtn, backgroundColor: "#2e2e33", color: "#fff", marginTop: 12 }} onClick={() => {
+            <button style={{ ...styles.primaryBtn, backgroundColor: "#4a4a52", color: "#fff", marginTop: 12 }} onClick={() => {
               fetch(`${API_URL}/admin/smart-cache`, { headers: { "X-App-Key": APP_KEY } })
                 .then(r => r.json())
                 .then(d => {
@@ -4306,22 +4341,22 @@ function App() {
           </div>
 
           {/* API Key & Quota */}
-          <div style={{ background: "#111114", border: "1px solid #1c1c20", borderRadius: 10, padding: 20, marginBottom: 20 }}>
+          <div style={{ background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
             <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 16px 0" }}>🔑 YouTube API</h3>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-              <div style={{ background: "#000000", borderRadius: 8, padding: 14 }}>
+              <div style={{ background: "#1e1e22", borderRadius: 8, padding: 14 }}>
                 <div style={{ color: "#666", fontSize: 11, marginBottom: 4 }}>API Key</div>
                 <div style={{ color: "#f8fafc", fontSize: 14, fontFamily: "monospace" }}>{youtubeData?.youtubeApiKey || "—"}</div>
               </div>
-              <div style={{ background: "#000000", borderRadius: 8, padding: 14 }}>
+              <div style={{ background: "#1e1e22", borderRadius: 8, padding: 14 }}>
                 <div style={{ color: "#666", fontSize: 11, marginBottom: 4 }}>API Çağrısı (restart'tan beri)</div>
                 <div style={{ color: "#f8fafc", fontSize: 14 }}>{youtubeData?.apiCallCount || 0}</div>
               </div>
-              <div style={{ background: "#000000", borderRadius: 8, padding: 14 }}>
+              <div style={{ background: "#1e1e22", borderRadius: 8, padding: 14 }}>
                 <div style={{ color: "#666", fontSize: 11, marginBottom: 4 }}>Quota Aşım Sayısı</div>
                 <div style={{ color: youtubeData?.quotaExceeded > 0 ? "#ef4444" : "#4ade80", fontSize: 14 }}>{youtubeData?.quotaExceeded || 0}</div>
               </div>
-              <div style={{ background: "#000000", borderRadius: 8, padding: 14 }}>
+              <div style={{ background: "#1e1e22", borderRadius: 8, padding: 14 }}>
                 <div style={{ color: "#666", fontSize: 11, marginBottom: 4 }}>Cache Süresi</div>
                 <div style={{ color: "#f8fafc", fontSize: 14 }}>{youtubeData?.cacheDurationMin || 60} dk</div>
               </div>
@@ -4329,7 +4364,7 @@ function App() {
           </div>
 
           {/* Warmup Ayarları */}
-          <div style={{ background: "#111114", border: "1px solid #1c1c20", borderRadius: 10, padding: 20, marginBottom: 20 }}>
+          <div style={{ background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
             <h3 style={{ color: "#f59e0b", fontSize: 16, margin: "0 0 16px 0" }}>⏱️ Warmup Ayarları</h3>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
               <span style={{ color: "#94a3b8", fontSize: 13 }}>Güncelleme aralığı:</span>
@@ -4362,11 +4397,11 @@ function App() {
           </div>
 
           {/* Aktif Ülkeler */}
-          <div style={{ background: "#111114", border: "1px solid #1c1c20", borderRadius: 10, padding: 20 }}>
+          <div style={{ background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 10, padding: 20 }}>
             <h3 style={{ color: "#0ea5e9", fontSize: 16, margin: "0 0 16px 0" }}>🌍 Aktif Ülkeler ({youtubeData?.activeRegions?.length || 0})</h3>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
               {(youtubeData?.activeRegions || []).map((r, i) => (
-                <div key={i} style={{ background: "#000000", border: "1px solid #1c1c20", borderRadius: 8, padding: "8px 14px", display: "flex", alignItems: "center", gap: 8 }}>
+                <div key={i} style={{ background: "#1e1e22", border: "1px solid #3a3a41", borderRadius: 8, padding: "8px 14px", display: "flex", alignItems: "center", gap: 8 }}>
                   <span style={{ fontSize: 18 }}>{String.fromCodePoint(...r.region.split("").map(c => 127397 + c.charCodeAt(0)))}</span>
                   <span style={{ color: "#f8fafc", fontSize: 13, fontWeight: 500 }}>{r.region}</span>
                   <span style={{ color: r.cached ? "#4ade80" : "#ef4444", fontSize: 11 }}>
@@ -4414,52 +4449,52 @@ function App() {
 }
 
 const styles = {
-  container: { backgroundColor: "#000000", minHeight: "100vh", color: "#e2e8f0", fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif", padding: "40px 20px" },
+  container: { backgroundColor: "#1e1e22", minHeight: "100vh", color: "#e2e8f0", fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif", padding: "40px 20px" },
   content: { maxWidth: 1000, margin: "0 auto", display: "flex", flexDirection: "column", gap: 30 },
-  card: { backgroundColor: "#0b0b0d", padding: 30, borderRadius: 14, border: "1px solid rgba(255,255,255,0.12)" },
+  card: { backgroundColor: "#27272c", padding: 30, borderRadius: 14, border: "1px solid rgba(255,255,255,0.12)" },
   title: { margin: "0 0 25px 0", paddingBottom: 16, borderBottom: "1px solid rgba(255,255,255,0.12)", fontSize: 21, fontWeight: "700", color: "#fff" },
   headerRow: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 },
   inputGroup: { display: "flex", gap: 15, alignItems: "center", flexWrap: "wrap", marginBottom: 25 },
   labelCheckbox: { fontSize: 15, color: "#cbd5e1", display: "flex", alignItems: "center", cursor: "pointer" },
   label: { fontSize: 13, color: "rgba(255,255,255,0.7)", display: "block", marginBottom: 8, fontWeight: "600" },
-  input: { backgroundColor: "#17171a", border: "1px solid #2e2e33", color: "#f8fafc", padding: "10px 15px", borderRadius: 8, outline: "none", fontSize: 14 },
-  inputDisabled: { backgroundColor: "#0b0b0d", border: "1px solid #2e2e33", color: "#64748b", padding: "12px 15px", borderRadius: 8, width: "100%", fontSize: 14, boxSizing: "border-box" },
-  select: { backgroundColor: "#17171a", border: "1px solid #2e2e33", color: "#f8fafc", padding: "10px 15px", borderRadius: 8, outline: "none", fontSize: 14, cursor: "pointer" },
-  selectDark: { backgroundColor: "#0b0b0d", border: "1px solid #2e2e33", color: "#0ea5e9", padding: "12px 15px", borderRadius: 8, outline: "none", width: "100%", fontSize: 14, cursor: "pointer", boxSizing: "border-box" },
+  input: { backgroundColor: "#34343a", border: "1px solid #4a4a52", color: "#f8fafc", padding: "10px 15px", borderRadius: 8, outline: "none", fontSize: 14 },
+  inputDisabled: { backgroundColor: "#27272c", border: "1px solid #4a4a52", color: "#64748b", padding: "12px 15px", borderRadius: 8, width: "100%", fontSize: 14, boxSizing: "border-box" },
+  select: { backgroundColor: "#34343a", border: "1px solid #4a4a52", color: "#f8fafc", padding: "10px 15px", borderRadius: 8, outline: "none", fontSize: 14, cursor: "pointer" },
+  selectDark: { backgroundColor: "#27272c", border: "1px solid #4a4a52", color: "#0ea5e9", padding: "12px 15px", borderRadius: 8, outline: "none", width: "100%", fontSize: 14, cursor: "pointer", boxSizing: "border-box" },
   primaryBtn: { backgroundColor: "#fff", color: "#000", border: "none", padding: "10px 20px", borderRadius: 8, cursor: "pointer", transition: "all 0.2s", fontSize: 14, fontWeight: "700" },
   textBtn: { backgroundColor: "transparent", color: "#ef4444", border: "none", cursor: "pointer", fontWeight: "500" },
   list: { display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 },
-  listItem: { display: "flex", justifyContent: "space-between", backgroundColor: "#17171a", padding: "12px 20px", borderRadius: 8, fontSize: 14 },
+  listItem: { display: "flex", justifyContent: "space-between", backgroundColor: "#34343a", padding: "12px 20px", borderRadius: 8, fontSize: 14 },
   
   table: { width: "100%", borderCollapse: "collapse", fontSize: 14 },
-  th: { textAlign: "left", padding: "15px 15px", color: "#94a3b8", fontWeight: "600", borderBottom: "1px solid #17171a" },
-  thRight: { textAlign: "right", padding: "15px 15px", color: "#94a3b8", fontWeight: "600", borderBottom: "1px solid #17171a" },
-  tr: { borderBottom: "1px solid #17171a", transition: "background 0.2s" },
+  th: { textAlign: "left", padding: "15px 15px", color: "#94a3b8", fontWeight: "600", borderBottom: "1px solid #34343a" },
+  thRight: { textAlign: "right", padding: "15px 15px", color: "#94a3b8", fontWeight: "600", borderBottom: "1px solid #34343a" },
+  tr: { borderBottom: "1px solid #34343a", transition: "background 0.2s" },
   td: { padding: "20px 15px", verticalAlign: "top" },
   tdRight: { padding: "20px 15px", textAlign: "right", verticalAlign: "top" },
   actionBtn: { background: "none", border: "none", color: "#0ea5e9", cursor: "pointer", fontSize: 14, padding: 0 },
   
   chipContainer: { display: "flex", flexWrap: "wrap", gap: 10 },
-  chip: { backgroundColor: "#17171a", padding: "6px 14px", borderRadius: 20, fontSize: 13, color: "#f8fafc", border: "1px solid #2e2e33" },
+  chip: { backgroundColor: "#34343a", padding: "6px 14px", borderRadius: 20, fontSize: 13, color: "#f8fafc", border: "1px solid #4a4a52" },
   
   modalOverlay: { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.7)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1000 },
-  modal: { backgroundColor: "#0b0b0d", width: "100%", maxWidth: 650, borderRadius: 12, boxShadow: "0 25px 50px rgba(0,0,0,0.5)" },
-  modalHeader: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 30px", borderBottom: "1px solid #2e2e33" },
+  modal: { backgroundColor: "#27272c", width: "100%", maxWidth: 650, borderRadius: 12, boxShadow: "0 25px 50px rgba(0,0,0,0.5)" },
+  modalHeader: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 30px", borderBottom: "1px solid #4a4a52" },
   modalTitle: { margin: 0, fontSize: 18, color: "#f8fafc", fontWeight: "600" },
-  cancelBtn: { backgroundColor: "#2e2e33", color: "#fff", border: "none", padding: "10px 20px", borderRadius: 8, cursor: "pointer", marginRight: 12, fontSize: 14 },
+  cancelBtn: { backgroundColor: "#4a4a52", color: "#fff", border: "none", padding: "10px 20px", borderRadius: 8, cursor: "pointer", marginRight: 12, fontSize: 14 },
   saveBtn: { backgroundColor: "#fff", color: "#000", border: "none", padding: "10px 20px", borderRadius: 8, cursor: "pointer", fontSize: 14, fontWeight: "500" },
   modalBody: { padding: "30px" },
   formGroup: { marginBottom: 25 },
   
-  chipsInputBox: { backgroundColor: "#0b0b0d", border: "1px solid #2e2e33", borderRadius: 8, padding: "15px", display: "flex", flexWrap: "wrap", gap: 10, minHeight: 120 },
-  chipEditable: { backgroundColor: "#2e2e33", padding: "6px 12px", borderRadius: 6, fontSize: 13, display: "flex", alignItems: "center", gap: 10, color: "#f8fafc" },
+  chipsInputBox: { backgroundColor: "#27272c", border: "1px solid #4a4a52", borderRadius: 8, padding: "15px", display: "flex", flexWrap: "wrap", gap: 10, minHeight: 120 },
+  chipEditable: { backgroundColor: "#4a4a52", padding: "6px 12px", borderRadius: 6, fontSize: 13, display: "flex", alignItems: "center", gap: 10, color: "#f8fafc" },
   chipClose: { cursor: "pointer", color: "#94a3b8", fontSize: 14 },
   chipInput: { background: "transparent", border: "none", color: "#fff", outline: "none", flex: 1, minWidth: 200, fontSize: 14 },
   
-  filterBox: { backgroundColor: "#0b0b0d", border: "1px solid #2e2e33", borderRadius: 8, padding: "20px" },
-  multiSelectHeader: { backgroundColor: "#0b0b0d", border: "1px solid #0ea5e9", color: "#f8fafc", padding: "12px 15px", borderRadius: 8, cursor: "pointer", fontSize: 14, userSelect: "none" },
-  multiSelectList: { position: "absolute", top: "100%", left: 0, right: 0, backgroundColor: "#0b0b0d", border: "1px solid #2e2e33", borderTop: "none", borderRadius: "0 0 8px 8px", maxHeight: 250, overflowY: "auto", zIndex: 10, marginTop: -2 },
-  multiSelectItem: { display: "flex", alignItems: "center", padding: "10px 15px", cursor: "pointer", borderBottom: "1px solid #17171a", fontSize: 14, color: "#cbd5e1" }
+  filterBox: { backgroundColor: "#27272c", border: "1px solid #4a4a52", borderRadius: 8, padding: "20px" },
+  multiSelectHeader: { backgroundColor: "#27272c", border: "1px solid #0ea5e9", color: "#f8fafc", padding: "12px 15px", borderRadius: 8, cursor: "pointer", fontSize: 14, userSelect: "none" },
+  multiSelectList: { position: "absolute", top: "100%", left: 0, right: 0, backgroundColor: "#27272c", border: "1px solid #4a4a52", borderTop: "none", borderRadius: "0 0 8px 8px", maxHeight: 250, overflowY: "auto", zIndex: 10, marginTop: -2 },
+  multiSelectItem: { display: "flex", alignItems: "center", padding: "10px 15px", cursor: "pointer", borderBottom: "1px solid #34343a", fontSize: 14, color: "#cbd5e1" }
 };
 
 export default App;
