@@ -202,6 +202,19 @@ function DaCountryPicker({ mode, countries, onChange, disabled }) {
   );
 }
 
+// Canlı Kullanıcılar bölüm başlığı — belirgin, solda beyaz çizgi
+function SectionHead({ title, sub, right }) {
+  return (
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 10, flexWrap: "wrap", marginBottom: 12 }}>
+      <div style={{ borderLeft: "3px solid #fff", paddingLeft: 10 }}>
+        <div style={{ color: "#fff", fontSize: 15, fontWeight: 800, letterSpacing: 0.4 }}>{title}</div>
+        {sub && <div style={{ color: "rgba(255,255,255,0.55)", fontSize: 12, marginTop: 2 }}>{sub}</div>}
+      </div>
+      {right}
+    </div>
+  );
+}
+
 // Giriş bilgisi satırı — kopyala butonlu (Uygulamalar ekranı)
 function CredRow({ label, value }) {
   const [copied, setCopied] = useState(false);
@@ -304,6 +317,8 @@ function App() {
   const [liveUsers, setLiveUsers] = useState(null);
   const [reviewLogs, setReviewLogs] = useState(null);
   const [liveWindow, setLiveWindow] = useState(5);
+  const [visitorStats, setVisitorStats] = useState(null);
+  const [showAllVisitorCountries, setShowAllVisitorCountries] = useState(false);
   // Canlı cihaz tablosu filtresi: "all" | "newpipe" | "backend" | "unknown"
   const [liveExtractor, setLiveExtractor] = useState("all");
   // Zil sesi modu bölümü — aynı uçtan ?mode=ringtone ile beslenir
@@ -370,6 +385,13 @@ function App() {
     fetch(`${API_URL}/admin/active-users?window=${win || 5}`, { headers: { "X-App-Key": APP_KEY } })
       .then(r => r.ok ? r.json() : null)
       .then(data => { if (data && !data.error) setLiveUsers(data); })
+      .catch(() => {});
+  };
+
+  const fetchVisitorStats = () => {
+    fetch(`${API_URL}/admin/visitor-stats`, { headers: { "X-App-Key": APP_KEY } })
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (data && !data.error) setVisitorStats(data); })
       .catch(() => {});
   };
 
@@ -952,6 +974,14 @@ function App() {
     const id = setInterval(() => fetchLiveUsers(liveWindow), activeSection === "live" ? 5000 : 30000);
     return () => clearInterval(id);
   }, [liveWindow, activeSection]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Ziyaretçi özeti: Canlı Kullanıcılar açıkken dakikada bir
+  useEffect(() => {
+    if (activeSection !== "live") return;
+    fetchVisitorStats();
+    const id = setInterval(fetchVisitorStats, 60000);
+    return () => clearInterval(id);
+  }, [activeSection]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Zil sesi modu: yalnız bölüm açıkken yoklanır (teşhis ekranı, rozeti yok)
   useEffect(() => {
@@ -1924,8 +1954,8 @@ function App() {
                 const pct = n => total > 0 ? Math.round((n / total) * 100) : 0;
                 const card = (title, sub, data, color, bg, border) => (
                   <div style={{ flex: "1 1 200px", padding: "18px 20px", borderRadius: 12, backgroundColor: bg, border: `1px solid ${border}` }}>
-                    <div style={{ color: "#94a3b8", fontSize: 12 }}>{title}</div>
-                    <div style={{ color: "#64748b", fontSize: 10, marginTop: 2 }}>{sub}</div>
+                    <div style={{ color: "#fff", fontSize: 15, fontWeight: 700 }}>{title}</div>
+                    <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 12, marginTop: 3 }}>{sub}</div>
                     <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginTop: 8 }}>
                       <span style={{ color, fontSize: 34, fontWeight: 800, lineHeight: 1.1 }}>{data.online5m || 0}</span>
                       <span style={{ color: "#64748b", fontSize: 13 }}>%{pct(data.online5m || 0)}</span>
@@ -1941,9 +1971,7 @@ function App() {
                 );
                 return (
                   <div style={{ marginBottom: 24 }}>
-                    <div style={{ color: "#94a3b8", fontSize: 12, marginBottom: 10 }}>
-                      İÇERİK KAYNAĞINA GÖRE (şu an aktif — son 5 dk)
-                    </div>
+                    <SectionHead title="İçerik Kaynağına Göre" sub="Şu an aktif — son 5 dakika" />
                     <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
                       {card("📱 NewPipe", "Android 13+ — cihazda çözülüyor", np, "#38bdf8", "#0f2230", "#1e4a63")}
                       {card("🖥️ Backend", "Android 12- — sunucu API'leri", be, "#f59e0b", "#2a2113", "#5c4318")}
@@ -1966,8 +1994,8 @@ function App() {
                 const pct = n => total > 0 ? Math.round((n / total) * 100) : 0;
                 const card = (title, sub, data, color, bg, border) => (
                   <div style={{ flex: "1 1 200px", padding: "18px 20px", borderRadius: 12, backgroundColor: bg, border: `1px solid ${border}` }}>
-                    <div style={{ color: "#94a3b8", fontSize: 12 }}>{title}</div>
-                    <div style={{ color: "#64748b", fontSize: 10, marginTop: 2 }}>{sub}</div>
+                    <div style={{ color: "#fff", fontSize: 15, fontWeight: 700 }}>{title}</div>
+                    <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 12, marginTop: 3 }}>{sub}</div>
                     <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginTop: 8 }}>
                       <span style={{ color, fontSize: 34, fontWeight: 800, lineHeight: 1.1 }}>{data.online5m || 0}</span>
                       <span style={{ color: "#64748b", fontSize: 13 }}>%{pct(data.online5m || 0)}</span>
@@ -1982,9 +2010,7 @@ function App() {
                 );
                 return (
                   <div style={{ marginBottom: 24 }}>
-                    <div style={{ color: "#94a3b8", fontSize: 12, marginBottom: 10 }}>
-                      UYGULAMA MODUNA GÖRE (şu an aktif — son 5 dk)
-                    </div>
+                    <SectionHead title="Uygulama Moduna Göre" sub="Şu an aktif — son 5 dakika" />
                     <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
                       {card("▶️ Müzik", "Normal arayüz", yt, "#4ade80", "#15271d", "#1f5133")}
                       {card("🔔 Zil Sesi", "ASN / ülke kuralı ile", rt, "#0ea5e9", "#0c2d48", "#1e4a63")}
@@ -2002,10 +2028,8 @@ function App() {
                 const max = Math.max(1, ...liveUsers.timeline.map(p => p.count));
                 return (
                   <div style={{ marginBottom: 26 }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", color: "#94a3b8", fontSize: 12, marginBottom: 8 }}>
-                      <span>Son 60 dakika (dakikalık benzersiz cihaz)</span>
-                      <span style={{ color: "#666" }}>zirve: {max}</span>
-                    </div>
+                    <SectionHead title="Son 60 Dakika" sub="Dakikalık benzersiz cihaz"
+                      right={<span style={{ color: "rgba(255,255,255,0.6)", fontSize: 12 }}>zirve: <b style={{ color: "#fff" }}>{max}</b></span>} />
                     <div style={{ display: "flex", alignItems: "flex-end", gap: 2, height: 90, padding: "0 2px",
                       backgroundColor: "#000000", border: "1px solid #26262b", borderRadius: 8 }}>
                       {liveUsers.timeline.map((p, i) => (
@@ -2023,10 +2047,99 @@ function App() {
                 );
               })()}
 
+              {/* ZİYARETÇİ ÖZETİ — son 24 saat / son 7 gün, ülke kırılımlı */}
+              {visitorStats && (() => {
+                const vs = visitorStats;
+                const maxDay = Math.max(1, ...(vs.daily || []).map(d => d.count));
+                const rows = showAllVisitorCountries ? vs.byCountry : vs.byCountry.slice(0, 15);
+                const dayLabel = (iso) => new Date(iso + "T00:00:00Z").toLocaleDateString("tr-TR", { day: "numeric", month: "short", weekday: "short", timeZone: "UTC" });
+                const big = (label, value, sub) => (
+                  <div style={{ flex: "1 1 220px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#111114", border: "1px solid rgba(255,255,255,0.14)" }}>
+                    <div style={{ color: "rgba(255,255,255,0.7)", fontSize: 13, fontWeight: 700 }}>{label}</div>
+                    <div style={{ color: "#fff", fontSize: 40, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{(value || 0).toLocaleString("tr-TR")}</div>
+                    <div style={{ color: "rgba(255,255,255,0.45)", fontSize: 11, marginTop: 4 }}>{sub}</div>
+                  </div>
+                );
+                return (
+                  <div style={{ marginBottom: 28, paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.12)" }}>
+                    <SectionHead title="Ziyaretçi Özeti" sub="Bu uygulamayı açan benzersiz cihaz sayısı"
+                      right={<span style={{ color: "rgba(255,255,255,0.45)", fontSize: 11 }}>dakikada bir güncellenir</span>} />
+                    <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 18 }}>
+                      {big("SON 24 SAAT", vs.last24h, "Kayan pencere, saatlik")}
+                      {big("SON 7 GÜN", vs.last7d, "Bugün dahil son 7 gün (UTC)")}
+                    </div>
+
+                    {/* günlük çubuklar */}
+                    <div style={{ display: "flex", gap: 8, alignItems: "flex-end", height: 120, padding: "12px 12px 0", background: "#000", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, marginBottom: 6 }}>
+                      {(vs.daily || []).map((d, i) => (
+                        <div key={d.date} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", height: "100%" }}>
+                          <span style={{ color: "#fff", fontSize: 11, fontWeight: 700, marginBottom: 4 }}>{d.count}</span>
+                          <div title={`${d.date} — ${d.count} cihaz`} style={{ width: "100%", height: `${Math.max(3, (d.count / maxDay) * 75)}%`, background: i === vs.daily.length - 1 ? "#fff" : "rgba(255,255,255,0.45)", borderRadius: "4px 4px 0 0" }} />
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{ display: "flex", gap: 8, padding: "0 12px", marginBottom: 20 }}>
+                      {(vs.daily || []).map(d => (
+                        <span key={d.date} style={{ flex: 1, textAlign: "center", color: "rgba(255,255,255,0.5)", fontSize: 10 }}>{dayLabel(d.date)}</span>
+                      ))}
+                    </div>
+
+                    {/* ülke tablosu */}
+                    {vs.byCountry.length === 0 ? (
+                      <div style={{ padding: 20, textAlign: "center", color: "rgba(255,255,255,0.5)", fontSize: 13, border: "1px dashed rgba(255,255,255,0.15)", borderRadius: 10 }}>
+                        Henüz veri yok — sayım bu sürüm yayına alındıktan sonra birikmeye başlar.
+                      </div>
+                    ) : (
+                      <div style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, overflow: "hidden" }}>
+                        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                          <thead>
+                            <tr style={{ background: "#111114", color: "rgba(255,255,255,0.7)", textAlign: "left" }}>
+                              <th style={{ padding: "10px 14px", fontWeight: 700 }}>Ülke</th>
+                              <th style={{ padding: "10px 14px", fontWeight: 700, textAlign: "right" }}>Son 24 saat</th>
+                              <th style={{ padding: "10px 14px", fontWeight: 700, textAlign: "right" }}>Son 7 gün</th>
+                              <th style={{ padding: "10px 14px", fontWeight: 700, width: "28%" }}>Pay (7 gün)</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {rows.map(c => {
+                              const share = vs.last7d > 0 ? Math.round((c.last7d / vs.last7d) * 100) : 0;
+                              return (
+                                <tr key={c.country} style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+                                  <td style={{ padding: "9px 14px", color: "#fff", fontWeight: 600 }}>
+                                    {c.country === "XX" ? "🏳️ Bilinmiyor" : `${countryFlag(c.country)} ${countryName(c.country)}`}
+                                    <span style={{ color: "rgba(255,255,255,0.4)", fontFamily: "monospace", fontSize: 11, marginLeft: 6 }}>{c.country !== "XX" ? c.country : ""}</span>
+                                  </td>
+                                  <td style={{ padding: "9px 14px", color: "#fff", textAlign: "right", fontWeight: 700 }}>{c.last24h.toLocaleString("tr-TR")}</td>
+                                  <td style={{ padding: "9px 14px", color: "#fff", textAlign: "right", fontWeight: 700 }}>{c.last7d.toLocaleString("tr-TR")}</td>
+                                  <td style={{ padding: "9px 14px" }}>
+                                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                      <div style={{ flex: 1, height: 6, background: "rgba(255,255,255,0.1)", borderRadius: 3, overflow: "hidden" }}>
+                                        <div style={{ width: `${share}%`, height: "100%", background: "#fff" }} />
+                                      </div>
+                                      <span style={{ color: "rgba(255,255,255,0.6)", fontSize: 11, width: 34, textAlign: "right" }}>%{share}</span>
+                                    </div>
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                        {vs.byCountry.length > 15 && (
+                          <button onClick={() => setShowAllVisitorCountries(v => !v)}
+                            style={{ width: "100%", padding: 10, background: "#111114", border: "none", borderTop: "1px solid rgba(255,255,255,0.08)", color: "#fff", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
+                            {showAllVisitorCountries ? "Daha az göster" : `Tüm ülkeleri göster (${vs.byCountry.length})`}
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
+
               {/* ÜLKELER */}
               {liveUsers.byCountry && liveUsers.byCountry.length > 0 && (
                 <div style={{ marginBottom: 26 }}>
-                  <div style={{ color: "#94a3b8", fontSize: 12, marginBottom: 10 }}>ÜLKELERE GÖRE (son {liveUsers.window} dk)</div>
+                  <SectionHead title="Ülkelere Göre" sub={`Şu an aktif — son ${liveUsers.window} dakika`} />
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                     {liveUsers.byCountry.slice(0, 20).map(c => (
                       <span key={c.country} style={{ padding: "6px 12px", borderRadius: 20, backgroundColor: "#1f1f2a",
@@ -2040,7 +2153,7 @@ function App() {
 
               {/* CANLI IP LİSTESİ */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, flexWrap: "wrap", gap: 10 }}>
-                <span style={{ color: "#94a3b8", fontSize: 12 }}>ŞU AN AKTİF CİHAZLAR (son {liveUsers.window} dk)</span>
+                <SectionHead title="Şu An Aktif Cihazlar" sub={`Son ${liveUsers.window} dakika`} />
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   {/* KAYNAK FİLTRESİ */}
                   <div style={{ display: "flex", gap: 4 }}>
