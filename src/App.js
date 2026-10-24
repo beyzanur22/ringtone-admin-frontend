@@ -226,10 +226,13 @@ function CredRow({ label, value }) {
     } catch (e) {}
   };
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-      <span style={{ color: "#64748b", fontSize: 12, minWidth: 72 }}>{label}</span>
-      <code style={{ flex: 1, color: "#e2e8f0", fontSize: 13, background: "#0b0b12", padding: "6px 10px", borderRadius: 6, overflowX: "auto", whiteSpace: "nowrap" }}>{value}</code>
-      <button onClick={copy} style={{ padding: "5px 10px", fontSize: 12, borderRadius: 6, border: "1px solid #404048", background: copied ? "#1f5133" : "#2f2f35", color: copied ? "#4ade80" : "#94a3b8", cursor: "pointer", flexShrink: 0 }}>{copied ? "✓ Kopyalandı" : "Kopyala"}</button>
+    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+      <span style={{ color: "rgba(255,255,255,0.85)", fontSize: 13, fontWeight: 700, minWidth: 80 }}>{label}</span>
+      <code title={value} style={{ flex: 1, minWidth: 0, color: "#fff", fontSize: 14, fontWeight: 500, background: "#1e1e22", border: "1px solid rgba(255,255,255,0.16)", padding: "9px 12px", borderRadius: 8, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</code>
+      <button onClick={copy} className="cred-copy"
+        style={{ padding: "8px 14px", fontSize: 12, fontWeight: 700, borderRadius: 8, border: copied ? "1px solid #22c55e" : "1px solid rgba(255,255,255,0.35)", background: copied ? "#14532d" : "transparent", color: copied ? "#4ade80" : "#fff", cursor: "pointer", flexShrink: 0, minWidth: 100 }}>
+        {copied ? "✓ Kopyalandı" : "📋 Kopyala"}
+      </button>
     </div>
   );
 }
@@ -788,6 +791,7 @@ function App() {
 
   // === UYGULAMALAR (yeni uygulama ekle + izole panel giriş bilgileri) — sadece süper panel ===
   const [appList, setAppList] = useState([]);
+  const [appSearch, setAppSearch] = useState("");
   const [newAppName, setNewAppName] = useState("");
   const [newAppPackage, setNewAppPackage] = useState("");
   const [newAppId, setNewAppId] = useState("");
@@ -1169,24 +1173,24 @@ function App() {
           </p>
 
           <div style={{ background: "#2f2f35", border: "1px solid #404048", borderRadius: 12, padding: 18, marginBottom: 24 }}>
-            <h3 style={{ color: "#e2e8f0", fontSize: 15, margin: "0 0 14px 0" }}>➕ Yeni Uygulama Ekle</h3>
+            <h3 style={{ color: "#fff", fontSize: 17, fontWeight: 800, margin: "0 0 16px 0" }}>➕ Yeni Uygulama Ekle</h3>
             <div style={{ display: "grid", gap: 12 }}>
               <div>
-                <label style={{ color: "#94a3b8", fontSize: 12, display: "block", marginBottom: 4 }}>Uygulama Adı</label>
+                <label style={{ color: "rgba(255,255,255,0.85)", fontSize: 13, fontWeight: 700, display: "block", marginBottom: 6 }}>Uygulama Adı</label>
                 <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Örn: OGZ Music" value={newAppName} onChange={e => setNewAppName(e.target.value)} />
               </div>
               <div>
-                <label style={{ color: "#94a3b8", fontSize: 12, display: "block", marginBottom: 4 }}>Paket Adı (applicationId)</label>
+                <label style={{ color: "rgba(255,255,255,0.85)", fontSize: 13, fontWeight: 700, display: "block", marginBottom: 6 }}>Paket Adı (applicationId)</label>
                 <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Örn: com.ogz.music" value={newAppPackage} onChange={e => setNewAppPackage(e.target.value)} />
               </div>
               <div>
-                <label style={{ color: "#94a3b8", fontSize: 12, display: "block", marginBottom: 4 }}>
+                <label style={{ color: "rgba(255,255,255,0.85)", fontSize: 13, fontWeight: 700, display: "block", marginBottom: 6 }}>
                   Panel Kısa Adı (opsiyonel){newAppPackage.trim() && !newAppId.trim() ? <span style={{ color: "#64748b" }}> — otomatik: <b style={{ color: "#a78bfa" }}>{deriveAppId(newAppPackage)}</b></span> : null}
                 </label>
                 <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder={newAppPackage.trim() ? deriveAppId(newAppPackage) : "boş bırak → otomatik"} value={newAppId} onChange={e => setNewAppId(e.target.value)} />
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <label style={{ color: "#94a3b8", fontSize: 12 }}>Marka Rengi</label>
+                <label style={{ color: "rgba(255,255,255,0.85)", fontSize: 13, fontWeight: 700 }}>Marka Rengi</label>
                 <input type="color" value={newAppColor} onChange={e => setNewAppColor(e.target.value)} style={{ width: 44, height: 30, border: "none", background: "none", cursor: "pointer" }} />
               </div>
               <button style={{ ...styles.primaryBtn, opacity: appBusy ? 0.6 : 1 }} disabled={appBusy} onClick={createApp}>
@@ -1205,26 +1209,58 @@ function App() {
             )}
           </div>
 
-          <h3 style={{ color: "#e2e8f0", fontSize: 15, margin: "0 0 12px 0" }}>Mevcut İzole Paneller</h3>
+          <style>{`
+            .cred-copy:hover { background: #fff !important; color: #111 !important; }
+            .app-open:hover { background: #fff !important; color: #111 !important; }
+            .app-del:hover { background: #7f1d1d !important; }
+          `}</style>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap", margin: "8px 0 14px" }}>
+            <div style={{ borderLeft: "3px solid #fff", paddingLeft: 10 }}>
+              <div style={{ color: "#fff", fontSize: 17, fontWeight: 800 }}>Mevcut İzole Paneller</div>
+              <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 12, marginTop: 2 }}>{appList.length} uygulama · her birinin ayrı giriş bilgisi</div>
+            </div>
+            {appList.length > 4 && (
+              <input style={{ ...styles.input, width: 240 }} placeholder="🔎 Uygulama ara..." value={appSearch} onChange={e => setAppSearch(e.target.value)} />
+            )}
+          </div>
           {appList.length === 0 ? (
-            <p style={{ color: "#64748b", fontSize: 13 }}>Henüz ek uygulama yok.</p>
+            <p style={{ color: "rgba(255,255,255,0.6)", fontSize: 13 }}>Henüz ek uygulama yok.</p>
           ) : (
-            <div style={{ display: "grid", gap: 12 }}>
-              {appList.map(a => (
-                <div key={a.id} style={{ background: "#2f2f35", border: "1px solid #404048", borderRadius: 10, padding: 14 }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8, gap: 8 }}>
-                    <div style={{ color: "#f8fafc", fontWeight: 700 }}>{a.name}</div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div style={{ color: "#64748b", fontSize: 12 }}>{a.packageName}</div>
-                      <button onClick={() => deleteApp(a)} title="Paneli sil"
-                        style={{ background: "transparent", border: "1px solid #3a2230", color: "#ef4444", borderRadius: 6, padding: "4px 8px", cursor: "pointer", fontSize: 14, lineHeight: 1, flexShrink: 0 }}>🗑️</button>
+            <div style={{ display: "grid", gap: 14 }}>
+              {appList.filter(a => {
+                const q = appSearch.trim().toLocaleLowerCase("tr");
+                return !q || (a.name || "").toLocaleLowerCase("tr").includes(q) || (a.packageName || "").toLowerCase().includes(q);
+              }).map(a => {
+                const brand = (apps[a.id] && apps[a.id].brandPrimary) || "#a78bfa";
+                return (
+                <div key={a.id} style={{ background: "#2f2f35", border: "1px solid rgba(255,255,255,0.14)", borderLeft: `4px solid ${brand}`, borderRadius: 12, overflow: "hidden" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap", padding: "14px 16px", background: "#34343a", borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
+                      <span style={{ width: 36, height: 36, borderRadius: 10, background: brand, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 800, fontSize: 16, flexShrink: 0 }}>
+                        {(a.name || a.id).trim().charAt(0).toLocaleUpperCase("tr")}
+                      </span>
+                      <div style={{ minWidth: 0 }}>
+                        <div style={{ color: "#fff", fontWeight: 800, fontSize: 17 }}>{a.name}</div>
+                        <div style={{ color: "rgba(255,255,255,0.65)", fontSize: 12, fontFamily: "monospace", marginTop: 2 }}>{a.packageName}</div>
+                      </div>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <a href={window.location.origin + a.panelPath} target="_blank" rel="noreferrer" className="app-open"
+                        style={{ padding: "8px 14px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.35)", color: "#fff", fontSize: 12, fontWeight: 700, textDecoration: "none" }}>
+                        Paneli Aç ↗
+                      </a>
+                      <button onClick={() => deleteApp(a)} title="Paneli sil" className="app-del"
+                        style={{ background: "#3a1a1f", border: "1px solid #7f1d1d", color: "#f87171", borderRadius: 8, padding: "7px 12px", cursor: "pointer", fontSize: 12, fontWeight: 700 }}>🗑️ Sil</button>
                     </div>
                   </div>
-                  <CredRow label="Link" value={window.location.origin + a.panelPath} />
-                  <CredRow label="Kullanıcı" value={a.user} />
-                  <CredRow label="Şifre" value={a.pass} />
+                  <div style={{ padding: "14px 16px 8px" }}>
+                    <CredRow label="Link" value={window.location.origin + a.panelPath} />
+                    <CredRow label="Kullanıcı" value={a.user} />
+                    <CredRow label="Şifre" value={a.pass} />
+                  </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>}
