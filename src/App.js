@@ -88,11 +88,11 @@ function CountryRulePicker({ rule, idx, configKey, config, setConfig }) {
 
   return (
     <div style={{ position: "relative" }}>
-      <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Ülkeler:</label>
+      <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Ülkeler:</label>
       <select value={mode} onChange={e => {
         const newMode = e.target.value;
         updateRule({ countryMode: newMode, countries: newMode === "all" ? [] : (rule.countries || []) });
-      }} style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 12, width: "100%", marginBottom: 6 }}>
+      }} style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 12, width: "100%", marginBottom: 6 }}>
         <option value="all">Tüm ülkeler</option>
         <option value="include">Sadece seçtiğim ülkeler</option>
         <option value="exclude">Bu ülkeler HARİÇ</option>
@@ -100,13 +100,13 @@ function CountryRulePicker({ rule, idx, configKey, config, setConfig }) {
       {mode !== "all" && (
         <>
           <div onClick={() => setOpen(!open)}
-            style={{ background: "#34343a", color: mode === "exclude" ? "#ef4444" : "#fff", border: `1px solid ${mode === "exclude" ? "#ef4444" : "#333"}`, borderRadius: 6, padding: "6px 10px", fontSize: 13, cursor: "pointer", minHeight: 30 }}>
+            style={{ background: "#141418", color: mode === "exclude" ? "#ef4444" : "#fff", border: `1px solid ${mode === "exclude" ? "#ef4444" : "#2c2c33"}`, borderRadius: 6, padding: "6px 10px", fontSize: 13, cursor: "pointer", minHeight: 30 }}>
             {modeLabel}
           </div>
           {open && (
-            <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "#34343a", border: "1px solid #444", borderRadius: 6, maxHeight: 250, overflowY: "auto", zIndex: 999, padding: "4px 0" }}>
+            <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "#141418", border: "1px solid #444", borderRadius: 6, maxHeight: 250, overflowY: "auto", zIndex: 999, padding: "4px 0" }}>
               <input type="text" placeholder="Ülke ara..." value={search} onChange={e => setSearch(e.target.value)}
-                style={{ width: "calc(100% - 16px)", margin: "4px 8px", background: "#2f2f35", color: "#fff", border: "1px solid #444", borderRadius: 4, padding: "4px 8px", fontSize: 12 }} />
+                style={{ width: "calc(100% - 16px)", margin: "4px 8px", background: "#18181c", color: "#fff", border: "1px solid #444", borderRadius: 4, padding: "4px 8px", fontSize: 12 }} />
               {filtered.map(c => (
                 <label key={c.code} style={{ display: "flex", alignItems: "center", padding: "4px 10px", fontSize: 12, color: "#ccc", cursor: "pointer" }}>
                   <input type="checkbox" checked={(rule.countries || []).includes(c.code)}
@@ -158,43 +158,43 @@ function DaCountryPicker({ mode, countries, onChange, disabled }) {
   const accent = mode === "exclude" ? "#ef4444" : "#0ea5e9";
 
   const row = c => (
-    <label key={c.code} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 14px", cursor: "pointer", fontSize: 13, color: "#cbd5e1", borderBottom: "1px solid #34343a", background: countries.includes(c.code) ? "#0c2d48" : "transparent" }}>
+    <label key={c.code} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 14px", cursor: "pointer", fontSize: 13, color: "#d4d4dc", borderBottom: "1px solid #2c2c33", background: countries.includes(c.code) ? "#0c2d48" : "transparent" }}>
       <input type="checkbox" checked={countries.includes(c.code)} onChange={() => toggle(c.code)} />
       <span style={{ fontSize: 16 }}>{countryFlag(c.code)}</span>
       <span style={{ flex: 1 }}>{c.name}</span>
-      <span style={{ color: "#64748b", fontFamily: "monospace", fontSize: 12 }}>{c.code}</span>
+      <span style={{ color: "#6b6b76", fontFamily: "monospace", fontSize: 12 }}>{c.code}</span>
     </label>
   );
 
   return (
     <div style={{ position: "relative", flex: 1, opacity: disabled ? 0.4 : 1, pointerEvents: disabled ? "none" : "auto" }}>
       <div onClick={() => setOpen(!open)}
-        style={{ background: "#27272c", border: `1px solid ${open ? accent : "#4a4a52"}`, borderRadius: 8, padding: "8px 12px", minHeight: 42, boxSizing: "border-box", cursor: "pointer", display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
-        {countries.length === 0 && <span style={{ color: "#64748b", fontSize: 14 }}>{disabled ? "Tüm ülkelere gönderilir" : "Ülke seçmek için tıkla..."}</span>}
+        style={{ background: "#1f1f24", border: `1px solid ${open ? accent : "#2c2c33"}`, borderRadius: 8, padding: "8px 12px", minHeight: 42, boxSizing: "border-box", cursor: "pointer", display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
+        {countries.length === 0 && <span style={{ color: "#6b6b76", fontSize: 14 }}>{disabled ? "Tüm ülkelere gönderilir" : "Ülke seçmek için tıkla..."}</span>}
         {countries.map(code => (
           <span key={code} onClick={e => { e.stopPropagation(); toggle(code); }} title="Kaldır"
             style={{ background: mode === "exclude" ? "#450a0a" : "#0c2d48", color: "#fff", border: `1px solid ${accent}`, borderRadius: 999, padding: "2px 10px", fontSize: 12, cursor: "pointer" }}>
             {countryFlag(code)} {countryName(code)} ✕
           </span>
         ))}
-        <span style={{ marginLeft: "auto", color: "#888", fontSize: 12 }}>{open ? "▲" : "▼"}</span>
+        <span style={{ marginLeft: "auto", color: "#9a9aa6", fontSize: 12 }}>{open ? "▲" : "▼"}</span>
       </div>
       {open && (
-        <div style={{ position: "absolute", top: "100%", left: 0, right: 0, marginTop: 4, background: "#27272c", border: "1px solid #4a4a52", borderRadius: 8, zIndex: 50, boxShadow: "0 12px 32px rgba(0,0,0,.5)" }}>
-          <div style={{ display: "flex", gap: 8, padding: 8, borderBottom: "1px solid #34343a" }}>
+        <div style={{ position: "absolute", top: "100%", left: 0, right: 0, marginTop: 4, background: "#1f1f24", border: "1px solid #2c2c33", borderRadius: 8, zIndex: 50, boxShadow: "0 12px 32px rgba(0,0,0,.5)" }}>
+          <div style={{ display: "flex", gap: 8, padding: 8, borderBottom: "1px solid #2c2c33" }}>
             <input autoFocus type="text" placeholder="Ülke ara (Türkiye, TR...)" value={search} onChange={e => setSearch(e.target.value)}
-              style={{ flex: 1, background: "#1e1e22", color: "#fff", border: "1px solid #4a4a52", borderRadius: 6, padding: "8px 10px", fontSize: 13 }} />
+              style={{ flex: 1, background: "#111114", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "8px 10px", fontSize: 13 }} />
             {countries.length > 0 && <button type="button" onClick={() => onChange([])}
-              style={{ background: "none", border: "1px solid #4a4a52", color: "#f87171", borderRadius: 6, padding: "0 10px", cursor: "pointer", fontSize: 12 }}>Temizle</button>}
+              style={{ background: "none", border: "1px solid #2c2c33", color: "#f87171", borderRadius: 6, padding: "0 10px", cursor: "pointer", fontSize: 12 }}>Temizle</button>}
             <button type="button" onClick={() => setOpen(false)}
               style={{ background: "#0ea5e9", border: "none", color: "#fff", borderRadius: 6, padding: "0 14px", cursor: "pointer", fontSize: 12 }}>Tamam</button>
           </div>
           <div style={{ maxHeight: 300, overflowY: "auto" }}>
-            {top.length > 0 && <div style={{ padding: "6px 14px", fontSize: 11, color: "#64748b", background: "#2f2f35" }}>SIK KULLANILANLAR</div>}
+            {top.length > 0 && <div style={{ padding: "6px 14px", fontSize: 11, color: "#6b6b76", background: "#18181c" }}>SIK KULLANILANLAR</div>}
             {top.map(row)}
-            {rest.length > 0 && <div style={{ padding: "6px 14px", fontSize: 11, color: "#64748b", background: "#2f2f35" }}>TÜM ÜLKELER</div>}
+            {rest.length > 0 && <div style={{ padding: "6px 14px", fontSize: 11, color: "#6b6b76", background: "#18181c" }}>TÜM ÜLKELER</div>}
             {rest.map(row)}
-            {top.length + rest.length === 0 && <div style={{ padding: 14, color: "#64748b", fontSize: 13 }}>Sonuç yok</div>}
+            {top.length + rest.length === 0 && <div style={{ padding: 14, color: "#6b6b76", fontSize: 13 }}>Sonuç yok</div>}
           </div>
         </div>
       )}
@@ -228,7 +228,7 @@ function CredRow({ label, value }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
       <span style={{ color: "rgba(255,255,255,0.85)", fontSize: 13, fontWeight: 700, minWidth: 80 }}>{label}</span>
-      <code title={value} style={{ flex: 1, minWidth: 0, color: "#fff", fontSize: 14, fontWeight: 500, background: "#1e1e22", border: "1px solid rgba(255,255,255,0.16)", padding: "9px 12px", borderRadius: 8, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</code>
+      <code title={value} style={{ flex: 1, minWidth: 0, color: "#fff", fontSize: 14, fontWeight: 500, background: "#111114", border: "1px solid rgba(255,255,255,0.16)", padding: "9px 12px", borderRadius: 8, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</code>
       <button onClick={copy} className="cred-copy"
         style={{ padding: "8px 14px", fontSize: 12, fontWeight: 700, borderRadius: 8, border: copied ? "1px solid #22c55e" : "1px solid rgba(255,255,255,0.35)", background: copied ? "#14532d" : "transparent", color: copied ? "#4ade80" : "#fff", cursor: "pointer", flexShrink: 0, minWidth: 100 }}>
         {copied ? "✓ Kopyalandı" : "📋 Kopyala"}
@@ -236,6 +236,134 @@ function CredRow({ label, value }) {
     </div>
   );
 }
+
+/* =========================================================================
+   PANEL GÖRÜNÜMÜ — yalnızca tasarım (menü başlıkları, simgeler, CSS)
+========================================================================= */
+const MENU_SECTIONS = [
+  { title: "Uygulama", keys: ["settings", "countries", "ringtonemode", "mp3", "appcontrols"] },
+  { title: "Kullanıcıya ulaş", keys: ["device", "notifications", "popup"] },
+  { title: "Reklam & İçerik", groups: true },
+  { title: "İzleme", keys: ["live", "loginips", "reviewlogs", "apiproviders"] },
+  { title: "Yönetim", keys: ["users", "apps", "privacy"] },
+];
+const PANEL_ICONS = {
+  settings: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+  countries: '<path d="M4 21V4M4 4h12l-2 4 2 4H4"/>',
+  ringtonemode: '<path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/>',
+  mp3: '<path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1v-6h3zM3 19a2 2 0 0 0 2 2h1v-6H3z"/>',
+  appcontrols: '<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/>',
+  device: '<path d="M21 12a8 8 0 0 1-12 7l-6 2 2-5a8 8 0 1 1 16-4z"/>',
+  notifications: '<path d="M3 11v2a1 1 0 0 0 1 1h3l5 4V6L7 10H4a1 1 0 0 0-1 1zM16 8a5 5 0 0 1 0 8"/>',
+  popup: '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="m8 12 3 3 5-6"/>',
+  reviewlogs: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+  live: '<path d="M3 12h4l3 8 4-16 3 8h4"/>',
+  loginips: '<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l3 3"/>',
+  apiproviders: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  users: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  apps: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+  privacy: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  ads: '<path d="M3 11v2a1 1 0 0 0 1 1h3l5 4V6L7 10H4a1 1 0 0 0-1 1z"/><path d="M16 9.5a3.5 3.5 0 0 1 0 5M19 7a7 7 0 0 1 0 10"/>',
+  content: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 4v16M17 4v16M3 9h4M17 9h4M3 15h4M17 15h4"/>',
+  blocked: '<circle cx="12" cy="12" r="9"/><path d="m5.6 5.6 12.8 12.8"/>',
+  contentfilter: '<path d="M4 4h16l-6 8v6l-4 2v-8z"/>',
+  downloadad: '<path d="M12 4v12M6 11l6 6 6-6M4 20h16"/>',
+  bannerad: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+  bottombanner: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 16h18"/>',
+  ringtonead: '<path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/>',
+  adfree: '<path d="M3 11v2a1 1 0 0 0 1 1h3l5 4V6L7 10H4a1 1 0 0 0-1 1z"/><path d="m16 9 5 6M21 9l-5 6"/>',
+  asn: '<path d="M13 7 9 3 5 7l4 4M17 11l4 4-4 4-4-4M8 12l4 4M16 8l-4 4"/><path d="M19 21a9 9 0 0 0-2-6"/>',
+  smartcache: '<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/>',
+  youtube: '<rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9 5 3-5 3z"/>',
+};
+function PanelIcon({ k, fallback }) {
+  const d = PANEL_ICONS[k];
+  if (!d) return <span className="pn-ico-e">{fallback}</span>;
+  return <svg className="pn-ico" viewBox="0 0 24 24" dangerouslySetInnerHTML={{ __html: d }} />;
+}
+const PANEL_CSS = `
+  .pn-root { display: flex; min-height: 100vh; background: #111114; color: #f4f4f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  .pn-root svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+  .pn-root ::-webkit-scrollbar { width: 8px; height: 8px; }
+  .pn-root ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 4px; }
+  .pn-side { width: 264px; min-width: 264px; background: #15151a; border-right: 1px solid rgba(255,255,255,0.08); height: 100vh; position: sticky; top: 0; display: flex; flex-direction: column; box-sizing: border-box; z-index: 40; }
+  .pn-side-top { padding: 18px 16px 10px; }
+  .pn-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; text-decoration: none; color: #f4f4f6; }
+  .pn-brand b { font-size: 15px; font-weight: 700; }
+  .pn-mark { width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; box-shadow: 0 6px 18px rgba(139,92,246,0.3); }
+  .pn-mark svg { width: 17px; height: 17px; }
+  .pn-lbl { font-size: 10.5px; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; color: #6b6b76; margin-bottom: 6px; }
+  .pn-app { position: relative; display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; background: #1f1f24; border: 1px solid rgba(255,255,255,0.08); transition: border-color .15s; }
+  .pn-app:hover { border-color: rgba(255,255,255,0.18); }
+  .pn-av { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-weight: 800; font-size: 13px; color: #fff; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15); }
+  .pn-app-t { flex: 1; min-width: 0; }
+  .pn-app-t b { display: block; font-size: 13.5px; }
+  .pn-app-t small { display: block; font-size: 11px; color: #6b6b76; font-family: ui-monospace, Menlo, monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pn-app-sel { flex: 1; min-width: 0; appearance: none; -webkit-appearance: none; background: transparent; border: 0; outline: 0; color: #f4f4f6; font: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer; padding: 6px 0; }
+  .pn-app-i { color: #6b6b76; width: 16px !important; height: 16px !important; pointer-events: none; }
+  .pn-live { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding: 9px 12px; border-radius: 12px; background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.22); cursor: pointer; transition: background .15s; }
+  .pn-live:hover { background: rgba(34,197,94,0.13); }
+  .pn-live i { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; animation: pnPulse 2s infinite; }
+  @keyframes pnPulse { 0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.6); } 70%, 100% { box-shadow: 0 0 0 7px rgba(34,197,94,0); } }
+  .pn-live b { font-size: 15px; color: #4ade80; font-variant-numeric: tabular-nums; }
+  .pn-live span { font-size: 12px; color: #6fae86; }
+  .pn-search { display: flex; align-items: center; gap: 8px; margin-top: 12px; height: 34px; padding: 0 10px; border-radius: 10px; background: #141418; border: 1px solid rgba(255,255,255,0.08); color: #6b6b76; }
+  .pn-search:focus-within { border-color: #8b5cf6; color: #f4f4f6; }
+  .pn-search svg { width: 15px; height: 15px; }
+  .pn-search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #f4f4f6; font: inherit; font-size: 13px; }
+  .pn-menu { flex: 1; overflow-y: auto; padding: 0 10px 12px; }
+  .pn-grp { font-size: 10.5px; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; color: #6b6b76; padding: 14px 8px 6px; }
+  .pn-mi { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 9px; font-size: 13.5px; font-weight: 550; color: #a1a1ab; cursor: pointer; user-select: none; position: relative; transition: background .12s, color .12s; }
+  .pn-mi:hover { background: rgba(255,255,255,0.05); color: #f4f4f6; }
+  .pn-mi.active { background: rgba(139,92,246,0.15); color: #fff; }
+  .pn-mi.active::before { content: ""; position: absolute; left: -10px; top: 8px; bottom: 8px; width: 3px; border-radius: 0 3px 3px 0; background: #8b5cf6; }
+  .pn-mi.active .pn-ico { color: #c4b5fd; }
+  .pn-mi.has-active { color: #fff; }
+  .pn-mi.has-active::before { content: ""; position: absolute; left: -10px; top: 8px; bottom: 8px; width: 3px; border-radius: 0 3px 3px 0; background: rgba(139,92,246,0.6); }
+  .pn-sub { padding-left: 22px; font-size: 13px; }
+  .pn-ico-e { width: 18px; text-align: center; font-size: 14px; flex-shrink: 0; }
+  .pn-count { font-size: 10.5px; font-weight: 700; color: #6b6b76; background: rgba(255,255,255,0.06); padding: 1px 7px; border-radius: 999px; }
+  .pn-chev { width: 15px !important; height: 15px !important; color: #6b6b76; transition: transform .2s; }
+  .pn-chev.open { transform: rotate(180deg); }
+  .pn-none { color: #6b6b76; font-size: 12.5px; padding: 14px 10px; }
+  .pn-logout { display: flex; align-items: center; gap: 8px; margin: 0; padding: 14px 20px; border-top: 1px solid rgba(255,255,255,0.08); color: #a1a1ab; font-size: 13px; font-weight: 600; text-decoration: none; transition: color .15s, background .15s; }
+  .pn-logout:hover { color: #f87171; background: rgba(248,113,113,0.08); }
+  .pn-logout svg { width: 16px; height: 16px; }
+  .pn-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .pn-top { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 12px; padding: 13px 32px; background: rgba(17,17,20,0.84); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .pn-burger { display: none; background: none; border: 0; color: #f4f4f6; cursor: pointer; padding: 4px; }
+  .pn-crumb { display: flex; align-items: center; gap: 7px; font-size: 13px; color: #6b6b76; min-width: 0; }
+  .pn-crumb b { color: #f4f4f6; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pn-crumb-app { white-space: nowrap; }
+  .pn-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .pn-ghost { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: #a1a1ab; background: #18181c; border: 1px solid rgba(255,255,255,0.08); padding: 7px 11px; border-radius: 9px; text-decoration: none; white-space: nowrap; }
+  .pn-ghost:hover { color: #f4f4f6; border-color: rgba(255,255,255,0.18); }
+  .pn-ghost svg { width: 15px; height: 15px; }
+  .pn-content { width: 100%; max-width: 980px; margin: 0 auto; padding: 28px 32px 80px; display: flex; flex-direction: column; gap: 22px; box-sizing: border-box; }
+  .pn-content h2 { letter-spacing: -0.3px; }
+  .pn-content code { background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 6px; font-size: 0.92em; }
+  .pn-content button { transition: filter .15s, transform .1s, background-color .15s; }
+  .pn-content button:not(:disabled):hover { filter: brightness(1.08); }
+  .pn-content button:not(:disabled):active { transform: translateY(1px); }
+  .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]):focus,
+  .pn-content select:focus, .pn-content textarea:focus { border-color: #8b5cf6 !important; box-shadow: 0 0 0 3px rgba(139,92,246,0.18); outline: none; }
+  .pn-root input[type=checkbox] { -webkit-appearance: none; appearance: none; width: 36px; height: 21px; min-width: 36px; border-radius: 999px; background: #34343c; position: relative; cursor: pointer; vertical-align: middle; border: 0; transition: background .18s; }
+  .pn-root input[type=checkbox]::after { content: ""; position: absolute; top: 3px; left: 3px; width: 15px; height: 15px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.4); transition: transform .18s; }
+  .pn-root input[type=checkbox]:checked { background: #22c55e; }
+  .pn-root input[type=checkbox]:checked::after { transform: translateX(15px); }
+  .pn-root input[type=checkbox]:disabled { opacity: 0.5; cursor: not-allowed; }
+  .pn-root input[type=radio] { accent-color: #8b5cf6; }
+  .pn-scrim { display: none; }
+  @media (max-width: 900px) {
+    .pn-side { position: fixed; left: 0; top: 0; transform: translateX(-100%); transition: transform .22s; }
+    .pn-side.open { transform: none; box-shadow: 20px 0 50px rgba(0,0,0,0.5); }
+    .pn-scrim { display: block; position: fixed; inset: 0; z-index: 35; background: rgba(0,0,0,0.5); }
+    .pn-burger { display: grid; }
+    .pn-top { padding: 11px 16px; }
+    .pn-content { padding: 20px 16px 60px; }
+  }
+  @media (max-width: 560px) { .pn-ghost span, .pn-crumb-app, .pn-sep { display: none; } }
+`;
 
 function App() {
   const [config, setConfig] = useState(null);
@@ -780,6 +908,8 @@ function App() {
 
   const [activeSection, setActiveSection] = useState("settings");
   const [openGroups, setOpenGroups] = useState({});
+  const [sideOpen, setSideOpen] = useState(false);   // mobil menü çekmecesi
+  const [menuQuery, setMenuQuery] = useState("");    // menüde ara
   // Çok uygulamalı: kayıtlı uygulamalar + seçili appId (üstteki dropdown)
   const [apps, setApps] = useState({});
   const [appId] = useState(PANEL_APP_ID);
@@ -1000,136 +1130,154 @@ function App() {
     return () => clearInterval(id);
   }, [rtWindow, activeSection]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!config) return <div style={{ color: "white", padding: 50, backgroundColor: "#1e1e22", minHeight: "100vh" }}>Yükleniyor...</div>;
+  if (!config) return <div style={{ color: "#9a9aa6", padding: 50, backgroundColor: "#111114", minHeight: "100vh", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif" }}>Yükleniyor...</div>;
+
+  // Yalnızca görünüm: menüyü başlıklar altında göster (hangi bölümün görüneceği değişmez)
+  const flatItems = menuItems.filter(item => !item.group);
+  const menuQ = menuQuery.trim().toLocaleLowerCase("tr");
+  const activeLabel = (menuItems.find(m => m.key === activeSection) || {}).label || "";
+  const brand = currentApp.brandPrimary || "#a78bfa";
+  const appInitial = String(currentApp.name || appId || "?").trim().charAt(0).toLocaleUpperCase("tr");
+  const pick = (key) => { setActiveSection(key); setSideOpen(false); };
+  const navItem = (item, sub) => (
+    <div key={item.key} onClick={() => pick(item.key)}
+      className={"pn-mi" + (sub ? " pn-sub" : "") + (activeSection === item.key ? " active" : "")}>
+      <PanelIcon k={item.key} fallback={item.icon} />
+      <span>{item.label}</span>
+    </div>
+  );
+  const groupBlock = (g) => {
+    const items = menuItems.filter(item => item.group === g.key);
+    const hasActive = items.some(item => item.key === activeSection);
+    const open = openGroups[g.key] ?? hasActive;
+    return (
+      <div key={g.key}>
+        <div onClick={() => setOpenGroups(o => ({ ...o, [g.key]: !open }))}
+          className={"pn-mi pn-group" + (hasActive && !open ? " has-active" : "")}>
+          <PanelIcon k={g.key} fallback={g.icon} />
+          <span style={{ flex: 1 }}>{g.label}</span>
+          <span className="pn-count">{items.length}</span>
+          <svg className={"pn-chev" + (open ? " open" : "")} viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></svg>
+        </div>
+        {open && items.map(item => navItem(item, true))}
+      </div>
+    );
+  };
+  const listed = new Set(MENU_SECTIONS.flatMap(s => s.keys || []));
+  const restItems = flatItems.filter(i => !listed.has(i.key));
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh", backgroundColor: "#1e1e22", color: "#e2e8f0", fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif" }}>
+    <div className="pn-root">
+      <style>{PANEL_CSS}</style>
+      {sideOpen && <div className="pn-scrim" onClick={() => setSideOpen(false)} />}
       {/* SIDEBAR */}
-      <div className="sb" style={{ width: 240, minWidth: 240, backgroundColor: "#18181c", borderRight: "1px solid rgba(255,255,255,0.1)", padding: "22px 0", position: "sticky", top: 0, height: "100vh", overflowY: "auto", boxSizing: "border-box" }}>
-        <style>{`
-          .sb::-webkit-scrollbar { width: 6px; }
-          .sb::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
-          .sb-menu { margin: 0 12px; border-top: 1px solid rgba(255,255,255,0.12); }
-          .sb-item { display: flex; align-items: center; gap: 12px; padding: 13px 12px; cursor: pointer; font-size: 14px; font-weight: 600;
-            color: rgba(255,255,255,0.82); border-bottom: 1px solid rgba(255,255,255,0.12); border-radius: 0; position: relative;
-            transition: background 0.15s, color 0.15s, padding-left 0.15s; user-select: none; }
-          .sb-item:hover { background: rgba(255,255,255,0.07); color: #fff; padding-left: 16px; }
-          .sb-item.active { background: #fff; color: #111; border-radius: 10px; border-bottom-color: transparent; }
-          .sb-ico { width: 22px; text-align: center; font-size: 15px; flex-shrink: 0; }
-          .sb-group { color: #fff; }
-          .sb-group.has-active { box-shadow: inset 3px 0 0 #fff; }
-          .sb-count { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.1); padding: 1px 7px; border-radius: 999px; }
-          .sb-chev { color: rgba(255,255,255,0.6); transition: transform 0.2s; }
-          .sb-chev.open { transform: rotate(180deg); }
-          .sb-sub { padding: 10px 12px 10px 34px; font-size: 13px; font-weight: 500; background: rgba(255,255,255,0.03); }
-          .sb-sub:hover { padding-left: 38px; }
-        `}</style>
-        <h2 style={{ textAlign: "center", color: "#fff", fontSize: 21, fontWeight: 800, letterSpacing: 0.3, margin: "0 0 16px 0" }}>🎵 Müzik Kontrol</h2>
-        {/* UYGULAMA SEÇİCİ — hangi uygulamayı yönettiğini gösterir (yanlış-app koruması) */}
-        <div style={{ margin: "0 14px 14px 14px" }}>
-          <div style={{ fontSize: 10, color: "rgba(255,255,255,0.55)", fontWeight: 700, marginBottom: 6, textTransform: "uppercase", letterSpacing: 1 }}>Uygulama</div>
+      <aside className={"pn-side" + (sideOpen ? " open" : "")}>
+        <div className="pn-side-top">
+          <a className="pn-brand" href="/admin">
+            <span className="pn-mark"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></svg></span>
+            <b>Müzik Kontrol</b>
+          </a>
+          {/* UYGULAMA SEÇİCİ — hangi uygulamayı yönettiğini gösterir (yanlış-app koruması) */}
+          <div className="pn-lbl">Uygulama</div>
           {PANEL_LOCKED ? (
             /* İzole panel: uygulama sabit — sadece göster, değiştirilemez */
-            <div style={{
-              width: "100%", padding: "9px 10px", borderRadius: 8, fontSize: 14, fontWeight: 700,
-              color: "#fff", boxSizing: "border-box",
-              backgroundColor: currentApp.brandPrimary || "#a78bfa",
-              border: `2px solid ${currentApp.brandPrimary || "#a78bfa"}`
-            }}>
-              {currentApp.name || appId} 🔒
+            <div className="pn-app" title="Bu panel bu uygulamaya kilitli">
+              <span className="pn-av" style={{ background: brand }}>{appInitial}</span>
+              <span className="pn-app-t"><b>{currentApp.name || appId}</b>{currentApp.packageName ? <small>{currentApp.packageName}</small> : null}</span>
+              <svg className="pn-app-i" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></svg>
             </div>
           ) : (
-            <select
-              value={appId}
-              onChange={(e) => { setPanelAppId(e.target.value); window.location.reload(); }}
-              style={{
-                width: "100%", padding: "9px 10px", borderRadius: 8, fontSize: 14, fontWeight: 700,
-                color: "#fff", cursor: "pointer",
-                backgroundColor: currentApp.brandPrimary || "#a78bfa",
-                border: `2px solid ${currentApp.brandPrimary || "#a78bfa"}`
-              }}>
-              {Object.values(apps).length === 0 && <option value={appId}>{appId}</option>}
-              {Object.values(apps).map(a => (
-                <option key={a.id} value={a.id} style={{ backgroundColor: "#18181c", color: "#fff" }}>
-                  {a.name}
-                </option>
-              ))}
-            </select>
-          )}
-          <div style={{ height: 4, borderRadius: 2, marginTop: 6, backgroundColor: currentApp.brandPrimary || "#a78bfa" }} />
-        </div>
-        {/* CANLI KULLANICI ROZETİ — her bölümde görünür */}
-        <div onClick={() => setActiveSection("live")}
-          style={{ margin: "0 14px 18px 14px", padding: "10px 12px", borderRadius: 10, cursor: "pointer",
-            backgroundColor: "#15271d", border: "1px solid #1f5133", display: "flex", alignItems: "center", gap: 10 }}>
-          <span style={{ width: 9, height: 9, borderRadius: "50%", backgroundColor: "#22c55e", boxShadow: "0 0 8px #22c55e", flexShrink: 0 }} />
-          <div style={{ lineHeight: 1.2 }}>
-            <div style={{ color: "#4ade80", fontSize: 18, fontWeight: 700 }}>{liveUsers ? liveUsers.online5m : "—"}</div>
-            <div style={{ color: "#5f8b70", fontSize: 10 }}>şu an aktif</div>
-          </div>
-        </div>
-        <div className="sb-menu">
-          {menuItems.filter(item => !item.group).map(item => (
-            <div key={item.key} onClick={() => setActiveSection(item.key)}
-              className={"sb-item" + (activeSection === item.key ? " active" : "")}>
-              <span className="sb-ico">{item.icon}</span>
-              <span>{item.label}</span>
-            </div>
-          ))}
-          {menuGroups.map(g => {
-            const items = menuItems.filter(item => item.group === g.key);
-            const hasActive = items.some(item => item.key === activeSection);
-            const open = openGroups[g.key] ?? hasActive;
-            return (
-              <div key={g.key}>
-                <div onClick={() => setOpenGroups(o => ({ ...o, [g.key]: !open }))}
-                  className={"sb-item sb-group" + (hasActive && !open ? " has-active" : "")}>
-                  <span className="sb-ico">{g.icon}</span>
-                  <span style={{ flex: 1 }}>{g.label}</span>
-                  <span className="sb-count">{items.length}</span>
-                  <span className={"sb-chev" + (open ? " open" : "")}>▾</span>
-                </div>
-                {open && items.map(item => (
-                  <div key={item.key} onClick={() => setActiveSection(item.key)}
-                    className={"sb-item sb-sub" + (activeSection === item.key ? " active" : "")}>
-                    <span className="sb-ico">{item.icon}</span>
-                    <span>{item.label}</span>
-                  </div>
+            <div className="pn-app">
+              <span className="pn-av" style={{ background: brand }}>{appInitial}</span>
+              <select className="pn-app-sel"
+                value={appId}
+                onChange={(e) => { setPanelAppId(e.target.value); window.location.reload(); }}>
+                {Object.values(apps).length === 0 && <option value={appId}>{appId}</option>}
+                {Object.values(apps).map(a => (
+                  <option key={a.id} value={a.id} style={{ backgroundColor: "#18181c", color: "#fff" }}>
+                    {a.name}
+                  </option>
                 ))}
-              </div>
-            );
-          })}
+              </select>
+              <svg className="pn-app-i" viewBox="0 0 24 24"><path d="m7 9 5-5 5 5M7 15l5 5 5-5" /></svg>
+            </div>
+          )}
+          {/* CANLI KULLANICI ROZETİ — her bölümde görünür */}
+          <div className="pn-live" onClick={() => pick("live")}>
+            <i />
+            <b>{liveUsers ? liveUsers.online5m : "—"}</b>
+            <span>şu an aktif</span>
+          </div>
+          <label className="pn-search">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+            <input value={menuQuery} onChange={e => setMenuQuery(e.target.value)} placeholder="Menüde ara" />
+          </label>
         </div>
+        <nav className="pn-menu">
+          {menuQ ? (
+            (() => {
+              const hits = menuItems.filter(i => i.label.toLocaleLowerCase("tr").includes(menuQ));
+              return hits.length ? hits.map(i => navItem(i)) : <div className="pn-none">Eşleşen bölüm yok</div>;
+            })()
+          ) : (
+            <>
+              {MENU_SECTIONS.map(sec => {
+                if (sec.groups) {
+                  return menuGroups.length ? <div key={sec.title}><div className="pn-grp">{sec.title}</div>{menuGroups.map(groupBlock)}</div> : null;
+                }
+                const its = sec.keys.map(k => flatItems.find(i => i.key === k)).filter(Boolean);
+                return its.length ? <div key={sec.title}><div className="pn-grp">{sec.title}</div>{its.map(i => navItem(i))}</div> : null;
+              })}
+              {restItems.length > 0 && <div><div className="pn-grp">Diğer</div>{restItems.map(i => navItem(i))}</div>}
+            </>
+          )}
+        </nav>
         {/* ÇIKIŞ — kişisel oturumu kapatır, giriş ekranına döner */}
-        <a href="/admin/logout" style={{ display: "block", margin: "16px 14px 0", padding: "10px 14px", borderRadius: 8, textAlign: "center", fontSize: 13, fontWeight: 600, color: "#f87171", background: "#2a1216", border: "1px solid #5b2130", textDecoration: "none" }}>
+        <a href="/admin/logout" className="pn-logout">
+          <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><path d="m16 17 5-5-5-5" /><path d="M21 12H9" /></svg>
           Çıkış Yap
         </a>
-      </div>
+      </aside>
       {/* MAIN CONTENT */}
-      <div style={{ flex: 1, padding: "40px 40px", maxWidth: 900, margin: "0 auto" }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: 30 }}>
+      <div className="pn-main">
+      <div className="pn-top">
+        <button className="pn-burger" onClick={() => setSideOpen(true)} aria-label="Menü">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+        </button>
+        <div className="pn-crumb">
+          <span className="pn-dot" style={{ background: brand }} />
+          <span className="pn-crumb-app">{currentApp.name || appId}</span>
+          <span className="pn-sep">/</span>
+          <b>{activeLabel}</b>
+        </div>
+        <a className="pn-ghost" href="/admin">
+          <svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7v9H3z" /></svg>
+          <span>Ana sayfa</span>
+        </a>
+      </div>
+      <div className="pn-content">
         
         {/* KULLANICILAR — kişisel giriş hesapları (sadece süper panel) */}
         {activeSection === "users" && !PANEL_LOCKED && <div style={styles.card}>
           <h2 style={styles.title}>👤 Kullanıcılar</h2>
-          <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 20 }}>
+          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
             Kişisel giriş hesapları. Herkes kendi kullanıcı adı + şifresiyle <code>/admin/panel</code>'e girer;
             yetkisine göre ya <b>tüm uygulamaları</b> ya da <b>sadece belirli bir uygulamayı</b> görür.
           </p>
 
-          <div style={{ background: "#2f2f35", border: "1px solid #404048", borderRadius: 12, padding: 18, marginBottom: 24 }}>
-            <h3 style={{ color: "#e2e8f0", fontSize: 15, margin: "0 0 14px 0" }}>➕ Kullanıcı Ekle / Şifre Güncelle</h3>
+          <div style={{ background: "#18181c", border: "1px solid #2c2c33", borderRadius: 12, padding: 18, marginBottom: 24 }}>
+            <h3 style={{ color: "#f4f4f6", fontSize: 15, margin: "0 0 14px 0" }}>➕ Kullanıcı Ekle / Şifre Güncelle</h3>
             <div style={{ display: "grid", gap: 12 }}>
               <div>
-                <label style={{ color: "#94a3b8", fontSize: 12, display: "block", marginBottom: 4 }}>Kullanıcı Adı</label>
+                <label style={{ color: "#9a9aa6", fontSize: 12, display: "block", marginBottom: 4 }}>Kullanıcı Adı</label>
                 <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Örn: oguz" value={newUserName} onChange={e => setNewUserName(e.target.value)} />
               </div>
               <div>
-                <label style={{ color: "#94a3b8", fontSize: 12, display: "block", marginBottom: 4 }}>Şifre</label>
+                <label style={{ color: "#9a9aa6", fontSize: 12, display: "block", marginBottom: 4 }}>Şifre</label>
                 <input type="text" style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Yeni şifre" value={newUserPass} onChange={e => setNewUserPass(e.target.value)} />
               </div>
               <div>
-                <label style={{ color: "#94a3b8", fontSize: 12, display: "block", marginBottom: 4 }}>Yetki (hangi uygulamayı görsün)</label>
+                <label style={{ color: "#9a9aa6", fontSize: 12, display: "block", marginBottom: 4 }}>Yetki (hangi uygulamayı görsün)</label>
                 <select style={{ ...styles.input, width: "100%", boxSizing: "border-box", cursor: "pointer" }} value={newUserScope} onChange={e => setNewUserScope(e.target.value)}>
                   <option value="all">⭐ Tüm Uygulamalar (Süper Admin)</option>
                   {Object.values(apps).filter(a => a.id !== "default").map(a => (
@@ -1140,20 +1288,20 @@ function App() {
               <button style={{ ...styles.primaryBtn, opacity: userBusy ? 0.6 : 1 }} disabled={userBusy} onClick={saveUser}>
                 {userBusy ? "Kaydediliyor..." : "Kaydet"}
               </button>
-              <p style={{ color: "#64748b", fontSize: 11, margin: 0 }}>Var olan bir kullanıcı adını yazarsan şifresi/yetkisi güncellenir.</p>
+              <p style={{ color: "#6b6b76", fontSize: 11, margin: 0 }}>Var olan bir kullanıcı adını yazarsan şifresi/yetkisi güncellenir.</p>
             </div>
           </div>
 
-          <h3 style={{ color: "#e2e8f0", fontSize: 15, margin: "0 0 12px 0" }}>Mevcut Kullanıcılar</h3>
+          <h3 style={{ color: "#f4f4f6", fontSize: 15, margin: "0 0 12px 0" }}>Mevcut Kullanıcılar</h3>
           {userList.length === 0 ? (
-            <p style={{ color: "#64748b", fontSize: 13 }}>Henüz kullanıcı yok.</p>
+            <p style={{ color: "#6b6b76", fontSize: 13 }}>Henüz kullanıcı yok.</p>
           ) : (
             <div style={{ display: "grid", gap: 10 }}>
               {userList.map(u => (
-                <div key={u.username} style={{ background: "#2f2f35", border: "1px solid #404048", borderRadius: 10, padding: "12px 14px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
+                <div key={u.username} style={{ background: "#18181c", border: "1px solid #2c2c33", borderRadius: 10, padding: "12px 14px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
                   <div>
-                    <div style={{ color: "#f8fafc", fontWeight: 700 }}>{u.username}</div>
-                    <div style={{ color: "#94a3b8", fontSize: 12 }}>
+                    <div style={{ color: "#f4f4f6", fontWeight: 700 }}>{u.username}</div>
+                    <div style={{ color: "#9a9aa6", fontSize: 12 }}>
                       {u.apps === "all" || u.super ? "⭐ Tüm uygulamalar" : `🔒 ${(Array.isArray(u.apps) ? u.apps : []).map(id => (apps[id] && apps[id].name) || id).join(", ")}`}
                     </div>
                   </div>
@@ -1167,12 +1315,12 @@ function App() {
         {/* UYGULAMALAR — yeni paket ekle + izole panel giriş bilgileri (sadece süper panel) */}
         {activeSection === "apps" && !PANEL_LOCKED && <div style={styles.card}>
           <h2 style={styles.title}>🗂️ Uygulamalar</h2>
-          <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 20 }}>
+          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
             Yeni paket adı ekle → panel sana o uygulamanın <b>ayrı panel linkini ve şifresini</b> verir.
             Sonra tek yapman gereken <code>app_config.json</code>'da paket adını bu değere ayarlayıp build almak. Android kodu değişmez.
           </p>
 
-          <div style={{ background: "#2f2f35", border: "1px solid #404048", borderRadius: 12, padding: 18, marginBottom: 24 }}>
+          <div style={{ background: "#18181c", border: "1px solid #2c2c33", borderRadius: 12, padding: 18, marginBottom: 24 }}>
             <h3 style={{ color: "#fff", fontSize: 17, fontWeight: 800, margin: "0 0 16px 0" }}>➕ Yeni Uygulama Ekle</h3>
             <div style={{ display: "grid", gap: 12 }}>
               <div>
@@ -1185,7 +1333,7 @@ function App() {
               </div>
               <div>
                 <label style={{ color: "rgba(255,255,255,0.85)", fontSize: 13, fontWeight: 700, display: "block", marginBottom: 6 }}>
-                  Panel Kısa Adı (opsiyonel){newAppPackage.trim() && !newAppId.trim() ? <span style={{ color: "#64748b" }}> — otomatik: <b style={{ color: "#a78bfa" }}>{deriveAppId(newAppPackage)}</b></span> : null}
+                  Panel Kısa Adı (opsiyonel){newAppPackage.trim() && !newAppId.trim() ? <span style={{ color: "#6b6b76" }}> — otomatik: <b style={{ color: "#a78bfa" }}>{deriveAppId(newAppPackage)}</b></span> : null}
                 </label>
                 <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder={newAppPackage.trim() ? deriveAppId(newAppPackage) : "boş bırak → otomatik"} value={newAppId} onChange={e => setNewAppId(e.target.value)} />
               </div>
@@ -1201,7 +1349,7 @@ function App() {
             {newAppResult && (
               <div style={{ marginTop: 16, background: "#0f2a17", border: "1px solid #1f5133", borderRadius: 10, padding: 16 }}>
                 <div style={{ color: "#4ade80", fontWeight: 700, marginBottom: 4 }}>✅ Panel oluşturuldu — bu bilgileri kaydet!</div>
-                <div style={{ color: "#94a3b8", fontSize: 12, marginBottom: 12 }}>Şifre master anahtardan türetilir; kaybolmaz, bu ekranda hep görebilirsin.</div>
+                <div style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 12 }}>Şifre master anahtardan türetilir; kaybolmaz, bu ekranda hep görebilirsin.</div>
                 <CredRow label="Panel Linki" value={window.location.origin + newAppResult.panelPath} />
                 <CredRow label="Kullanıcı" value={newAppResult.user} />
                 <CredRow label="Şifre" value={newAppResult.pass} />
@@ -1233,8 +1381,8 @@ function App() {
               }).map(a => {
                 const brand = (apps[a.id] && apps[a.id].brandPrimary) || "#a78bfa";
                 return (
-                <div key={a.id} style={{ background: "#2f2f35", border: "1px solid rgba(255,255,255,0.14)", borderLeft: `4px solid ${brand}`, borderRadius: 12, overflow: "hidden" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap", padding: "14px 16px", background: "#34343a", borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
+                <div key={a.id} style={{ background: "#18181c", border: "1px solid rgba(255,255,255,0.14)", borderLeft: `4px solid ${brand}`, borderRadius: 12, overflow: "hidden" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap", padding: "14px 16px", background: "#141418", borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
                       <span style={{ width: 36, height: 36, borderRadius: 10, background: brand, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 800, fontSize: 16, flexShrink: 0 }}>
                         {(a.name || a.id).trim().charAt(0).toLocaleUpperCase("tr")}
@@ -1268,24 +1416,24 @@ function App() {
         {/* GİZLİLİK POLİTİKALARI — paket + e-posta gir, link al (sadece süper panel) */}
         {activeSection === "privacy" && !PANEL_LOCKED && <div style={styles.card}>
           <h2 style={styles.title}>🔒 Gizlilik Politikaları</h2>
-          <p style={{ color: "#94a3b8", fontSize: 13, marginBottom: 20 }}>
+          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
             Uygulama adı, paket adı ve iletişim e-postasını gir → hazır gizlilik politikası sayfasının <b>linkini</b> verir.
             Aynı paket adını tekrar kaydedersen sayfa güncellenir, link değişmez.
           </p>
 
-          <div style={{ background: "#2f2f35", border: "1px solid #404048", borderRadius: 12, padding: 18, marginBottom: 24 }}>
-            <h3 style={{ color: "#e2e8f0", fontSize: 15, margin: "0 0 14px 0" }}>➕ Politika Oluştur / Güncelle</h3>
+          <div style={{ background: "#18181c", border: "1px solid #2c2c33", borderRadius: 12, padding: 18, marginBottom: 24 }}>
+            <h3 style={{ color: "#f4f4f6", fontSize: 15, margin: "0 0 14px 0" }}>➕ Politika Oluştur / Güncelle</h3>
             <div style={{ display: "grid", gap: 12 }}>
               <div>
-                <label style={{ color: "#94a3b8", fontSize: 12, display: "block", marginBottom: 4 }}>Uygulama Adı</label>
+                <label style={{ color: "#9a9aa6", fontSize: 12, display: "block", marginBottom: 4 }}>Uygulama Adı</label>
                 <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Örn: VupVup Music Player - MP3 Player" value={policyName} onChange={e => setPolicyName(e.target.value)} />
               </div>
               <div>
-                <label style={{ color: "#94a3b8", fontSize: 12, display: "block", marginBottom: 4 }}>Paket Adı</label>
+                <label style={{ color: "#9a9aa6", fontSize: 12, display: "block", marginBottom: 4 }}>Paket Adı</label>
                 <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Örn: app.vupvup.descargamusica" value={policyPackage} onChange={e => setPolicyPackage(e.target.value)} />
               </div>
               <div>
-                <label style={{ color: "#94a3b8", fontSize: 12, display: "block", marginBottom: 4 }}>İletişim E-postası</label>
+                <label style={{ color: "#9a9aa6", fontSize: 12, display: "block", marginBottom: 4 }}>İletişim E-postası</label>
                 <input type="email" style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Örn: destek@gmail.com" value={policyEmail} onChange={e => setPolicyEmail(e.target.value)} />
               </div>
               <button style={{ ...styles.primaryBtn, opacity: policyBusy ? 0.6 : 1 }} disabled={policyBusy} onClick={savePolicy}>
@@ -1301,17 +1449,17 @@ function App() {
             )}
           </div>
 
-          <h3 style={{ color: "#e2e8f0", fontSize: 15, margin: "0 0 12px 0" }}>Mevcut Politikalar</h3>
+          <h3 style={{ color: "#f4f4f6", fontSize: 15, margin: "0 0 12px 0" }}>Mevcut Politikalar</h3>
           {policyList.length === 0 ? (
-            <p style={{ color: "#64748b", fontSize: 13 }}>Henüz politika yok.</p>
+            <p style={{ color: "#6b6b76", fontSize: 13 }}>Henüz politika yok.</p>
           ) : (
             <div style={{ display: "grid", gap: 12 }}>
               {policyList.map(p => (
-                <div key={p.packageName} style={{ background: "#2f2f35", border: "1px solid #404048", borderRadius: 10, padding: 14 }}>
+                <div key={p.packageName} style={{ background: "#18181c", border: "1px solid #2c2c33", borderRadius: 10, padding: 14 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8, gap: 8 }}>
-                    <div style={{ color: "#f8fafc", fontWeight: 700 }}>{p.appName}</div>
+                    <div style={{ color: "#f4f4f6", fontWeight: 700 }}>{p.appName}</div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div style={{ color: "#64748b", fontSize: 12 }}>{p.email}</div>
+                      <div style={{ color: "#6b6b76", fontSize: 12 }}>{p.email}</div>
                       <button onClick={() => deletePolicy(p)} title="Politikayı sil"
                         style={{ background: "transparent", border: "1px solid #3a2230", color: "#ef4444", borderRadius: 6, padding: "4px 8px", cursor: "pointer", fontSize: 14, lineHeight: 1, flexShrink: 0 }}>🗑️</button>
                     </div>
@@ -1343,8 +1491,8 @@ function App() {
           <button style={styles.primaryBtn} onClick={updateConfig}>Ayarları Kaydet</button>
 
           <div style={{ marginTop: 24, borderTop: "1px solid #2a2a2a", paddingTop: 16 }}>
-            <h3 style={{ color: "#e2e8f0", fontSize: 15, marginBottom: 8 }}>🔔 Otomatik Zil Sesi</h3>
-            <p style={{ color: "#94a3b8", fontSize: 12, marginBottom: 12 }}>
+            <h3 style={{ color: "#f4f4f6", fontSize: 15, marginBottom: 8 }}>🔔 Otomatik Zil Sesi</h3>
+            <p style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 12 }}>
               Telefon dili ile cihaz ülkesi farklıysa, indirilen MP3 otomatik zil sesi yapılır.
             </p>
             {autoRingtone ? (
@@ -1369,26 +1517,26 @@ function App() {
         {/* MP3 İNDİRME PROVIDER KONTROL */}
         {activeSection === "mp3" && <div style={styles.card}>
           <h2 style={styles.title}>MP3 İndirme Ayarları</h2>
-          <p style={{ color: "#888", fontSize: 13, marginBottom: 16 }}>
+          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 16 }}>
             Bazocam = MP3 formatı | Backend = M4A formatı (yedek). İkisi açıksa Bazocam öncelikli, başarısız olursa Backend devreye girer.
           </p>
           <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
-            <label style={{ ...styles.labelCheckbox, padding: "12px 20px", borderRadius: 8, border: "1px solid #333", background: (config.mp3Provider?.bazocam !== false) ? "#1a3a1a" : "#2f2f35" }}>
+            <label style={{ ...styles.labelCheckbox, padding: "12px 20px", borderRadius: 8, border: "1px solid #2c2c33", background: (config.mp3Provider?.bazocam !== false) ? "#1a3a1a" : "#18181c" }}>
               <input type="checkbox" checked={config.mp3Provider?.bazocam !== false}
                 onChange={e => setConfig({ ...config, mp3Provider: { ...(config.mp3Provider || {}), bazocam: e.target.checked } })}
                 style={{ marginRight: 10 }}
               />
-              <span style={{ color: (config.mp3Provider?.bazocam !== false) ? "#4ade80" : "#888" }}>🌐 Bazocam (MP3)</span>
+              <span style={{ color: (config.mp3Provider?.bazocam !== false) ? "#4ade80" : "#9a9aa6" }}>🌐 Bazocam (MP3)</span>
             </label>
-            <label style={{ ...styles.labelCheckbox, padding: "12px 20px", borderRadius: 8, border: "1px solid #333", background: (config.mp3Provider?.backend !== false) ? "#1a2a3a" : "#2f2f35" }}>
+            <label style={{ ...styles.labelCheckbox, padding: "12px 20px", borderRadius: 8, border: "1px solid #2c2c33", background: (config.mp3Provider?.backend !== false) ? "#1a2a3a" : "#18181c" }}>
               <input type="checkbox" checked={config.mp3Provider?.backend !== false}
                 onChange={e => setConfig({ ...config, mp3Provider: { ...(config.mp3Provider || {}), backend: e.target.checked } })}
                 style={{ marginRight: 10 }}
               />
-              <span style={{ color: (config.mp3Provider?.backend !== false) ? "#60a5fa" : "#888" }}>🖥️ Backend (M4A)</span>
+              <span style={{ color: (config.mp3Provider?.backend !== false) ? "#60a5fa" : "#9a9aa6" }}>🖥️ Backend (M4A)</span>
             </label>
           </div>
-          <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 6, background: "#111", fontSize: 12, color: "#aaa" }}>
+          <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 6, background: "#141418", fontSize: 12, color: "#aaa" }}>
             {(config.mp3Provider?.bazocam !== false) && (config.mp3Provider?.backend !== false) && "✅ Bazocam öncelikli — başarısız olursa Backend devreye girer"}
             {(config.mp3Provider?.bazocam !== false) && (config.mp3Provider?.backend === false) && "⚠️ Sadece Bazocam — başarısız olursa indirme çalışmaz"}
             {(config.mp3Provider?.bazocam === false) && (config.mp3Provider?.backend !== false) && "🖥️ Sadece Backend — M4A formatında indirilir"}
@@ -1400,36 +1548,36 @@ function App() {
         {/* İÇERİK FİLTRESİ — canlı yayın engeli + süre limiti */}
         {activeSection === "contentfilter" && <div style={styles.card}>
           <h2 style={styles.title}>İçerik Filtresi</h2>
-          <p style={{ color: "#888", fontSize: 13, marginBottom: 16 }}>
+          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 16 }}>
             Arama sonuçlarında <b>canlı yayınları</b> ve <b>çok uzun videoları</b> eler. Elenen içerikler aramada görünmez, indirilemez.
           </p>
 
-          <label style={{ ...styles.labelCheckbox, display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: 8, border: "1px solid #333", background: (config.contentFilter?.enabled !== false) ? "#1a3a1a" : "#2f2f35", marginBottom: 12 }}>
+          <label style={{ ...styles.labelCheckbox, display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: 8, border: "1px solid #2c2c33", background: (config.contentFilter?.enabled !== false) ? "#1a3a1a" : "#18181c", marginBottom: 12 }}>
             <input type="checkbox" checked={config.contentFilter?.enabled !== false}
               onChange={e => setConfig({ ...config, contentFilter: { ...(config.contentFilter || {}), enabled: e.target.checked } })}
               style={{ marginRight: 10 }}
             />
-            <span style={{ color: (config.contentFilter?.enabled !== false) ? "#4ade80" : "#888" }}>Filtre aktif</span>
+            <span style={{ color: (config.contentFilter?.enabled !== false) ? "#4ade80" : "#9a9aa6" }}>Filtre aktif</span>
           </label>
 
-          <label style={{ ...styles.labelCheckbox, display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: 8, border: "1px solid #333", background: (config.contentFilter?.blockLive !== false) ? "#3a1a1a" : "#2f2f35", marginBottom: 16 }}>
+          <label style={{ ...styles.labelCheckbox, display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: 8, border: "1px solid #2c2c33", background: (config.contentFilter?.blockLive !== false) ? "#3a1a1a" : "#18181c", marginBottom: 16 }}>
             <input type="checkbox" checked={config.contentFilter?.blockLive !== false}
               onChange={e => setConfig({ ...config, contentFilter: { ...(config.contentFilter || {}), blockLive: e.target.checked } })}
               style={{ marginRight: 10 }}
             />
-            <span style={{ color: (config.contentFilter?.blockLive !== false) ? "#f87171" : "#888" }}>📡 Canlı yayınları engelle</span>
+            <span style={{ color: (config.contentFilter?.blockLive !== false) ? "#f87171" : "#9a9aa6" }}>📡 Canlı yayınları engelle</span>
           </label>
 
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
-            <span style={{ color: "#e2e8f0", fontSize: 14 }}>Maksimum süre:</span>
+            <span style={{ color: "#f4f4f6", fontSize: 14 }}>Maksimum süre:</span>
             <input type="number" min={1} max={600} step={1}
               value={config.contentFilter?.maxDurationMinutes ?? 35}
               onChange={e => setConfig({ ...config, contentFilter: { ...(config.contentFilter || {}), maxDurationMinutes: parseInt(e.target.value, 10) || 0 } })}
               style={{ ...styles.select, flex: "unset", width: 90, textAlign: "center" }}
             />
-            <span style={{ color: "#94a3b8", fontSize: 13 }}>dakika ve üstü elenir</span>
+            <span style={{ color: "#9a9aa6", fontSize: 13 }}>dakika ve üstü elenir</span>
           </div>
-          <div style={{ padding: "10px 14px", borderRadius: 6, background: "#111", fontSize: 12, color: "#aaa", marginBottom: 16 }}>
+          <div style={{ padding: "10px 14px", borderRadius: 6, background: "#141418", fontSize: 12, color: "#aaa", marginBottom: 16 }}>
             Örn: <b>{config.contentFilter?.maxDurationMinutes ?? 35}</b> → {config.contentFilter?.maxDurationMinutes ?? 35} dk ve üzeri videolar aramada çıkmaz.
           </div>
 
@@ -1457,7 +1605,7 @@ function App() {
             <div
               onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
               style={{
-                background: "#1e1e2e", border: "1px solid #333", borderRadius: 8,
+                background: "#1e1e2e", border: "1px solid #2c2c33", borderRadius: 8,
                 padding: "12px 16px", cursor: "pointer", display: "flex",
                 justifyContent: "space-between", alignItems: "center", color: "#fff"
               }}>
@@ -1466,19 +1614,19 @@ function App() {
                   ? `${Object.keys(config.countries).length} ülke seçili`
                   : "Ülke seç..."}
               </span>
-              <span style={{ fontSize: 12, color: "#888" }}>{isCountryDropdownOpen ? "▲" : "▼"}</span>
+              <span style={{ fontSize: 12, color: "#9a9aa6" }}>{isCountryDropdownOpen ? "▲" : "▼"}</span>
             </div>
 
             {isCountryDropdownOpen && (
               <div style={{
                 position: "absolute", top: "100%", left: 0, right: 0, zIndex: 999,
-                background: "#2f2f35", border: "1px solid #333", borderRadius: 8,
+                background: "#18181c", border: "1px solid #2c2c33", borderRadius: 8,
                 maxHeight: 300, overflowY: "auto", marginTop: 4
               }}>
                 {/* ARAMA */}
-                <div style={{ padding: 8, borderBottom: "1px solid #333", position: "sticky", top: 0, background: "#2f2f35" }}>
+                <div style={{ padding: 8, borderBottom: "1px solid #2c2c33", position: "sticky", top: 0, background: "#18181c" }}>
                   <input
-                    style={{...styles.input, margin: 0, background: "#111", fontSize: 13}}
+                    style={{...styles.input, margin: 0, background: "#141418", fontSize: 13}}
                     placeholder="Ülke ara..."
                     value={countrySearch}
                     onChange={e => setCountrySearch(e.target.value)}
@@ -1611,9 +1759,9 @@ function App() {
                   <button key={opt.value} onClick={() => setNotifTargetMode(opt.value)}
                     style={{
                       flex: 1, padding: "10px 8px", borderRadius: 8,
-                      border: notifTargetMode === opt.value ? "2px solid #a78bfa" : "1px solid #4a4a52",
-                      background: notifTargetMode === opt.value ? "#2d1f4e" : "#34343a",
-                      color: notifTargetMode === opt.value ? "#c4b5fd" : "#888",
+                      border: notifTargetMode === opt.value ? "2px solid #a78bfa" : "1px solid #2c2c33",
+                      background: notifTargetMode === opt.value ? "#2d1f4e" : "#141418",
+                      color: notifTargetMode === opt.value ? "#c4b5fd" : "#9a9aa6",
                       cursor: "pointer", fontSize: 13, fontWeight: notifTargetMode === opt.value ? 600 : 400
                     }}>
                     {opt.label}
@@ -1718,7 +1866,7 @@ function App() {
                 </tr>
               ))}
               {blockedChannels.length === 0 && (
-                <tr><td colSpan="3" style={{...styles.td, textAlign: "center", color: "#888", padding: "40px"}}>Henüz yasaklı kanal yok.</td></tr>
+                <tr><td colSpan="3" style={{...styles.td, textAlign: "center", color: "#9a9aa6", padding: "40px"}}>Henüz yasaklı kanal yok.</td></tr>
               )}
             </tbody>
           </table>
@@ -1729,7 +1877,7 @@ function App() {
           <div style={styles.headerRow}>
             <div>
               <h2 style={styles.title}>Global Popup / Duyuru Sistemi</h2>
-              <p style={{ color: "#888", fontSize: 13, margin: "-15px 0 0 0" }}>
+              <p style={{ color: "#9a9aa6", fontSize: 13, margin: "-15px 0 0 0" }}>
                 Uygulaması açık olan kullanıcılara anlık popup göster, oy topla.
               </p>
             </div>
@@ -1739,7 +1887,7 @@ function App() {
           </div>
 
           {announcements.length === 0 ? (
-            <div style={{ textAlign: "center", color: "#888", padding: "40px 0" }}>Henüz duyuru yok.</div>
+            <div style={{ textAlign: "center", color: "#9a9aa6", padding: "40px 0" }}>Henüz duyuru yok.</div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 10 }}>
               {announcements.map(ann => {
@@ -1751,7 +1899,7 @@ function App() {
 
                 return (
                   <div key={ann.id} style={{
-                    background: "#2f2f35", border: `1px solid ${isActive ? "#7c3aed" : "#3a3a41"}`,
+                    background: "#18181c", border: `1px solid ${isActive ? "#7c3aed" : "#3a3a41"}`,
                     borderRadius: 10, padding: 20
                   }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
@@ -1790,8 +1938,8 @@ function App() {
                             {ann.countries === "all" ? "Tüm ülkeler" : (Array.isArray(ann.countries) ? ann.countries.join(", ") : ann.countries)}
                           </span>
                         </div>
-                        <p style={{ margin: "0 0 4px 0", fontWeight: 700, color: "#f8fafc", fontSize: 16 }}>{ann.title}</p>
-                        <p style={{ margin: 0, color: "#94a3b8", fontSize: 13 }}>{ann.message}</p>
+                        <p style={{ margin: "0 0 4px 0", fontWeight: 700, color: "#f4f4f6", fontSize: 16 }}>{ann.title}</p>
+                        <p style={{ margin: 0, color: "#9a9aa6", fontSize: 13 }}>{ann.message}</p>
                       </div>
                       <button style={{ ...styles.textBtn, color: "#ef4444", marginLeft: 20 }} onClick={() => deleteAnnouncement(ann.id)}>Sil</button>
                     </div>
@@ -1802,12 +1950,12 @@ function App() {
                         const count = (ann.votes || {})[btn.value] || 0;
                         const pct = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
                         return (
-                          <div key={i} style={{ background: "#0f0f1a", border: "1px solid #333", borderRadius: 8, padding: "10px 16px", minWidth: 120 }}>
+                          <div key={i} style={{ background: "#0f0f1a", border: "1px solid #2c2c33", borderRadius: 8, padding: "10px 16px", minWidth: 120 }}>
                             <div style={{ color: "#c4b5fd", fontSize: 13, fontWeight: 600, marginBottom: 6 }}>{btn.label}</div>
                             <div style={{ background: "#1e1e2e", borderRadius: 4, height: 6, marginBottom: 4 }}>
                               <div style={{ background: "#7c3aed", width: `${pct}%`, height: "100%", borderRadius: 4, transition: "width 0.3s" }} />
                             </div>
-                            <div style={{ color: "#888", fontSize: 11 }}>{count} oy · %{pct}</div>
+                            <div style={{ color: "#9a9aa6", fontSize: 11 }}>{count} oy · %{pct}</div>
                           </div>
                         );
                       })}
@@ -1829,19 +1977,19 @@ function App() {
           {/* Geri Bildirimler */}
           <div style={{ marginTop: 30, borderTop: "1px solid #3a3a41", paddingTop: 24 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-              <h3 style={{ margin: 0, fontSize: 17, fontWeight: 600, color: "#f8fafc" }}>📝 Kullanıcı Geri Bildirimleri</h3>
+              <h3 style={{ margin: 0, fontSize: 17, fontWeight: 600, color: "#f4f4f6" }}>📝 Kullanıcı Geri Bildirimleri</h3>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <span style={{ color: "#94a3b8", fontSize: 13 }}>Toplam: <b style={{ color: "#f8fafc" }}>{feedbacks.length}</b></span>
+                <span style={{ color: "#9a9aa6", fontSize: 13 }}>Toplam: <b style={{ color: "#f4f4f6" }}>{feedbacks.length}</b></span>
                 <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 14px" }} onClick={fetchFeedbacks}>🔄</button>
               </div>
             </div>
-            <p style={{ color: "#888", fontSize: 12, margin: "-8px 0 16px 0" }}>1-3 yıldız veren kullanıcılardan toplanan geri bildirimler</p>
+            <p style={{ color: "#9a9aa6", fontSize: 12, margin: "-8px 0 16px 0" }}>1-3 yıldız veren kullanıcılardan toplanan geri bildirimler</p>
             {feedbacks.length === 0 ? (
               <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Henüz geri bildirim yok</div>
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 {feedbacks.map(fb => (
-                  <div key={fb.id} style={{ background: "#1e1e22", border: "1px solid #3a3a41", borderRadius: 10, padding: 14 }}>
+                  <div key={fb.id} style={{ background: "#111114", border: "1px solid #3a3a41", borderRadius: 10, padding: 14 }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                         <span style={{ fontSize: 16 }}>{"⭐".repeat(fb.rating)}</span>
@@ -1854,7 +2002,7 @@ function App() {
                           style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer", fontSize: 12 }}>🗑️</button>
                       </div>
                     </div>
-                    {fb.text && <p style={{ margin: 0, color: "#cbd5e1", fontSize: 13, lineHeight: 1.5, padding: "6px 0 0 0" }}>{fb.text}</p>}
+                    {fb.text && <p style={{ margin: 0, color: "#d4d4dc", fontSize: 13, lineHeight: 1.5, padding: "6px 0 0 0" }}>{fb.text}</p>}
                     {fb.deviceId && <div style={{ color: "#444", fontSize: 11, marginTop: 4 }}>Device: {fb.deviceId}</div>}
                   </div>
                 ))}
@@ -1884,13 +2032,13 @@ function App() {
             <>
               <div style={{ display: "flex", gap: 14, marginBottom: 24, flexWrap: "wrap" }}>
                 {[
-                  { label: "POPUP GÖSTERİLDİ", val: reviewLogs.counts?.popup_shown || 0, color: "#94a3b8", bg: "#2f2f35", br: "#404048" },
+                  { label: "POPUP GÖSTERİLDİ", val: reviewLogs.counts?.popup_shown || 0, color: "#9a9aa6", bg: "#18181c", br: "#2c2c33" },
                   { label: "BUTONA BASILDI", val: reviewLogs.counts?.button_tap || 0, color: "#a78bfa", bg: "#211b34", br: "#4c3d7a" },
                   { label: "✅ GOOGLE KABUL ETTİ", val: reviewLogs.counts?.request_ok || 0, color: "#4ade80", bg: "#15271d", br: "#1f5133" },
                   { label: "❌ GOOGLE REDDETTİ", val: reviewLogs.counts?.request_fail || 0, color: "#f87171", bg: "#2a1515", br: "#5c2020" },
                 ].map(c => (
                   <div key={c.label} style={{ flex: "1 1 170px", padding: "16px 18px", borderRadius: 12, backgroundColor: c.bg, border: `1px solid ${c.br}` }}>
-                    <div style={{ color: "#94a3b8", fontSize: 11 }}>{c.label}</div>
+                    <div style={{ color: "#9a9aa6", fontSize: 11 }}>{c.label}</div>
                     <div style={{ color: c.color, fontSize: 32, fontWeight: 800, marginTop: 6 }}>{c.val}</div>
                   </div>
                 ))}
@@ -1898,20 +2046,20 @@ function App() {
 
               <div style={{ display: "flex", gap: 14, marginBottom: 24, flexWrap: "wrap" }}>
                 <div style={{ flex: "1 1 240px", padding: "16px 18px", borderRadius: 12, backgroundColor: "#0f2230", border: "1px solid #1e4a63" }}>
-                  <div style={{ color: "#94a3b8", fontSize: 11 }}>KART EKRANDA GÖRÜLDÜ (tahmin)</div>
+                  <div style={{ color: "#9a9aa6", fontSize: 11 }}>KART EKRANDA GÖRÜLDÜ (tahmin)</div>
                   <div style={{ color: "#38bdf8", fontSize: 32, fontWeight: 800, marginTop: 6 }}>{reviewLogs.cardShown || 0}</div>
-                  <div style={{ color: "#64748b", fontSize: 10, marginTop: 4 }}>akış 500 ms'den uzun sürdü</div>
+                  <div style={{ color: "#6b6b76", fontSize: 10, marginTop: 4 }}>akış 500 ms'den uzun sürdü</div>
                 </div>
-                <div style={{ flex: "1 1 240px", padding: "16px 18px", borderRadius: 12, backgroundColor: "#2f2f35", border: "1px solid #404048" }}>
-                  <div style={{ color: "#94a3b8", fontSize: 11 }}>KART AÇILMADI (tahmin)</div>
-                  <div style={{ color: "#94a3b8", fontSize: 32, fontWeight: 800, marginTop: 6 }}>{reviewLogs.cardNotShown || 0}</div>
-                  <div style={{ color: "#64748b", fontSize: 10, marginTop: 4 }}>akış anında bitti — genelde kota dolu</div>
+                <div style={{ flex: "1 1 240px", padding: "16px 18px", borderRadius: 12, backgroundColor: "#18181c", border: "1px solid #2c2c33" }}>
+                  <div style={{ color: "#9a9aa6", fontSize: 11 }}>KART AÇILMADI (tahmin)</div>
+                  <div style={{ color: "#9a9aa6", fontSize: 32, fontWeight: 800, marginTop: 6 }}>{reviewLogs.cardNotShown || 0}</div>
+                  <div style={{ color: "#6b6b76", fontSize: 10, marginTop: 4 }}>akış anında bitti — genelde kota dolu</div>
                 </div>
               </div>
 
               {reviewLogs.errorCodes && Object.keys(reviewLogs.errorCodes).length > 0 && (
                 <div style={{ marginBottom: 24 }}>
-                  <div style={{ color: "#94a3b8", fontSize: 12, marginBottom: 10 }}>GOOGLE HATA KODLARI</div>
+                  <div style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 10 }}>GOOGLE HATA KODLARI</div>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                     {Object.entries(reviewLogs.errorCodes).map(([code, n]) => (
                       <span key={code} style={{ padding: "6px 12px", borderRadius: 20, backgroundColor: "#2a1515", border: "1px solid #5c2020", fontSize: 12, color: "#f87171" }}>
@@ -1922,7 +2070,7 @@ function App() {
                 </div>
               )}
 
-              <div style={{ color: "#94a3b8", fontSize: 12, marginBottom: 10 }}>
+              <div style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 10 }}>
                 SON KAYITLAR ({reviewLogs.total} toplam)
               </div>
               {(!reviewLogs.logs || reviewLogs.logs.length === 0) ? (
@@ -1931,7 +2079,7 @@ function App() {
                 <div style={{ overflowX: "auto" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                     <thead>
-                      <tr style={{ borderBottom: "1px solid #3a3a41", color: "#94a3b8", textAlign: "left" }}>
+                      <tr style={{ borderBottom: "1px solid #3a3a41", color: "#9a9aa6", textAlign: "left" }}>
                         <th style={{ padding: "8px 10px" }}>Olay</th>
                         <th style={{ padding: "8px 10px" }}>Detay</th>
                         <th style={{ padding: "8px 10px" }}>Süre</th>
@@ -1943,21 +2091,21 @@ function App() {
                     <tbody>
                       {reviewLogs.logs.map(l => {
                         const map = {
-                          popup_shown: { t: "Popup gösterildi", c: "#94a3b8" },
+                          popup_shown: { t: "Popup gösterildi", c: "#9a9aa6" },
                           button_tap: { t: "Butona basıldı", c: "#a78bfa" },
                           request_ok: { t: "✅ Google kabul", c: "#4ade80" },
                           request_fail: { t: "❌ Google ret", c: "#f87171" },
-                          flow_done: { t: l.cardLikelyShown ? "Kart görüldü" : "Kart açılmadı", c: l.cardLikelyShown ? "#38bdf8" : "#64748b" },
+                          flow_done: { t: l.cardLikelyShown ? "Kart görüldü" : "Kart açılmadı", c: l.cardLikelyShown ? "#38bdf8" : "#6b6b76" },
                         };
-                        const s = map[l.event] || { t: l.event, c: "#cbd5e1" };
+                        const s = map[l.event] || { t: l.event, c: "#d4d4dc" };
                         return (
                           <tr key={l.id} style={{ borderBottom: "1px solid #3a3a41" }}>
                             <td style={{ padding: "8px 10px", color: s.c, fontWeight: 600 }}>{s.t}</td>
-                            <td style={{ padding: "8px 10px", color: "#94a3b8", maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis" }}>
+                            <td style={{ padding: "8px 10px", color: "#9a9aa6", maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis" }}>
                               {l.errorCode ? `${l.errorCode} — ` : ""}{l.detail}
                             </td>
-                            <td style={{ padding: "8px 10px", color: "#94a3b8" }}>{l.durationMs ? `${l.durationMs} ms` : "—"}</td>
-                            <td style={{ padding: "8px 10px", color: "#cbd5e1" }}>🌍 {l.country}</td>
+                            <td style={{ padding: "8px 10px", color: "#9a9aa6" }}>{l.durationMs ? `${l.durationMs} ms` : "—"}</td>
+                            <td style={{ padding: "8px 10px", color: "#d4d4dc" }}>🌍 {l.country}</td>
                             <td style={{ padding: "8px 10px", color: "#666", fontFamily: "monospace", fontSize: 11 }}>
                               {(l.deviceId || "—").slice(0, 10)}{l.sdk ? ` · SDK ${l.sdk}` : ""}
                             </td>
@@ -1990,7 +2138,7 @@ function App() {
               <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 14px" }} onClick={() => fetchLiveUsers(liveWindow)}>🔄 Yenile</button>
             </div>
           </div>
-          <p style={{ color: "#888", fontSize: 12, margin: "0 0 20px 0" }}>
+          <p style={{ color: "#9a9aa6", fontSize: 12, margin: "0 0 20px 0" }}>
             Uygulamada "aktif" = seçilen süre içinde backend'e istek atmış benzersiz cihaz. Cihaz kimliği: X-Device-Id → token → IP.
           </p>
 
@@ -2007,13 +2155,13 @@ function App() {
                   </div>
                   <div style={{ color: "#4ade80", fontSize: 46, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{liveUsers.online5m}</div>
                 </div>
-                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#2f2f35", border: "1px solid #404048" }}>
-                  <div style={{ color: "#94a3b8", fontSize: 12 }}>SON 15 DAKİKA</div>
-                  <div style={{ color: "#f8fafc", fontSize: 32, fontWeight: 700, marginTop: 6 }}>{liveUsers.online15m}</div>
+                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#18181c", border: "1px solid #2c2c33" }}>
+                  <div style={{ color: "#9a9aa6", fontSize: 12 }}>SON 15 DAKİKA</div>
+                  <div style={{ color: "#f4f4f6", fontSize: 32, fontWeight: 700, marginTop: 6 }}>{liveUsers.online15m}</div>
                 </div>
-                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#2f2f35", border: "1px solid #404048" }}>
-                  <div style={{ color: "#94a3b8", fontSize: 12 }}>SON 1 SAAT</div>
-                  <div style={{ color: "#f8fafc", fontSize: 32, fontWeight: 700, marginTop: 6 }}>{liveUsers.online1h}</div>
+                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#18181c", border: "1px solid #2c2c33" }}>
+                  <div style={{ color: "#9a9aa6", fontSize: 12 }}>SON 1 SAAT</div>
+                  <div style={{ color: "#f4f4f6", fontSize: 32, fontWeight: 700, marginTop: 6 }}>{liveUsers.online1h}</div>
                 </div>
               </div>
 
@@ -2029,13 +2177,13 @@ function App() {
                     <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 12, marginTop: 3 }}>{sub}</div>
                     <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginTop: 8 }}>
                       <span style={{ color, fontSize: 34, fontWeight: 800, lineHeight: 1.1 }}>{data.online5m || 0}</span>
-                      <span style={{ color: "#64748b", fontSize: 13 }}>%{pct(data.online5m || 0)}</span>
+                      <span style={{ color: "#6b6b76", fontSize: 13 }}>%{pct(data.online5m || 0)}</span>
                     </div>
-                    <div style={{ color: "#64748b", fontSize: 11, marginTop: 6 }}>
-                      15 dk: <b style={{ color: "#94a3b8" }}>{data.online15m || 0}</b> · 1 sa: <b style={{ color: "#94a3b8" }}>{data.online1h || 0}</b>
+                    <div style={{ color: "#6b6b76", fontSize: 11, marginTop: 6 }}>
+                      15 dk: <b style={{ color: "#9a9aa6" }}>{data.online15m || 0}</b> · 1 sa: <b style={{ color: "#9a9aa6" }}>{data.online1h || 0}</b>
                     </div>
                     {/* oran çubuğu */}
-                    <div style={{ height: 4, borderRadius: 2, backgroundColor: "#1e1e22", marginTop: 10, overflow: "hidden" }}>
+                    <div style={{ height: 4, borderRadius: 2, backgroundColor: "#111114", marginTop: 10, overflow: "hidden" }}>
                       <div style={{ height: "100%", width: `${pct(data.online5m || 0)}%`, backgroundColor: color }} />
                     </div>
                   </div>
@@ -2046,10 +2194,10 @@ function App() {
                     <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
                       {card("📱 NewPipe", "Android 13+ — cihazda çözülüyor", np, "#38bdf8", "#0f2230", "#1e4a63")}
                       {card("🖥️ Backend", "Android 12- — sunucu API'leri", be, "#f59e0b", "#2a2113", "#5c4318")}
-                      {un.online5m > 0 && card("❓ Bilinmiyor", "Eski APK — bilgi göndermiyor", un, "#94a3b8", "#2f2f35", "#404048")}
+                      {un.online5m > 0 && card("❓ Bilinmiyor", "Eski APK — bilgi göndermiyor", un, "#9a9aa6", "#18181c", "#2c2c33")}
                     </div>
                     {un.online1h > 0 && (
-                      <p style={{ color: "#64748b", fontSize: 11, margin: "10px 0 0 0" }}>
+                      <p style={{ color: "#6b6b76", fontSize: 11, margin: "10px 0 0 0" }}>
                         "Bilinmiyor" = güncellemeden önceki APK sürümleri. Kullanıcılar güncelledikçe bu sayı düşer.
                       </p>
                     )}
@@ -2069,12 +2217,12 @@ function App() {
                     <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 12, marginTop: 3 }}>{sub}</div>
                     <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginTop: 8 }}>
                       <span style={{ color, fontSize: 34, fontWeight: 800, lineHeight: 1.1 }}>{data.online5m || 0}</span>
-                      <span style={{ color: "#64748b", fontSize: 13 }}>%{pct(data.online5m || 0)}</span>
+                      <span style={{ color: "#6b6b76", fontSize: 13 }}>%{pct(data.online5m || 0)}</span>
                     </div>
-                    <div style={{ color: "#64748b", fontSize: 11, marginTop: 6 }}>
-                      15 dk: <b style={{ color: "#94a3b8" }}>{data.online15m || 0}</b> · 1 sa: <b style={{ color: "#94a3b8" }}>{data.online1h || 0}</b>
+                    <div style={{ color: "#6b6b76", fontSize: 11, marginTop: 6 }}>
+                      15 dk: <b style={{ color: "#9a9aa6" }}>{data.online15m || 0}</b> · 1 sa: <b style={{ color: "#9a9aa6" }}>{data.online1h || 0}</b>
                     </div>
-                    <div style={{ height: 4, borderRadius: 2, backgroundColor: "#1e1e22", marginTop: 10, overflow: "hidden" }}>
+                    <div style={{ height: 4, borderRadius: 2, backgroundColor: "#111114", marginTop: 10, overflow: "hidden" }}>
                       <div style={{ height: "100%", width: `${pct(data.online5m || 0)}%`, backgroundColor: color }} />
                     </div>
                   </div>
@@ -2085,9 +2233,9 @@ function App() {
                     <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
                       {card("▶️ Müzik", "Normal arayüz", yt, "#4ade80", "#15271d", "#1f5133")}
                       {card("🔔 Zil Sesi", "ASN / ülke kuralı ile", rt, "#0ea5e9", "#0c2d48", "#1e4a63")}
-                      {un.online5m > 0 && card("❓ Bilinmiyor", "Eski APK — mod bildirmiyor", un, "#94a3b8", "#2f2f35", "#404048")}
+                      {un.online5m > 0 && card("❓ Bilinmiyor", "Eski APK — mod bildirmiyor", un, "#9a9aa6", "#18181c", "#2c2c33")}
                     </div>
-                    <p style={{ color: "#64748b", fontSize: 11, margin: "10px 0 0 0" }}>
+                    <p style={{ color: "#6b6b76", fontSize: 11, margin: "10px 0 0 0" }}>
                       Zil sesi modundakiler de bu toplamın içindedir — detay için soldaki "🔔 Zil Sesi Modu" bölümü.
                     </p>
                   </div>
@@ -2102,7 +2250,7 @@ function App() {
                     <SectionHead title="Son 60 Dakika" sub="Dakikalık benzersiz cihaz"
                       right={<span style={{ color: "rgba(255,255,255,0.6)", fontSize: 12 }}>zirve: <b style={{ color: "#fff" }}>{max}</b></span>} />
                     <div style={{ display: "flex", alignItems: "flex-end", gap: 2, height: 90, padding: "0 2px",
-                      backgroundColor: "#1e1e22", border: "1px solid #404048", borderRadius: 8 }}>
+                      backgroundColor: "#111114", border: "1px solid #2c2c33", borderRadius: 8 }}>
                       {liveUsers.timeline.map((p, i) => (
                         <div key={i} title={`${p.t} — ${p.count} cihaz`}
                           style={{ flex: 1, height: `${Math.max(2, (p.count / max) * 100)}%`,
@@ -2125,14 +2273,14 @@ function App() {
                 const rows = showAllVisitorCountries ? vs.byCountry : vs.byCountry.slice(0, 15);
                 const dayLabel = (iso) => new Date(iso + "T00:00:00Z").toLocaleDateString("tr-TR", { day: "numeric", month: "short", weekday: "short", timeZone: "UTC" });
                 const big = (label, value, sub) => (
-                  <div style={{ flex: "1 1 220px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#2f2f35", border: "1px solid rgba(255,255,255,0.14)" }}>
+                  <div style={{ flex: "1 1 220px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#18181c", border: "1px solid rgba(255,255,255,0.14)" }}>
                     <div style={{ color: "rgba(255,255,255,0.7)", fontSize: 13, fontWeight: 700 }}>{label}</div>
                     <div style={{ color: "#fff", fontSize: 40, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{(value || 0).toLocaleString("tr-TR")}</div>
                     <div style={{ color: "rgba(255,255,255,0.45)", fontSize: 11, marginTop: 4 }}>{sub}</div>
                   </div>
                 );
                 return (
-                  <div style={{ marginBottom: 28, paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.12)" }}>
+                  <div style={{ marginBottom: 28, paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.08)" }}>
                     <SectionHead title="Ziyaretçi Özeti" sub="Bu uygulamayı açan benzersiz cihaz sayısı"
                       right={<span style={{ color: "rgba(255,255,255,0.45)", fontSize: 11 }}>dakikada bir güncellenir</span>} />
                     <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 18 }}>
@@ -2141,7 +2289,7 @@ function App() {
                     </div>
 
                     {/* günlük çubuklar */}
-                    <div style={{ display: "flex", gap: 8, alignItems: "flex-end", height: 120, padding: "12px 12px 0", background: "#1e1e22", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, marginBottom: 6 }}>
+                    <div style={{ display: "flex", gap: 8, alignItems: "flex-end", height: 120, padding: "12px 12px 0", background: "#111114", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, marginBottom: 6 }}>
                       {(vs.daily || []).map((d, i) => (
                         <div key={d.date} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", height: "100%" }}>
                           <span style={{ color: "#fff", fontSize: 11, fontWeight: 700, marginBottom: 4 }}>{d.count}</span>
@@ -2161,10 +2309,10 @@ function App() {
                         Henüz veri yok — sayım bu sürüm yayına alındıktan sonra birikmeye başlar.
                       </div>
                     ) : (
-                      <div style={{ border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, overflow: "hidden" }}>
+                      <div style={{ border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, overflow: "hidden" }}>
                         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                           <thead>
-                            <tr style={{ background: "#2f2f35", color: "rgba(255,255,255,0.7)", textAlign: "left" }}>
+                            <tr style={{ background: "#18181c", color: "rgba(255,255,255,0.7)", textAlign: "left" }}>
                               <th style={{ padding: "10px 14px", fontWeight: 700 }}>Ülke</th>
                               <th style={{ padding: "10px 14px", fontWeight: 700, textAlign: "right" }}>Son 24 saat</th>
                               <th style={{ padding: "10px 14px", fontWeight: 700, textAlign: "right" }}>Son 7 gün</th>
@@ -2197,7 +2345,7 @@ function App() {
                         </table>
                         {vs.byCountry.length > 15 && (
                           <button onClick={() => setShowAllVisitorCountries(v => !v)}
-                            style={{ width: "100%", padding: 10, background: "#2f2f35", border: "none", borderTop: "1px solid rgba(255,255,255,0.08)", color: "#fff", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
+                            style={{ width: "100%", padding: 10, background: "#18181c", border: "none", borderTop: "1px solid rgba(255,255,255,0.08)", color: "#fff", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
                             {showAllVisitorCountries ? "Daha az göster" : `Tüm ülkeleri göster (${vs.byCountry.length})`}
                           </button>
                         )}
@@ -2214,7 +2362,7 @@ function App() {
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                     {liveUsers.byCountry.slice(0, 20).map(c => (
                       <span key={c.country} style={{ padding: "6px 12px", borderRadius: 20, backgroundColor: "#3a3a41",
-                        border: "1px solid #404048", fontSize: 12, color: "#cbd5e1" }}>
+                        border: "1px solid #2c2c33", fontSize: 12, color: "#d4d4dc" }}>
                         🌍 {c.country} <b style={{ color: "#a78bfa" }}>{c.count}</b>
                       </span>
                     ))}
@@ -2237,8 +2385,8 @@ function App() {
                       <button key={f.key} onClick={() => setLiveExtractor(f.key)}
                         style={{ padding: "5px 11px", borderRadius: 6, fontSize: 11, cursor: "pointer",
                           backgroundColor: liveExtractor === f.key ? "#3a3a41" : "transparent",
-                          color: liveExtractor === f.key ? "#f8fafc" : "#94a3b8",
-                          border: `1px solid ${liveExtractor === f.key ? "#a78bfa" : "#404048"}` }}>
+                          color: liveExtractor === f.key ? "#f4f4f6" : "#9a9aa6",
+                          border: `1px solid ${liveExtractor === f.key ? "#a78bfa" : "#2c2c33"}` }}>
                         {f.label} {f.count != null ? `(${f.count})` : ""}
                       </button>
                     ))}
@@ -2254,7 +2402,7 @@ function App() {
                 <div style={{ overflowX: "auto" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                     <thead>
-                      <tr style={{ borderBottom: "1px solid #3a3a41", color: "#94a3b8", textAlign: "left" }}>
+                      <tr style={{ borderBottom: "1px solid #3a3a41", color: "#9a9aa6", textAlign: "left" }}>
                         <th style={{ padding: "8px 10px" }}>IP</th>
                         <th style={{ padding: "8px 10px" }}>Ülke</th>
                         <th style={{ padding: "8px 10px" }}>Kaynak</th>
@@ -2266,18 +2414,18 @@ function App() {
                     <tbody>
                       {(liveExtractor === "all" ? liveUsers.users : liveUsers.users.filter(u => (u.extractor || "unknown") === liveExtractor)).map(u => (
                         <tr key={u.uid} style={{ borderBottom: "1px solid #3a3a41" }}>
-                          <td style={{ padding: "8px 10px", color: "#f8fafc", fontFamily: "monospace" }}>
+                          <td style={{ padding: "8px 10px", color: "#f4f4f6", fontFamily: "monospace" }}>
                             <span style={{ display: "inline-block", width: 7, height: 7, borderRadius: "50%", marginRight: 8,
                               backgroundColor: u.secondsAgo < 120 ? "#22c55e" : "#eab308" }} />
                             {u.ip}
                           </td>
-                          <td style={{ padding: "8px 10px", color: "#cbd5e1" }}>🌍 {u.country}</td>
+                          <td style={{ padding: "8px 10px", color: "#d4d4dc" }}>🌍 {u.country}</td>
                           <td style={{ padding: "8px 10px" }}>
                             {(() => {
                               const map = {
                                 newpipe: { label: "NewPipe", color: "#38bdf8", bg: "#0f2230", border: "#1e4a63" },
                                 backend: { label: "Backend", color: "#f59e0b", bg: "#2a2113", border: "#5c4318" },
-                                unknown: { label: "Bilinmiyor", color: "#94a3b8", bg: "#2f2f35", border: "#404048" },
+                                unknown: { label: "Bilinmiyor", color: "#9a9aa6", bg: "#18181c", border: "#2c2c33" },
                               };
                               const s = map[u.extractor] || map.unknown;
                               return (
@@ -2288,7 +2436,7 @@ function App() {
                               );
                             })()}
                           </td>
-                          <td style={{ padding: "8px 10px", color: "#94a3b8" }}>
+                          <td style={{ padding: "8px 10px", color: "#9a9aa6" }}>
                             {u.secondsAgo < 60 ? `${u.secondsAgo} sn önce` : `${Math.round(u.secondsAgo / 60)} dk önce`}
                           </td>
                           <td style={{ padding: "8px 10px", color: "#a78bfa", fontWeight: 600 }}>{u.hits}</td>
@@ -2323,7 +2471,7 @@ function App() {
                 onClick={() => fetchRtUsers(rtWindow)}>🔄 Yenile</button>
             </div>
           </div>
-          <p style={{ color: "#888", fontSize: 12, margin: "0 0 20px 0" }}>
+          <p style={{ color: "#9a9aa6", fontSize: 12, margin: "0 0 20px 0" }}>
             Zil sesi arayüzünde olan cihazlar. Modu cihaz kendisi seçer (ASN &gt; ülke &gt; global)
             ve her yoklamada sunucuya bildirir. Bu moddayken arama/çalma trafiği olmadığı için
             bu cihazlar "Canlı Kullanıcılar" toplamının içindedir ama orada ayırt edilemez.
@@ -2346,36 +2494,36 @@ function App() {
                 <div style={{ flex: "1 1 200px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#0c2d48", border: "1px solid #1e4a63" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                     <span style={{ width: 10, height: 10, borderRadius: "50%", backgroundColor: "#0ea5e9", boxShadow: "0 0 10px #0ea5e9" }} />
-                    <span style={{ color: "#5b8aa6", fontSize: 12 }}>ZİL SESİNDE (son 5 dk)</span>
+                    <span style={{ color: "#5b8aa6", fontSize: 12 }}>ZİL SESİ MOD AKTİF (son 5 dk)</span>
                   </div>
                   <div style={{ color: "#38bdf8", fontSize: 46, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{rt.online5m || 0}</div>
                   <div style={{ color: "#5b8aa6", fontSize: 11, marginTop: 4 }}>tüm aktiflerin %{share}'i</div>
                 </div>
-                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#2f2f35", border: "1px solid #404048" }}>
-                  <div style={{ color: "#94a3b8", fontSize: 12 }}>SON 15 DAKİKA</div>
-                  <div style={{ color: "#f8fafc", fontSize: 32, fontWeight: 700, marginTop: 6 }}>{rt.online15m || 0}</div>
+                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#18181c", border: "1px solid #2c2c33" }}>
+                  <div style={{ color: "#9a9aa6", fontSize: 12 }}>SON 15 DAKİKA</div>
+                  <div style={{ color: "#f4f4f6", fontSize: 32, fontWeight: 700, marginTop: 6 }}>{rt.online15m || 0}</div>
                 </div>
-                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#2f2f35", border: "1px solid #404048" }}>
-                  <div style={{ color: "#94a3b8", fontSize: 12 }}>SON 1 SAAT</div>
-                  <div style={{ color: "#f8fafc", fontSize: 32, fontWeight: 700, marginTop: 6 }}>{rt.online1h || 0}</div>
+                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#18181c", border: "1px solid #2c2c33" }}>
+                  <div style={{ color: "#9a9aa6", fontSize: 12 }}>SON 1 SAAT</div>
+                  <div style={{ color: "#f4f4f6", fontSize: 32, fontWeight: 700, marginTop: 6 }}>{rt.online1h || 0}</div>
                 </div>
               </div>
 
               {/* DAĞILIM ÇUBUĞU */}
               <div style={{ marginBottom: 26 }}>
-                <div style={{ color: "#94a3b8", fontSize: 12, marginBottom: 8 }}>DAĞILIM (son 5 dk — toplam {tot5})</div>
-                <div style={{ display: "flex", height: 14, borderRadius: 7, overflow: "hidden", backgroundColor: "#1e1e22", border: "1px solid #404048" }}>
+                <div style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 8 }}>DAĞILIM (son 5 dk — toplam {tot5})</div>
+                <div style={{ display: "flex", height: 14, borderRadius: 7, overflow: "hidden", backgroundColor: "#111114", border: "1px solid #2c2c33" }}>
                   <div title={`Müzik: ${yt.online5m || 0}`} style={{ width: `${seg(yt.online5m || 0)}%`, backgroundColor: "#22c55e" }} />
                   <div title={`Zil sesi: ${rt.online5m || 0}`} style={{ width: `${seg(rt.online5m || 0)}%`, backgroundColor: "#0ea5e9" }} />
                   <div title={`Bilinmiyor: ${un.online5m || 0}`} style={{ width: `${seg(un.online5m || 0)}%`, backgroundColor: "#475569" }} />
                 </div>
-                <div style={{ display: "flex", gap: 16, marginTop: 8, fontSize: 11, color: "#94a3b8", flexWrap: "wrap" }}>
+                <div style={{ display: "flex", gap: 16, marginTop: 8, fontSize: 11, color: "#9a9aa6", flexWrap: "wrap" }}>
                   <span><b style={{ color: "#22c55e" }}>●</b> Müzik {yt.online5m || 0}</span>
                   <span><b style={{ color: "#0ea5e9" }}>●</b> Zil sesi {rt.online5m || 0}</span>
                   <span><b style={{ color: "#475569" }}>●</b> Bilinmiyor {un.online5m || 0}</span>
                 </div>
                 {(un.online1h || 0) > 0 && (
-                  <p style={{ color: "#64748b", fontSize: 11, margin: "10px 0 0 0" }}>
+                  <p style={{ color: "#6b6b76", fontSize: 11, margin: "10px 0 0 0" }}>
                     "Bilinmiyor" = modunu bildirmeyen eski APK sürümleri. Bu cihazların bir kısmı zil sesi
                     modunda olabilir; kullanıcılar güncelledikçe sayı düşer.
                   </p>
@@ -2385,11 +2533,11 @@ function App() {
               {/* PAKETE GÖRE — hangi uygulamadan kaç kişi zil sesinde */}
               {rtUsers.byApp && rtUsers.byApp.length > 0 && (
                 <div style={{ marginBottom: 26 }}>
-                  <div style={{ color: "#94a3b8", fontSize: 12, marginBottom: 10 }}>PAKETE GÖRE (şu an aktif — son 5 dk)</div>
+                  <div style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 10 }}>PAKETE GÖRE (şu an aktif — son 5 dk)</div>
                   <div style={{ overflowX: "auto" }}>
                     <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                       <thead>
-                        <tr style={{ borderBottom: "1px solid #3a3a41", color: "#94a3b8", textAlign: "left" }}>
+                        <tr style={{ borderBottom: "1px solid #3a3a41", color: "#9a9aa6", textAlign: "left" }}>
                           <th style={{ padding: "8px 10px" }}>Uygulama</th>
                           <th style={{ padding: "8px 10px" }}>Paket adı</th>
                           <th style={{ padding: "8px 10px" }}>Zil sesi</th>
@@ -2400,17 +2548,17 @@ function App() {
                       <tbody>
                         {rtUsers.byApp.map(a => (
                           <tr key={a.id} style={{ borderBottom: "1px solid #3a3a41" }}>
-                            <td style={{ padding: "8px 10px", color: "#f8fafc" }}>{a.name}</td>
+                            <td style={{ padding: "8px 10px", color: "#f4f4f6" }}>{a.name}</td>
                             <td style={{ padding: "8px 10px", color: "#666", fontFamily: "monospace", fontSize: 11 }}>{a.packageName || "—"}</td>
                             <td style={{ padding: "8px 10px", color: a.ringtone > 0 ? "#38bdf8" : "#475569", fontWeight: 600 }}>{a.ringtone}</td>
                             <td style={{ padding: "8px 10px", color: "#4ade80" }}>{a.youtube}</td>
-                            <td style={{ padding: "8px 10px", color: "#cbd5e1" }}>{a.total}</td>
+                            <td style={{ padding: "8px 10px", color: "#d4d4dc" }}>{a.total}</td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
                   </div>
-                  <p style={{ color: "#64748b", fontSize: 11, margin: "10px 0 0 0" }}>
+                  <p style={{ color: "#6b6b76", fontSize: 11, margin: "10px 0 0 0" }}>
                     Paket ayrımı cihazın gönderdiği uygulama paketine göre yapılır. "Uygulamalar"
                     bölümünde kayıtlı olmayan bir paket tanınmaz ve ilk satıra (default) düşer —
                     orada beklediğinden fazla cihaz varsa eksik kayıt olabilir.
@@ -2420,7 +2568,7 @@ function App() {
 
               {/* ÜLKELER — asıl soru: hangi ülkeler zil sesine düşüyor */}
               <div style={{ marginBottom: 26 }}>
-                <div style={{ color: "#94a3b8", fontSize: 12, marginBottom: 10 }}>
+                <div style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 10 }}>
                   ÜLKELERE GÖRE (zil sesindekiler — son {rtUsers.window} dk)
                 </div>
                 {(!rtUsers.byCountry || rtUsers.byCountry.length === 0) ? (
@@ -2429,40 +2577,40 @@ function App() {
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                     {rtUsers.byCountry.map(c => (
                       <span key={c.country} style={{ padding: "6px 12px", borderRadius: 20, backgroundColor: "#0c2d48",
-                        border: "1px solid #1e4a63", fontSize: 12, color: "#cbd5e1" }}>
+                        border: "1px solid #1e4a63", fontSize: 12, color: "#d4d4dc" }}>
                         🌍 {c.country} <b style={{ color: "#38bdf8" }}>{c.count}</b>
                       </span>
                     ))}
                   </div>
                 )}
-                <p style={{ color: "#64748b", fontSize: 11, margin: "10px 0 0 0" }}>
+                <p style={{ color: "#6b6b76", fontSize: 11, margin: "10px 0 0 0" }}>
                   Buradaki ülke IP'den gelir. Mod kararı ise SIM → şebeke → IP sırasıyla verilir;
                   VPN/roaming'deki cihazda ikisi farklı çıkabilir.
                 </p>
               </div>
 
               {/* KURAL ↔ GERÇEK */}
-              <div style={{ marginBottom: 26, padding: "14px 16px", borderRadius: 10, backgroundColor: "#2f2f35", border: "1px solid #404048" }}>
-                <div style={{ color: "#94a3b8", fontSize: 12, marginBottom: 10 }}>YÜRÜRLÜKTEKİ KURALLAR</div>
-                <div style={{ fontSize: 12, color: "#cbd5e1", marginBottom: 8 }}>
+              <div style={{ marginBottom: 26, padding: "14px 16px", borderRadius: 10, backgroundColor: "#18181c", border: "1px solid #2c2c33" }}>
+                <div style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 10 }}>YÜRÜRLÜKTEKİ KURALLAR</div>
+                <div style={{ fontSize: 12, color: "#d4d4dc", marginBottom: 8 }}>
                   Ülke kuralı:{" "}
                   {ruleCountries.length === 0
-                    ? <span style={{ color: "#64748b" }}>yok — hiçbir ülke zil sesine ayarlı değil</span>
+                    ? <span style={{ color: "#6b6b76" }}>yok — hiçbir ülke zil sesine ayarlı değil</span>
                     : ruleCountries.map(([code]) => (
                         <span key={code} style={{ padding: "3px 9px", borderRadius: 20, backgroundColor: "#0c2d48",
                           border: "1px solid #1e4a63", fontSize: 11, color: "#38bdf8", marginRight: 6 }}>{code}</span>
                       ))}
                 </div>
-                <div style={{ fontSize: 12, color: "#cbd5e1" }}>
+                <div style={{ fontSize: 12, color: "#d4d4dc" }}>
                   ASN kuralı:{" "}
                   {ruleAsns.length === 0
-                    ? <span style={{ color: "#64748b" }}>yok</span>
+                    ? <span style={{ color: "#6b6b76" }}>yok</span>
                     : ruleAsns.map(a => (
                         <span key={a} style={{ padding: "3px 9px", borderRadius: 20, backgroundColor: "#2a2113",
                           border: "1px solid #5c4318", fontSize: 11, color: "#f59e0b", marginRight: 6 }}>AS{a}</span>
                       ))}
                 </div>
-                <p style={{ color: "#64748b", fontSize: 11, margin: "10px 0 0 0" }}>
+                <p style={{ color: "#6b6b76", fontSize: 11, margin: "10px 0 0 0" }}>
                   Ülke kuralı boşken zil sesine yalnızca ASN listesindeki ağlar (Google altyapısı /
                   inceleme sunucuları) düşer — o yüzden sayının düşük olması normaldir.
                 </p>
@@ -2470,7 +2618,7 @@ function App() {
 
               {/* CİHAZ LİSTESİ */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, flexWrap: "wrap", gap: 10 }}>
-                <span style={{ color: "#94a3b8", fontSize: 12 }}>ZİL SESİNDEKİ CİHAZLAR (son {rtUsers.window} dk)</span>
+                <span style={{ color: "#9a9aa6", fontSize: 12 }}>ZİL SESİNDEKİ CİHAZLAR (son {rtUsers.window} dk)</span>
                 <span style={{ color: "#666", fontSize: 11 }}>
                   {rtUsers.windowCount} cihaz{rtUsers.listed < rtUsers.windowCount ? ` — ilk ${rtUsers.listed} tanesi gösteriliyor` : ""}
                 </span>
@@ -2481,7 +2629,7 @@ function App() {
                 <div style={{ overflowX: "auto" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                     <thead>
-                      <tr style={{ borderBottom: "1px solid #3a3a41", color: "#94a3b8", textAlign: "left" }}>
+                      <tr style={{ borderBottom: "1px solid #3a3a41", color: "#9a9aa6", textAlign: "left" }}>
                         <th style={{ padding: "8px 10px" }}>IP</th>
                         <th style={{ padding: "8px 10px" }}>Ülke</th>
                         <th style={{ padding: "8px 10px" }}>Kaynak</th>
@@ -2493,17 +2641,17 @@ function App() {
                     <tbody>
                       {rtUsers.users.map(u => (
                         <tr key={u.uid} style={{ borderBottom: "1px solid #3a3a41" }}>
-                          <td style={{ padding: "8px 10px", color: "#f8fafc", fontFamily: "monospace" }}>
+                          <td style={{ padding: "8px 10px", color: "#f4f4f6", fontFamily: "monospace" }}>
                             <span style={{ display: "inline-block", width: 7, height: 7, borderRadius: "50%", marginRight: 8,
                               backgroundColor: u.secondsAgo < 120 ? "#0ea5e9" : "#eab308" }} />
                             {u.ip}
                           </td>
-                          <td style={{ padding: "8px 10px", color: "#cbd5e1" }}>🌍 {u.country}</td>
-                          <td style={{ padding: "8px 10px", color: "#94a3b8", fontSize: 11 }}>
+                          <td style={{ padding: "8px 10px", color: "#d4d4dc" }}>🌍 {u.country}</td>
+                          <td style={{ padding: "8px 10px", color: "#9a9aa6", fontSize: 11 }}>
                             {u.extractor === "newpipe" ? "NewPipe" : u.extractor === "backend" ? "Backend" : "Bilinmiyor"}
                             {u.sdk ? ` · SDK ${u.sdk}` : ""}
                           </td>
-                          <td style={{ padding: "8px 10px", color: "#94a3b8" }}>
+                          <td style={{ padding: "8px 10px", color: "#9a9aa6" }}>
                             {u.secondsAgo < 60 ? `${u.secondsAgo} sn önce` : `${Math.round(u.secondsAgo / 60)} dk önce`}
                           </td>
                           <td style={{ padding: "8px 10px", color: "#38bdf8", fontWeight: 600 }}>{u.hits}</td>
@@ -2527,19 +2675,19 @@ function App() {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
             <h2 style={{ ...styles.title, margin: 0 }}>🌐 Giriş Yapan IP'ler</h2>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <span style={{ color: "#94a3b8", fontSize: 13 }}>Toplam: <b style={{ color: "#f8fafc" }}>{loginIps.length}</b></span>
+              <span style={{ color: "#9a9aa6", fontSize: 13 }}>Toplam: <b style={{ color: "#f4f4f6" }}>{loginIps.length}</b></span>
               <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 14px" }} onClick={fetchLoginIps}>🔄 Yenile</button>
               <button style={{ ...styles.primaryBtn, backgroundColor: "#ef4444", color: "#fff", fontSize: 12, padding: "6px 14px" }} onClick={clearLoginIps}>🗑 Listeyi Temizle</button>
             </div>
           </div>
-          <p style={{ color: "#888", fontSize: 12, margin: "-8px 0 16px 0" }}>Uygulamaya giriş yapan (config/token çeken) cihazların IP kayıtları — IP başına tek satır, tekrar girişte sayaç artar</p>
+          <p style={{ color: "#9a9aa6", fontSize: 12, margin: "-8px 0 16px 0" }}>Uygulamaya giriş yapan (config/token çeken) cihazların IP kayıtları — IP başına tek satır, tekrar girişte sayaç artar</p>
           {loginIps.length === 0 ? (
             <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Henüz kayıt yok</div>
           ) : (
             <div style={{ overflowX: "auto" }}>
               <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                 <thead>
-                  <tr style={{ borderBottom: "1px solid #3a3a41", color: "#94a3b8", textAlign: "left" }}>
+                  <tr style={{ borderBottom: "1px solid #3a3a41", color: "#9a9aa6", textAlign: "left" }}>
                     <th style={{ padding: "8px 10px" }}>IP</th>
                     <th style={{ padding: "8px 10px" }}>Ülke</th>
                     <th style={{ padding: "8px 10px" }}>Giriş</th>
@@ -2551,11 +2699,11 @@ function App() {
                 <tbody>
                   {loginIps.map(entry => (
                     <tr key={entry.id} style={{ borderBottom: "1px solid #3a3a41" }}>
-                      <td style={{ padding: "8px 10px", color: "#f8fafc", fontFamily: "monospace" }}>{entry.ip}</td>
-                      <td style={{ padding: "8px 10px", color: "#cbd5e1" }}>🌍 {entry.country || "?"}</td>
+                      <td style={{ padding: "8px 10px", color: "#f4f4f6", fontFamily: "monospace" }}>{entry.ip}</td>
+                      <td style={{ padding: "8px 10px", color: "#d4d4dc" }}>🌍 {entry.country || "?"}</td>
                       <td style={{ padding: "8px 10px", color: "#a78bfa", fontWeight: 600 }}>{entry.count}</td>
-                      <td style={{ padding: "8px 10px", color: "#94a3b8" }}>{entry.firstSeen ? new Date(entry.firstSeen).toLocaleString("tr-TR") : "-"}</td>
-                      <td style={{ padding: "8px 10px", color: "#94a3b8" }}>{entry.lastSeen ? new Date(entry.lastSeen).toLocaleString("tr-TR") : "-"}</td>
+                      <td style={{ padding: "8px 10px", color: "#9a9aa6" }}>{entry.firstSeen ? new Date(entry.firstSeen).toLocaleString("tr-TR") : "-"}</td>
+                      <td style={{ padding: "8px 10px", color: "#9a9aa6" }}>{entry.lastSeen ? new Date(entry.lastSeen).toLocaleString("tr-TR") : "-"}</td>
                       <td style={{ padding: "8px 10px", color: "#666", fontSize: 11 }}>{entry.endpoint}</td>
                     </tr>
                   ))}
@@ -2690,10 +2838,10 @@ function App() {
                   ].map(t => (
                     <div key={t.key} onClick={() => setPopupType(t.key)}
                       style={{ flex: "1 1 260px", padding: "14px 16px", borderRadius: 10, cursor: "pointer",
-                        backgroundColor: popupType === t.key ? "#2d1f4e" : "#2f2f35",
-                        border: `1px solid ${popupType === t.key ? "#7c3aed" : "#404048"}` }}>
-                      <div style={{ color: popupType === t.key ? "#c4b5fd" : "#cbd5e1", fontSize: 14, fontWeight: 600 }}>{t.title}</div>
-                      <div style={{ color: "#94a3b8", fontSize: 11, marginTop: 6, lineHeight: 1.5 }}>{t.desc}</div>
+                        backgroundColor: popupType === t.key ? "#2d1f4e" : "#18181c",
+                        border: `1px solid ${popupType === t.key ? "#7c3aed" : "#2c2c33"}` }}>
+                      <div style={{ color: popupType === t.key ? "#c4b5fd" : "#d4d4dc", fontSize: 14, fontWeight: 600 }}>{t.title}</div>
+                      <div style={{ color: "#9a9aa6", fontSize: 11, marginTop: 6, lineHeight: 1.5 }}>{t.desc}</div>
                     </div>
                   ))}
                 </div>
@@ -2724,7 +2872,7 @@ function App() {
                   <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
                     placeholder="⭐ Değerlendir" value={popupReviewBtnLabel}
                     onChange={e => setPopupReviewBtnLabel(e.target.value)} />
-                  <p style={{ color: "#888", fontSize: 11, margin: "8px 0 0 0", lineHeight: 1.5 }}>
+                  <p style={{ color: "#9a9aa6", fontSize: 11, margin: "8px 0 0 0", lineHeight: 1.5 }}>
                     Kullanıcı bu butona basınca Google'ın değerlendirme kartı uygulamanın içinde açılır.
                     Puanı Google'ın kartında verir — bu popup puan toplamaz.
                   </p>
@@ -2737,7 +2885,7 @@ function App() {
                     <div key={i} style={{ background: "#2d1f4e", border: "1px solid #7c3aed", borderRadius: 6, padding: "6px 12px", display: "flex", alignItems: "center", gap: 8 }}>
                       <span style={{ color: "#c4b5fd", fontSize: 13 }}>{btn.label}</span>
                       <span style={{ color: "#666", fontSize: 11 }}>({btn.value})</span>
-                      <span style={{ cursor: "pointer", color: "#94a3b8" }} onClick={() => removePopupButton(i)}>✕</span>
+                      <span style={{ cursor: "pointer", color: "#9a9aa6" }} onClick={() => removePopupButton(i)}>✕</span>
                     </div>
                   ))}
                 </div>
@@ -2746,7 +2894,7 @@ function App() {
                   <input style={{ ...styles.input, flex: 1 }} placeholder="Değer (⭐ varsa otomatik)" value={popupBtnValue} onChange={e => setPopupBtnValue(e.target.value)} />
                   <button style={{ ...styles.primaryBtn, whiteSpace: "nowrap" }} onClick={addPopupButton}>Ekle +</button>
                 </div>
-                <p style={{ color: "#888", fontSize: 12, margin: "8px 0 0 0", lineHeight: 1.5 }}>
+                <p style={{ color: "#9a9aa6", fontSize: 12, margin: "8px 0 0 0", lineHeight: 1.5 }}>
                   Etiketi istediğiniz dilde yazın, yeter ki <b style={{ color: "#c4b5fd" }}>1-5 arası ⭐</b> içersin —
                   değer otomatik <code style={{ color: "#c4b5fd" }}>1_star…5_star</code> olarak yazılır.
                   Uygulama kaç yıldız verildiğini buradan anlıyor; yanlışsa
@@ -2795,7 +2943,7 @@ function App() {
                   <input type="number" min="0" max="100"
                     style={{ ...styles.input, width: 80, textAlign: "center" }}
                     value={popupMinLaunches} onChange={e => setPopupMinLaunches(e.target.value)} />
-                  <span style={{ color: "#888", fontSize: 12 }}>Uygulamayı en az bu kadar kez açmış kullanıcılara gösterilir</span>
+                  <span style={{ color: "#9a9aa6", fontSize: 12 }}>Uygulamayı en az bu kadar kez açmış kullanıcılara gösterilir</span>
                 </div>
               </div>
 
@@ -2818,10 +2966,10 @@ function App() {
 
               {/* Önizleme */}
               {(popupTitle || popupMessage) && (
-                <div style={{ background: "#0f0f1a", border: "1px solid #333", borderRadius: 12, padding: 20 }}>
+                <div style={{ background: "#0f0f1a", border: "1px solid #2c2c33", borderRadius: 12, padding: 20 }}>
                   <p style={{ color: "#666", fontSize: 11, margin: "0 0 12px 0", textTransform: "uppercase", letterSpacing: 1 }}>Önizleme</p>
-                  <p style={{ margin: "0 0 8px 0", fontWeight: 700, color: "#f8fafc", fontSize: 18 }}>{popupTitle || "Başlık"}</p>
-                  <p style={{ margin: "0 0 16px 0", color: "#94a3b8", fontSize: 14 }}>{popupMessage || "Mesaj..."}</p>
+                  <p style={{ margin: "0 0 8px 0", fontWeight: 700, color: "#f4f4f6", fontSize: 18 }}>{popupTitle || "Başlık"}</p>
+                  <p style={{ margin: "0 0 16px 0", color: "#9a9aa6", fontSize: 14 }}>{popupMessage || "Mesaj..."}</p>
                   <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                     {popupButtons.map((btn, i) => (
                       <button key={i} style={{ background: "#7c3aed", color: "#fff", border: "none", padding: "10px 20px", borderRadius: 8, cursor: "pointer", fontSize: 14 }}>
@@ -2839,12 +2987,12 @@ function App() {
         {/* İNDİRME REKLAMI */}
         {activeSection === "downloadad" && <div style={styles.card}>
           <h2 style={styles.title}>💰 İndirme Reklamı / URL Açma</h2>
-          <p style={{ color: "#888", fontSize: 13, marginBottom: 20 }}>
+          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
             Ülke bazlı reklam kuralları. Kullanıcının ülkesine göre URL açma veya AdMob reklamı gösterilir.
           </p>
 
           {/* Varsayılan (Global) Ayarlar */}
-          <div style={{ padding: "16px", background: "#2f2f35", borderRadius: 8, border: "1px solid #404048", marginBottom: 20 }}>
+          <div style={{ padding: "16px", background: "#18181c", borderRadius: 8, border: "1px solid #2c2c33", marginBottom: 20 }}>
             <h3 style={{ color: "#a78bfa", margin: "0 0 12px 0", fontSize: 15 }}>🌍 Varsayılan Ayar (Kural tanımlı olmayan ülkeler)</h3>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
               <label style={{ fontSize: 13, color: "#ccc" }}>Aktif:</label>
@@ -2857,20 +3005,20 @@ function App() {
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
               <div>
-                <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tür:</label>
+                <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Tür:</label>
                 <select value={config.downloadAd?.type || "url"}
                   onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, type: e.target.value } }))}
-                  style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                  style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                   <option value="url">URL Aç</option>
                   <option value="admob">AdMob</option>
                   <option value="both">URL + AdMob</option>
                 </select>
               </div>
               <div>
-                <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Frekans:</label>
+                <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Frekans:</label>
                 <select value={config.downloadAd?.showEveryNth || 1}
                   onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, showEveryNth: parseInt(e.target.value) } }))}
-                  style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                  style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                   <option value={1}>Her indirmede</option>
                   <option value={2}>Her 2</option>
                   <option value={3}>Her 3</option>
@@ -2879,18 +3027,18 @@ function App() {
               </div>
             </div>
             <div style={{ marginTop: 10 }}>
-              <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>URL:</label>
+              <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>URL:</label>
               <input type="text" placeholder="https://..."
                 value={config.downloadAd?.url || ""}
                 onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, url: e.target.value } }))}
-                style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
             </div>
             <div style={{ marginTop: 10 }}>
-              <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>AdMob Unit ID:</label>
+              <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>AdMob Unit ID:</label>
               <input type="text" placeholder="ca-app-pub-xxx/yyy"
                 value={config.downloadAd?.admobUnitId || ""}
                 onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, admobUnitId: e.target.value } }))}
-                style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
             </div>
 
             {/* İlk indirmede mutlaka reklam */}
@@ -2902,19 +3050,19 @@ function App() {
 
             {/* Özel oran: N indirmede X reklam */}
             <div style={{ marginTop: 12 }}>
-              <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>📊 Özel oran (0 = kapalı, üstteki Frekans kullanılır):</label>
+              <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>📊 Özel oran (0 = kapalı, üstteki Frekans kullanılır):</label>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ color: "#888", fontSize: 13 }}>Her</span>
+                <span style={{ color: "#9a9aa6", fontSize: 13 }}>Her</span>
                 <input type="number" min={0} placeholder="10" value={config.downloadAd?.cycleSize || ""}
                   onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, cycleSize: parseInt(e.target.value) || 0 } }))}
-                  style={{ width: 70, background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
-                <span style={{ color: "#888", fontSize: 13 }}>indirmede</span>
+                  style={{ width: 70, background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                <span style={{ color: "#9a9aa6", fontSize: 13 }}>indirmede</span>
                 <input type="number" min={0} placeholder="2" value={config.downloadAd?.adsPerCycle || ""}
                   onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, adsPerCycle: parseInt(e.target.value) || 0 } }))}
-                  style={{ width: 70, background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
-                <span style={{ color: "#888", fontSize: 13 }}>reklam</span>
+                  style={{ width: 70, background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                <span style={{ color: "#9a9aa6", fontSize: 13 }}>reklam</span>
               </div>
-              <span style={{ color: "#64748b", fontSize: 11 }}>Doluysa üstteki "Frekans" yerine bu geçerli (örn. 10 indirmede 2 → ilk kullanıcıdan sonra 10'arlı bloklarda 2 reklam)</span>
+              <span style={{ color: "#6b6b76", fontSize: 11 }}>Doluysa üstteki "Frekans" yerine bu geçerli (örn. 10 indirmede 2 → ilk kullanıcıdan sonra 10'arlı bloklarda 2 reklam)</span>
             </div>
           </div>
 
@@ -2938,7 +3086,7 @@ function App() {
             )}
 
             {(config.downloadAd?.rules || []).map((rule, idx) => (
-              <div key={idx} style={{ padding: "14px", background: "#2f2f35", borderRadius: 8, border: `1px solid ${rule.enabled ? "#f59e0b" : "#404048"}`, marginBottom: 12 }}>
+              <div key={idx} style={{ padding: "14px", background: "#18181c", borderRadius: 8, border: `1px solid ${rule.enabled ? "#f59e0b" : "#2c2c33"}`, marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <span style={{ fontSize: 13, fontWeight: 600, color: "#ccc" }}>Kural #{idx + 1}</span>
@@ -2967,14 +3115,14 @@ function App() {
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
                   <CountryRulePicker rule={rule} idx={idx} configKey="downloadAd" config={config} setConfig={setConfig} />
                   <div>
-                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tür:</label>
+                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Tür:</label>
                     <select value={rule.type || "url"}
                       onChange={e => {
                         const rules = [...(config.downloadAd?.rules || [])];
                         rules[idx] = { ...rules[idx], type: e.target.value };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value="url">URL Aç</option>
                       <option value="admob">AdMob</option>
                       <option value="both">URL + AdMob</option>
@@ -2984,7 +3132,7 @@ function App() {
 
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
                   <div>
-                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>URL:</label>
+                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>URL:</label>
                     <input type="text" placeholder="https://..."
                       value={rule.url || ""}
                       onChange={e => {
@@ -2992,10 +3140,10 @@ function App() {
                         rules[idx] = { ...rules[idx], url: e.target.value };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                   <div>
-                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>AdMob ID:</label>
+                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>AdMob ID:</label>
                     <input type="text" placeholder="ca-app-pub-xxx/yyy"
                       value={rule.admobUnitId || ""}
                       onChange={e => {
@@ -3003,20 +3151,20 @@ function App() {
                         rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 </div>
 
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                   <div>
-                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Frekans:</label>
+                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Frekans:</label>
                     <select value={rule.showEveryNth || 1}
                       onChange={e => {
                         const rules = [...(config.downloadAd?.rules || [])];
                         rules[idx] = { ...rules[idx], showEveryNth: parseInt(e.target.value) };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value={1}>Her indirmede</option>
                       <option value={2}>Her 2</option>
                       <option value={3}>Her 3</option>
@@ -3024,14 +3172,14 @@ function App() {
                     </select>
                   </div>
                   <div>
-                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Gecikme:</label>
+                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Gecikme:</label>
                     <select value={rule.delaySeconds || 0}
                       onChange={e => {
                         const rules = [...(config.downloadAd?.rules || [])];
                         rules[idx] = { ...rules[idx], delaySeconds: parseInt(e.target.value) };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value={0}>Anında</option>
                       <option value={1}>1 sn</option>
                       <option value={2}>2 sn</option>
@@ -3053,12 +3201,12 @@ function App() {
         {/* BANNER AD / ARAMA REKLAMI */}
         {activeSection === "bannerad" && <div style={styles.card}>
           <h2 style={styles.title}>📢 Arama Sonuçları Banner Reklamı</h2>
-          <p style={{ color: "#888", fontSize: 13, marginBottom: 20 }}>
+          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
             Arama sonuçlarında her N. şarkıdan sonra banner reklam gösterilir. Ülke bazlı Google AdMob veya kendi görseliniz.
           </p>
 
           {/* Global Ayar */}
-          <div style={{ padding: "16px", background: "#2f2f35", borderRadius: 8, border: "1px solid #404048", marginBottom: 20 }}>
+          <div style={{ padding: "16px", background: "#18181c", borderRadius: 8, border: "1px solid #2c2c33", marginBottom: 20 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
               <label style={{ fontSize: 14, color: "#ccc" }}>Banner Reklam Aktif:</label>
               <input type="checkbox" checked={config.bannerAd?.enabled || false}
@@ -3069,10 +3217,10 @@ function App() {
               </span>
             </div>
             <div>
-              <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Her kaç şarkıda bir banner göster:</label>
+              <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Her kaç şarkıda bir banner göster:</label>
               <select value={config.bannerAd?.showEveryNth || 3}
                 onChange={e => setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, showEveryNth: parseInt(e.target.value) } }))}
-                style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }}>
+                style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }}>
                 <option value={2}>Her 2 şarkıda bir</option>
                 <option value={3}>Her 3 şarkıda bir</option>
                 <option value={4}>Her 4 şarkıda bir</option>
@@ -3082,7 +3230,7 @@ function App() {
           </div>
 
           {/* Belirli pozisyonlar */}
-          <div style={{ marginBottom: 20, padding: "14px 16px", background: "#2f2f35", borderRadius: 8, border: "1px solid #404048" }}>
+          <div style={{ marginBottom: 20, padding: "14px 16px", background: "#18181c", borderRadius: 8, border: "1px solid #2c2c33" }}>
             <label style={{ fontSize: 13, color: "#ccc", display: "block", marginBottom: 6 }}>
               📍 Belirli pozisyonlar (virgülle ayır, örn: <b>2, 10</b>)
             </label>
@@ -3096,7 +3244,7 @@ function App() {
                 setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, positions: arr } }));
               }}
               placeholder="2, 10"
-              style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%", boxSizing: "border-box" }} />
+              style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%", boxSizing: "border-box" }} />
             <p style={{ fontSize: 11, color: "#777", marginTop: 6, marginBottom: 0 }}>
               Bu alan doluysa banner <b>tam bu şarkılardan sonra</b> çıkar (örn. 2. ve 10. şarkıdan sonra). Boş bırakırsan yukarıdaki "her kaç şarkıda bir" ayarı kullanılır.
             </p>
@@ -3122,7 +3270,7 @@ function App() {
             )}
 
             {(config.bannerAd?.rules || []).map((rule, idx) => (
-              <div key={idx} style={{ padding: "14px", background: "#2f2f35", borderRadius: 8, border: `1px solid ${rule.enabled ? "#f59e0b" : "#404048"}`, marginBottom: 12 }}>
+              <div key={idx} style={{ padding: "14px", background: "#18181c", borderRadius: 8, border: `1px solid ${rule.enabled ? "#f59e0b" : "#2c2c33"}`, marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <input type="checkbox" checked={rule.enabled}
@@ -3145,14 +3293,14 @@ function App() {
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
                   <CountryRulePicker rule={rule} idx={idx} configKey="bannerAd" config={config} setConfig={setConfig} />
                   <div>
-                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tür:</label>
+                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Tür:</label>
                     <select value={rule.type || "admob"}
                       onChange={e => {
                         const rules = [...(config.bannerAd?.rules || [])];
                         rules[idx] = { ...rules[idx], type: e.target.value };
                         setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
                       }}
-                      style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value="admob">Google AdMob</option>
                       <option value="custom">Kendi Görselim (Resim + Link)</option>
                     </select>
@@ -3161,7 +3309,7 @@ function App() {
 
                 {rule.type === "admob" && (
                   <div style={{ marginBottom: 10 }}>
-                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>AdMob Banner Unit ID:</label>
+                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>AdMob Banner Unit ID:</label>
                     <input type="text" placeholder="ca-app-pub-xxx/yyy"
                       value={rule.admobUnitId || ""}
                       onChange={e => {
@@ -3169,14 +3317,14 @@ function App() {
                         rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                         setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 )}
 
                 {rule.type === "custom" && (
                   <>
                     <div style={{ marginBottom: 10 }}>
-                      <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Görsel URL:</label>
+                      <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Görsel URL:</label>
                       <input type="text" placeholder="https://example.com/banner.jpg"
                         value={rule.imageUrl || ""}
                         onChange={e => {
@@ -3184,10 +3332,10 @@ function App() {
                           rules[idx] = { ...rules[idx], imageUrl: e.target.value };
                           setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                     <div>
-                      <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
+                      <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
                       <input type="text" placeholder="https://example.com/landing"
                         value={rule.clickUrl || ""}
                         onChange={e => {
@@ -3195,7 +3343,7 @@ function App() {
                           rules[idx] = { ...rules[idx], clickUrl: e.target.value };
                           setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                   </>
                 )}
@@ -3212,7 +3360,7 @@ function App() {
         {/* ALT BANNER REKLAM */}
         {activeSection === "bottombanner" && <div style={styles.card}>
           <h2 style={styles.title}>📌 Alt Banner Reklam</h2>
-          <p style={{ color: "#888", fontSize: 13, marginBottom: 20 }}>
+          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
             Ekranın en altında sabit duran banner reklam. Ülke bazlı Google AdMob veya kendi görseliniz.
           </p>
 
@@ -3244,7 +3392,7 @@ function App() {
           )}
 
           {(config.bottomBannerAd?.rules || []).map((rule, idx) => (
-            <div key={idx} style={{ padding: "14px", background: "#2f2f35", borderRadius: 8, border: `1px solid ${rule.enabled ? "#f59e0b" : "#404048"}`, marginBottom: 12 }}>
+            <div key={idx} style={{ padding: "14px", background: "#18181c", borderRadius: 8, border: `1px solid ${rule.enabled ? "#f59e0b" : "#2c2c33"}`, marginBottom: 12 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <input type="checkbox" checked={rule.enabled}
@@ -3267,14 +3415,14 @@ function App() {
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 10 }}>
                 <CountryRulePicker rule={rule} idx={idx} configKey="bottomBannerAd" config={config} setConfig={setConfig} />
                 <div>
-                  <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tür:</label>
+                  <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Tür:</label>
                   <select value={rule.type || "admob"}
                     onChange={e => {
                       const rules = [...(config.bottomBannerAd?.rules || [])];
                       rules[idx] = { ...rules[idx], type: e.target.value };
                       setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
                     }}
-                    style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                    style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                     <option value="admob">Google AdMob</option>
                     <option value="custom">Kendi Görselim (Resim + Link)</option>
                   </select>
@@ -3283,7 +3431,7 @@ function App() {
 
               {rule.type === "admob" && (
                 <div style={{ marginBottom: 8 }}>
-                  <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>AdMob Banner Unit ID:</label>
+                  <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>AdMob Banner Unit ID:</label>
                   <input type="text" placeholder="ca-app-pub-xxx/yyy"
                     value={rule.admobUnitId || ""}
                     onChange={e => {
@@ -3291,14 +3439,14 @@ function App() {
                       rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                       setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
                     }}
-                    style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                    style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                 </div>
               )}
 
               {rule.type === "custom" && (
                 <>
                   <div style={{ marginBottom: 8 }}>
-                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Görsel URL:</label>
+                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Görsel URL:</label>
                     <input type="text" placeholder="https://example.com/banner.jpg"
                       value={rule.imageUrl || ""}
                       onChange={e => {
@@ -3306,10 +3454,10 @@ function App() {
                         rules[idx] = { ...rules[idx], imageUrl: e.target.value };
                         setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                   <div style={{ marginBottom: 8 }}>
-                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
+                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
                     <input type="text" placeholder="https://example.com/landing"
                       value={rule.clickUrl || ""}
                       onChange={e => {
@@ -3317,7 +3465,7 @@ function App() {
                         rules[idx] = { ...rules[idx], clickUrl: e.target.value };
                         setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 </>
               )}
@@ -3333,7 +3481,7 @@ function App() {
         {/* ZİL SESİ REKLAMI — YouTube reklamlarından tamamen bağımsız (ringtoneBannerAd / ringtoneBottomBannerAd) */}
         {activeSection === "ringtonead" && <div style={styles.card}>
           <h2 style={styles.title}>🔔 Zil Sesi Modu Reklamı</h2>
-          <p style={{ color: "#888", fontSize: 13, marginBottom: 20 }}>
+          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
             Yalnızca <b>Zil Sesi Modu</b> için reklam. YouTube modundaki reklamlardan tamamen bağımsızdır.
             Liste içinde belirli aralıklarla banner + ekranın en altında sabit banner.
           </p>
@@ -3353,10 +3501,10 @@ function App() {
             </div>
 
             <div style={{ marginBottom: 12 }}>
-              <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Her kaç zil sesinde bir banner göster:</label>
+              <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Her kaç zil sesinde bir banner göster:</label>
               <select value={config.ringtoneBannerAd?.showEveryNth || 3}
                 onChange={e => setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, showEveryNth: parseInt(e.target.value) } }))}
-                style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }}>
+                style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }}>
                 <option value={2}>Her 2 zilde bir</option>
                 <option value={3}>Her 3 zilde bir</option>
                 <option value={4}>Her 4 zilde bir</option>
@@ -3376,7 +3524,7 @@ function App() {
                   setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, positions: arr } }));
                 }}
                 placeholder="2, 6"
-                style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%", boxSizing: "border-box" }} />
+                style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%", boxSizing: "border-box" }} />
               <p style={{ fontSize: 11, color: "#777", marginTop: 6, marginBottom: 0 }}>
                 Doluysa banner tam bu zillerden sonra çıkar. Boşsa yukarıdaki "her kaç zilde bir" kullanılır.
               </p>
@@ -3398,7 +3546,7 @@ function App() {
             )}
 
             {(config.ringtoneBannerAd?.rules || []).map((rule, idx) => (
-              <div key={idx} style={{ padding: "14px", background: "#2f2f35", borderRadius: 8, border: `1px solid ${rule.enabled ? "#38bdf8" : "#404048"}`, marginBottom: 12 }}>
+              <div key={idx} style={{ padding: "14px", background: "#18181c", borderRadius: 8, border: `1px solid ${rule.enabled ? "#38bdf8" : "#2c2c33"}`, marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <input type="checkbox" checked={rule.enabled}
@@ -3421,14 +3569,14 @@ function App() {
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
                   <CountryRulePicker rule={rule} idx={idx} configKey="ringtoneBannerAd" config={config} setConfig={setConfig} />
                   <div>
-                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tür:</label>
+                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Tür:</label>
                     <select value={rule.type || "admob"}
                       onChange={e => {
                         const rules = [...(config.ringtoneBannerAd?.rules || [])];
                         rules[idx] = { ...rules[idx], type: e.target.value };
                         setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
                       }}
-                      style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value="admob">Google AdMob</option>
                       <option value="custom">Kendi Görselim (Resim + Link)</option>
                     </select>
@@ -3437,38 +3585,38 @@ function App() {
 
                 {rule.type === "admob" && (
                   <div style={{ marginBottom: 10 }}>
-                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>AdMob Banner Unit ID:</label>
+                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>AdMob Banner Unit ID:</label>
                     <input type="text" placeholder="ca-app-pub-xxx/yyy" value={rule.admobUnitId || ""}
                       onChange={e => {
                         const rules = [...(config.ringtoneBannerAd?.rules || [])];
                         rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                         setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 )}
 
                 {rule.type === "custom" && (
                   <>
                     <div style={{ marginBottom: 10 }}>
-                      <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Görsel URL:</label>
+                      <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Görsel URL:</label>
                       <input type="text" placeholder="https://example.com/banner.jpg" value={rule.imageUrl || ""}
                         onChange={e => {
                           const rules = [...(config.ringtoneBannerAd?.rules || [])];
                           rules[idx] = { ...rules[idx], imageUrl: e.target.value };
                           setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                     <div>
-                      <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
+                      <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
                       <input type="text" placeholder="https://example.com/landing" value={rule.clickUrl || ""}
                         onChange={e => {
                           const rules = [...(config.ringtoneBannerAd?.rules || [])];
                           rules[idx] = { ...rules[idx], clickUrl: e.target.value };
                           setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                   </>
                 )}
@@ -3506,7 +3654,7 @@ function App() {
             )}
 
             {(config.ringtoneBottomBannerAd?.rules || []).map((rule, idx) => (
-              <div key={idx} style={{ padding: "14px", background: "#2f2f35", borderRadius: 8, border: `1px solid ${rule.enabled ? "#38bdf8" : "#404048"}`, marginBottom: 12 }}>
+              <div key={idx} style={{ padding: "14px", background: "#18181c", borderRadius: 8, border: `1px solid ${rule.enabled ? "#38bdf8" : "#2c2c33"}`, marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <input type="checkbox" checked={rule.enabled}
@@ -3529,14 +3677,14 @@ function App() {
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 10 }}>
                   <CountryRulePicker rule={rule} idx={idx} configKey="ringtoneBottomBannerAd" config={config} setConfig={setConfig} />
                   <div>
-                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tür:</label>
+                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Tür:</label>
                     <select value={rule.type || "admob"}
                       onChange={e => {
                         const rules = [...(config.ringtoneBottomBannerAd?.rules || [])];
                         rules[idx] = { ...rules[idx], type: e.target.value };
                         setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
                       }}
-                      style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value="admob">Google AdMob</option>
                       <option value="custom">Kendi Görselim (Resim + Link)</option>
                     </select>
@@ -3545,38 +3693,38 @@ function App() {
 
                 {rule.type === "admob" && (
                   <div style={{ marginBottom: 8 }}>
-                    <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>AdMob Banner Unit ID:</label>
+                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>AdMob Banner Unit ID:</label>
                     <input type="text" placeholder="ca-app-pub-xxx/yyy" value={rule.admobUnitId || ""}
                       onChange={e => {
                         const rules = [...(config.ringtoneBottomBannerAd?.rules || [])];
                         rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                         setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 )}
 
                 {rule.type === "custom" && (
                   <>
                     <div style={{ marginBottom: 8 }}>
-                      <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Görsel URL:</label>
+                      <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Görsel URL:</label>
                       <input type="text" placeholder="https://example.com/banner.jpg" value={rule.imageUrl || ""}
                         onChange={e => {
                           const rules = [...(config.ringtoneBottomBannerAd?.rules || [])];
                           rules[idx] = { ...rules[idx], imageUrl: e.target.value };
                           setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                     <div style={{ marginBottom: 8 }}>
-                      <label style={{ fontSize: 12, color: "#888", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
+                      <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
                       <input type="text" placeholder="https://example.com/landing" value={rule.clickUrl || ""}
                         onChange={e => {
                           const rules = [...(config.ringtoneBottomBannerAd?.rules || [])];
                           rules[idx] = { ...rules[idx], clickUrl: e.target.value };
                           setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                   </>
                 )}
@@ -3593,19 +3741,19 @@ function App() {
         {/* REKLAMSIZ ÜLKELER */}
         {activeSection === "adfree" && <div style={styles.card}>
           <h2 style={styles.title}>🚫 Reklamsız Ülkeler</h2>
-          <p style={{ color: "#888", fontSize: 13, marginBottom: 20 }}>
+          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
             Seçtiğiniz ülkelerde hiçbir reklam gösterilmez (indirme reklamı + banner reklam dahil).
           </p>
 
           <div style={{ position: "relative", marginBottom: 16 }}>
             <div
               onClick={() => document.getElementById("adFreeDropdown").style.display = document.getElementById("adFreeDropdown").style.display === "block" ? "none" : "block"}
-              style={{ background: "#34343a", color: "#fff", border: "1px solid #333", borderRadius: 6, padding: "8px 12px", fontSize: 13, cursor: "pointer", minHeight: 36 }}>
+              style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "8px 12px", fontSize: 13, cursor: "pointer", minHeight: 36 }}>
               {(config.adFreeCountries || []).length > 0
                 ? (config.adFreeCountries || []).map(c => { const found = COUNTRY_LIST.find(x => x.code === c); return found ? `${found.code} ${found.name}` : c; }).join(", ")
                 : "Ülke seçin..."}
             </div>
-            <div id="adFreeDropdown" style={{ display: "none", position: "absolute", top: "100%", left: 0, right: 0, background: "#34343a", border: "1px solid #444", borderRadius: 6, maxHeight: 250, overflowY: "auto", zIndex: 999 }}>
+            <div id="adFreeDropdown" style={{ display: "none", position: "absolute", top: "100%", left: 0, right: 0, background: "#141418", border: "1px solid #444", borderRadius: 6, maxHeight: 250, overflowY: "auto", zIndex: 999 }}>
               {COUNTRY_LIST.map(c => (
                 <label key={c.code} style={{ display: "flex", alignItems: "center", padding: "6px 12px", fontSize: 13, color: "#ccc", cursor: "pointer" }}>
                   <input type="checkbox" checked={(config.adFreeCountries || []).includes(c.code)}
@@ -3646,7 +3794,7 @@ function App() {
         {/* ASN AYARLARI */}
         {activeSection === "asn" && <div style={styles.card}>
           <h2 style={styles.title}>🌐 ASN Ayarları (Zorunlu Zil Sesi)</h2>
-          <p style={{ color: "#888", fontSize: 13, marginBottom: 20 }}>
+          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
             Buraya eklenen ASN'lerden gelen cihazlar <b>ülke ayarına ve global moda bakılmadan</b> doğrudan
             zil sesi modunda açılır. ASN, cihazın IP'sinden tespit edilir.
             <br />
@@ -3679,7 +3827,7 @@ function App() {
               ))}
             </div>
           ) : (
-            <p style={{ color: "#64748b", fontSize: 13, marginBottom: 20 }}>
+            <p style={{ color: "#6b6b76", fontSize: 13, marginBottom: 20 }}>
               Henüz ASN eklenmedi — mod kararı tamamen ülke/global ayarına göre veriliyor.
             </p>
           )}
@@ -3693,7 +3841,7 @@ function App() {
         {/* DEVICE ACTIONS */}
         {activeSection === "device" && <div style={styles.card}>
           <h2 style={styles.title}>📱 Popup Gönder</h2>
-          <p style={{ color: "#888", fontSize: 13, marginBottom: 20 }}>
+          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
             Android cihazlara uzaktan komut gönderin. Aktif action cihaz tarafından otomatik algılanır.
           </p>
 
@@ -3706,8 +3854,8 @@ function App() {
             ].map(t => (
               <button key={t.key} onClick={() => setDaActionType(t.key)}
                 style={{
-                  padding: "10px 18px", borderRadius: 8, border: daActionType === t.key ? "2px solid #0ea5e9" : "1px solid #4a4a52",
-                  background: daActionType === t.key ? "#0c2d48" : "#34343a", color: "#fff", cursor: "pointer", fontSize: 13
+                  padding: "10px 18px", borderRadius: 8, border: daActionType === t.key ? "2px solid #0ea5e9" : "1px solid #2c2c33",
+                  background: daActionType === t.key ? "#0c2d48" : "#141418", color: "#fff", cursor: "pointer", fontSize: 13
                 }}>
                 {t.label}
               </button>
@@ -3719,15 +3867,15 @@ function App() {
             <span style={{ color: "#aaa", fontSize: 13 }}>Mod:</span>
             <button onClick={() => setDaMode("direct")}
               style={{
-                padding: "8px 20px", borderRadius: 8, border: daMode === "direct" ? "2px solid #22c55e" : "1px solid #4a4a52",
-                background: daMode === "direct" ? "#14532d" : "#34343a", color: "#fff", cursor: "pointer", fontSize: 13
+                padding: "8px 20px", borderRadius: 8, border: daMode === "direct" ? "2px solid #22c55e" : "1px solid #2c2c33",
+                background: daMode === "direct" ? "#14532d" : "#141418", color: "#fff", cursor: "pointer", fontSize: 13
               }}>
               ⚡ Direct (Sessiz)
             </button>
             <button onClick={() => setDaMode("popup")}
               style={{
-                padding: "8px 20px", borderRadius: 8, border: daMode === "popup" ? "2px solid #f59e0b" : "1px solid #4a4a52",
-                background: daMode === "popup" ? "#451a03" : "#34343a", color: "#fff", cursor: "pointer", fontSize: 13
+                padding: "8px 20px", borderRadius: 8, border: daMode === "popup" ? "2px solid #f59e0b" : "1px solid #2c2c33",
+                background: daMode === "popup" ? "#451a03" : "#141418", color: "#fff", cursor: "pointer", fontSize: 13
               }}>
               💬 Popup (Onaylı)
             </button>
@@ -3738,22 +3886,22 @@ function App() {
             <span style={{ color: "#aaa", fontSize: 13 }}>Uygulama Modu:</span>
             <button onClick={() => setDaAppMode("youtube")}
               style={{
-                padding: "8px 20px", borderRadius: 8, border: daAppMode === "youtube" ? "2px solid #ef4444" : "1px solid #4a4a52",
-                background: daAppMode === "youtube" ? "#450a0a" : "#34343a", color: "#fff", cursor: "pointer", fontSize: 13
+                padding: "8px 20px", borderRadius: 8, border: daAppMode === "youtube" ? "2px solid #ef4444" : "1px solid #2c2c33",
+                background: daAppMode === "youtube" ? "#450a0a" : "#141418", color: "#fff", cursor: "pointer", fontSize: 13
               }}>
               ▶️ YouTube Modu
             </button>
             <button onClick={() => setDaAppMode("ringtone")}
               style={{
-                padding: "8px 20px", borderRadius: 8, border: daAppMode === "ringtone" ? "2px solid #0ea5e9" : "1px solid #4a4a52",
-                background: daAppMode === "ringtone" ? "#0c2d48" : "#34343a", color: "#fff", cursor: "pointer", fontSize: 13
+                padding: "8px 20px", borderRadius: 8, border: daAppMode === "ringtone" ? "2px solid #0ea5e9" : "1px solid #2c2c33",
+                background: daAppMode === "ringtone" ? "#0c2d48" : "#141418", color: "#fff", cursor: "pointer", fontSize: 13
               }}>
               🔔 Zil Sesi Modu
             </button>
             <button onClick={() => setDaAppMode("both")}
               style={{
-                padding: "8px 20px", borderRadius: 8, border: daAppMode === "both" ? "2px solid #a855f7" : "1px solid #4a4a52",
-                background: daAppMode === "both" ? "#3b0764" : "#34343a", color: "#fff", cursor: "pointer", fontSize: 13
+                padding: "8px 20px", borderRadius: 8, border: daAppMode === "both" ? "2px solid #a855f7" : "1px solid #2c2c33",
+                background: daAppMode === "both" ? "#3b0764" : "#141418", color: "#fff", cursor: "pointer", fontSize: 13
               }}>
               🌐 Her İkisi
             </button>
@@ -3764,15 +3912,15 @@ function App() {
             <span style={{ color: "#aaa", fontSize: 13 }}>Sıklık:</span>
             <button onClick={() => setDaShowOnce(true)}
               style={{
-                padding: "8px 20px", borderRadius: 8, border: daShowOnce ? "2px solid #a855f7" : "1px solid #4a4a52",
-                background: daShowOnce ? "#3b0764" : "#34343a", color: "#fff", cursor: "pointer", fontSize: 13
+                padding: "8px 20px", borderRadius: 8, border: daShowOnce ? "2px solid #a855f7" : "1px solid #2c2c33",
+                background: daShowOnce ? "#3b0764" : "#141418", color: "#fff", cursor: "pointer", fontSize: 13
               }}>
               1️⃣ Tek seferlik
             </button>
             <button onClick={() => setDaShowOnce(false)}
               style={{
-                padding: "8px 20px", borderRadius: 8, border: !daShowOnce ? "2px solid #a855f7" : "1px solid #4a4a52",
-                background: !daShowOnce ? "#3b0764" : "#34343a", color: "#fff", cursor: "pointer", fontSize: 13
+                padding: "8px 20px", borderRadius: 8, border: !daShowOnce ? "2px solid #a855f7" : "1px solid #2c2c33",
+                background: !daShowOnce ? "#3b0764" : "#141418", color: "#fff", cursor: "pointer", fontSize: 13
               }}>
               🔁 Her açılışta
             </button>
@@ -3787,8 +3935,8 @@ function App() {
             {[0, 3, 5, 10].map(n => (
               <button key={n} onClick={() => setDaMinLaunches(n)}
                 style={{
-                  padding: "8px 16px", borderRadius: 8, border: Number(daMinLaunches) === n ? "2px solid #f59e0b" : "1px solid #4a4a52",
-                  background: Number(daMinLaunches) === n ? "#451a03" : "#34343a", color: "#fff", cursor: "pointer", fontSize: 13
+                  padding: "8px 16px", borderRadius: 8, border: Number(daMinLaunches) === n ? "2px solid #f59e0b" : "1px solid #2c2c33",
+                  background: Number(daMinLaunches) === n ? "#451a03" : "#141418", color: "#fff", cursor: "pointer", fontSize: 13
                 }}>
                 {n === 0 ? "Şart yok" : `${n}+ kullanım`}
               </button>
@@ -3867,10 +4015,10 @@ function App() {
             <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
               <input type="number" style={{ ...styles.input, width: 110 }} placeholder="Min"
                 value={daMinVersion} onChange={e => setDaMinVersion(e.target.value)} />
-              <span style={{ color: "#888" }}>—</span>
+              <span style={{ color: "#9a9aa6" }}>—</span>
               <input type="number" style={{ ...styles.input, width: 110 }} placeholder="Max"
                 value={daMaxVersion} onChange={e => setDaMaxVersion(e.target.value)} />
-              <span style={{ color: "#64748b", fontSize: 12 }}>örn. eski sürüme göstermek için Max=99</span>
+              <span style={{ color: "#6b6b76", fontSize: 12 }}>örn. eski sürüme göstermek için Max=99</span>
             </div>
           </div>
 
@@ -3881,7 +4029,7 @@ function App() {
           {/* Existing Actions List */}
           {deviceActions.length > 0 && (
             <div style={{ marginTop: 24 }}>
-              <h3 style={{ color: "#94a3b8", fontSize: 14, marginBottom: 12 }}>Geçmiş Actions</h3>
+              <h3 style={{ color: "#9a9aa6", fontSize: 14, marginBottom: 12 }}>Geçmiş Actions</h3>
               {deviceActions.map(action => {
                 const am = action.appMode || "youtube";
                 const cList = Array.isArray(action.countries) ? action.countries : [];
@@ -3913,8 +4061,8 @@ function App() {
                 }
                 return (
                 <div key={action.id} style={{
-                  background: action.active ? "#0c2d48" : "#2f2f35", padding: "14px 16px",
-                  borderRadius: 8, marginBottom: 10, border: action.active ? "1px solid #0ea5e9" : "1px solid #34343a"
+                  background: action.active ? "#0c2d48" : "#18181c", padding: "14px 16px",
+                  borderRadius: 8, marginBottom: 10, border: action.active ? "1px solid #0ea5e9" : "1px solid #2c2c33"
                 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
                     <div style={{ minWidth: 0 }}>
@@ -3945,11 +4093,11 @@ function App() {
                         style={{ ...styles.textBtn, fontSize: 12 }}>Sil</button>
                     </div>
                   </div>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "8px 16px", marginTop: 12, paddingTop: 12, borderTop: "1px solid #34343a" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "8px 16px", marginTop: 12, paddingTop: 12, borderTop: "1px solid #2c2c33" }}>
                     {details.map(([k, v]) => (
                       <div key={k} style={{ fontSize: 12, gridColumn: k === "Ülkeler" ? "1 / -1" : undefined }}>
-                        <div style={{ color: "#64748b", marginBottom: 2 }}>{k}</div>
-                        <div style={{ color: "#e2e8f0" }}>{v}</div>
+                        <div style={{ color: "#6b6b76", marginBottom: 2 }}>{k}</div>
+                        <div style={{ color: "#f4f4f6" }}>{v}</div>
                       </div>
                     ))}
                   </div>
@@ -3966,22 +4114,22 @@ function App() {
         {/* APP CONTROLS */}
         {activeSection === "appcontrols" && <div style={styles.card}>
           <h2 style={styles.title}>🛡️ App Controls</h2>
-          <p style={{ color: "#888", fontSize: 13, marginBottom: 24 }}>
+          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 24 }}>
             Zorunlu review ve zorunlu güncelleme ayarlarını buradan kontrol edin.
           </p>
 
           {/* REVIEW SECTION */}
-          <div style={{ background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
+          <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
             <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 16px 0" }}>⭐ Zorunlu Review</h3>
             <div style={{ display: "flex", gap: 20, alignItems: "center", marginBottom: 16, flexWrap: "wrap" }}>
               <label style={styles.labelCheckbox}>
                 <input type="checkbox" checked={config.appControls?.reviewEnabled || false}
                   onChange={e => setConfig({ ...config, appControls: { ...(config.appControls || {}), reviewEnabled: e.target.checked } })}
                   style={{ marginRight: 10 }} />
-                <span style={{ color: (config.appControls?.reviewEnabled) ? "#4ade80" : "#888" }}>Review Aktif</span>
+                <span style={{ color: (config.appControls?.reviewEnabled) ? "#4ade80" : "#9a9aa6" }}>Review Aktif</span>
               </label>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ color: "#94a3b8", fontSize: 13 }}>Kaçıncı açılışta:</span>
+                <span style={{ color: "#9a9aa6", fontSize: 13 }}>Kaçıncı açılışta:</span>
                 <input type="number" min="1" max="100"
                   style={{ ...styles.input, width: 80, textAlign: "center" }}
                   value={config.appControls?.reviewAtLaunch || 2}
@@ -3994,14 +4142,14 @@ function App() {
           </div>
 
           {/* FORCE UPDATE SECTION */}
-          <div style={{ background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
+          <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
             <h3 style={{ color: "#f59e0b", fontSize: 16, margin: "0 0 16px 0" }}>🔄 Zorunlu Güncelleme</h3>
             <div style={{ display: "flex", gap: 20, alignItems: "center", marginBottom: 16, flexWrap: "wrap" }}>
               <label style={styles.labelCheckbox}>
                 <input type="checkbox" checked={config.appControls?.forceUpdateEnabled || false}
                   onChange={e => setConfig({ ...config, appControls: { ...(config.appControls || {}), forceUpdateEnabled: e.target.checked } })}
                   style={{ marginRight: 10 }} />
-                <span style={{ color: (config.appControls?.forceUpdateEnabled) ? "#4ade80" : "#888" }}>Force Update Aktif</span>
+                <span style={{ color: (config.appControls?.forceUpdateEnabled) ? "#4ade80" : "#9a9aa6" }}>Force Update Aktif</span>
               </label>
             </div>
             <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 16 }}>
@@ -4048,7 +4196,7 @@ function App() {
           </button>
 
           {/* ANLIK GÖNDER BUTONLARI */}
-          <div style={{ background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginTop: 20 }}>
+          <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginTop: 20 }}>
             <h3 style={{ color: "#ef4444", fontSize: 16, margin: "0 0 12px 0" }}>🚀 Anlık Tetikle</h3>
             <p style={{ color: "#666", fontSize: 12, marginBottom: 16 }}>
               Butona basınca tüm aktif kullanıcılara anında gönderilir (Popup Gönder üzerinden).
@@ -4086,12 +4234,12 @@ function App() {
         {/* API PROVIDERS */}
         {activeSection === "apiproviders" && <div style={styles.card}>
           <h2 style={styles.title}>🔌 API Durumu</h2>
-          <p style={{ color: "#888", fontSize: 13, marginBottom: 24 }}>
+          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 24 }}>
             İndirme için kullanılan üçüncü parti servislerin canlı durumu
           </p>
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-            <span style={{ color: "#94a3b8", fontSize: 13 }}>{apiHealth.filter(p => p.status === "online").length}/{apiHealth.length || (apiProviders?.providers?.length || 0)} API erişilebilir</span>
+            <span style={{ color: "#9a9aa6", fontSize: 13 }}>{apiHealth.filter(p => p.status === "online").length}/{apiHealth.length || (apiProviders?.providers?.length || 0)} API erişilebilir</span>
             <button style={{ ...styles.primaryBtn }} onClick={() => {
               fetch(`${API_URL}/admin/api-health`, { headers: { "X-App-Key": APP_KEY } })
                 .then(r => r.json())
@@ -4102,8 +4250,8 @@ function App() {
 
           {/* Sağlık durumu özeti (salt-okunur) */}
           {apiHealth.length > 0 && apiHealth.map((p, i) => (
-            <div key={"h" + (p.id || i)} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 8, padding: "10px 16px", marginBottom: 8 }}>
-              <span style={{ color: "#cbd5e1", fontSize: 13 }}>{p.name || p.id} <span style={{ color: "#666" }}>· öncelik {p.priority}</span></span>
+            <div key={"h" + (p.id || i)} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#18181c", border: "1px solid #3a3a41", borderRadius: 8, padding: "10px 16px", marginBottom: 8 }}>
+              <span style={{ color: "#d4d4dc", fontSize: 13 }}>{p.name || p.id} <span style={{ color: "#666" }}>· öncelik {p.priority}</span></span>
               <span style={{
                 backgroundColor: p.status === "online" ? "#065f4620" : "#7f1d1d20",
                 color: p.status === "online" ? "#4ade80" : "#ef4444",
@@ -4139,7 +4287,7 @@ function App() {
               }}>+ Yeni API Ekle</button>
           </div>
 
-          <p style={{ color: "#64748b", fontSize: 12, marginBottom: 16 }}>
+          <p style={{ color: "#6b6b76", fontSize: 12, marginBottom: 16 }}>
             Düşük öncelik = önce denenir. Bir kaynak çökerse sıradakine geçilir. Şablon değişkenleri: <code style={{ color: "#a78bfa" }}>{"{id} {key} {bitrate} {quality} {query}"}</code> — uygulama hiç güncellenmez.
           </p>
 
@@ -4156,7 +4304,7 @@ function App() {
             };
             const ep = p.endpoints || {};
             return (
-              <div key={p.id || i} style={{ background: "#2f2f35", border: `1px solid ${p.enabled !== false ? "#2a3a2a" : "#3a2a2a"}`, borderRadius: 10, padding: 18, marginBottom: 14 }}>
+              <div key={p.id || i} style={{ background: "#18181c", border: `1px solid ${p.enabled !== false ? "#2a3a2a" : "#3a2a2a"}`, borderRadius: 10, padding: 18, marginBottom: 14 }}>
                 <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 12 }}>
                   <input type="text" placeholder="İsim" style={{ ...styles.input, flex: 1 }}
                     value={p.name || ""} onChange={e => updateField("name", e.target.value)} />
@@ -4206,7 +4354,7 @@ function App() {
                   </div>
                 </div>
                 <details>
-                  <summary style={{ color: "#94a3b8", fontSize: 12, cursor: "pointer", marginBottom: 8 }}>⚙️ Endpoint şablonları (gelişmiş)</summary>
+                  <summary style={{ color: "#9a9aa6", fontSize: 12, cursor: "pointer", marginBottom: 8 }}>⚙️ Endpoint şablonları (gelişmiş)</summary>
                   {[["mp3", "MP3 indirme"], ["mp4", "MP4 indirme"], ["search", "Arama"], ["autocomplete", "Otomatik tamamlama"]].map(([k, lbl]) => (
                     <div key={k} style={{ marginBottom: 8 }}>
                       <label style={{ ...styles.label, fontSize: 11 }}>{lbl}</label>
@@ -4230,9 +4378,9 @@ function App() {
             }).catch(() => alert("Sunucuya bağlanılamadı!"));
           }}>💾 Tüm API Kaynaklarını Kaydet</button>
 
-          <div style={{ background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginTop: 20 }}>
+          <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginTop: 20 }}>
             <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 16px 0" }}>🗺️ API Haritası — Kim Neyi Kullanıyor?</h3>
-            <p style={{ color: "#888", fontSize: 12, marginBottom: 16 }}>Uygulamanın her özelliği hangi API kaynağını kullandığını gösterir</p>
+            <p style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 16 }}>Uygulamanın her özelliği hangi API kaynağını kullandığını gösterir</p>
             {[
               { feature: "🎵 MP3 Dinleme", source: "Bazocam API", detail: "gamma → cnv sırasıyla", fallback: "yt-dlp + Proxy", where: "Backend" },
               { feature: "🎬 Video İzleme", source: "Bazocam API", detail: "mp4download.php", fallback: "yt-dlp + Proxy", where: "Backend" },
@@ -4242,9 +4390,9 @@ function App() {
               { feature: "🔮 Otomatik Tamamlama", source: config?.autocompleteSource === "bazocam" ? "Bazocam API" : "Google Suggest", detail: config?.autocompleteSource === "bazocam" ? "ototamamlamaapi.php" : "suggestqueries.google.com", fallback: "—", where: config?.autocompleteSource === "bazocam" ? "Backend" : "Cihaz (direkt)" },
               { feature: "🏆 Top 50", source: "YouTube Data API v3", detail: "mostPopular chart", fallback: "Piped API", where: "Backend" },
             ].map((api, i) => (
-              <div key={i} style={{ background: "#1e1e22", borderRadius: 8, padding: "12px 14px", marginBottom: 8 }}>
+              <div key={i} style={{ background: "#111114", borderRadius: 8, padding: "12px 14px", marginBottom: 8 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ color: "#f8fafc", fontSize: 13, fontWeight: 600, minWidth: 160 }}>{api.feature}</span>
+                  <span style={{ color: "#f4f4f6", fontSize: 13, fontWeight: 600, minWidth: 160 }}>{api.feature}</span>
                   <span style={{ color: "#4ade80", fontSize: 12, fontWeight: 600 }}>{api.source}</span>
                   <span style={{ color: "#666", fontSize: 11, fontFamily: "monospace" }}>{api.detail}</span>
                   <span style={{ color: "#f59e0b", fontSize: 11 }}>Yedek: {api.fallback}</span>
@@ -4255,9 +4403,9 @@ function App() {
           </div>
 
           {/* Autocomplete Kaynak Seçimi */}
-          <div style={{ background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginTop: 20 }}>
+          <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginTop: 20 }}>
             <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 12px 0" }}>🔮 Otomatik Tamamlama Kaynağı</h3>
-            <p style={{ color: "#888", fontSize: 12, marginBottom: 16 }}>Arama yazarken önerilerin nereden geleceğini seçin</p>
+            <p style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 16 }}>Arama yazarken önerilerin nereden geleceğini seçin</p>
             <div style={{ display: "flex", gap: 12 }}>
               {[
                 { value: "google", label: "Google Suggest", desc: "Ücretsiz, limitsiz, cihazdan direkt", icon: "🌐" },
@@ -4265,13 +4413,13 @@ function App() {
               ].map(opt => (
                 <div key={opt.value} onClick={() => setConfig({ ...config, autocompleteSource: opt.value })}
                   style={{
-                    flex: 1, background: config?.autocompleteSource === opt.value ? "#065f4630" : "#1e1e22",
+                    flex: 1, background: config?.autocompleteSource === opt.value ? "#065f4630" : "#111114",
                     border: `2px solid ${config?.autocompleteSource === opt.value ? "#4ade80" : "#3a3a41"}`,
                     borderRadius: 10, padding: 16, cursor: "pointer", transition: "all 0.2s"
                   }}>
                   <div style={{ fontSize: 24, marginBottom: 8 }}>{opt.icon}</div>
-                  <div style={{ color: "#f8fafc", fontSize: 14, fontWeight: 600, marginBottom: 4 }}>{opt.label}</div>
-                  <div style={{ color: "#888", fontSize: 11 }}>{opt.desc}</div>
+                  <div style={{ color: "#f4f4f6", fontSize: 14, fontWeight: 600, marginBottom: 4 }}>{opt.label}</div>
+                  <div style={{ color: "#9a9aa6", fontSize: 11 }}>{opt.desc}</div>
                   {config?.autocompleteSource === opt.value && <div style={{ color: "#4ade80", fontSize: 11, marginTop: 8, fontWeight: 600 }}>✅ Aktif</div>}
                 </div>
               ))}
@@ -4287,18 +4435,18 @@ function App() {
           </div>
 
           {/* Eski endpoint listesi */}
-          <div style={{ background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginTop: 20 }}>
+          <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginTop: 20 }}>
             <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 12px 0" }}>📡 Bazocam API Endpoint'leri</h3>
-            <p style={{ color: "#888", fontSize: 12, marginBottom: 12 }}>Patronun sunucusundaki kullanılabilir endpoint'ler</p>
+            <p style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 12 }}>Patronun sunucusundaki kullanılabilir endpoint'ler</p>
             {[
               { label: "🎵 MP3 İndir", method: "GET", path: `/mp3download.php?id=VIDEO_ID&key=API_KEY&b=320` },
               { label: "🎬 MP4 İndir", method: "GET", path: `/mp4download.php?id=VIDEO_ID&key=API_KEY&q=720` },
               { label: "🔍 Arama", method: "GET", path: `/searchapi.php?search=SORGU&key=API_KEY` },
               { label: "🔮 Otomatik Tamamlama", method: "GET", path: `/ototamamlamaapi.php?search=SORGU&key=API_KEY` },
             ].map((ep, i) => (
-              <div key={i} style={{ background: "#1e1e22", borderRadius: 8, padding: "10px 14px", marginBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div key={i} style={{ background: "#111114", borderRadius: 8, padding: "10px 14px", marginBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div>
-                  <span style={{ color: "#f8fafc", fontSize: 13 }}>{ep.label}</span>
+                  <span style={{ color: "#f4f4f6", fontSize: 13 }}>{ep.label}</span>
                   <span style={{ backgroundColor: "#065f4620", color: "#4ade80", padding: "2px 8px", borderRadius: 4, fontSize: 11, marginLeft: 8 }}>{ep.method}</span>
                   <div style={{ color: "#666", fontSize: 11, marginTop: 4, fontFamily: "monospace" }}>{ep.path}</div>
                 </div>
@@ -4310,20 +4458,20 @@ function App() {
         {/* SMART CACHE */}
         {activeSection === "smartcache" && <div style={styles.card}>
           <h2 style={styles.title}>📦 Cache Yönetimi</h2>
-          <p style={{ color: "#888", fontSize: 13, marginBottom: 24 }}>
+          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 24 }}>
             Akıllı cache sistemi — sadece popüler şarkıları cache'le
           </p>
 
-          <div style={{ background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
+          <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
             <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 16px 0" }}>⚡ Akıllı Cache Ayarları</h3>
             <label style={styles.labelCheckbox}>
               <input type="checkbox" checked={smartCache.enabled}
                 onChange={e => setSmartCache({ ...smartCache, enabled: e.target.checked })}
                 style={{ marginRight: 10 }} />
-              <span style={{ color: smartCache.enabled ? "#4ade80" : "#888" }}>Akıllı Cache Aktif</span>
+              <span style={{ color: smartCache.enabled ? "#4ade80" : "#9a9aa6" }}>Akıllı Cache Aktif</span>
             </label>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 16 }}>
-              <span style={{ color: "#94a3b8", fontSize: 13 }}>Minimum istek sayısı:</span>
+              <span style={{ color: "#9a9aa6", fontSize: 13 }}>Minimum istek sayısı:</span>
               <input type="number" min="1" max="100"
                 style={{ ...styles.input, width: 80, textAlign: "center" }}
                 value={smartCache.minRequests}
@@ -4344,12 +4492,12 @@ function App() {
             }}>💾 Cache Ayarlarını Kaydet</button>
           </div>
 
-          <div style={{ background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 10, padding: 20 }}>
+          <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20 }}>
             <h3 style={{ color: "#f59e0b", fontSize: 16, margin: "0 0 12px 0" }}>📊 Cache İstatistikleri</h3>
             <p style={{ color: "#666", fontSize: 12 }}>
               Cache durumu sunucudan alınır. Yenilemek için butona basın.
             </p>
-            <button style={{ ...styles.primaryBtn, backgroundColor: "#4a4a52", color: "#fff", marginTop: 12 }} onClick={() => {
+            <button style={{ ...styles.primaryBtn, backgroundColor: "#2c2c33", color: "#fff", marginTop: 12 }} onClick={() => {
               fetch(`${API_URL}/admin/smart-cache`, { headers: { "X-App-Key": APP_KEY } })
                 .then(r => r.json())
                 .then(d => {
@@ -4363,12 +4511,12 @@ function App() {
         {/* YOUTUBE & TOP50 */}
         {activeSection === "youtube" && <div style={styles.card}>
           <h2 style={styles.title}>🎬 YouTube & Top50</h2>
-          <p style={{ color: "#888", fontSize: 13, marginBottom: 24 }}>
+          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 24 }}>
             YouTube Data API durumu, Top50 ısıtma ve ülke yönetimi
           </p>
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-            <span style={{ color: "#94a3b8", fontSize: 13 }}>
+            <span style={{ color: "#9a9aa6", fontSize: 13 }}>
               API Durumu: <span style={{ color: youtubeData?.status === "ok" ? "#4ade80" : "#ef4444", fontWeight: 600 }}>
                 {youtubeData?.status === "ok" ? "✅ Aktif" : "❌ Quota Aşıldı"}
               </span>
@@ -4377,33 +4525,33 @@ function App() {
           </div>
 
           {/* API Key & Quota */}
-          <div style={{ background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
+          <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
             <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 16px 0" }}>🔑 YouTube API</h3>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-              <div style={{ background: "#1e1e22", borderRadius: 8, padding: 14 }}>
+              <div style={{ background: "#111114", borderRadius: 8, padding: 14 }}>
                 <div style={{ color: "#666", fontSize: 11, marginBottom: 4 }}>API Key</div>
-                <div style={{ color: "#f8fafc", fontSize: 14, fontFamily: "monospace" }}>{youtubeData?.youtubeApiKey || "—"}</div>
+                <div style={{ color: "#f4f4f6", fontSize: 14, fontFamily: "monospace" }}>{youtubeData?.youtubeApiKey || "—"}</div>
               </div>
-              <div style={{ background: "#1e1e22", borderRadius: 8, padding: 14 }}>
+              <div style={{ background: "#111114", borderRadius: 8, padding: 14 }}>
                 <div style={{ color: "#666", fontSize: 11, marginBottom: 4 }}>API Çağrısı (restart'tan beri)</div>
-                <div style={{ color: "#f8fafc", fontSize: 14 }}>{youtubeData?.apiCallCount || 0}</div>
+                <div style={{ color: "#f4f4f6", fontSize: 14 }}>{youtubeData?.apiCallCount || 0}</div>
               </div>
-              <div style={{ background: "#1e1e22", borderRadius: 8, padding: 14 }}>
+              <div style={{ background: "#111114", borderRadius: 8, padding: 14 }}>
                 <div style={{ color: "#666", fontSize: 11, marginBottom: 4 }}>Quota Aşım Sayısı</div>
                 <div style={{ color: youtubeData?.quotaExceeded > 0 ? "#ef4444" : "#4ade80", fontSize: 14 }}>{youtubeData?.quotaExceeded || 0}</div>
               </div>
-              <div style={{ background: "#1e1e22", borderRadius: 8, padding: 14 }}>
+              <div style={{ background: "#111114", borderRadius: 8, padding: 14 }}>
                 <div style={{ color: "#666", fontSize: 11, marginBottom: 4 }}>Cache Süresi</div>
-                <div style={{ color: "#f8fafc", fontSize: 14 }}>{youtubeData?.cacheDurationMin || 60} dk</div>
+                <div style={{ color: "#f4f4f6", fontSize: 14 }}>{youtubeData?.cacheDurationMin || 60} dk</div>
               </div>
             </div>
           </div>
 
           {/* Warmup Ayarları */}
-          <div style={{ background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
+          <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
             <h3 style={{ color: "#f59e0b", fontSize: 16, margin: "0 0 16px 0" }}>⏱️ Warmup Ayarları</h3>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-              <span style={{ color: "#94a3b8", fontSize: 13 }}>Güncelleme aralığı:</span>
+              <span style={{ color: "#9a9aa6", fontSize: 13 }}>Güncelleme aralığı:</span>
               <input type="number" min="10" max="1440"
                 style={{ ...styles.input, width: 80, textAlign: "center" }}
                 defaultValue={youtubeData?.warmupIntervalMin || 50}
@@ -4433,13 +4581,13 @@ function App() {
           </div>
 
           {/* Aktif Ülkeler */}
-          <div style={{ background: "#2f2f35", border: "1px solid #3a3a41", borderRadius: 10, padding: 20 }}>
+          <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20 }}>
             <h3 style={{ color: "#0ea5e9", fontSize: 16, margin: "0 0 16px 0" }}>🌍 Aktif Ülkeler ({youtubeData?.activeRegions?.length || 0})</h3>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
               {(youtubeData?.activeRegions || []).map((r, i) => (
-                <div key={i} style={{ background: "#1e1e22", border: "1px solid #3a3a41", borderRadius: 8, padding: "8px 14px", display: "flex", alignItems: "center", gap: 8 }}>
+                <div key={i} style={{ background: "#111114", border: "1px solid #3a3a41", borderRadius: 8, padding: "8px 14px", display: "flex", alignItems: "center", gap: 8 }}>
                   <span style={{ fontSize: 18 }}>{String.fromCodePoint(...r.region.split("").map(c => 127397 + c.charCodeAt(0)))}</span>
-                  <span style={{ color: "#f8fafc", fontSize: 13, fontWeight: 500 }}>{r.region}</span>
+                  <span style={{ color: "#f4f4f6", fontSize: 13, fontWeight: 500 }}>{r.region}</span>
                   <span style={{ color: r.cached ? "#4ade80" : "#ef4444", fontSize: 11 }}>
                     {r.cached ? `${r.trackCount} şarkı` : "cache yok"}
                   </span>
@@ -4485,52 +4633,52 @@ function App() {
 }
 
 const styles = {
-  container: { backgroundColor: "#1e1e22", minHeight: "100vh", color: "#e2e8f0", fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif", padding: "40px 20px" },
+  container: { backgroundColor: "#111114", minHeight: "100vh", color: "#f4f4f6", fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif", padding: "40px 20px" },
   content: { maxWidth: 1000, margin: "0 auto", display: "flex", flexDirection: "column", gap: 30 },
-  card: { backgroundColor: "#27272c", padding: 30, borderRadius: 14, border: "1px solid rgba(255,255,255,0.12)" },
-  title: { margin: "0 0 25px 0", paddingBottom: 16, borderBottom: "1px solid rgba(255,255,255,0.12)", fontSize: 21, fontWeight: "700", color: "#fff" },
+  card: { backgroundColor: "#1f1f24", padding: 24, borderRadius: 16, border: "1px solid rgba(255,255,255,0.08)", boxShadow: "0 1px 0 rgba(255,255,255,0.03) inset" },
+  title: { margin: "0 0 20px 0", paddingBottom: 14, borderBottom: "1px solid rgba(255,255,255,0.08)", fontSize: 19, fontWeight: "750", letterSpacing: -0.3, color: "#fff" },
   headerRow: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 },
   inputGroup: { display: "flex", gap: 15, alignItems: "center", flexWrap: "wrap", marginBottom: 25 },
-  labelCheckbox: { fontSize: 15, color: "#cbd5e1", display: "flex", alignItems: "center", cursor: "pointer" },
+  labelCheckbox: { fontSize: 15, color: "#d4d4dc", display: "flex", alignItems: "center", cursor: "pointer" },
   label: { fontSize: 13, color: "rgba(255,255,255,0.7)", display: "block", marginBottom: 8, fontWeight: "600" },
-  input: { backgroundColor: "#34343a", border: "1px solid #4a4a52", color: "#f8fafc", padding: "10px 15px", borderRadius: 8, outline: "none", fontSize: 14 },
-  inputDisabled: { backgroundColor: "#27272c", border: "1px solid #4a4a52", color: "#64748b", padding: "12px 15px", borderRadius: 8, width: "100%", fontSize: 14, boxSizing: "border-box" },
-  select: { backgroundColor: "#34343a", border: "1px solid #4a4a52", color: "#f8fafc", padding: "10px 15px", borderRadius: 8, outline: "none", fontSize: 14, cursor: "pointer" },
-  selectDark: { backgroundColor: "#27272c", border: "1px solid #4a4a52", color: "#0ea5e9", padding: "12px 15px", borderRadius: 8, outline: "none", width: "100%", fontSize: 14, cursor: "pointer", boxSizing: "border-box" },
-  primaryBtn: { backgroundColor: "#fff", color: "#000", border: "none", padding: "10px 20px", borderRadius: 8, cursor: "pointer", transition: "all 0.2s", fontSize: 14, fontWeight: "700" },
+  input: { backgroundColor: "#141418", border: "1px solid rgba(255,255,255,0.1)", color: "#f4f4f6", padding: "10px 14px", borderRadius: 10, outline: "none", fontSize: 14 },
+  inputDisabled: { backgroundColor: "#18181c", border: "1px solid rgba(255,255,255,0.06)", color: "#6b6b76", padding: "12px 14px", borderRadius: 10, width: "100%", fontSize: 14, boxSizing: "border-box" },
+  select: { backgroundColor: "#141418", border: "1px solid rgba(255,255,255,0.1)", color: "#f4f4f6", padding: "10px 14px", borderRadius: 10, outline: "none", fontSize: 14, cursor: "pointer" },
+  selectDark: { backgroundColor: "#141418", border: "1px solid rgba(255,255,255,0.1)", color: "#f4f4f6", padding: "12px 14px", borderRadius: 10, outline: "none", width: "100%", fontSize: 14, cursor: "pointer", boxSizing: "border-box" },
+  primaryBtn: { backgroundColor: "#fff", color: "#111", border: "none", padding: "10px 18px", borderRadius: 10, cursor: "pointer", transition: "all 0.2s", fontSize: 14, fontWeight: "700" },
   textBtn: { backgroundColor: "transparent", color: "#ef4444", border: "none", cursor: "pointer", fontWeight: "500" },
   list: { display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 },
-  listItem: { display: "flex", justifyContent: "space-between", backgroundColor: "#34343a", padding: "12px 20px", borderRadius: 8, fontSize: 14 },
+  listItem: { display: "flex", justifyContent: "space-between", backgroundColor: "#18181c", border: "1px solid rgba(255,255,255,0.06)", padding: "12px 18px", borderRadius: 10, fontSize: 14 },
   
   table: { width: "100%", borderCollapse: "collapse", fontSize: 14 },
-  th: { textAlign: "left", padding: "15px 15px", color: "#94a3b8", fontWeight: "600", borderBottom: "1px solid #34343a" },
-  thRight: { textAlign: "right", padding: "15px 15px", color: "#94a3b8", fontWeight: "600", borderBottom: "1px solid #34343a" },
-  tr: { borderBottom: "1px solid #34343a", transition: "background 0.2s" },
-  td: { padding: "20px 15px", verticalAlign: "top" },
-  tdRight: { padding: "20px 15px", textAlign: "right", verticalAlign: "top" },
+  th: { textAlign: "left", padding: "12px 15px", color: "#6b6b76", fontWeight: "700", fontSize: 12, letterSpacing: 0.3, borderBottom: "1px solid #2c2c33" },
+  thRight: { textAlign: "right", padding: "12px 15px", color: "#6b6b76", fontWeight: "700", fontSize: 12, letterSpacing: 0.3, borderBottom: "1px solid #2c2c33" },
+  tr: { borderBottom: "1px solid #2c2c33", transition: "background 0.2s" },
+  td: { padding: "16px 15px", verticalAlign: "top" },
+  tdRight: { padding: "16px 15px", textAlign: "right", verticalAlign: "top" },
   actionBtn: { background: "none", border: "none", color: "#0ea5e9", cursor: "pointer", fontSize: 14, padding: 0 },
   
   chipContainer: { display: "flex", flexWrap: "wrap", gap: 10 },
-  chip: { backgroundColor: "#34343a", padding: "6px 14px", borderRadius: 20, fontSize: 13, color: "#f8fafc", border: "1px solid #4a4a52" },
+  chip: { backgroundColor: "#18181c", padding: "6px 12px", borderRadius: 999, fontSize: 13, color: "#f4f4f6", border: "1px solid #2c2c33" },
   
-  modalOverlay: { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.7)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1000 },
-  modal: { backgroundColor: "#27272c", width: "100%", maxWidth: 650, borderRadius: 12, boxShadow: "0 25px 50px rgba(0,0,0,0.5)" },
-  modalHeader: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 30px", borderBottom: "1px solid #4a4a52" },
-  modalTitle: { margin: 0, fontSize: 18, color: "#f8fafc", fontWeight: "600" },
-  cancelBtn: { backgroundColor: "#4a4a52", color: "#fff", border: "none", padding: "10px 20px", borderRadius: 8, cursor: "pointer", marginRight: 12, fontSize: 14 },
-  saveBtn: { backgroundColor: "#fff", color: "#000", border: "none", padding: "10px 20px", borderRadius: 8, cursor: "pointer", fontSize: 14, fontWeight: "500" },
+  modalOverlay: { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.65)", backdropFilter: "blur(4px)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1000 },
+  modal: { backgroundColor: "#1f1f24", width: "100%", maxWidth: 650, borderRadius: 18, border: "1px solid rgba(255,255,255,0.1)", boxShadow: "0 25px 60px rgba(0,0,0,0.6)" },
+  modalHeader: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 30px", borderBottom: "1px solid #2c2c33" },
+  modalTitle: { margin: 0, fontSize: 18, color: "#f4f4f6", fontWeight: "600" },
+  cancelBtn: { backgroundColor: "#26262c", color: "#fff", border: "1px solid rgba(255,255,255,0.08)", padding: "10px 18px", borderRadius: 10, cursor: "pointer", marginRight: 12, fontSize: 14 },
+  saveBtn: { backgroundColor: "#fff", color: "#111", border: "none", padding: "10px 18px", borderRadius: 10, cursor: "pointer", fontSize: 14, fontWeight: "700" },
   modalBody: { padding: "30px" },
   formGroup: { marginBottom: 25 },
   
-  chipsInputBox: { backgroundColor: "#27272c", border: "1px solid #4a4a52", borderRadius: 8, padding: "15px", display: "flex", flexWrap: "wrap", gap: 10, minHeight: 120 },
-  chipEditable: { backgroundColor: "#4a4a52", padding: "6px 12px", borderRadius: 6, fontSize: 13, display: "flex", alignItems: "center", gap: 10, color: "#f8fafc" },
-  chipClose: { cursor: "pointer", color: "#94a3b8", fontSize: 14 },
+  chipsInputBox: { backgroundColor: "#141418", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, padding: "15px", display: "flex", flexWrap: "wrap", gap: 10, minHeight: 120 },
+  chipEditable: { backgroundColor: "#2c2c33", padding: "6px 12px", borderRadius: 6, fontSize: 13, display: "flex", alignItems: "center", gap: 10, color: "#f4f4f6" },
+  chipClose: { cursor: "pointer", color: "#9a9aa6", fontSize: 14 },
   chipInput: { background: "transparent", border: "none", color: "#fff", outline: "none", flex: 1, minWidth: 200, fontSize: 14 },
   
-  filterBox: { backgroundColor: "#27272c", border: "1px solid #4a4a52", borderRadius: 8, padding: "20px" },
-  multiSelectHeader: { backgroundColor: "#27272c", border: "1px solid #0ea5e9", color: "#f8fafc", padding: "12px 15px", borderRadius: 8, cursor: "pointer", fontSize: 14, userSelect: "none" },
-  multiSelectList: { position: "absolute", top: "100%", left: 0, right: 0, backgroundColor: "#27272c", border: "1px solid #4a4a52", borderTop: "none", borderRadius: "0 0 8px 8px", maxHeight: 250, overflowY: "auto", zIndex: 10, marginTop: -2 },
-  multiSelectItem: { display: "flex", alignItems: "center", padding: "10px 15px", cursor: "pointer", borderBottom: "1px solid #34343a", fontSize: 14, color: "#cbd5e1" }
+  filterBox: { backgroundColor: "#18181c", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: "20px" },
+  multiSelectHeader: { backgroundColor: "#141418", border: "1px solid #8b5cf6", color: "#f4f4f6", padding: "12px 15px", borderRadius: 8, cursor: "pointer", fontSize: 14, userSelect: "none" },
+  multiSelectList: { position: "absolute", top: "100%", left: 0, right: 0, backgroundColor: "#1f1f24", border: "1px solid #2c2c33", borderTop: "none", borderRadius: "0 0 8px 8px", maxHeight: 250, overflowY: "auto", zIndex: 10, marginTop: -2 },
+  multiSelectItem: { display: "flex", alignItems: "center", padding: "10px 15px", cursor: "pointer", borderBottom: "1px solid #2c2c33", fontSize: 14, color: "#d4d4dc" }
 };
 
 export default App;
