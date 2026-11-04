@@ -238,13 +238,185 @@ function CredRow({ label, value }) {
 }
 
 /* =========================================================================
+   ALBÜMLER — ülke listelerinin canlı durumu (/admin/albums/*)
+========================================================================= */
+const ALBUM_STATUS = {
+  ok:          { t: "Güncel",              c: "#4ade80", bg: "#065f4626" },
+  fetching:    { t: "Çekiliyor…",          c: "#60a5fa", bg: "#1e3a8a33" },
+  stale:       { t: "Süresi doldu",        c: "#fbbf24", bg: "#78350f33" },
+  old_version: { t: "Eski sürüm (süresiz)", c: "#fbbf24", bg: "#78350f33" },
+  file_only:   { t: "Sadece dosyada",      c: "#fbbf24", bg: "#78350f33" },
+  missing:     { t: "Liste yok",           c: "#ef4444", bg: "#7f1d1d33" },
+  unsupported: { t: "Desteklenmiyor → Dünya", c: "#9a9aa6", bg: "#ffffff10" },
+};
+const ccFlag = cc => /^[A-Z]{2}$/.test(cc) ? String.fromCodePoint(...[...cc].map(ch => 127397 + ch.charCodeAt(0))) : "🌐";
+const ccName = cc => {
+  if (cc === "GLOBAL") return "Dünya listesi";
+  try { return new Intl.DisplayNames(["tr"], { type: "region" }).of(cc) || cc; } catch (e) { return cc; }
+};
+const agoTr = ms => {
+  if (ms == null) return "—";
+  const m = Math.round(ms / 60000);
+  if (m < 60) return `${m} dk önce`;
+  const h = Math.round(m / 60);
+  return h < 48 ? `${h} sa önce` : `${Math.round(h / 24)} gün önce`;
+};
+
+function AlbumsSection({ apiUrl }) {
+  const [data, setData] = useState(null);
+  const [err, setErr] = useState("");
+  const [testCc, setTestCc] = useState("");
+  const [test, setTest] = useState(null);
+  const [open, setOpen] = useState(null);
+  const H = { "X-App-Key": APP_KEY };
+
+  const load = () => {
+    fetch(`${apiUrl}/admin/albums/status`, { headers: H })
+      .then(r => r.ok ? r.json() : r.json().then(d => Promise.reject(d.error || r.status)))
+      .then(d => { setData(d); setErr(""); })
+      .catch(e => setErr(String(e) === "404" ? "Sunucuda albüm durum ucu yok — backend güncel değil (git pull + pm2 reload server)." : "Durum alınamadı: " + e));
+  };
+  useEffect(() => {
+    load();
+    const id = setInterval(load, 15000);   // sayfa açıkken 15 sn'de bir
+    return () => clearInterval(id);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const refresh = cc => {
+    if (!window.confirm(`${ccName(cc)} albüm listesi YouTube Music'ten şimdi yeniden çekilsin mi? (5–10 dk sürer)`)) return;
+    fetch(`${apiUrl}/admin/albums/refresh?cc=${cc}`, { method: "POST", headers: H })
+      .then(r => r.json())
+      .then(d => { if (d.error) alert(d.error); else { if (d.already) alert("Bu ülke zaten çekiliyor."); load(); } })
+      .catch(() => alert("Sunucuya bağlanılamadı"));
+  };
+  const runTest = () => {
+    const cc = testCc.trim().toUpperCase();
+    if (!/^[A-Z]{2}$/.test(cc)) return alert("2 harfli ülke kodu yazın (ör. TR, US, AZ)");
+    fetch(`${apiUrl}/admin/albums/test?cc=${cc}`, { headers: H })
+      .then(r => r.json()).then(setTest).catch(() => alert("Test başarısız"));
+  };
+
+  const rows = (data && data.rows) || [];
+  const count = k => rows.filter(r => r.status === k).length;
+  const sum = [
+    ["Güncel", count("ok"), "#4ade80"],
+    ["Çekiliyor", count("fetching"), "#60a5fa"],
+    ["Dikkat", count("stale") + count("old_version") + count("file_only"), "#fbbf24"],
+    ["Liste yok", count("missing"), "#ef4444"],
+  ];
+  const pill = (txt, c, bg) => <span style={{ color: c, background: bg, padding: "3px 10px", borderRadius: 6, fontSize: 12, fontWeight: 700, whiteSpace: "nowrap" }}>{txt}</span>;
+  const lvlColor = { ok: "#4ade80", info: "#9a9aa6", warn: "#fbbf24", error: "#ef4444" };
+
+  return (
+    <div style={styles.card}>
+      <h2 style={styles.title}>💿 Popüler Albümler</h2>
+      <p style={{ color: "#9a9aa6", fontSize: 13, marginTop: -8, marginBottom: 20 }}>
+        Ülke listeleri YouTube Music'ten haftada bir çekilir; uygulama yalnızca bu kayıtları okur. Liste yoksa ya da ülke desteklenmiyorsa dünya listesi gösterilir. Sayfa 15 sn'de bir yenilenir.
+      </p>
+      {err && <div style={{ background: "#7f1d1d33", color: "#fca5a5", padding: "10px 14px", borderRadius: 10, marginBottom: 16, fontSize: 13 }}>{err}</div>}
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: 10, marginBottom: 22 }}>
+        {sum.map(([t, n, c]) => (
+          <div key={t} style={{ background: "#18181c", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, padding: "12px 14px" }}>
+            <div style={{ color: "#9a9aa6", fontSize: 12, fontWeight: 600 }}>{t}</div>
+            <div style={{ color: c, fontSize: 24, fontWeight: 800 }}>{data ? n : "…"}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap", marginBottom: 18 }}>
+        <span style={{ color: "#d4d4dc", fontSize: 13, fontWeight: 600 }}>Canlı test:</span>
+        <input style={{ ...styles.input, width: 90, textTransform: "uppercase" }} maxLength={2} placeholder="TR" value={testCc}
+          onChange={e => setTestCc(e.target.value)} onKeyDown={e => e.key === "Enter" && runTest()} />
+        <button style={styles.primaryBtn} onClick={runTest}>Bu ülkeye ne gider?</button>
+        <button style={{ ...styles.primaryBtn, background: "transparent", color: "#fff", border: "1px solid rgba(255,255,255,0.2)" }} onClick={load}>🔄 Yenile</button>
+      </div>
+      {test && (
+        <div style={{ background: "#18181c", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: 14, marginBottom: 20, fontSize: 13 }}>
+          <div style={{ marginBottom: 8 }}>
+            {ccFlag(test.cc)} <b>{ccName(test.cc)}</b> → {test.served ? <>{ccFlag(test.served)} <b>{ccName(test.served)}</b></> : <b style={{ color: "#ef4444" }}>hiç liste yok (boş)</b>}
+            {" "}· {test.albumCount} albüm · {agoTr(test.updatedAt ? Date.now() - test.updatedAt : null)}
+            {test.fallback && <span style={{ color: "#fbbf24" }}> · {test.supported ? "ülke listesi henüz hazır değil, dünya listesi gidiyor" : "YouTube Music'te bu ülkenin listesi yok, dünya listesi gidiyor"}</span>}
+          </div>
+          <div style={{ display: "flex", gap: 8, overflowX: "auto" }}>
+            {(test.albums || []).map(a => (
+              <div key={a.id} style={{ width: 84, flexShrink: 0 }} title={`${a.artist} — ${a.title}`}>
+                <img src={a.cover} alt="" style={{ width: 84, height: 84, borderRadius: 8, objectFit: "cover", background: "#222" }} />
+                <div style={{ fontSize: 11, color: "#d4d4dc", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{a.title}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div style={{ overflowX: "auto" }}>
+        <table style={styles.table}>
+          <thead><tr>
+            <th style={styles.th}>Ülke</th><th style={styles.th}>Durum</th><th style={styles.thRight}>Albüm</th>
+            <th style={styles.th}>Son güncelleme</th><th style={styles.th}>Önbellek</th><th style={styles.thRight}>İstek</th><th style={styles.th}></th>
+          </tr></thead>
+          <tbody>
+            {rows.map(r => {
+              const s = ALBUM_STATUS[r.status] || ALBUM_STATUS.ok;
+              const full = r.albumCount && r.cachedItems === r.albumCount;
+              return (
+                <React.Fragment key={r.cc}>
+                  <tr style={{ ...styles.tr, cursor: "pointer" }} onClick={() => setOpen(open === r.cc ? null : r.cc)}>
+                    <td style={{ ...styles.td, color: "#f4f4f6" }}>{ccFlag(r.cc)} <b>{ccName(r.cc)}</b> <span style={{ color: "#6b6b76" }}>{r.cc}</span>
+                      {r.wanted && <span style={{ color: "#60a5fa", fontSize: 11 }}> · sırada</span>}
+                      {!r.tracked && r.supported && <span style={{ color: "#6b6b76", fontSize: 11 }}> · takipte değil</span>}</td>
+                    <td style={styles.td}>{pill(s.t, s.c, s.bg)}</td>
+                    <td style={styles.tdRight}>{r.albumCount || "—"}</td>
+                    <td style={{ ...styles.td, color: "#d4d4dc" }}>{agoTr(r.updatedAt ? data.now - r.updatedAt : null)}</td>
+                    <td style={{ ...styles.td, fontSize: 12, color: "#9a9aa6" }}>
+                      <span style={{ color: r.inRedis ? "#4ade80" : "#ef4444" }}>Redis {r.inRedis ? "✓" : "✗"}</span> ·{" "}
+                      <span style={{ color: r.inFile ? "#4ade80" : "#ef4444" }}>Dosya {r.inFile ? "✓" : "✗"}</span><br />
+                      <span style={{ color: full ? "#4ade80" : "#fbbf24" }}>Detay {r.cachedItems}/{r.albumCount}</span> · Yedek {r.itemFiles}/{r.albumCount}
+                    </td>
+                    <td style={{ ...styles.tdRight, color: "#9a9aa6" }}>{r.requests ? r.requests.toLocaleString("tr") : "—"}</td>
+                    <td style={styles.tdRight} onClick={e => e.stopPropagation()}>
+                      {data.canRefresh && r.supported && r.status !== "fetching" &&
+                        <button style={styles.actionBtn} onClick={() => refresh(r.cc)}>Şimdi yenile</button>}
+                    </td>
+                  </tr>
+                  {open === r.cc && (
+                    <tr><td colSpan={7} style={{ padding: "0 15px 14px", color: "#9a9aa6", fontSize: 12 }}>
+                      {r.sample.length ? "İlk albümler: " + r.sample.join(" · ") : "Albüm yok"} · liste sürümü v{r.v}
+                    </td></tr>
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {data && data.unsupportedTop && data.unsupportedTop.length > 0 && (
+        <p style={{ color: "#9a9aa6", fontSize: 12, marginTop: 14 }}>
+          YouTube Music listesi olmayan, dünya listesini gören ülkeler: {data.unsupportedTop.map(u => `${ccFlag(u.cc)} ${u.cc}`).join("  ")}
+        </p>
+      )}
+
+      <h3 style={{ fontSize: 15, margin: "26px 0 10px", color: "#fff" }}>Son olaylar</h3>
+      <div style={{ background: "#141418", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 10, padding: 10, maxHeight: 280, overflowY: "auto", fontFamily: "ui-monospace, Menlo, monospace", fontSize: 12 }}>
+        {(data && data.log && data.log.length) ? data.log.map((l, i) => (
+          <div key={i} style={{ color: lvlColor[l.level] || "#9a9aa6", padding: "2px 0" }}>
+            <span style={{ color: "#6b6b76" }}>{new Date(l.t).toLocaleString("tr")}</span> {l.cc}: {l.msg}
+          </div>
+        )) : <div style={{ color: "#6b6b76" }}>Henüz kayıt yok (ilk kontrol sunucu açıldıktan 1 dk sonra çalışır).</div>}
+      </div>
+    </div>
+  );
+}
+
+/* =========================================================================
    PANEL GÖRÜNÜMÜ — yalnızca tasarım (menü başlıkları, simgeler, CSS)
 ========================================================================= */
 const MENU_SECTIONS = [
   { title: "Uygulama", keys: ["settings", "countries", "ringtonemode", "mp3", "appcontrols"] },
   { title: "Kullanıcıya ulaş", keys: ["device", "notifications", "popup"] },
   { title: "Reklam & İçerik", groups: true },
-  { title: "İzleme", keys: ["live", "loginips", "reviewlogs", "apiproviders"] },
+  { title: "İzleme", keys: ["live", "loginips", "reviewlogs", "apiproviders", "albums"] },
   { title: "Yönetim", keys: ["users", "apps", "privacy"] },
 ];
 const PANEL_ICONS = {
@@ -260,6 +432,7 @@ const PANEL_ICONS = {
   live: '<path d="M3 12h4l3 8 4-16 3 8h4"/>',
   loginips: '<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l3 3"/>',
   apiproviders: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  albums: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/>',
   users: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
   apps: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
   privacy: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
@@ -1103,6 +1276,7 @@ function App() {
     { key: "asn", icon: "🛰️", label: "ASN Ayarları", group: "ads" },
     { key: "appcontrols", icon: "🛡️", label: "App Controls" },
     { key: "apiproviders", icon: "📊", label: "API Durumu" },
+    ...(!PANEL_LOCKED ? [{ key: "albums", icon: "💿", label: "Albümler" }] : []),
     { key: "smartcache", icon: "💾", label: "Cache Yönetimi", group: "content" },
     { key: "youtube", icon: "▶️", label: "YouTube & Top50", group: "content" },
   ];
@@ -4232,6 +4406,8 @@ function App() {
         </div>}
 
         {/* API PROVIDERS */}
+        {activeSection === "albums" && !PANEL_LOCKED && <AlbumsSection apiUrl={API_URL} />}
+
         {activeSection === "apiproviders" && <div style={styles.card}>
           <h2 style={styles.title}>🔌 API Durumu</h2>
           <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 24 }}>
