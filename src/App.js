@@ -1208,6 +1208,8 @@ function App() {
   const [policyName, setPolicyName] = useState("");
   const [policyPackage, setPolicyPackage] = useState("");
   const [policyEmail, setPolicyEmail] = useState("");
+  const [policyDev, setPolicyDev] = useState("");
+  const [policyAddr, setPolicyAddr] = useState("");
   const [policyResult, setPolicyResult] = useState(null);
   const [policyBusy, setPolicyBusy] = useState(false);
 
@@ -1223,19 +1225,21 @@ function App() {
 
   const savePolicy = () => {
     const appName = policyName.trim(), packageName = policyPackage.trim(), email = policyEmail.trim();
+    const developerName = policyDev.trim(), developerAddress = policyAddr.trim();
     if (!appName || !packageName || !email) return alert("Uygulama adı, paket adı ve e-posta zorunlu!");
+    if (!developerName && !window.confirm("Geliştirici adı boş. Google Play politikayı bu yüzden reddedebilir. Yine de kaydedilsin mi?")) return;
     setPolicyBusy(true);
     fetch(`${API_URL}/admin/privacy-policies`, {
       method: "POST",
       headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
-      body: JSON.stringify({ appName, packageName, email })
+      body: JSON.stringify({ appName, packageName, email, developerName, developerAddress })
     })
       .then(r => r.json())
       .then(d => {
         setPolicyBusy(false);
         if (d.ok) {
           setPolicyResult(d.policy);
-          setPolicyName(""); setPolicyPackage(""); setPolicyEmail("");
+          setPolicyName(""); setPolicyPackage(""); setPolicyEmail(""); setPolicyDev(""); setPolicyAddr("");
           fetchPolicies();
         } else alert("Hata: " + (d.error || "Kaydedilemedi"));
       })
@@ -1610,6 +1614,14 @@ function App() {
                 <label style={{ color: "#9a9aa6", fontSize: 12, display: "block", marginBottom: 4 }}>İletişim E-postası</label>
                 <input type="email" style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Örn: destek@gmail.com" value={policyEmail} onChange={e => setPolicyEmail(e.target.value)} />
               </div>
+              <div>
+                <label style={{ color: "#9a9aa6", fontSize: 12, display: "block", marginBottom: 4 }}>Geliştirici Adı (Play Console'daki ile birebir)</label>
+                <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Örn: VupVup Apps" value={policyDev} onChange={e => setPolicyDev(e.target.value)} />
+              </div>
+              <div>
+                <label style={{ color: "#9a9aa6", fontSize: 12, display: "block", marginBottom: 4 }}>Geliştirici Adresi (isteğe bağlı, kurumsal hesapta önerilir)</label>
+                <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Örn: Örnek Mah. 1. Sok. No:1, İstanbul, Türkiye" value={policyAddr} onChange={e => setPolicyAddr(e.target.value)} />
+              </div>
               <button style={{ ...styles.primaryBtn, opacity: policyBusy ? 0.6 : 1 }} disabled={policyBusy} onClick={savePolicy}>
                 {policyBusy ? "Kaydediliyor..." : "Kaydet + Link Oluştur"}
               </button>
@@ -1634,11 +1646,14 @@ function App() {
                     <div style={{ color: "#f4f4f6", fontWeight: 700 }}>{p.appName}</div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <div style={{ color: "#6b6b76", fontSize: 12 }}>{p.email}</div>
+                      <button onClick={() => { setPolicyName(p.appName || ""); setPolicyPackage(p.packageName || ""); setPolicyEmail(p.email || ""); setPolicyDev(p.developerName || ""); setPolicyAddr(p.developerAddress || ""); setPolicyResult(null); window.scrollTo({ top: 0, behavior: "smooth" }); }} title="Düzenle"
+                        style={{ background: "transparent", border: "1px solid #2c2c33", color: "#a78bfa", borderRadius: 6, padding: "4px 8px", cursor: "pointer", fontSize: 14, lineHeight: 1, flexShrink: 0 }}>✏️</button>
                       <button onClick={() => deletePolicy(p)} title="Politikayı sil"
                         style={{ background: "transparent", border: "1px solid #3a2230", color: "#ef4444", borderRadius: 6, padding: "4px 8px", cursor: "pointer", fontSize: 14, lineHeight: 1, flexShrink: 0 }}>🗑️</button>
                     </div>
                   </div>
                   <CredRow label="Paket" value={p.packageName} />
+                  {p.developerName ? <CredRow label="Geliştirici" value={p.developerName} /> : <div style={{ color: "#f59e0b", fontSize: 12, margin: "4px 0" }}>⚠️ Geliştirici adı yok — Play reddedebilir</div>}
                   <CredRow label="Link" value={p.url} />
                 </div>
               ))}
