@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { AreaChart, Area, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "@rsuite/charts";
+import { AreaChart, Area, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LabelList } from "@rsuite/charts";
 
 /* Panel grafikleri — veri: GET /admin/stats-series (backend stats_series.js) */
 
@@ -223,15 +223,17 @@ export function CountryBarChart({ data, range }) {
   return (
     <ChartFrame title="Ülke sıralaması" sub={sub}>
       {!rows.length ? <Empty loading={!data} /> : (
-        <BarChart horizontal height={Math.max(160, rows.length * 30 + 30)} data={rows} theme="dark"
-          margin={{ top: 4, right: 24, left: 8, bottom: 0 }}>
-          <XAxis type="number" {...axisProps} allowDecimals={false} />
-          <YAxis type="category" dataKey="name" {...axisProps} width={140} />
+        <BarChart horizontal height={Math.max(120, rows.length * 22 + 8)} data={rows} theme="dark"
+          margin={{ top: 0, right: 30, left: 0, bottom: 0 }} barCategoryGap={5}>
+          <XAxis type="number" hide allowDecimals={false} />
+          <YAxis type="category" dataKey="name" tick={{ fill: "#a1a1ab", fontSize: 11 }} axisLine={false} tickLine={false} width={112} />
           <Tooltip cursor={{ fill: "rgba(255,255,255,0.04)" }}
             content={({ active, payload }) => active && payload && payload.length ? (
               <div className="st-tip"><div className="st-tip-h">{payload[0].payload.name}</div>
                 <div className="st-tip-r"><span>Aktif cihaz</span><b>{num(payload[0].value)}</b></div></div>) : null} />
-          <Bar dataKey="value" name="Aktif cihaz" fill="#a78bfa" radius={[0, 5, 5, 0]} isAnimationActive={false} />
+          <Bar dataKey="value" name="Aktif cihaz" fill="#a78bfa" radius={[0, 4, 4, 0]} isAnimationActive={false}>
+            <LabelList dataKey="value" position="right" fill="#d4d4dc" fontSize={11} formatter={num} />
+          </Bar>
         </BarChart>
       )}
     </ChartFrame>
@@ -356,7 +358,8 @@ export const STATS_CSS = `
   .st-range button.on, .st-seg button.on { background: #8b5cf6; color: #fff; }
   .st-grid { display: grid; gap: 14px; margin-bottom: 26px; }
   .st-grid.two { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); }
-  @media (max-width: 900px) { .st-grid.two { grid-template-columns: minmax(0, 1fr); } }
+  .st-grid.main-side { grid-template-columns: minmax(0, 3fr) minmax(210px, 1fr); align-items: start; }
+  @media (max-width: 900px) { .st-grid.two, .st-grid.main-side { grid-template-columns: minmax(0, 1fr); } }
   .st-card { background: #141418; border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 14px 14px 8px; min-width: 0; }
   .st-card-h { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
   .st-card-h b { display: block; font-size: 13.5px; color: #f4f4f6; }
@@ -411,8 +414,8 @@ export function StatsSection({ apiUrl, appKey, scope, scopeLabel, kind, onPickAp
         </div>
       )}
       {(kind === "countries" || kind === "overview") && (
-        <div className="st-grid two">
-          <CountryTrendChart data={data} range={range} />
+        <div className="st-grid main-side">
+          <CountryTrendChart data={data} range={range} height={360} />
           <CountryBarChart data={data} range={range} />
         </div>
       )}
