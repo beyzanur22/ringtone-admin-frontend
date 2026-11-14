@@ -468,6 +468,39 @@ const PANEL_ICONS = {
   monitor: '<path d="M3 12h4l3 8 4-16 3 8h4"/>',
   admin: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
 };
+const AD_ICONS = {
+  search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  x: '<path d="M6 6l12 12M18 6 6 18"/>',
+  grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+  pulse: '<path d="M3 12h4l3 8 4-16 3 8h4"/>',
+  bell: '<path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/>',
+  warn: '<path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',
+  check: '<path d="m5 12 5 5 9-10"/>',
+  ext: '<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+  key: '<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l3 3"/>',
+  more: '<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',
+  copy: '<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/>',
+  eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+  edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13 7 4 4"/>',
+  star: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+  lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  users: '<circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0"/><path d="M16 4a4 4 0 0 1 0 8M22 21a7 7 0 0 0-4-6.3"/>',
+  spark: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/>',
+};
+const adIco = (k) => <svg viewBox="0 0 24 24" dangerouslySetInnerHTML={{ __html: AD_ICONS[k] || "" }} />;
+const adStat = (icon, bg, color, label, value) => (
+  <div className="ad-st" key={label}><span className="ad-st-ic" style={{ background: bg, color }}>{adIco(icon)}</span><div><small>{label}</small><b>{value}</b></div></div>
+);
+const AD_COLORS = ["#8b5cf6", "#2E6BF6", "#db2777", "#0ea5e9", "#14b8a6", "#f59e0b", "#ef4444", "#22c55e"];
+const adColor = (name) => AD_COLORS[[...String(name)].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7) % AD_COLORS.length];
+function genPassword() {
+  const abc = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  const a = new Uint32Array(12);
+  (window.crypto || window.msCrypto).getRandomValues(a);
+  return [...a].map(x => abc[x % abc.length]).join("");
+}
 function PanelIcon({ k, fallback }) {
   const d = PANEL_ICONS[k];
   if (!d) return <span className="pn-ico-e">{fallback}</span>;
@@ -633,6 +666,113 @@ const PANEL_CSS = `
   @media (max-width: 560px) { .da-types { grid-template-columns: minmax(0, 1fr); } .da-tag { display: none; } .da-det { padding-left: 14px; } }
   .pn-content { transition: opacity .15s; }
   .pn-switching { opacity: 0.5; pointer-events: none; }
+  .ad svg { width: 16px; height: 16px; }
+  .ad-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; margin-bottom: 18px; flex-wrap: wrap; }
+  .ad h1 { font-size: 26px; font-weight: 750; letter-spacing: -0.5px; margin: 0; }
+  .ad-sub { color: #8b8b96; font-size: 13.5px; margin-top: 4px; }
+  .ad-tools { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .ad-search { display: flex; align-items: center; gap: 8px; width: 270px; height: 40px; padding: 0 12px; border-radius: 11px; background: #18181c; border: 1px solid rgba(255,255,255,0.08); color: #6b6b76; }
+  .ad-search:focus-within { border-color: #8b5cf6; }
+  .ad-search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #f4f4f6; font: inherit; font-size: 13.5px; box-shadow: none !important; }
+  .ad-btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; height: 40px; padding: 0 16px; border-radius: 11px; font: inherit; font-size: 13.5px; font-weight: 650; border: 0; cursor: pointer; }
+  .ad-btn.pri { background: #8b5cf6; color: #fff; box-shadow: 0 8px 24px rgba(139,92,246,0.3); }
+  .ad-btn.pri:disabled { opacity: .6; }
+  .ad-btn.wide { width: 100%; height: 46px; font-size: 14.5px; margin-top: 16px; }
+  .ad-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .ad-stats.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ad-st { background: #17171c; border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
+  .ad-st-ic { width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center; flex-shrink: 0; }
+  .ad-st-ic svg { width: 18px; height: 18px; }
+  .ad-st small { display: block; color: #7c7c87; font-size: 11px; font-weight: 650; letter-spacing: .3px; }
+  .ad-st b { display: block; font-size: 22px; font-weight: 750; font-variant-numeric: tabular-nums; }
+  .ad-filters { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+  .ad-filters button { font: inherit; font-size: 12.5px; font-weight: 600; color: #a1a1ab; padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.08); background: none; cursor: pointer; }
+  .ad-filters button.on { background: #f4f4f6; color: #111114; border-color: #f4f4f6; }
+  .ad-empty { color: #6b6b76; font-size: 13.5px; padding: 40px 0; text-align: center; }
+  .ad-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; align-items: start; }
+  .ad-card { --c: #8b5cf6; background: #17171c; border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 16px; position: relative; }
+  .ad-card.stripe::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; border-radius: 16px 16px 0 0; background: var(--c); }
+  .ad-ch { display: flex; align-items: center; gap: 12px; }
+  .ad-av { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 17px; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15); }
+  .ad-av.round { border-radius: 50%; font-size: 14px; }
+  .ad-nm { font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ad-pk { font-family: ui-monospace, Menlo, monospace; font-size: 11.5px; color: #6b6b76; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ad-ch > div { flex: 1; }
+  .ad-pk.plain { font-family: inherit; font-size: 12px; color: #7c7c87; }
+  .ad-live { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #4ade80; background: rgba(34,197,94,0.1); padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
+  .ad-live i { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; }
+  .ad-live.z { color: #7c7c87; background: rgba(255,255,255,0.05); }
+  .ad-live.z i { background: #55555f; }
+  .ad-role { font-size: 11.5px; font-weight: 700; padding: 4px 9px; border-radius: 999px; background: rgba(56,189,248,0.12); color: #38bdf8; white-space: nowrap; }
+  .ad-role.sup { background: rgba(251,191,36,0.12); color: #fbbf24; }
+  .ad-spark { height: 46px; margin: 12px -4px 6px; }
+  .ad-spark svg { width: 100%; height: 46px; }
+  .ad-meta { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .ad-tg { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: rgba(255,255,255,0.05); color: #a1a1ab; }
+  .ad-tg svg { width: 13px; height: 13px; stroke-width: 2.2; }
+  .ad-tg.ok { background: rgba(34,197,94,0.1); color: #4ade80; }
+  .ad-tg.warn { background: rgba(251,191,36,0.12); color: #fbbf24; }
+  .ad-tg.all { background: rgba(139,92,246,0.12); color: #c4b5fd; }
+  .ad-access { margin: 14px 0 12px; }
+  .ad-access small { display: block; font-size: 10.5px; font-weight: 700; letter-spacing: .6px; color: #6b6b76; margin-bottom: 7px; }
+  .ad-apps, .ad-pick { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ad-mini { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 9px 0 3px; border-radius: 9px; background: #1f1f25; border: 1px solid rgba(255,255,255,0.07); font: inherit; font-size: 12px; font-weight: 600; color: #d4d4dc; }
+  .ad-mini .ad-av { width: 22px; height: 22px; border-radius: 7px; font-size: 10.5px; }
+  .ad-mini.more { padding: 0 9px; color: #8b8b96; }
+  .ad-mini.sel { cursor: pointer; height: 32px; }
+  .ad-mini.sel.on { border-color: #8b5cf6; background: rgba(139,92,246,0.12); color: #fff; }
+  .ad-mini.sel svg { width: 13px; height: 13px; color: #c4b5fd; stroke-width: 2.4; }
+  .ad-acts { display: flex; gap: 8px; align-items: center; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 12px; }
+  .ad-a { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 11px; border-radius: 9px; font: inherit; font-size: 12.5px; font-weight: 650; color: #d4d4dc; background: #1f1f25; border: 1px solid rgba(255,255,255,0.07); cursor: pointer; text-decoration: none; white-space: nowrap; }
+  .ad-a:hover { color: #fff; border-color: rgba(255,255,255,0.18); }
+  .ad-a svg { width: 15px; height: 15px; }
+  .ad-a.ghost { background: none; }
+  .ad-a.ghost.on { color: #c4b5fd; border-color: rgba(139,92,246,0.45); }
+  .ad-a.more { padding: 0 8px; color: #7c7c87; background: none; border-color: transparent; }
+  .ad-more-wrap { margin-left: auto; position: relative; }
+  .ad-menu { position: absolute; right: 0; bottom: 38px; z-index: 30; min-width: 190px; background: #222228; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 5px; box-shadow: 0 18px 40px rgba(0,0,0,0.5); }
+  .ad-menu button { display: flex; align-items: center; gap: 8px; width: 100%; padding: 8px 10px; border-radius: 8px; border: 0; background: none; color: #d4d4dc; font: inherit; font-size: 13px; cursor: pointer; text-align: left; }
+  .ad-menu button:hover { background: rgba(255,255,255,0.06); }
+  .ad-menu button.danger { color: #f87171; }
+  .ad-menu button.danger:hover { background: rgba(248,113,113,0.12); }
+  .ad-cred { background: #111114; border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 4px 10px; margin: 2px 0 12px; }
+  .ad-cr { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 12.5px; }
+  .ad-cr + .ad-cr { border-top: 1px solid rgba(255,255,255,0.05); }
+  .ad-cr span { color: #6b6b76; width: 58px; font-weight: 600; font-size: 11.5px; flex-shrink: 0; }
+  .ad-cr code { flex: 1; min-width: 0; font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: #e4e4ea; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: none !important; padding: 0 !important; }
+  .ad-cred.big .ad-cr { padding: 10px 0; }
+  .ad-ib { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; border: 0; background: none; color: #8b8b96; cursor: pointer; flex-shrink: 0; }
+  .ad-ib:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .ad-scrim { position: fixed; inset: 0; z-index: 60; background: rgba(6,6,9,0.6); }
+  .ad-sheet { position: fixed; top: 0; right: 0; bottom: 0; z-index: 61; width: min(420px, 100vw); background: #18181d; border-left: 1px solid rgba(255,255,255,0.1); box-shadow: -30px 0 60px rgba(0,0,0,0.5); padding: 26px; display: flex; flex-direction: column; box-sizing: border-box; animation: adIn .2s ease-out; }
+  @keyframes adIn { from { transform: translateX(30px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .ad-sheet h2 { font-size: 20px; font-weight: 750; margin: 0; }
+  .ad-sheet-body { flex: 1; overflow-y: auto; margin: 0 -6px; padding: 0 6px; }
+  .ad-x { position: absolute; top: 22px; right: 20px; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9px; border: 0; background: none; color: #8b8b96; cursor: pointer; }
+  .ad-x:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .ad-lbl { font-size: 12.5px; font-weight: 600; color: #a1a1ab; margin: 18px 0 7px; }
+  .ad-inp { width: 100%; box-sizing: border-box; height: 42px; border-radius: 11px; background: #111114; border: 1px solid rgba(255,255,255,0.1); padding: 0 13px; font: inherit; font-size: 14px; color: #f4f4f6; outline: 0; }
+  .ad-inp:disabled { opacity: .6; }
+  .ad-hint { font-size: 11.5px; color: #6b6b76; margin-top: 6px; }
+  .ad-pw { display: flex; gap: 6px; align-items: center; position: relative; }
+  .ad-pw .ad-a { height: 42px; }
+  .ad-auto { position: absolute; right: 13px; font-size: 11.5px; color: #6b6b76; pointer-events: none; }
+  .ad-seg { display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: #111114; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 10px; }
+  .ad-seg button { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 34px; border: 0; border-radius: 8px; background: none; color: #a1a1ab; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .ad-seg button.on { background: #2a2733; color: #fff; box-shadow: inset 0 0 0 1px rgba(139,92,246,0.5); }
+  .ad-sw { display: flex; gap: 9px; align-items: center; }
+  .ad-sw button { width: 30px; height: 30px; border-radius: 9px; border: 0; cursor: pointer; padding: 0; }
+  .ad-sw button.on { box-shadow: 0 0 0 2px #18181d, 0 0 0 4px #f4f4f6; }
+  .ad-sw-custom { width: 30px; height: 30px; border-radius: 9px; border: 1px dashed rgba(255,255,255,0.25); display: grid; place-items: center; color: #8b8b96; cursor: pointer; position: relative; overflow: hidden; }
+  .ad-sw-custom input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .ad-pv { margin-top: 22px; background: #111114; border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 14px; }
+  .ad-pv small { display: block; font-size: 11px; font-weight: 700; letter-spacing: .6px; color: #6b6b76; margin-bottom: 10px; }
+  .ad-pvr { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 12.5px; color: #a1a1ab; margin-top: 10px; }
+  .ad-pvr code { font-family: ui-monospace, Menlo, monospace; color: #c4b5fd; font-size: 12px; background: none !important; }
+  .ad-note { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; color: #8b8b96; margin-top: 14px; line-height: 1.45; }
+  .ad-note svg { color: #4ade80; flex-shrink: 0; margin-top: 1px; }
+  @media (max-width: 900px) { .ad-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ad-stats.three { grid-template-columns: repeat(3, minmax(0, 1fr)); } .ad-search { width: 100%; } .ad-tools { width: 100%; } }
+  @media (max-width: 560px) { .ad-stats.three { grid-template-columns: minmax(0, 1fr); } .ad-grid { grid-template-columns: minmax(0, 1fr); } }
   .pn-scrim { display: none; }
   @media (max-width: 900px) {
     .pn-appbar { padding: 4px 16px 10px; }
@@ -1255,7 +1395,6 @@ function App() {
 
   // === UYGULAMALAR (yeni uygulama ekle + izole panel giriş bilgileri) — sadece süper panel ===
   const [appList, setAppList] = useState([]);
-  const [appSearch, setAppSearch] = useState("");
   const [newAppName, setNewAppName] = useState("");
   const [newAppPackage, setNewAppPackage] = useState("");
   const [newAppId, setNewAppId] = useState("");
@@ -1326,8 +1465,44 @@ function App() {
   const [userList, setUserList] = useState([]);
   const [newUserName, setNewUserName] = useState("");
   const [newUserPass, setNewUserPass] = useState("");
-  const [newUserScope, setNewUserScope] = useState("all"); // "all" veya appId
   const [userBusy, setUserBusy] = useState(false);
+  const [newUserAll, setNewUserAll] = useState(true);
+  const [newUserApps, setNewUserApps] = useState([]);
+  const [userEditing, setUserEditing] = useState(null);   // düzenlenen kullanıcı adı
+  const [userPwOnly, setUserPwOnly] = useState(false);
+  // Yönetim ekranları (Uygulamalar / Kullanıcılar) — ortak görünüm durumu
+  const [adSheet, setAdSheet] = useState(null);           // "app" | "user"
+  const [adFilter, setAdFilter] = useState("all");
+  const [adQuery, setAdQuery] = useState("");
+  const [adCred, setAdCred] = useState(null);
+  const [adShow, setAdShow] = useState({});
+  const [adMenu, setAdMenu] = useState(null);
+  const [adCopied, setAdCopied] = useState(null);
+  const [adPwVisible, setAdPwVisible] = useState(false);
+  const stats24 = useStatsSeries({ apiUrl: API_URL, appKey: APP_KEY, scope: "all", range: "24h", byApp: true, enabled: !PANEL_LOCKED && activeSection === "apps" });
+  useEffect(() => { setAdFilter("all"); setAdQuery(""); setAdMenu(null); setAdSheet(null); setAdCred(null); }, [activeSection]);
+  useEffect(() => {
+    if (!adMenu) return undefined;
+    const close = (e) => { if (!e.target.closest || !e.target.closest(".ad-more-wrap")) setAdMenu(null); };
+    window.addEventListener("click", close);
+    return () => window.removeEventListener("click", close);
+  }, [adMenu]);
+  const adCopy = (text, key) => {
+    try { navigator.clipboard.writeText(String(text || "")); } catch (e) {}
+    setAdCopied(key);
+    setTimeout(() => setAdCopied(k => (k === key ? null : k)), 1400);
+  };
+  const openUserSheet = (u, pwOnly = false) => {
+    setUserEditing(u ? u.username : null);
+    setUserPwOnly(!!pwOnly);
+    setNewUserName(u ? u.username : "");
+    setNewUserPass("");
+    setAdPwVisible(false);
+    const all = !u || u.apps === "all" || !!u.super;
+    setNewUserAll(u ? all : true);
+    setNewUserApps(u && Array.isArray(u.apps) ? u.apps : []);
+    setAdSheet("user");
+  };
 
   const fetchUsers = () => {
     fetch(`${API_URL}/admin/users`, { headers: { "X-App-Key": APP_KEY } })
@@ -1341,9 +1516,12 @@ function App() {
 
   const saveUser = () => {
     const username = newUserName.trim().toLowerCase();
-    if (!username || !newUserPass) return alert("Kullanıcı adı ve şifre zorunlu!");
-    const body = { username, password: newUserPass };
-    body.apps = newUserScope === "all" ? "all" : [newUserScope];
+    if (!username) return alert("Kullanıcı adı zorunlu!");
+    if (!userEditing && !newUserPass) return alert("Yeni kullanıcı için şifre zorunlu!");
+    if (userPwOnly && !newUserPass) return alert("Yeni şifreyi yaz!");
+    if (!newUserAll && !newUserApps.length) return alert("En az bir uygulama seç!");
+    const body = { username, apps: newUserAll ? "all" : newUserApps };
+    if (newUserPass) body.password = newUserPass;
     setUserBusy(true);
     fetch(`${API_URL}/admin/users`, {
       method: "POST",
@@ -1353,7 +1531,7 @@ function App() {
       .then(r => r.json())
       .then(d => {
         setUserBusy(false);
-        if (d.ok) { setNewUserName(""); setNewUserPass(""); setNewUserScope("all"); fetchUsers(); alert("Kullanıcı kaydedildi ✓"); }
+        if (d.ok) { setNewUserName(""); setNewUserPass(""); setAdSheet(null); fetchUsers(); }
         else alert("Hata: " + (d.error || "Kaydedilemedi"));
       })
       .catch(() => { setUserBusy(false); alert("Sunucuya bağlanılamadı!"); });
@@ -1383,7 +1561,7 @@ function App() {
       .catch(() => {});
   };
   useEffect(() => {
-    if (!PANEL_LOCKED && activeSection === "privacy") fetchPolicies();
+    if (!PANEL_LOCKED && (activeSection === "privacy" || activeSection === "apps")) fetchPolicies();
   }, [activeSection]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const savePolicy = () => {
@@ -1641,160 +1819,308 @@ function App() {
         </div>}
 
         {/* KULLANICILAR — kişisel giriş hesapları (sadece süper panel) */}
-        {activeSection === "users" && !PANEL_LOCKED && <div style={styles.card}>
-          <h2 style={styles.title}>👤 Kullanıcılar</h2>
-          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
-            Kişisel giriş hesapları. Herkes kendi kullanıcı adı + şifresiyle <code>/admin/panel</code>'e girer;
-            yetkisine göre ya <b>tüm uygulamaları</b> ya da <b>sadece belirli bir uygulamayı</b> görür.
-          </p>
-
-          <div style={{ background: "#18181c", border: "1px solid #2c2c33", borderRadius: 12, padding: 18, marginBottom: 24 }}>
-            <h3 style={{ color: "#f4f4f6", fontSize: 15, margin: "0 0 14px 0" }}>➕ Kullanıcı Ekle / Şifre Güncelle</h3>
-            <div style={{ display: "grid", gap: 12 }}>
-              <div>
-                <label style={{ color: "#9a9aa6", fontSize: 12, display: "block", marginBottom: 4 }}>Kullanıcı Adı</label>
-                <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Örn: oguz" value={newUserName} onChange={e => setNewUserName(e.target.value)} />
+        {activeSection === "users" && !PANEL_LOCKED && (() => {
+          const q = adQuery.trim().toLocaleLowerCase("tr");
+          const supers = userList.filter(u => u.apps === "all" || u.super);
+          const scoped = userList.filter(u => !(u.apps === "all" || u.super));
+          const shown = userList
+            .filter(u => adFilter === "super" ? (u.apps === "all" || u.super) : adFilter === "scoped" ? !(u.apps === "all" || u.super) : true)
+            .filter(u => !q || u.username.includes(q));
+          const appOpts = Object.values(apps).filter(a => a.id !== "default");
+          return (
+          <div className="ad">
+            <div className="ad-top">
+              <div><h1>Kullanıcılar</h1><div className="ad-sub">Herkes kendi adı ve şifresiyle <code>/admin</code>'den girer; yetkisine göre uygulamaları görür.</div></div>
+              <div className="ad-tools">
+                <label className="ad-search">{adIco("search")}<input value={adQuery} onChange={e => setAdQuery(e.target.value)} placeholder="Kullanıcı ara" /></label>
+                <button type="button" className="ad-btn pri" onClick={() => openUserSheet(null)}>{adIco("plus")}Yeni kullanıcı</button>
               </div>
-              <div>
-                <label style={{ color: "#9a9aa6", fontSize: 12, display: "block", marginBottom: 4 }}>Şifre</label>
-                <input type="text" style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Yeni şifre" value={newUserPass} onChange={e => setNewUserPass(e.target.value)} />
-              </div>
-              <div>
-                <label style={{ color: "#9a9aa6", fontSize: 12, display: "block", marginBottom: 4 }}>Yetki (hangi uygulamayı görsün)</label>
-                <select style={{ ...styles.input, width: "100%", boxSizing: "border-box", cursor: "pointer" }} value={newUserScope} onChange={e => setNewUserScope(e.target.value)}>
-                  <option value="all">⭐ Tüm Uygulamalar (Süper Admin)</option>
-                  {Object.values(apps).filter(a => a.id !== "default").map(a => (
-                    <option key={a.id} value={a.id}>🔒 Sadece {a.name}</option>
-                  ))}
-                </select>
-              </div>
-              <button style={{ ...styles.primaryBtn, opacity: userBusy ? 0.6 : 1 }} disabled={userBusy} onClick={saveUser}>
-                {userBusy ? "Kaydediliyor..." : "Kaydet"}
-              </button>
-              <p style={{ color: "#6b6b76", fontSize: 11, margin: 0 }}>Var olan bir kullanıcı adını yazarsan şifresi/yetkisi güncellenir.</p>
             </div>
-          </div>
-
-          <h3 style={{ color: "#f4f4f6", fontSize: 15, margin: "0 0 12px 0" }}>Mevcut Kullanıcılar</h3>
-          {userList.length === 0 ? (
-            <p style={{ color: "#6b6b76", fontSize: 13 }}>Henüz kullanıcı yok.</p>
-          ) : (
-            <div style={{ display: "grid", gap: 10 }}>
-              {userList.map(u => (
-                <div key={u.username} style={{ background: "#18181c", border: "1px solid #2c2c33", borderRadius: 10, padding: "12px 14px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
-                  <div>
-                    <div style={{ color: "#f4f4f6", fontWeight: 700 }}>{u.username}</div>
-                    <div style={{ color: "#9a9aa6", fontSize: 12 }}>
-                      {u.apps === "all" || u.super ? "⭐ Tüm uygulamalar" : `🔒 ${(Array.isArray(u.apps) ? u.apps : []).map(id => (apps[id] && apps[id].name) || id).join(", ")}`}
-                    </div>
-                  </div>
-                  <button onClick={() => deleteUser(u.username)} style={{ padding: "6px 12px", fontSize: 12, borderRadius: 6, border: "1px solid #5b2130", background: "#2a1216", color: "#f87171", cursor: "pointer" }}>Sil</button>
-                </div>
+            <div className="ad-stats three">
+              {adStat("users", "rgba(139,92,246,.14)", "#c4b5fd", "KULLANICI", userList.length)}
+              {adStat("star", "rgba(251,191,36,.12)", "#fbbf24", "SÜPER ADMİN", supers.length)}
+              {adStat("lock", "rgba(56,189,248,.12)", "#38bdf8", "UYGULAMA YÖNETİCİSİ", scoped.length)}
+            </div>
+            <div className="ad-filters">
+              {[["all", `Tümü ${userList.length}`], ["super", `Süper admin ${supers.length}`], ["scoped", `Uygulama yöneticisi ${scoped.length}`]].map(([k, l]) => (
+                <button key={k} type="button" className={adFilter === k ? "on" : ""} onClick={() => setAdFilter(k)}>{l}</button>
               ))}
             </div>
-          )}
-        </div>}
-
-        {/* UYGULAMALAR — yeni paket ekle + izole panel giriş bilgileri (sadece süper panel) */}
-        {activeSection === "apps" && !PANEL_LOCKED && <div style={styles.card}>
-          <h2 style={styles.title}>🗂️ Uygulamalar</h2>
-          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
-            Yeni paket adı ekle → panel sana o uygulamanın <b>ayrı panel linkini ve şifresini</b> verir.
-            Sonra tek yapman gereken <code>app_config.json</code>'da paket adını bu değere ayarlayıp build almak. Android kodu değişmez.
-          </p>
-
-          <div style={{ background: "#18181c", border: "1px solid #2c2c33", borderRadius: 12, padding: 18, marginBottom: 24 }}>
-            <h3 style={{ color: "#fff", fontSize: 17, fontWeight: 800, margin: "0 0 16px 0" }}>➕ Yeni Uygulama Ekle</h3>
-            <div style={{ display: "grid", gap: 12 }}>
-              <div>
-                <label style={{ color: "rgba(255,255,255,0.85)", fontSize: 13, fontWeight: 700, display: "block", marginBottom: 6 }}>Uygulama Adı</label>
-                <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Örn: OGZ Music" value={newAppName} onChange={e => setNewAppName(e.target.value)} />
-              </div>
-              <div>
-                <label style={{ color: "rgba(255,255,255,0.85)", fontSize: 13, fontWeight: 700, display: "block", marginBottom: 6 }}>Paket Adı (applicationId)</label>
-                <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Örn: com.ogz.music" value={newAppPackage} onChange={e => setNewAppPackage(e.target.value)} />
-              </div>
-              <div>
-                <label style={{ color: "rgba(255,255,255,0.85)", fontSize: 13, fontWeight: 700, display: "block", marginBottom: 6 }}>
-                  Panel Kısa Adı (opsiyonel){newAppPackage.trim() && !newAppId.trim() ? <span style={{ color: "#6b6b76" }}> — otomatik: <b style={{ color: "#a78bfa" }}>{deriveAppId(newAppPackage)}</b></span> : null}
-                </label>
-                <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder={newAppPackage.trim() ? deriveAppId(newAppPackage) : "boş bırak → otomatik"} value={newAppId} onChange={e => setNewAppId(e.target.value)} />
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <label style={{ color: "rgba(255,255,255,0.85)", fontSize: 13, fontWeight: 700 }}>Marka Rengi</label>
-                <input type="color" value={newAppColor} onChange={e => setNewAppColor(e.target.value)} style={{ width: 44, height: 30, border: "none", background: "none", cursor: "pointer" }} />
-              </div>
-              <button style={{ ...styles.primaryBtn, opacity: appBusy ? 0.6 : 1 }} disabled={appBusy} onClick={createApp}>
-                {appBusy ? "Ekleniyor..." : "Uygulama Ekle + Panel Oluştur"}
-              </button>
-            </div>
-
-            {newAppResult && (
-              <div style={{ marginTop: 16, background: "#0f2a17", border: "1px solid #1f5133", borderRadius: 10, padding: 16 }}>
-                <div style={{ color: "#4ade80", fontWeight: 700, marginBottom: 4 }}>✅ Panel oluşturuldu — bu bilgileri kaydet!</div>
-                <div style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 12 }}>Şifre master anahtardan türetilir; kaybolmaz, bu ekranda hep görebilirsin.</div>
-                <CredRow label="Panel Linki" value={window.location.origin + newAppResult.panelPath} />
-                <CredRow label="Kullanıcı" value={newAppResult.user} />
-                <CredRow label="Şifre" value={newAppResult.pass} />
-              </div>
-            )}
-          </div>
-
-          <style>{`
-            .cred-copy:hover { background: #fff !important; color: #111 !important; }
-            .app-open:hover { background: #fff !important; color: #111 !important; }
-            .app-del:hover { background: #7f1d1d !important; }
-          `}</style>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap", margin: "8px 0 14px" }}>
-            <div style={{ borderLeft: "3px solid #fff", paddingLeft: 10 }}>
-              <div style={{ color: "#fff", fontSize: 17, fontWeight: 800 }}>Mevcut İzole Paneller</div>
-              <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 12, marginTop: 2 }}>{appList.length} uygulama · her birinin ayrı giriş bilgisi</div>
-            </div>
-            {appList.length > 4 && (
-              <input style={{ ...styles.input, width: 240 }} placeholder="🔎 Uygulama ara..." value={appSearch} onChange={e => setAppSearch(e.target.value)} />
-            )}
-          </div>
-          {appList.length === 0 ? (
-            <p style={{ color: "rgba(255,255,255,0.6)", fontSize: 13 }}>Henüz ek uygulama yok.</p>
-          ) : (
-            <div style={{ display: "grid", gap: 14 }}>
-              {appList.filter(a => {
-                const q = appSearch.trim().toLocaleLowerCase("tr");
-                return !q || (a.name || "").toLocaleLowerCase("tr").includes(q) || (a.packageName || "").toLowerCase().includes(q);
-              }).map(a => {
-                const brand = (apps[a.id] && apps[a.id].brandPrimary) || "#a78bfa";
-                return (
-                <div key={a.id} style={{ background: "#18181c", border: "1px solid rgba(255,255,255,0.14)", borderLeft: `4px solid ${brand}`, borderRadius: 12, overflow: "hidden" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap", padding: "14px 16px", background: "#141418", borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
-                      <span style={{ width: 36, height: 36, borderRadius: 10, background: brand, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 800, fontSize: 16, flexShrink: 0 }}>
-                        {(a.name || a.id).trim().charAt(0).toLocaleUpperCase("tr")}
-                      </span>
-                      <div style={{ minWidth: 0 }}>
-                        <div style={{ color: "#fff", fontWeight: 800, fontSize: 17 }}>{a.name}</div>
-                        <div style={{ color: "rgba(255,255,255,0.65)", fontSize: 12, fontFamily: "monospace", marginTop: 2 }}>{a.packageName}</div>
+            {shown.length === 0 ? <div className="ad-empty">{userList.length ? "Eşleşen kullanıcı yok." : "Henüz kullanıcı yok."}</div> : (
+              <div className="ad-grid">
+                {shown.map(u => {
+                  const isSup = u.apps === "all" || u.super;
+                  const ids = Array.isArray(u.apps) ? u.apps : [];
+                  const col = adColor(u.username);
+                  return (
+                    <div key={u.username} className="ad-card" style={{ "--c": col }}>
+                      <div className="ad-ch">
+                        <span className="ad-av round" style={{ background: col }}>{u.username.slice(0, 2).toLocaleUpperCase("tr")}</span>
+                        <div style={{ minWidth: 0 }}>
+                          <div className="ad-nm">{u.username}</div>
+                          <div className="ad-pk plain">{isSup ? "Tüm uygulamalara erişir" : `${ids.length} uygulamaya erişir`}</div>
+                        </div>
+                        <span className={"ad-role" + (isSup ? " sup" : "")}>{isSup ? "Süper admin" : "Yönetici"}</span>
+                      </div>
+                      <div className="ad-access">
+                        <small>ERİŞİM</small>
+                        {isSup ? <span className="ad-tg all">{adIco("grid")}Tüm uygulamalar</span> : (
+                          <div className="ad-apps">
+                            {ids.slice(0, 6).map(id => {
+                              const a = apps[id] || { name: id };
+                              return <span key={id} className="ad-mini"><span className="ad-av" style={{ background: a.brandPrimary || "#a78bfa" }}>{String(a.name || id).trim().charAt(0).toLocaleUpperCase("tr")}</span>{a.name || id}</span>;
+                            })}
+                            {ids.length > 6 && <span className="ad-mini more">+{ids.length - 6}</span>}
+                            {!ids.length && <span className="ad-tg warn">{adIco("warn")}Uygulama atanmamış</span>}
+                          </div>
+                        )}
+                      </div>
+                      <div className="ad-acts">
+                        <button type="button" className="ad-a" onClick={() => openUserSheet(u)}>{adIco("edit")}Düzenle</button>
+                        <button type="button" className="ad-a ghost" onClick={() => openUserSheet(u, true)}>{adIco("key")}Şifre değiştir</button>
+                        <span className="ad-more-wrap">
+                          <button type="button" className="ad-a more" aria-label="Diğer" onClick={() => setAdMenu(adMenu === "u:" + u.username ? null : "u:" + u.username)}>{adIco("more")}</button>
+                          {adMenu === "u:" + u.username && (
+                            <div className="ad-menu"><button type="button" className="danger" onClick={() => { setAdMenu(null); deleteUser(u.username); }}>{adIco("trash")}Kullanıcıyı sil</button></div>
+                          )}
+                        </span>
                       </div>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                      <a href={window.location.origin + a.panelPath} target="_blank" rel="noreferrer" className="app-open"
-                        style={{ padding: "8px 14px", borderRadius: 8, border: "1px solid rgba(255,255,255,0.35)", color: "#fff", fontSize: 12, fontWeight: 700, textDecoration: "none" }}>
-                        Paneli Aç ↗
-                      </a>
-                      <button onClick={() => deleteApp(a)} title="Paneli sil" className="app-del"
-                        style={{ background: "#3a1a1f", border: "1px solid #7f1d1d", color: "#f87171", borderRadius: 8, padding: "7px 12px", cursor: "pointer", fontSize: 12, fontWeight: 700 }}>🗑️ Sil</button>
+                  );
+                })}
+              </div>
+            )}
+
+            {adSheet === "user" && (
+              <>
+                <div className="ad-scrim" onClick={() => setAdSheet(null)} />
+                <div className="ad-sheet">
+                  <button type="button" className="ad-x" aria-label="Kapat" onClick={() => setAdSheet(null)}>{adIco("x")}</button>
+                  <h2>{userEditing ? (userPwOnly ? "Şifre değiştir" : "Kullanıcıyı düzenle") : "Yeni kullanıcı"}</h2>
+                  <div className="ad-sub">{userEditing ? `${userEditing} hesabı` : "Giriş adı, şifre ve hangi uygulamaları göreceği."}</div>
+                  <div className="ad-sheet-body">
+                    <div className="ad-lbl">Kullanıcı adı</div>
+                    <input className="ad-inp" value={newUserName} disabled={!!userEditing} placeholder="örn. oguz"
+                      onChange={e => setNewUserName(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ""))} />
+                    <div className="ad-hint">Sadece küçük harf, rakam ve alt çizgi.</div>
+                    <div className="ad-lbl">Şifre{userEditing ? " (boş bırakırsan değişmez)" : ""}</div>
+                    <div className="ad-pw">
+                      <input className="ad-inp" type={adPwVisible ? "text" : "password"} value={newUserPass} placeholder={userEditing ? "Yeni şifre" : "Şifre"}
+                        onChange={e => setNewUserPass(e.target.value)} />
+                      <button type="button" className="ad-ib" aria-label="Göster" onClick={() => setAdPwVisible(v => !v)}>{adIco("eye")}</button>
+                      <button type="button" className="ad-a" onClick={() => { setNewUserPass(genPassword()); setAdPwVisible(true); }}>{adIco("spark")}Üret</button>
+                    </div>
+                    {!userPwOnly && (
+                      <>
+                        <div className="ad-lbl">Yetki</div>
+                        <div className="ad-seg">
+                          <button type="button" className={newUserAll ? "on" : ""} onClick={() => setNewUserAll(true)}>{adIco("star")}Tüm uygulamalar</button>
+                          <button type="button" className={!newUserAll ? "on" : ""} onClick={() => setNewUserAll(false)}>{adIco("lock")}Seçili uygulamalar</button>
+                        </div>
+                        {newUserAll ? (
+                          <div className="ad-hint">Süper admin: tüm uygulamaları, kullanıcıları ve ayarları yönetir.</div>
+                        ) : (
+                          <div className="ad-pick">
+                            {appOpts.map(a => {
+                              const on = newUserApps.includes(a.id);
+                              return (
+                                <button key={a.id} type="button" className={"ad-mini sel" + (on ? " on" : "")}
+                                  onClick={() => setNewUserApps(on ? newUserApps.filter(x => x !== a.id) : [...newUserApps, a.id])}>
+                                  <span className="ad-av" style={{ background: a.brandPrimary || "#a78bfa" }}>{String(a.name || a.id).trim().charAt(0).toLocaleUpperCase("tr")}</span>
+                                  {a.name || a.id}{on && adIco("check")}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </>
+                    )}
+                    <div className="ad-pv">
+                      <small>ÖZET</small>
+                      <div className="ad-pvr"><span>Giriş adresi</span><code>{window.location.host}/admin</code></div>
+                      <div className="ad-pvr"><span>Kullanıcı</span><code>{newUserName || "—"}</code></div>
+                      <div className="ad-pvr"><span>Görecekleri</span><code>{newUserAll ? "Tüm uygulamalar" : `${newUserApps.length} uygulama`}</code></div>
                     </div>
                   </div>
-                  <div style={{ padding: "14px 16px 8px" }}>
-                    <CredRow label="Link" value={window.location.origin + a.panelPath} />
-                    <CredRow label="Kullanıcı" value={a.user} />
-                    <CredRow label="Şifre" value={a.pass} />
-                  </div>
+                  <button type="button" className="ad-btn pri wide" disabled={userBusy} onClick={saveUser}>{userBusy ? "Kaydediliyor…" : "Kaydet"}</button>
                 </div>
-                );
-              })}
+              </>
+            )}
+          </div>
+          );
+        })()}
+
+        {/* UYGULAMALAR — kartlar + izole panel giriş bilgileri (sadece süper panel) */}
+        {activeSection === "apps" && !PANEL_LOCKED && (() => {
+          const q = adQuery.trim().toLocaleLowerCase("tr");
+          const polSet = new Set(policyList.map(p => p.packageName));
+          const def = apps.default;
+          const cards = [
+            ...(def ? [{ id: "default", name: def.name || "Musica", packageName: def.packageName || "", main: true }] : []),
+            ...appList,
+          ].map(a => ({ ...a, brand: (apps[a.id] && apps[a.id].brandPrimary) || "#a78bfa", live: chipCount(a.id), pol: !!a.packageName && polSet.has(a.packageName) }));
+          const nopol = cards.filter(c => !c.pol).length;
+          const liveN = cards.filter(c => (c.live || 0) > 0).length;
+          const shown = cards
+            .filter(c => adFilter === "live" ? (c.live || 0) > 0 : adFilter === "idle" ? !(c.live > 0) : adFilter === "nopolicy" ? !c.pol : true)
+            .filter(c => !q || (c.name || "").toLocaleLowerCase("tr").includes(q) || (c.packageName || "").toLowerCase().includes(q));
+          const sparkOf = (id) => {
+            const s = stats24.data && stats24.data.byApp && stats24.data.byApp.find(x => x.id === id);
+            const v = s ? s.series.map(p => (p ? p.t : 0)) : [];
+            if (v.length < 2) return null;
+            const w = 300, h = 46, mx = Math.max(1, ...v);
+            const d = v.map((y, i) => `${i ? "L" : "M"}${(i * w / (v.length - 1)).toFixed(1)} ${(h - 4 - (y / mx) * (h - 10)).toFixed(1)}`).join(" ");
+            return (
+              <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none">
+                <path d={`${d} L${w} ${h} L0 ${h} Z`} fill="var(--c)" opacity=".12" stroke="none" />
+                <path d={d} stroke="var(--c)" strokeWidth="2" fill="none" vectorEffect="non-scaling-stroke" />
+              </svg>
+            );
+          };
+          const allPtsNow = chipStats.data ? chipStats.data.points.filter(p => !p.missing) : [];
+          const lastAll = allPtsNow[allPtsNow.length - 1];
+          const slug = newAppId.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "") || deriveAppId(newAppPackage);
+          return (
+          <div className="ad">
+            <div className="ad-top">
+              <div><h1>Uygulamalar</h1><div className="ad-sub">Her uygulamanın kendi paneli ve girişi var. Kartı aç, linki ve şifreyi kopyala.</div></div>
+              <div className="ad-tools">
+                <label className="ad-search">{adIco("search")}<input value={adQuery} onChange={e => setAdQuery(e.target.value)} placeholder="Uygulama veya paket ara" /></label>
+                <button type="button" className="ad-btn pri" onClick={() => { setNewAppResult(null); setAdSheet("app"); }}>{adIco("plus")}Yeni uygulama</button>
+              </div>
             </div>
-          )}
-        </div>}
+            <div className="ad-stats">
+              {adStat("grid", "rgba(139,92,246,.14)", "#c4b5fd", "UYGULAMA", cards.length)}
+              {adStat("pulse", "rgba(34,197,94,.12)", "#4ade80", "ŞU AN AKTİF", allCount == null ? "—" : allCount)}
+              {adStat("bell", "rgba(56,189,248,.12)", "#38bdf8", "ZİL SESİ MODUNDA", lastAll ? lastAll.r : "—")}
+              {adStat("warn", "rgba(251,191,36,.12)", "#fbbf24", "POLİTİKASI EKSİK", nopol)}
+            </div>
+            <div className="ad-filters">
+              {[["all", `Tümü ${cards.length}`], ["live", `Aktif olanlar ${liveN}`], ["nopolicy", `Politikası eksik ${nopol}`], ["idle", `Boşta ${cards.length - liveN}`]].map(([k, l]) => (
+                <button key={k} type="button" className={adFilter === k ? "on" : ""} onClick={() => setAdFilter(k)}>{l}</button>
+              ))}
+            </div>
+            {shown.length === 0 ? <div className="ad-empty">Eşleşen uygulama yok.</div> : (
+              <div className="ad-grid">
+                {shown.map(a => {
+                  const open = adCred === a.id;
+                  const link = a.panelPath ? window.location.origin + a.panelPath : "";
+                  const pwKey = "pw:" + a.id;
+                  return (
+                    <div key={a.id} className="ad-card stripe" style={{ "--c": a.brand }}>
+                      <div className="ad-ch">
+                        <span className="ad-av" style={{ background: a.brand }}>{String(a.name || a.id).trim().charAt(0).toLocaleUpperCase("tr")}</span>
+                        <div style={{ minWidth: 0 }}>
+                          <div className="ad-nm">{a.name}</div>
+                          <div className="ad-pk" title={a.packageName}>{a.packageName}</div>
+                        </div>
+                        <span className={"ad-live" + (a.live > 0 ? "" : " z")}><i />{a.live == null ? "—" : a.live} aktif</span>
+                      </div>
+                      <div className="ad-spark">{sparkOf(a.id)}</div>
+                      {open && !a.main ? (
+                        <div className="ad-cred">
+                          {[["Link", link, link], ["Kullanıcı", a.user, a.user], ["Şifre", adShow[pwKey] ? a.pass : "••••••••••••••", a.pass]].map(([k, v, raw]) => (
+                            <div key={k} className="ad-cr">
+                              <span>{k}</span><code title={k === "Şifre" ? "" : v}>{v}</code>
+                              {k === "Şifre" && <button type="button" className="ad-ib" aria-label="Göster" onClick={() => setAdShow(s => ({ ...s, [pwKey]: !s[pwKey] }))}>{adIco("eye")}</button>}
+                              <button type="button" className="ad-ib" aria-label="Kopyala" onClick={() => adCopy(raw, a.id + k)}>{adIco(adCopied === a.id + k ? "check" : "copy")}</button>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="ad-meta">
+                          {a.main ? <span className="ad-tg">{adIco("star")}Ana uygulama</span>
+                            : <span className={"ad-tg " + (a.pol ? "ok" : "warn")}>{adIco(a.pol ? "check" : "warn")}{a.pol ? "Gizlilik politikası" : "Politika eksik"}</span>}
+                          <span className="ad-tg">Son 24 saat</span>
+                        </div>
+                      )}
+                      <div className="ad-acts">
+                        {a.main ? (
+                          <button type="button" className="ad-a" onClick={() => pickApp("default")}>{adIco("ext")}Ayarlarına git</button>
+                        ) : (
+                          <>
+                            <a className="ad-a" href={link} target="_blank" rel="noreferrer">{adIco("ext")}Paneli aç</a>
+                            <button type="button" className={"ad-a ghost" + (open ? " on" : "")} onClick={() => setAdCred(open ? null : a.id)}>{adIco("key")}Giriş bilgileri</button>
+                            <span className="ad-more-wrap">
+                              <button type="button" className="ad-a more" aria-label="Diğer" onClick={() => setAdMenu(adMenu === "a:" + a.id ? null : "a:" + a.id)}>{adIco("more")}</button>
+                              {adMenu === "a:" + a.id && (
+                                <div className="ad-menu">
+                                  <button type="button" onClick={() => { setAdMenu(null); pickApp(a.id); }}>{adIco("edit")}Ayarlarına git</button>
+                                  <button type="button" className="danger" onClick={() => { setAdMenu(null); deleteApp(a); }}>{adIco("trash")}Uygulamayı sil</button>
+                                </div>
+                              )}
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {adSheet === "app" && (
+              <>
+                <div className="ad-scrim" onClick={() => setAdSheet(null)} />
+                <div className="ad-sheet">
+                  <button type="button" className="ad-x" aria-label="Kapat" onClick={() => setAdSheet(null)}>{adIco("x")}</button>
+                  {newAppResult ? (
+                    <>
+                      <h2>Panel hazır</h2>
+                      <div className="ad-sub">Bu bilgileri kaydet. Şifre ana anahtardan üretilir; kartta hep görebilirsin.</div>
+                      <div className="ad-sheet-body">
+                        <div className="ad-cred big">
+                          {[["Link", window.location.origin + newAppResult.panelPath], ["Kullanıcı", newAppResult.user], ["Şifre", newAppResult.pass]].map(([k, v]) => (
+                            <div key={k} className="ad-cr"><span>{k}</span><code>{v}</code>
+                              <button type="button" className="ad-ib" aria-label="Kopyala" onClick={() => adCopy(v, "new" + k)}>{adIco(adCopied === "new" + k ? "check" : "copy")}</button></div>
+                          ))}
+                        </div>
+                        <div className="ad-note">{adIco("check")}Sırada: Android'de <code>app_config.json</code> paket adını <b>{newAppResult.id}</b> paneliyle eşleşen pakete ayarlayıp build al.</div>
+                      </div>
+                      <button type="button" className="ad-btn pri wide" onClick={() => { setNewAppResult(null); setAdSheet(null); }}>Tamam</button>
+                    </>
+                  ) : (
+                    <>
+                      <h2>Yeni uygulama</h2>
+                      <div className="ad-sub">Paket adını gir, panel ve şifre otomatik hazırlanır.</div>
+                      <div className="ad-sheet-body">
+                        <div className="ad-lbl">Uygulama adı</div>
+                        <input className="ad-inp" placeholder="örn. OGZ Music" value={newAppName} onChange={e => setNewAppName(e.target.value)} />
+                        <div className="ad-lbl">Paket adı (applicationId)</div>
+                        <input className="ad-inp" placeholder="örn. com.ogz.music" value={newAppPackage} onChange={e => setNewAppPackage(e.target.value)} />
+                        <div className="ad-hint">Android'deki app_config.json ile birebir aynı olmalı.</div>
+                        <div className="ad-lbl">Panel kısa adı</div>
+                        <div className="ad-pw">
+                          <input className="ad-inp" placeholder={newAppPackage.trim() ? deriveAppId(newAppPackage) : "boş bırak → otomatik"} value={newAppId} onChange={e => setNewAppId(e.target.value)} />
+                          {!newAppId.trim() && <span className="ad-auto">otomatik</span>}
+                        </div>
+                        <div className="ad-lbl">Marka rengi</div>
+                        <div className="ad-sw">
+                          {["#2E6BF6", "#1DB954", "#8b5cf6", "#ec4899", "#f59e0b", "#ef4444", "#14b8a6"].map(c => (
+                            <button key={c} type="button" aria-label={c} className={newAppColor.toLowerCase() === c.toLowerCase() ? "on" : ""} style={{ background: c }} onClick={() => setNewAppColor(c)} />
+                          ))}
+                          <label className="ad-sw-custom" title="Özel renk"><input type="color" value={newAppColor} onChange={e => setNewAppColor(e.target.value)} />{adIco("plus")}</label>
+                        </div>
+                        <div className="ad-pv">
+                          <small>ÖNİZLEME</small>
+                          <span className="pn-chip" style={{ "--c": newAppColor, display: "inline-flex" }}>
+                            <span className="pn-av" style={{ background: newAppColor }}>{(newAppName.trim() || "?").charAt(0).toLocaleUpperCase("tr")}</span>
+                            <b>{newAppName.trim() || "Uygulama adı"}</b><em>0</em>
+                          </span>
+                          <div className="ad-pvr"><span>Panel adresi</span><code>/admin/{slug || "…"}/panel</code></div>
+                          <div className="ad-pvr"><span>Giriş kullanıcısı</span><code>{slug || "…"}</code></div>
+                        </div>
+                        <div className="ad-note">{adIco("check")}Şifre ana anahtardan üretilir, kaybolmaz; kartta istediğin zaman görebilirsin.</div>
+                      </div>
+                      <button type="button" className="ad-btn pri wide" disabled={appBusy} onClick={createApp}>{appBusy ? "Oluşturuluyor…" : "Uygulamayı oluştur"}</button>
+                    </>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+          );
+        })()}
 
         {/* GİZLİLİK POLİTİKALARI — paket + e-posta gir, link al (sadece süper panel) */}
         {activeSection === "privacy" && !PANEL_LOCKED && <div style={styles.card}>
