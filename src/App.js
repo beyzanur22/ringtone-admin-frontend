@@ -592,7 +592,7 @@ const PANEL_CSS = `
   .pn-root input[type=checkbox]:disabled { opacity: 0.5; cursor: not-allowed; }
   .pn-root input[type=radio] { accent-color: #8b5cf6; }
   .pn-head { position: sticky; top: 0; z-index: 20; background: rgba(17,17,20,0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.08); }
-  .pn-head .pn-top { position: static; background: none; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: 0; padding-bottom: 6px; }
+  .pn-head .pn-top { position: static; background: none; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: 0; }
   .pn-appbar { display: flex; align-items: center; gap: 8px; padding: 4px 32px 12px; }
   .pn-appbar-scroll { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; overflow-x: auto; padding: 3px 3px 4px; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.14) transparent; }
   .pn-appbar-scroll::-webkit-scrollbar { height: 6px; }
@@ -791,6 +791,33 @@ const PANEL_CSS = `
   .ad-note svg { color: #4ade80; flex-shrink: 0; margin-top: 1px; }
   @media (max-width: 900px) { .ad-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ad-stats.three { grid-template-columns: repeat(3, minmax(0, 1fr)); } .ad-search { width: 100%; } .ad-tools { width: 100%; } }
   @media (max-width: 560px) { .ad-stats.three { grid-template-columns: minmax(0, 1fr); } .ad-grid { grid-template-columns: minmax(0, 1fr); } }
+  .sw-wrap { position: relative; }
+  .sw-btn { display: flex; align-items: center; gap: 9px; height: 38px; padding: 0 10px 0 5px; border-radius: 11px; background: #18181c; border: 1px solid rgba(255,255,255,0.1); color: #f4f4f6; font: inherit; font-size: 13.5px; cursor: pointer; max-width: 320px; transition: border-color .15s, background .15s; }
+  .sw-btn:hover, .sw-btn.open { border-color: rgba(139,92,246,0.55); background: #1d1c24; }
+  .sw-btn.locked { cursor: default; }
+  .sw-btn b { font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sw-btn .pn-av, .sw-item .pn-av { width: 28px; height: 28px; border-radius: 8px; font-size: 12px; }
+  .sw-btn em, .sw-item em { display: inline-flex; align-items: center; gap: 5px; font-style: normal; font-size: 11.5px; font-weight: 700; color: #7c7c87; background: rgba(255,255,255,0.06); padding: 2px 8px; border-radius: 999px; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+  .sw-btn em i, .sw-item em i { width: 6px; height: 6px; border-radius: 50%; background: #55555f; }
+  .sw-btn em.live, .sw-item em.live { color: #4ade80; background: rgba(34,197,94,0.12); }
+  .sw-btn em.live i, .sw-item em.live i { background: #22c55e; }
+  .sw-ic { width: 15px !important; height: 15px !important; color: #7c7c87; }
+  .sw-pop { position: absolute; top: calc(100% + 8px); left: 0; z-index: 50; width: 360px; max-width: calc(100vw - 24px); background: #1c1c22; border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; box-shadow: 0 24px 60px rgba(0,0,0,0.55); overflow: hidden; animation: swIn .14s ease-out; }
+  @keyframes swIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+  .sw-search { display: flex; align-items: center; gap: 8px; padding: 0 12px; height: 46px; border-bottom: 1px solid rgba(255,255,255,0.07); color: #7c7c87; }
+  .sw-search svg { width: 16px; height: 16px; }
+  .sw-search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #f4f4f6; font: inherit; font-size: 14px; box-shadow: none !important; }
+  .sw-search kbd { font: inherit; font-size: 10.5px; color: #6b6b76; border: 1px solid rgba(255,255,255,0.1); border-radius: 5px; padding: 1px 5px; }
+  .sw-list { max-height: 380px; overflow-y: auto; padding: 6px; }
+  .sw-item { display: flex; align-items: center; gap: 10px; width: 100%; padding: 7px 8px; border: 0; border-radius: 9px; background: none; color: #d4d4dc; font: inherit; text-align: left; cursor: pointer; }
+  .sw-item:hover { background: rgba(255,255,255,0.05); }
+  .sw-item.on { background: rgba(139,92,246,0.14); color: #fff; }
+  .sw-t { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .sw-t b { font-size: 13.5px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sw-t small { font-size: 11px; color: #6b6b76; font-family: ui-monospace, Menlo, monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sw-none { color: #6b6b76; font-size: 13px; padding: 16px; text-align: center; }
+  .sw-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 12px; border-top: 1px solid rgba(255,255,255,0.07); font-size: 11.5px; color: #6b6b76; }
+  .sw-foot button { border: 0; background: none; color: #a78bfa; font: inherit; font-size: 12px; font-weight: 650; cursor: pointer; padding: 0; }
   .pn-scrim { display: none; }
   @media (max-width: 900px) {
     .pn-appbar { padding: 4px 16px 10px; }
@@ -1356,7 +1383,19 @@ function App() {
     try { return localStorage.getItem("panelScopeAll") !== "0"; } catch (e) { return true; }
   });
   const setScopeAll = (v) => { setScopeAllState(v); try { localStorage.setItem("panelScopeAll", v ? "1" : "0"); } catch (e) {} };
-  const [editApps, setEditApps] = useState(false);
+  const [swOpen, setSwOpen] = useState(false);
+  const [swQuery, setSwQuery] = useState("");
+  useEffect(() => {
+    const onKey = (e) => { if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k" && !PANEL_LOCKED) { e.preventDefault(); setSwOpen(v => !v); } };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+  useEffect(() => {
+    if (!swOpen) return undefined;
+    const close = (e) => { if (!e.target.closest || !e.target.closest(".sw-wrap")) { setSwOpen(false); setSwQuery(""); } };
+    window.addEventListener("mousedown", close);
+    return () => window.removeEventListener("mousedown", close);
+  }, [swOpen]);
   const [sideOpen, setSideOpen] = useState(false);   // mobil menü çekmecesi
   const [menuQuery, setMenuQuery] = useState("");    // menüde ara
   // Çok uygulamalı: kayıtlı uygulamalar + seçili appId (üstteki dropdown)
@@ -1764,6 +1803,67 @@ function App() {
         <button className="pn-burger" onClick={() => setSideOpen(true)} aria-label="Menü">
           <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
         </button>
+        {/* UYGULAMA SEÇİCİ — tıkla veya ⌘K: ara, seç; izleme ekranlarında "Tüm uygulamalar" */}
+        <div className="sw-wrap">
+          {(() => {
+            const showAll = !PANEL_LOCKED && isMonitor && scopeAll;
+            const cur = showAll ? null : currentApp;
+            const n = showAll ? allCount : chipCount(appId);
+            return (
+              <button type="button" className={"sw-btn" + (swOpen ? " open" : "") + (PANEL_LOCKED ? " locked" : "")}
+                onClick={() => !PANEL_LOCKED && setSwOpen(v => !v)} title={PANEL_LOCKED ? "Bu panel bu uygulamaya kilitli" : "Uygulama değiştir (⌘K)"}>
+                {showAll
+                  ? <span className="pn-av pn-av-all"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></svg></span>
+                  : <span className="pn-av" style={{ background: brand }}>{String(cur.name || appId).trim().charAt(0).toLocaleUpperCase("tr")}</span>}
+                <b>{showAll ? "Tüm uygulamalar" : (cur.name || appId)}</b>
+                {n != null && <em className={n > 0 ? "live" : ""}><i />{n}</em>}
+                {PANEL_LOCKED
+                  ? <svg viewBox="0 0 24 24" className="sw-ic"><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></svg>
+                  : <svg viewBox="0 0 24 24" className="sw-ic"><path d="m7 9 5-5 5 5M7 15l5 5 5-5" /></svg>}
+              </button>
+            );
+          })()}
+          {swOpen && !PANEL_LOCKED && (() => {
+            const q = swQuery.trim().toLocaleLowerCase("tr");
+            const list = appChips.filter(a => !q || String(a.name || a.id).toLocaleLowerCase("tr").includes(q) || String(a.packageName || "").toLowerCase().includes(q));
+            const choose = (id) => { setSwOpen(false); setSwQuery(""); if (id === "__all") setScopeAll(true); else pickApp(id); };
+            return (
+              <div className="sw-pop">
+                <label className="sw-search">
+                  <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+                  <input autoFocus value={swQuery} onChange={e => setSwQuery(e.target.value)} placeholder="Uygulama ara"
+                    onKeyDown={e => { if (e.key === "Enter" && list[0]) choose(list[0].id); if (e.key === "Escape") setSwOpen(false); }} />
+                  <kbd>esc</kbd>
+                </label>
+                <div className="sw-list">
+                  {isMonitor && !q && (
+                    <button type="button" className={"sw-item" + (scopeAll ? " on" : "")} onClick={() => choose("__all")}>
+                      <span className="pn-av pn-av-all"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></svg></span>
+                      <span className="sw-t"><b>Tüm uygulamalar</b><small style={{ fontFamily: "inherit" }}>Grafikler hepsini birlikte gösterir</small></span>
+                      {allCount != null && <em className={allCount > 0 ? "live" : ""}><i />{allCount}</em>}
+                    </button>
+                  )}
+                  {list.map(a => {
+                    const on = a.id === appId && !(isMonitor && scopeAll);
+                    const n = chipCount(a.id);
+                    return (
+                      <button key={a.id} type="button" className={"sw-item" + (on ? " on" : "")} onClick={() => choose(a.id)}>
+                        <span className="pn-av" style={{ background: a.brandPrimary || "#a78bfa" }}>{String(a.name || a.id).trim().charAt(0).toLocaleUpperCase("tr")}</span>
+                        <span className="sw-t"><b>{a.name || a.id}</b><small>{a.packageName || a.id}</small></span>
+                        {n != null && <em className={n > 0 ? "live" : ""}><i />{n}</em>}
+                      </button>
+                    );
+                  })}
+                  {!list.length && <div className="sw-none">Eşleşen uygulama yok</div>}
+                </div>
+                <div className="sw-foot">
+                  <span>{appChips.length} uygulama · aktife göre sıralı</span>
+                  <button type="button" onClick={() => { setSwOpen(false); pick("apps"); }}>Uygulamaları yönet</button>
+                </div>
+              </div>
+            );
+          })()}
+        </div>
         <div className="pn-crumb">
           <span className="pn-crumb-app">{curScreen.label}</span>
           {curScreen.tabs.length > 1 && <><span className="pn-sep">/</span><b>{activeLabel}</b></>}
@@ -1772,56 +1872,6 @@ function App() {
           <svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7v9H3z" /></svg>
           <span>Ana sayfa</span>
         </a>
-      </div>
-      {/* UYGULAMA ÇUBUĞU — hangi uygulamayı yönettiğin; izleme ekranlarında "Tümü" */}
-      <div className="pn-appbar">
-        {PANEL_LOCKED ? (
-          <span className="pn-chip on" title="Bu panel bu uygulamaya kilitli">
-            <span className="pn-av" style={{ background: brand }}>{String(currentApp.name || appId).trim().charAt(0).toLocaleUpperCase("tr")}</span>
-            <b>{currentApp.name || appId}</b>
-            <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></svg>
-          </span>
-        ) : (
-          <>
-            <div className="pn-appbar-scroll">
-            {isMonitor && (
-              <button type="button" className={"pn-chip" + (scopeAll ? " on" : "")} onClick={() => setScopeAll(true)}>
-                <span className="pn-av pn-av-all"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></svg></span>
-                <b>Tümü</b>
-                {allCount != null && <em className={allCount > 0 ? "live" : ""}>{allCount}</em>}
-              </button>
-            )}
-            {appChips.map(a => {
-              const on = a.id === appId && !(isMonitor && scopeAll);
-              const n = chipCount(a.id);
-              return (
-                <span key={a.id} className={"pn-chip" + (on ? " on" : "")} style={{ "--c": a.brandPrimary || "#a78bfa" }}
-                  onClick={() => !editApps && pickApp(a.id)} title={a.packageName || a.id}>
-                  <span className="pn-av" style={{ background: a.brandPrimary || "#a78bfa" }}>{String(a.name || a.id).trim().charAt(0).toLocaleUpperCase("tr")}</span>
-                  <b>{a.name || a.id}</b>
-                  {n != null && <em className={n > 0 ? "live" : ""}>{n}</em>}
-                  {editApps && a.id !== "default" && (
-                    <button type="button" className="pn-chip-x" aria-label={`${a.name} sil`}
-                      onClick={(e) => { e.stopPropagation(); deleteApp(a); }}>
-                      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" /></svg>
-                    </button>
-                  )}
-                </span>
-              );
-            })}
-            </div>
-            <span className="pn-appbar-tools">
-              <button type="button" className={"pn-tool" + (editApps ? " on" : "")} onClick={() => setEditApps(v => !v)}
-                title={editApps ? "Düzenlemeyi bitir" : "Uygulama sil"}>
-                {editApps ? <><svg viewBox="0 0 24 24"><path d="m5 12 5 5 9-10" /></svg><span>Bitti</span></>
-                  : <><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" /></svg><span>Sil</span></>}
-              </button>
-              <button type="button" className="pn-tool" onClick={() => pick("apps")} title="Yeni uygulama ekle">
-                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></svg><span>Ekle</span>
-              </button>
-            </span>
-          </>
-        )}
       </div>
       </div>
       <div className={"pn-content" + (switching ? " pn-switching" : "")}>

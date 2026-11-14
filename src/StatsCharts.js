@@ -201,14 +201,13 @@ export function CountryTrendChart({ data, range, height = 260 }) {
   const maxOf = (row, key) => row._p && row._p.cMax && row._p.cMax[key];
   const series = [...top, OTHER];
   return (
-    <ChartFrame title="Ülkelere göre zaman içinde" sub="En kalabalık 6 ülke ayrı, kalanlar 'Diğer ülkeler'de toplanır (üstüne gelince listelenir)">
+    <ChartFrame title="Ülkelere göre zaman içinde" sub="Renkli 6 ülke grafikte ayrı çizilir; gri olanlar 'Diğer ülkeler'de toplanır">
       {!data || !hasData(data.points) ? <Empty loading={!data} /> : (
         <AreaChart height={height} data={rows} theme="dark" margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
           <CartesianGrid stroke="#24242a" vertical={false} />
           <XAxis dataKey="label" {...axisProps} minTickGap={18} />
           <YAxis {...axisProps} allowDecimals={false} width={40} />
           <Tooltip content={makeTooltip(data.unit, maxOf)} cursor={{ stroke: "#55555f" }} />
-          <Legend wrapperStyle={{ fontSize: 12, color: "#a1a1ab" }} />
           {series.map((cc, i) => (
             <Area key={cc} type="monotone" dataKey={cc} stackId="c"
               name={cc === OTHER ? "Diğer ülkeler" : `${flag(cc)} ${countryName(cc)}`}
@@ -217,6 +216,21 @@ export function CountryTrendChart({ data, range, height = 260 }) {
               fillOpacity={0.2} strokeWidth={2} isAnimationActive={false} />
           ))}
         </AreaChart>
+      )}
+      {data && data.countries.length > 0 && (
+        <div className="st-dots">
+          <small>{data.unit === "minute" ? "Şu an aktif · son 5 dk" : `${(RANGES.find(r => r.key === range) || {}).label} ortalaması`}</small>
+          {data.countries.slice(0, 24).map(c => {
+            const i = top.indexOf(c.country);
+            return (
+              <span key={c.country} className="st-dot">
+                <i style={{ background: i >= 0 ? COLORS[i % COLORS.length] : "#55555f" }} />
+                {flag(c.country)} {countryName(c.country)} <b>{num(c.value)}</b>
+              </span>
+            );
+          })}
+          {data.countries.length > 24 && <span className="st-dot more">+{data.countries.length - 24} ülke</span>}
+        </div>
       )}
     </ChartFrame>
   );
@@ -381,6 +395,12 @@ export const STATS_CSS = `
   .st-tip-r span { flex: 1; color: #b4b4be; }
   .st-tip-r b { font-variant-numeric: tabular-nums; }
   .st-tip-r small { color: #7c7c87; font-size: 11px; margin-left: 4px; }
+  .st-dots { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; padding: 12px 4px 6px; margin-top: 6px; border-top: 1px solid rgba(255,255,255,0.06); }
+  .st-dots small { width: 100%; font-size: 11px; font-weight: 600; color: #6b6b76; letter-spacing: .3px; margin-bottom: 2px; }
+  .st-dot { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: #c4c4cc; white-space: nowrap; }
+  .st-dot i { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .st-dot b { color: #f4f4f6; font-weight: 650; font-variant-numeric: tabular-nums; }
+  .st-dot.more { color: #7c7c87; }
   .st-tip-sub { display: flex; flex-wrap: wrap; gap: 3px 10px; padding: 3px 0 6px 17px; font-size: 11.5px; color: #9a9aa6; max-width: 300px; }
   .st-tip-sub b { color: #e4e4ea; font-weight: 600; }
   .st-tip-t { border-top: 1px solid rgba(255,255,255,0.08); margin-top: 5px; padding-top: 6px; }
@@ -423,9 +443,8 @@ export function StatsSection({ apiUrl, appKey, scope, scopeLabel, kind, onPickAp
         </div>
       )}
       {(kind === "countries" || kind === "overview") && (
-        <div className="st-grid main-side">
-          <CountryTrendChart data={data} range={range} height={360} />
-          <CountryBarChart data={data} range={range} />
+        <div className="st-grid">
+          <CountryTrendChart data={data} range={range} height={340} />
         </div>
       )}
       {(kind === "countries" || kind === "overview") && (
