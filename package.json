@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "/admin/panel",
   "dependencies": {
+    "@rsuite/charts": "^6.0.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
@@ -36,5 +37,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "overrides": {
+    "recharts": {
+      "react-is": "^19.0.0"
+    }
   }
 }

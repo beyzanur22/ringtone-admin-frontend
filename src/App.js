@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { StatsSection, useStatsSeries, STATS_CSS } from "./StatsCharts";
 
 /* =========================================================================
    ÇOK UYGULAMALI PANEL — appId enjeksiyonu
@@ -412,13 +413,25 @@ function AlbumsSection({ apiUrl }) {
 /* =========================================================================
    PANEL GÖRÜNÜMÜ — yalnızca tasarım (menü başlıkları, simgeler, CSS)
 ========================================================================= */
-const MENU_SECTIONS = [
-  { title: "Uygulama", keys: ["settings", "countries", "ringtonemode", "mp3", "appcontrols"] },
-  { title: "Kullanıcıya ulaş", keys: ["device", "notifications", "popup"] },
-  { title: "Reklam & İçerik", groups: true },
-  { title: "İzleme", keys: ["live", "loginips", "reviewlogs", "apiproviders", "albums"] },
-  { title: "Yönetim", keys: ["users", "apps", "privacy"] },
+// Sol menüde ekranlar; her ekranın sekmeleri içerikte üstte
+const SCREENS = [
+  { key: "overview", label: "Genel Bakış", tabs: ["overview"] },
+  { key: "countrycfg", label: "Ülke Ayarları", tabs: ["settings", "countries"] },
+  { key: "infra", label: "İndirme & Altyapı", tabs: ["mp3", "apiproviders", "smartcache", "youtube"] },
+  { key: "ads", label: "Reklamlar", tabs: ["downloadad", "bannerad", "bottombanner", "ringtonead", "adfree", "asn"] },
+  { key: "content", label: "İçerik", tabs: ["blocked", "contentfilter"] },
+  { key: "appcontrols", label: "App Controls", tabs: ["appcontrols"] },
+  { key: "reach", label: "Kullanıcıya Ulaş", tabs: ["device", "notifications", "popup"] },
+  { key: "monitor", label: "İzleme", tabs: ["live", "ringtonemode", "loginips", "reviewlogs", "albums"] },
+  { key: "admin", label: "Yönetim", tabs: ["users", "apps", "privacy"] },
 ];
+const SCREEN_GROUPS = [
+  { title: "Genel", keys: ["overview", "monitor"] },
+  { title: "Ayarlar", keys: ["countrycfg", "infra", "ads", "content", "appcontrols"] },
+  { title: "Kullanıcılar", keys: ["reach"] },
+  { title: "Yönetim", keys: ["admin"] },
+];
+const MONITOR_TABS = ["overview", "live", "ringtonemode"];
 const PANEL_ICONS = {
   settings: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
   countries: '<path d="M4 21V4M4 4h12l-2 4 2 4H4"/>',
@@ -448,6 +461,12 @@ const PANEL_ICONS = {
   asn: '<path d="M13 7 9 3 5 7l4 4M17 11l4 4-4 4-4-4M8 12l4 4M16 8l-4 4"/><path d="M19 21a9 9 0 0 0-2-6"/>',
   smartcache: '<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/>',
   youtube: '<rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9 5 3-5 3z"/>',
+  overview: '<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
+  countrycfg: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+  infra: '<rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/>',
+  reach: '<path d="M21 12a8 8 0 0 1-12 7l-6 2 2-5a8 8 0 1 1 16-4z"/>',
+  monitor: '<path d="M3 12h4l3 8 4-16 3 8h4"/>',
+  admin: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
 };
 function PanelIcon({ k, fallback }) {
   const d = PANEL_ICONS[k];
@@ -512,7 +531,7 @@ const PANEL_CSS = `
   .pn-ghost { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: #a1a1ab; background: #18181c; border: 1px solid rgba(255,255,255,0.08); padding: 7px 11px; border-radius: 9px; text-decoration: none; white-space: nowrap; }
   .pn-ghost:hover { color: #f4f4f6; border-color: rgba(255,255,255,0.18); }
   .pn-ghost svg { width: 15px; height: 15px; }
-  .pn-content { width: 100%; max-width: 980px; margin: 0 auto; padding: 28px 32px 80px; display: flex; flex-direction: column; gap: 22px; box-sizing: border-box; }
+  .pn-content { width: 100%; max-width: 1180px; margin: 0 auto; padding: 28px 32px 80px; display: flex; flex-direction: column; gap: 22px; box-sizing: border-box; }
   .pn-content h2 { letter-spacing: -0.3px; }
   .pn-content code { background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 6px; font-size: 0.92em; }
   .pn-content button { transition: filter .15s, transform .1s, background-color .15s; }
@@ -526,8 +545,38 @@ const PANEL_CSS = `
   .pn-root input[type=checkbox]:checked::after { transform: translateX(15px); }
   .pn-root input[type=checkbox]:disabled { opacity: 0.5; cursor: not-allowed; }
   .pn-root input[type=radio] { accent-color: #8b5cf6; }
+  .pn-head { position: sticky; top: 0; z-index: 20; background: rgba(17,17,20,0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .pn-head .pn-top { position: static; background: none; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: 0; padding-bottom: 6px; }
+  .pn-appbar { display: flex; align-items: center; gap: 8px; padding: 4px 32px 12px; }
+  .pn-appbar-scroll { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; overflow-x: auto; padding: 3px 3px 4px; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.14) transparent; }
+  .pn-appbar-scroll::-webkit-scrollbar { height: 6px; }
+  .pn-chip { --c: #a78bfa; position: relative; display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; height: 38px; padding: 0 12px 0 5px; border-radius: 11px; background: #18181c; border: 1px solid rgba(255,255,255,0.08); color: #c4c4cc; font: inherit; font-size: 13px; cursor: pointer; user-select: none; transition: border-color .15s, background .15s, color .15s; }
+  .pn-chip:hover { border-color: rgba(255,255,255,0.2); color: #fff; }
+  .pn-chip.on { background: #22202b; border-color: var(--c); color: #fff; box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 22%, transparent); }
+  .pn-chip b { font-weight: 650; white-space: nowrap; }
+  .pn-chip .pn-av { width: 28px; height: 28px; border-radius: 8px; font-size: 12px; }
+  .pn-av-all { background: #2a2a33; color: #c4b5fd; }
+  .pn-av-all svg { width: 15px !important; height: 15px !important; }
+  .pn-chip > svg { width: 14px !important; height: 14px !important; color: #6b6b76; }
+  .pn-chip em { font-style: normal; font-size: 11.5px; font-weight: 700; color: #7c7c87; background: rgba(255,255,255,0.06); padding: 1px 7px; border-radius: 999px; font-variant-numeric: tabular-nums; }
+  .pn-chip em.live { color: #4ade80; background: rgba(34,197,94,0.12); }
+  .pn-chip-x { display: grid; place-items: center; width: 22px; height: 22px; margin-right: -4px; border-radius: 7px; border: 0; background: rgba(248,113,113,0.15); color: #f87171; cursor: pointer; }
+  .pn-chip-x:hover { background: #ef4444; color: #fff; }
+  .pn-chip-x svg { width: 13px !important; height: 13px !important; stroke-width: 2.4; }
+  .pn-appbar-tools { display: inline-flex; gap: 6px; padding-left: 8px; border-left: 1px solid rgba(255,255,255,0.08); flex-shrink: 0; }
+  .pn-tool { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 11px; border-radius: 10px; border: 1px dashed rgba(255,255,255,0.16); background: none; color: #a1a1ab; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .pn-tool:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
+  .pn-tool.on { border-style: solid; border-color: #ef4444; color: #fca5a5; background: rgba(239,68,68,0.1); }
+  .pn-tool svg { width: 15px !important; height: 15px !important; }
+  .pn-tabs { display: flex; gap: 4px; padding: 4px; border-radius: 13px; background: #15151a; border: 1px solid rgba(255,255,255,0.07); overflow-x: auto; }
+  .pn-tabs button { display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0; border: 0; background: none; color: #a1a1ab; font: inherit; font-size: 13px; font-weight: 600; padding: 8px 13px; border-radius: 9px; cursor: pointer; white-space: nowrap; }
+  .pn-tabs button:hover { color: #fff; background: rgba(255,255,255,0.04); }
+  .pn-tabs button.on { background: #26232f; color: #fff; box-shadow: inset 0 0 0 1px rgba(139,92,246,0.45); }
+  .pn-tabs button.on .pn-ico { color: #c4b5fd; }
+  .pn-tabs .pn-ico { width: 16px !important; height: 16px !important; }
   .pn-scrim { display: none; }
   @media (max-width: 900px) {
+    .pn-appbar { padding: 4px 16px 10px; }
     .pn-side { position: fixed; left: 0; top: 0; transform: translateX(-100%); transition: transform .22s; }
     .pn-side.open { transform: none; box-shadow: 20px 0 50px rgba(0,0,0,0.5); }
     .pn-scrim { display: block; position: fixed; inset: 0; z-index: 35; background: rgba(0,0,0,0.5); }
@@ -535,7 +584,7 @@ const PANEL_CSS = `
     .pn-top { padding: 11px 16px; }
     .pn-content { padding: 20px 16px 60px; }
   }
-  @media (max-width: 560px) { .pn-ghost span, .pn-crumb-app, .pn-sep { display: none; } }
+  @media (max-width: 560px) { .pn-ghost span, .pn-crumb-app, .pn-sep { display: none; } .pn-tool span { display: none; } .pn-tool { padding: 0 9px; } .pn-chip { height: 34px; } }
 `;
 
 function App() {
@@ -1079,17 +1128,37 @@ function App() {
     .catch(err => alert("İstek başarısız!"));
   };
 
-  const [activeSection, setActiveSection] = useState("settings");
-  const [openGroups, setOpenGroups] = useState({});
+  const [activeSection, setActiveSectionState] = useState(() => {
+    try { return localStorage.getItem("panelSection") || "overview"; } catch (e) { return "overview"; }
+  });
+  const setActiveSection = (k) => { setActiveSectionState(k); try { localStorage.setItem("panelSection", k); } catch (e) {} };
+  // Üst çubukta "Tümü": izleme grafikleri tüm uygulamaları kapsar (ayar ekranlarını etkilemez)
+  const [scopeAll, setScopeAllState] = useState(() => {
+    try { return localStorage.getItem("panelScopeAll") !== "0"; } catch (e) { return true; }
+  });
+  const setScopeAll = (v) => { setScopeAllState(v); try { localStorage.setItem("panelScopeAll", v ? "1" : "0"); } catch (e) {} };
+  const [editApps, setEditApps] = useState(false);
   const [sideOpen, setSideOpen] = useState(false);   // mobil menü çekmecesi
   const [menuQuery, setMenuQuery] = useState("");    // menüde ara
   // Çok uygulamalı: kayıtlı uygulamalar + seçili appId (üstteki dropdown)
   const [apps, setApps] = useState({});
   const [appId] = useState(PANEL_APP_ID);
-  useEffect(() => {
+  const fetchApps = () => {
     fetch(`${API_URL}/admin/apps`, { headers: { "X-App-Key": APP_KEY } })
       .then(r => r.json()).then(setApps).catch(() => {});
-  }, [API_URL]);
+  };
+  useEffect(fetchApps, [API_URL]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Üst çubuktaki uygulama başına anlık sayılar
+  const chipStats = useStatsSeries({ apiUrl: API_URL, appKey: APP_KEY, scope: "all", range: "live", byApp: !PANEL_LOCKED });
+  const chipCount = (id) => {
+    const a = chipStats.data && chipStats.data.byApp && chipStats.data.byApp.find(x => x.id === id);
+    const pts = a ? a.series.filter(Boolean) : [];
+    return pts.length ? pts[pts.length - 1].t : null;
+  };
+  const pickApp = (id) => {
+    setScopeAll(false);
+    if (id !== appId) { setPanelAppId(id); window.location.reload(); }
+  };
   const currentApp = apps[appId] || { name: appId, brandPrimary: "#a78bfa" };
 
   // === UYGULAMALAR (yeni uygulama ekle + izole panel giriş bilgileri) — sadece süper panel ===
@@ -1153,8 +1222,10 @@ function App() {
     })
       .then(r => r.json())
       .then(d => {
-        if (d.ok) fetchAppCredentials();
-        else alert("Hata: " + (d.error || "Silinemedi"));
+        if (!d.ok) return alert("Hata: " + (d.error || "Silinemedi"));
+        if (a.id === appId) { setPanelAppId("default"); window.location.reload(); return; }
+        fetchAppCredentials();
+        fetchApps();
       })
       .catch(() => alert("Sunucuya bağlanılamadı!"));
   };
@@ -1254,11 +1325,8 @@ function App() {
       .catch(() => alert("Sunucuya bağlanılamadı!"));
   };
 
-  const menuGroups = [
-    { key: "ads", icon: "📢", label: "Reklamlar" },
-    { key: "content", icon: "🎬", label: "İçerik" },
-  ];
   const menuItems = [
+    { key: "overview", icon: "📊", label: "Genel Bakış" },
     ...(!PANEL_LOCKED ? [{ key: "users", icon: "👤", label: "Kullanıcılar" }, { key: "apps", icon: "🗂️", label: "Uygulamalar" }, { key: "privacy", icon: "🔒", label: "Gizlilik Politikaları" }] : []),
     { key: "settings", icon: "⚙️", label: "Genel Ülke Modu" },
     { key: "countries", icon: "🌍", label: "Ülke Ayarları" },
@@ -1310,43 +1378,50 @@ function App() {
 
   if (!config) return <div style={{ color: "#9a9aa6", padding: 50, backgroundColor: "#111114", minHeight: "100vh", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif" }}>Yükleniyor...</div>;
 
-  // Yalnızca görünüm: menüyü başlıklar altında göster (hangi bölümün görüneceği değişmez)
-  const flatItems = menuItems.filter(item => !item.group);
+  // Ekranlar: yalnız erişilebilir sekmeleri olanlar (izole panelde bazı sekmeler yok)
+  const itemByKey = Object.fromEntries(menuItems.map(m => [m.key, m]));
+  const screens = SCREENS.map(sc => ({ ...sc, tabs: sc.tabs.filter(k => itemByKey[k]) })).filter(sc => sc.tabs.length);
+  const curScreen = screens.find(sc => sc.tabs.includes(activeSection)) || screens[0];
+  if (!curScreen.tabs.includes(activeSection)) setTimeout(() => setActiveSection(curScreen.tabs[0]), 0);
   const menuQ = menuQuery.trim().toLocaleLowerCase("tr");
-  const activeLabel = (menuItems.find(m => m.key === activeSection) || {}).label || "";
+  const activeLabel = (itemByKey[activeSection] || {}).label || "";
   const brand = currentApp.brandPrimary || "#a78bfa";
-  const appInitial = String(currentApp.name || appId || "?").trim().charAt(0).toLocaleUpperCase("tr");
-  const pick = (key) => { setActiveSection(key); setSideOpen(false); };
-  const navItem = (item, sub) => (
+  const pick = (key) => {
+    const sc = screens.find(x => x.tabs.includes(key));
+    if (sc) { try { localStorage.setItem("panelTab:" + sc.key, key); } catch (e) {} }
+    setActiveSection(key); setSideOpen(false);
+  };
+  // Ekrana geçince o ekranda en son açılan sekme
+  const pickScreen = (sc) => {
+    let last = null;
+    try { last = localStorage.getItem("panelTab:" + sc.key); } catch (e) {}
+    pick(sc.tabs.includes(last) ? last : sc.tabs[0]);
+  };
+  const navItem = (item) => (
     <div key={item.key} onClick={() => pick(item.key)}
-      className={"pn-mi" + (sub ? " pn-sub" : "") + (activeSection === item.key ? " active" : "")}>
+      className={"pn-mi" + (activeSection === item.key ? " active" : "")}>
       <PanelIcon k={item.key} fallback={item.icon} />
       <span>{item.label}</span>
     </div>
   );
-  const groupBlock = (g) => {
-    const items = menuItems.filter(item => item.group === g.key);
-    const hasActive = items.some(item => item.key === activeSection);
-    const open = openGroups[g.key] ?? hasActive;
-    return (
-      <div key={g.key}>
-        <div onClick={() => setOpenGroups(o => ({ ...o, [g.key]: !open }))}
-          className={"pn-mi pn-group" + (hasActive && !open ? " has-active" : "")}>
-          <PanelIcon k={g.key} fallback={g.icon} />
-          <span style={{ flex: 1 }}>{g.label}</span>
-          <span className="pn-count">{items.length}</span>
-          <svg className={"pn-chev" + (open ? " open" : "")} viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></svg>
-        </div>
-        {open && items.map(item => navItem(item, true))}
-      </div>
-    );
-  };
-  const listed = new Set(MENU_SECTIONS.flatMap(s => s.keys || []));
-  const restItems = flatItems.filter(i => !listed.has(i.key));
+  const screenItem = (sc) => (
+    <div key={sc.key} onClick={() => pickScreen(sc)}
+      className={"pn-mi" + (curScreen.key === sc.key ? " active" : "")}>
+      <PanelIcon k={sc.key} fallback="•" />
+      <span style={{ flex: 1 }}>{sc.label}</span>
+      {sc.tabs.length > 1 && <span className="pn-count">{sc.tabs.length}</span>}
+    </div>
+  );
+  const isMonitor = MONITOR_TABS.includes(activeSection);
+  const statsScope = PANEL_LOCKED ? appId : (scopeAll ? "all" : appId);
+  const statsScopeLabel = statsScope === "all" ? "Tüm uygulamalar" : (currentApp.name || appId) + (appId === "default" ? " (kayıtsız paketler dahil)" : "");
+  const allPts = chipStats.data ? chipStats.data.points.filter(x => !x.missing) : [];
+  const allCount = allPts.length ? allPts[allPts.length - 1].t : null;
+  const appChips = Object.values(apps).sort((a, b) => (a.id === "default" ? -1 : b.id === "default" ? 1 : 0));
 
   return (
     <div className="pn-root">
-      <style>{PANEL_CSS}</style>
+      <style>{PANEL_CSS + STATS_CSS}</style>
       {sideOpen && <div className="pn-scrim" onClick={() => setSideOpen(false)} />}
       {/* SIDEBAR */}
       <aside className={"pn-side" + (sideOpen ? " open" : "")}>
@@ -1355,31 +1430,6 @@ function App() {
             <span className="pn-mark"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></svg></span>
             <b>Müzik Kontrol</b>
           </a>
-          {/* UYGULAMA SEÇİCİ — hangi uygulamayı yönettiğini gösterir (yanlış-app koruması) */}
-          <div className="pn-lbl">Uygulama</div>
-          {PANEL_LOCKED ? (
-            /* İzole panel: uygulama sabit — sadece göster, değiştirilemez */
-            <div className="pn-app" title="Bu panel bu uygulamaya kilitli">
-              <span className="pn-av" style={{ background: brand }}>{appInitial}</span>
-              <span className="pn-app-t"><b>{currentApp.name || appId}</b>{currentApp.packageName ? <small>{currentApp.packageName}</small> : null}</span>
-              <svg className="pn-app-i" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></svg>
-            </div>
-          ) : (
-            <div className="pn-app">
-              <span className="pn-av" style={{ background: brand }}>{appInitial}</span>
-              <select className="pn-app-sel"
-                value={appId}
-                onChange={(e) => { setPanelAppId(e.target.value); window.location.reload(); }}>
-                {Object.values(apps).length === 0 && <option value={appId}>{appId}</option>}
-                {Object.values(apps).map(a => (
-                  <option key={a.id} value={a.id} style={{ backgroundColor: "#18181c", color: "#fff" }}>
-                    {a.name}
-                  </option>
-                ))}
-              </select>
-              <svg className="pn-app-i" viewBox="0 0 24 24"><path d="m7 9 5-5 5 5M7 15l5 5 5-5" /></svg>
-            </div>
-          )}
           {/* CANLI KULLANICI ROZETİ — her bölümde görünür */}
           <div className="pn-live" onClick={() => pick("live")}>
             <i />
@@ -1394,20 +1444,14 @@ function App() {
         <nav className="pn-menu">
           {menuQ ? (
             (() => {
-              const hits = menuItems.filter(i => i.label.toLocaleLowerCase("tr").includes(menuQ));
+              const hits = menuItems.filter(i => itemByKey[i.key] && screens.some(sc => sc.tabs.includes(i.key)) && i.label.toLocaleLowerCase("tr").includes(menuQ));
               return hits.length ? hits.map(i => navItem(i)) : <div className="pn-none">Eşleşen bölüm yok</div>;
             })()
           ) : (
-            <>
-              {MENU_SECTIONS.map(sec => {
-                if (sec.groups) {
-                  return menuGroups.length ? <div key={sec.title}><div className="pn-grp">{sec.title}</div>{menuGroups.map(groupBlock)}</div> : null;
-                }
-                const its = sec.keys.map(k => flatItems.find(i => i.key === k)).filter(Boolean);
-                return its.length ? <div key={sec.title}><div className="pn-grp">{sec.title}</div>{its.map(i => navItem(i))}</div> : null;
-              })}
-              {restItems.length > 0 && <div><div className="pn-grp">Diğer</div>{restItems.map(i => navItem(i))}</div>}
-            </>
+            SCREEN_GROUPS.map(g => {
+              const its = g.keys.map(k => screens.find(sc => sc.key === k)).filter(Boolean);
+              return its.length ? <div key={g.title}><div className="pn-grp">{g.title}</div>{its.map(screenItem)}</div> : null;
+            })
           )}
         </nav>
         {/* ÇIKIŞ — kişisel oturumu kapatır, giriş ekranına döner */}
@@ -1418,23 +1462,90 @@ function App() {
       </aside>
       {/* MAIN CONTENT */}
       <div className="pn-main">
+      <div className="pn-head">
       <div className="pn-top">
         <button className="pn-burger" onClick={() => setSideOpen(true)} aria-label="Menü">
           <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
         </button>
         <div className="pn-crumb">
-          <span className="pn-dot" style={{ background: brand }} />
-          <span className="pn-crumb-app">{currentApp.name || appId}</span>
-          <span className="pn-sep">/</span>
-          <b>{activeLabel}</b>
+          <span className="pn-crumb-app">{curScreen.label}</span>
+          {curScreen.tabs.length > 1 && <><span className="pn-sep">/</span><b>{activeLabel}</b></>}
         </div>
         <a className="pn-ghost" href="/admin">
           <svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7v9H3z" /></svg>
           <span>Ana sayfa</span>
         </a>
       </div>
+      {/* UYGULAMA ÇUBUĞU — hangi uygulamayı yönettiğin; izleme ekranlarında "Tümü" */}
+      <div className="pn-appbar">
+        {PANEL_LOCKED ? (
+          <span className="pn-chip on" title="Bu panel bu uygulamaya kilitli">
+            <span className="pn-av" style={{ background: brand }}>{String(currentApp.name || appId).trim().charAt(0).toLocaleUpperCase("tr")}</span>
+            <b>{currentApp.name || appId}</b>
+            <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></svg>
+          </span>
+        ) : (
+          <>
+            <div className="pn-appbar-scroll">
+            {isMonitor && (
+              <button type="button" className={"pn-chip" + (scopeAll ? " on" : "")} onClick={() => setScopeAll(true)}>
+                <span className="pn-av pn-av-all"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></svg></span>
+                <b>Tümü</b>
+                {allCount != null && <em className={allCount > 0 ? "live" : ""}>{allCount}</em>}
+              </button>
+            )}
+            {appChips.map(a => {
+              const on = a.id === appId && !(isMonitor && scopeAll);
+              const n = chipCount(a.id);
+              return (
+                <span key={a.id} className={"pn-chip" + (on ? " on" : "")} style={{ "--c": a.brandPrimary || "#a78bfa" }}
+                  onClick={() => !editApps && pickApp(a.id)} title={a.packageName || a.id}>
+                  <span className="pn-av" style={{ background: a.brandPrimary || "#a78bfa" }}>{String(a.name || a.id).trim().charAt(0).toLocaleUpperCase("tr")}</span>
+                  <b>{a.name || a.id}</b>
+                  {n != null && <em className={n > 0 ? "live" : ""}>{n}</em>}
+                  {editApps && a.id !== "default" && (
+                    <button type="button" className="pn-chip-x" aria-label={`${a.name} sil`}
+                      onClick={(e) => { e.stopPropagation(); deleteApp(a); }}>
+                      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" /></svg>
+                    </button>
+                  )}
+                </span>
+              );
+            })}
+            </div>
+            <span className="pn-appbar-tools">
+              <button type="button" className={"pn-tool" + (editApps ? " on" : "")} onClick={() => setEditApps(v => !v)}
+                title={editApps ? "Düzenlemeyi bitir" : "Uygulama sil"}>
+                {editApps ? <><svg viewBox="0 0 24 24"><path d="m5 12 5 5 9-10" /></svg><span>Bitti</span></>
+                  : <><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" /></svg><span>Sil</span></>}
+              </button>
+              <button type="button" className="pn-tool" onClick={() => pick("apps")} title="Yeni uygulama ekle">
+                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></svg><span>Ekle</span>
+              </button>
+            </span>
+          </>
+        )}
+      </div>
+      </div>
       <div className="pn-content">
-        
+        {curScreen.tabs.length > 1 && (
+          <div className="pn-tabs" role="tablist">
+            {curScreen.tabs.map(k => (
+              <button key={k} type="button" role="tab" aria-selected={activeSection === k}
+                className={activeSection === k ? "on" : ""} onClick={() => pick(k)}>
+                <PanelIcon k={k} fallback={(itemByKey[k] || {}).icon} />
+                <span>{(itemByKey[k] || {}).label}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* GENEL BAKIŞ — tüm uygulamalar ya da seçili uygulama, zaman aralıklı grafikler */}
+        {activeSection === "overview" && <div style={styles.card}>
+          <StatsSection apiUrl={API_URL} appKey={APP_KEY} scope={statsScope} scopeLabel={statsScopeLabel}
+            kind="overview" allowByApp={!PANEL_LOCKED} onPickApp={pickApp} />
+        </div>}
+
         {/* KULLANICILAR — kişisel giriş hesapları (sadece süper panel) */}
         {activeSection === "users" && !PANEL_LOCKED && <div style={styles.card}>
           <h2 style={styles.title}>👤 Kullanıcılar</h2>
@@ -2331,6 +2442,8 @@ function App() {
             Uygulamada "aktif" = seçilen süre içinde backend'e istek atmış benzersiz cihaz. Cihaz kimliği: X-Device-Id → token → IP.
           </p>
 
+          <StatsSection apiUrl={API_URL} appKey={APP_KEY} scope={statsScope} scopeLabel={statsScopeLabel} kind="countries" />
+
           {!liveUsers ? (
             <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Yükleniyor...</div>
           ) : (
@@ -2431,30 +2544,6 @@ function App() {
                 );
               })()}
 
-              {/* SON 60 DAKİKA GRAFİĞİ */}
-              {liveUsers.timeline && liveUsers.timeline.length > 0 && (() => {
-                const max = Math.max(1, ...liveUsers.timeline.map(p => p.count));
-                return (
-                  <div style={{ marginBottom: 26 }}>
-                    <SectionHead title="Son 60 Dakika" sub="Dakikalık benzersiz cihaz"
-                      right={<span style={{ color: "rgba(255,255,255,0.6)", fontSize: 12 }}>zirve: <b style={{ color: "#fff" }}>{max}</b></span>} />
-                    <div style={{ display: "flex", alignItems: "flex-end", gap: 2, height: 90, padding: "0 2px",
-                      backgroundColor: "#111114", border: "1px solid #2c2c33", borderRadius: 8 }}>
-                      {liveUsers.timeline.map((p, i) => (
-                        <div key={i} title={`${p.t} — ${p.count} cihaz`}
-                          style={{ flex: 1, height: `${Math.max(2, (p.count / max) * 100)}%`,
-                            backgroundColor: i === liveUsers.timeline.length - 1 ? "#4ade80" : "#22c55e",
-                            opacity: i === liveUsers.timeline.length - 1 ? 1 : 0.55, borderRadius: "2px 2px 0 0" }} />
-                      ))}
-                    </div>
-                    <div style={{ display: "flex", justifyContent: "space-between", color: "#555", fontSize: 10, marginTop: 4 }}>
-                      <span>{liveUsers.timeline[0].t} (UTC)</span>
-                      <span>{liveUsers.timeline[liveUsers.timeline.length - 1].t} (UTC)</span>
-                    </div>
-                  </div>
-                );
-              })()}
-
               {/* ZİYARETÇİ ÖZETİ — son 24 saat / son 7 gün, ülke kırılımlı */}
               {visitorStats && (() => {
                 const vs = visitorStats;
@@ -2543,21 +2632,6 @@ function App() {
                   </div>
                 );
               })()}
-
-              {/* ÜLKELER */}
-              {liveUsers.byCountry && liveUsers.byCountry.length > 0 && (
-                <div style={{ marginBottom: 26 }}>
-                  <SectionHead title="Ülkelere Göre" sub={`Şu an aktif — son ${liveUsers.window} dakika`} />
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                    {liveUsers.byCountry.slice(0, 20).map(c => (
-                      <span key={c.country} style={{ padding: "6px 12px", borderRadius: 20, backgroundColor: "#3a3a41",
-                        border: "1px solid #2c2c33", fontSize: 12, color: "#d4d4dc" }}>
-                        🌍 {c.country} <b style={{ color: "#a78bfa" }}>{c.count}</b>
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
 
               {/* CANLI IP LİSTESİ */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, flexWrap: "wrap", gap: 10 }}>
@@ -2665,6 +2739,9 @@ function App() {
             ve her yoklamada sunucuya bildirir. Bu moddayken arama/çalma trafiği olmadığı için
             bu cihazlar "Canlı Kullanıcılar" toplamının içindedir ama orada ayırt edilemez.
           </p>
+
+          <StatsSection apiUrl={API_URL} appKey={APP_KEY} scope={statsScope} scopeLabel={statsScopeLabel}
+            kind="ringtone" allowByApp={!PANEL_LOCKED} onPickApp={pickApp} />
 
           {!rtUsers ? (
             <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Yükleniyor...</div>
