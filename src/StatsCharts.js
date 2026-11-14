@@ -85,6 +85,103 @@ export function useStatsSeries({ apiUrl, appKey, scope, range, byApp, enabled = 
   return state;
 }
 
+export function useVisitorSeries({ apiUrl, appKey, scope, range, enabled = true }) {
+  const [state, setState] = useState({ data: null, error: null });
+  useEffect(() => {
+    if (!enabled) return undefined;
+    let alive = true;
+    const load = () => fetch(`${apiUrl}/admin/visitor-series?range=${range}&appId=${encodeURIComponent(scope)}`, { headers: { "X-App-Key": appKey } })
+      .then(r => r.json().then(d => (r.ok ? d : Promise.reject(new Error(d.error || r.status)))))
+      .then(d => alive && setState({ data: d, error: null }))
+      .catch(e => alive && setState(s => ({ ...s, error: e.message || "Bağlantı hatası" })));
+    setState({ data: null, error: null });
+    load();
+    const id = setInterval(load, 120000);
+    return () => { alive = false; clearInterval(id); };
+  }, [apiUrl, appKey, scope, range, enabled]);
+  return state;
+}
+
+/* Kaç farklı kişi girdi — saat ya da gün başına, ülkelere göre yığılmış sütun */
+export function VisitorCountryChart({ data, error, height = 320 }) {
+  const top = useMemo(() => (data ? data.countries.slice(0, 6).map(c => c.country) : []), [data]);
+  const rows = useMemo(() => (data ? data.points.map(p => {
+    const row = { ts: p.ts, label: data.unit === "hour" ? F.hm.format(new Date(p.ts)) : F.dayShort.format(new Date(p.ts)), _total: p.total };
+    let sumTop = 0;
+    const rest = [];
+    Object.entries(p.c || {}).forEach(([cc, v]) => { if (top.includes(cc)) { row[cc] = v; sumTop += v; } else rest.push([cc, v]); });
+    top.forEach(cc => { if (row[cc] == null) row[cc] = 0; });
+    row[OTHER] = Math.max(0, p.total - sumTop);
+    row._other = rest.sort((a, b) => b[1] - a[1]);
+    return row;
+  }) : []), [data, top]);
+  const series = [...top, OTHER];
+  const isHour = data && data.unit === "hour";
+  const Tip = ({ active, payload }) => {
+    if (!active || !payload || !payload.length) return null;
+    const row = payload[0].payload;
+    const d = new Date(row.ts);
+    const title = isHour ? `${F.full.format(d)} · ${F.hm.format(d)}–${F.hm.format(new Date(row.ts + 3600000))}` : F.full.format(d);
+    const items = payload.filter(p => p.value > 0).slice().reverse();
+    return (
+      <div className="st-tip">
+        <div className="st-tip-h">{title}</div>
+        <div className="st-tip-r st-tip-big"><span>Giren farklı kişi</span><b>{num(row._total)}</b></div>
+        {items.map(p => (
+          <React.Fragment key={p.dataKey}>
+            <div className="st-tip-r"><i style={{ background: p.color || p.fill }} /><span>{p.name}</span><b>{num(p.value)}</b></div>
+            {p.dataKey === OTHER && row._other.length > 0 && (
+              <div className="st-tip-sub">
+                {row._other.slice(0, 12).map(([cc, v]) => <span key={cc}>{flag(cc)} {countryName(cc)} <b>{num(v)}</b></span>)}
+                {row._other.length > 12 && <span>+{row._other.length - 12} ülke daha</span>}
+              </div>
+            )}
+          </React.Fragment>
+        ))}
+      </div>
+    );
+  };
+  const rangeLabel = !data ? "" : data.range === "24h" ? "Son 24 saatte" : data.range === "7d" ? "Son 7 günde" : "Son 30 günde";
+  return (
+    <ChartFrame title={isHour ? "Saat başı kaç kişi girdi" : "Gün başı kaç kişi girdi"}
+      sub={`Uygulamayı açan farklı cihaz sayısı, ülkelere göre${data && !isHour ? " · günler UTC" : ""}`}
+      right={data ? <div className="st-total"><b>{num(data.total)}</b><small>{rangeLabel.toLocaleLowerCase("tr")} farklı kişi</small></div> : null}>
+      {!data || !data.points.some(p => p.total > 0) ? <Empty loading={!data && !error} error={error} /> : (
+        <LineChart height={height} data={rows} theme="dark" margin={{ top: 10, right: 16, left: 0, bottom: 0 }}>
+          <CartesianGrid stroke="#24242a" vertical={false} />
+          <XAxis dataKey="label" {...axisProps} minTickGap={12} />
+          <YAxis {...axisProps} allowDecimals={false} width={58} tickFormatter={v => num(v)} />
+          <Tooltip content={<Tip />} cursor={{ stroke: "#55555f" }} />
+          {series.map((cc, i) => {
+            const col = cc === OTHER ? "#7c7c87" : COLORS[i % COLORS.length];
+            return (
+              <Line key={cc} type="monotone" dataKey={cc} name={cc === OTHER ? "Diğer ülkeler" : `${flag(cc)} ${countryName(cc)}`}
+                stroke={col} strokeWidth={2} strokeDasharray={cc === OTHER ? "5 4" : undefined}
+                dot={{ r: isHour ? 2.5 : 3.5, fill: col, stroke: "#17171c", strokeWidth: 1.5 }}
+                activeDot={{ r: 6, fill: col, stroke: "#fff", strokeWidth: 2 }} isAnimationActive={false} />
+            );
+          })}
+        </LineChart>
+      )}
+      {data && data.countries.length > 0 && (
+        <div className="st-dots">
+          <small>{rangeLabel} giren farklı kişi · ülkelere göre</small>
+          {data.countries.slice(0, 24).map(c => {
+            const i = top.indexOf(c.country);
+            return (
+              <span key={c.country} className="st-dot">
+                <i style={{ background: i >= 0 ? COLORS[i % COLORS.length] : "#55555f" }} />
+                {flag(c.country)} {countryName(c.country)} <b>{num(c.value)}</b>
+              </span>
+            );
+          })}
+          {data.countries.length > 24 && <span className="st-dot more">+{data.countries.length - 24} ülke</span>}
+        </div>
+      )}
+    </ChartFrame>
+  );
+}
+
 export function RangePicker({ range, onChange }) {
   return (
     <div className="st-range" role="tablist">
@@ -401,6 +498,11 @@ export const STATS_CSS = `
   .st-dot i { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
   .st-dot b { color: #f4f4f6; font-weight: 650; font-variant-numeric: tabular-nums; }
   .st-dot.more { color: #7c7c87; }
+  .st-head-r { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .st-total { text-align: right; }
+  .st-total b { display: block; font-size: 22px; font-weight: 750; color: #f4f4f6; font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .st-total small { font-size: 11px; color: #7c7c87; }
+  .st-tip-big b { font-size: 15px; }
   .st-tip-sub { display: flex; flex-wrap: wrap; gap: 3px 10px; padding: 3px 0 6px 17px; font-size: 11.5px; color: #9a9aa6; max-width: 300px; }
   .st-tip-sub b { color: #e4e4ea; font-weight: 600; }
   .st-tip-t { border-top: 1px solid rgba(255,255,255,0.08); margin-top: 5px; padding-top: 6px; }
@@ -419,13 +521,26 @@ export function StatsSection({ apiUrl, appKey, scope, scopeLabel, kind, onPickAp
   const [range, setRange] = useRange();
   const byApp = allowByApp && scope === "all" && kind !== "countries";
   const { data, error } = useStatsSeries({ apiUrl, appKey, scope, range, byApp });
+  const [metric, setMetricState] = useState(() => { try { return localStorage.getItem("panelMetric") || "visitors"; } catch (e) { return "visitors"; } });
+  const setMetric = (m) => { setMetricState(m); try { localStorage.setItem("panelMetric", m); } catch (e) {} };
+  const longRange = ["24h", "7d", "30d"].includes(range);
+  const showVisitors = longRange && metric === "visitors" && (kind === "countries" || kind === "overview");
+  const vis = useVisitorSeries({ apiUrl, appKey, scope, range, enabled: showVisitors });
   const hint = (RANGES.find(r => r.key === range) || {}).hint;
   const title = kind === "ringtone" ? "Zil sesi / müzik grafiği" : kind === "countries" ? "Ülkelere göre aktif kullanıcılar" : "Aktif kullanıcılar";
   return (
     <div style={{ marginBottom: 8 }}>
       <div className="st-head">
         <div><h3>{title}</h3><p>{scopeLabel} · {hint}</p></div>
-        <RangePicker range={range} onChange={setRange} />
+        <div className="st-head-r">
+          {longRange && (kind === "countries" || kind === "overview") && (
+            <div className="st-seg" title="Kaç kişi girdi: o saatte/günde uygulamayı açan farklı kişi · Aynı anda: o anda aktif kişilerin ortalaması">
+              <button type="button" className={metric === "visitors" ? "on" : ""} onClick={() => setMetric("visitors")}>Kaç kişi girdi</button>
+              <button type="button" className={metric === "active" ? "on" : ""} onClick={() => setMetric("active")}>Aynı anda (ort.)</button>
+            </div>
+          )}
+          <RangePicker range={range} onChange={setRange} />
+        </div>
       </div>
       {error && !data && <div className="st-card"><Empty error={error} /></div>}
       {kind === "overview" && <StatTiles data={data} />}
@@ -444,7 +559,9 @@ export function StatsSection({ apiUrl, appKey, scope, scopeLabel, kind, onPickAp
       )}
       {(kind === "countries" || kind === "overview") && (
         <div className="st-grid">
-          <CountryTrendChart data={data} range={range} height={340} />
+          {showVisitors
+            ? <VisitorCountryChart data={vis.data} error={vis.error} height={320} />
+            : <CountryTrendChart data={data} range={range} height={340} />}
         </div>
       )}
       {(kind === "countries" || kind === "overview") && (
