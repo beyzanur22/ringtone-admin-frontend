@@ -17,6 +17,11 @@ const MODE_SERIES = [
   { key: "y", name: "Müzik", color: "#22c55e" },
   { key: "u", name: "Bilinmiyor", color: "#6b6b76" },
 ];
+const EXTRACTOR_SERIES = [
+  { key: "n", name: "NewPipe (Android 13+)", color: "#38bdf8" },
+  { key: "b", name: "Backend (Android 12-)", color: "#f59e0b" },
+  { key: "xu", name: "Bilinmiyor", color: "#6b6b76" },
+];
 const OTHER = "Diğer";
 
 const SHORT = { US: "ABD", GB: "İngiltere", AE: "BAE", DO: "Dominik C.", CD: "Kongo DC" };
@@ -147,21 +152,25 @@ function Empty({ loading, error }) {
 const hasData = (points) => points.some(p => !p.missing);
 
 /* Müzik / zil sesi / bilinmiyor — yığılmış alan */
-export function ModeChart({ data, range, title = "Aktif kullanıcılar", sub, height = 260 }) {
-  const rows = useMemo(() => (data ? data.points.map(p => p.missing
-    ? { ts: p.ts, _missing: true, label: axisLabel(p.ts, data.unit, range) }
-    : { ts: p.ts, label: axisLabel(p.ts, data.unit, range), r: p.r, y: p.y, u: p.u, _p: p }) : []), [data, range]);
-  const maxOf = (row, key) => row._p && (key === "u" ? null : row._p[key + "Max"]);
+export function ModeChart({ data, range, title = "Aktif kullanıcılar", sub, height = 260, series = MODE_SERIES }) {
+  const rows = useMemo(() => (data ? data.points.map(p => {
+    const row = { ts: p.ts, label: axisLabel(p.ts, data.unit, range) };
+    if (p.missing) return { ...row, _missing: true };
+    series.forEach(s => { row[s.key] = p[s.key] == null ? null : p[s.key]; });
+    return { ...row, _p: p };
+  }) : []), [data, range, series]);
+  const maxOf = (row, key) => row._p && (key === "u" || key === "xu" ? null : row._p[key + "Max"]);
+  const filled = data ? data.points.filter(p => !p.missing && series.some(s => p[s.key] != null)) : [];
   return (
     <ChartFrame title={title} sub={sub}>
-      {!data || !hasData(data.points) ? <Empty loading={!data} /> : (
+      {!data || !filled.length ? <Empty loading={!data} /> : (
         <AreaChart height={height} data={rows} theme="dark" margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
           <CartesianGrid stroke="#24242a" vertical={false} />
           <XAxis dataKey="label" {...axisProps} minTickGap={18} />
           <YAxis {...axisProps} allowDecimals={false} width={40} />
           <Tooltip content={makeTooltip(data.unit, maxOf)} cursor={{ stroke: "#55555f" }} />
           <Legend wrapperStyle={{ fontSize: 12, color: "#a1a1ab" }} />
-          {MODE_SERIES.map(s => (
+          {series.map(s => (
             <Area key={s.key} type="monotone" dataKey={s.key} name={s.name} stackId="m"
               stroke={s.color} fill={s.color} fillOpacity={0.22} strokeWidth={2} isAnimationActive={false} />
           ))}
@@ -226,7 +235,7 @@ export function CountryBarChart({ data, range }) {
         <BarChart horizontal height={Math.max(120, rows.length * 22 + 8)} data={rows} theme="dark"
           margin={{ top: 0, right: 30, left: 0, bottom: 0 }} barCategoryGap={5}>
           <XAxis type="number" hide allowDecimals={false} />
-          <YAxis type="category" dataKey="name" tick={{ fill: "#a1a1ab", fontSize: 11 }} axisLine={false} tickLine={false} width={112} />
+          <YAxis type="category" dataKey="name" tick={{ fill: "#a1a1ab", fontSize: 11 }} axisLine={false} tickLine={false} width={112} interval={0} />
           <Tooltip cursor={{ fill: "rgba(255,255,255,0.04)" }}
             content={({ active, payload }) => active && payload && payload.length ? (
               <div className="st-tip"><div className="st-tip-h">{payload[0].payload.name}</div>
@@ -417,6 +426,12 @@ export function StatsSection({ apiUrl, appKey, scope, scopeLabel, kind, onPickAp
         <div className="st-grid main-side">
           <CountryTrendChart data={data} range={range} height={360} />
           <CountryBarChart data={data} range={range} />
+        </div>
+      )}
+      {(kind === "countries" || kind === "overview") && (
+        <div className="st-grid">
+          <ModeChart data={data} range={range} series={EXTRACTOR_SERIES} height={240}
+            title="İçerik kaynağına göre" sub="NewPipe cihazda çözer, Backend sunucu API'lerini kullanır · üstüne gel: saat ve kişi sayısı" />
         </div>
       )}
     </div>
