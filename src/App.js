@@ -769,6 +769,11 @@ const PANEL_CSS = `
   .ad-pv small { display: block; font-size: 11px; font-weight: 700; letter-spacing: .6px; color: #6b6b76; margin-bottom: 10px; }
   .ad-pvr { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 12.5px; color: #a1a1ab; margin-top: 10px; }
   .ad-pvr code { font-family: ui-monospace, Menlo, monospace; color: #c4b5fd; font-size: 12px; background: none !important; }
+  .ad-group { font-size: 11px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; color: #6b6b76; margin: 22px 0 -6px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.06); }
+  .ad-sheet-body .ad-group:first-child { border-top: 0; padding-top: 0; margin-top: 18px; }
+  .ad-opt { color: #6b6b76; font-weight: 500; margin-left: 4px; }
+  .ad-inp.mono { font-family: ui-monospace, Menlo, monospace; font-size: 13px; }
+  .ad-url { display: block; font-family: ui-monospace, Menlo, monospace; font-size: 12.5px; color: #e4e4ea; word-break: break-all; background: none !important; padding: 0 !important; }
   .ad-note { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; color: #8b8b96; margin-top: 14px; line-height: 1.45; }
   .ad-note svg { color: #4ade80; flex-shrink: 0; margin-top: 1px; }
   @media (max-width: 900px) { .ad-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ad-stats.three { grid-template-columns: repeat(3, minmax(0, 1fr)); } .ad-search { width: 100%; } .ad-tools { width: 100%; } }
@@ -1553,6 +1558,12 @@ function App() {
   const [policyAddr, setPolicyAddr] = useState("");
   const [policyResult, setPolicyResult] = useState(null);
   const [policyBusy, setPolicyBusy] = useState(false);
+  const [policyEditing, setPolicyEditing] = useState(null);   // düzenlenen paket adı
+  const openPolicySheet = (p) => {
+    setPolicyName(p ? p.appName || "" : ""); setPolicyPackage(p ? p.packageName || "" : "");
+    setPolicyEmail(p ? p.email || "" : ""); setPolicyDev(p ? p.developerName || "" : ""); setPolicyAddr(p ? p.developerAddress || "" : "");
+    setPolicyResult(null); setPolicyEditing(p ? p.packageName : null); setAdSheet("policy");
+  };
 
   const fetchPolicies = () => {
     fetch(`${API_URL}/admin/privacy-policies`, { headers: { "X-App-Key": APP_KEY } })
@@ -2123,48 +2134,65 @@ function App() {
         })()}
 
         {/* GİZLİLİK POLİTİKALARI — paket + e-posta gir, link al (sadece süper panel) */}
-        {activeSection === "privacy" && !PANEL_LOCKED && <div style={styles.card}>
-          <h2 style={styles.title}>🔒 Gizlilik Politikaları</h2>
-          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
-            Uygulama adı, paket adı ve iletişim e-postasını gir → hazır gizlilik politikası sayfasının <b>linkini</b> verir.
-            Aynı paket adını tekrar kaydedersen sayfa güncellenir, link değişmez.
-          </p>
+        {activeSection === "privacy" && !PANEL_LOCKED && <>
+          {adSheet === "policy" && (
+            <>
+              <div className="ad-scrim" onClick={() => setAdSheet(null)} />
+              <div className="ad-sheet">
+                <button type="button" className="ad-x" aria-label="Kapat" onClick={() => setAdSheet(null)}>{adIco("x")}</button>
+                {policyResult ? (
+                  <>
+                    <h2>Politika hazır</h2>
+                    <div className="ad-sub">{policyResult.appName} için sayfa yayında. Linki Play Console'a yapıştır.</div>
+                    <div className="ad-sheet-body">
+                      <div className="ad-cred big">
+                        <div className="ad-cr"><span>Link</span><code title={policyResult.url}>{policyResult.url}</code>
+                          <a className="ad-ib" href={policyResult.url} target="_blank" rel="noreferrer" aria-label="Aç">{adIco("ext")}</a>
+                          <button type="button" className="ad-ib" aria-label="Kopyala" onClick={() => adCopy(policyResult.url, "pol")}>{adIco(adCopied === "pol" ? "check" : "copy")}</button>
+                        </div>
+                      </div>
+                    </div>
+                    <button type="button" className="ad-btn pri wide" onClick={() => { setPolicyResult(null); setAdSheet(null); }}>Tamam</button>
+                  </>
+                ) : (
+                  <>
+                    <h2>{policyEditing ? "Politikayı düzenle" : "Politika oluştur"}</h2>
+                    <div className="ad-sub">{policyEditing ? "Kaydedince sayfa güncellenir, link aynı kalır." : "Bilgileri gir, hazır politika sayfasının linkini al."}</div>
+                    <div className="ad-sheet-body">
+                      <div className="ad-group">Uygulama</div>
+                      <div className="ad-lbl">Uygulama adı</div>
+                      <input className="ad-inp" placeholder="örn. VupVup Music Player - MP3 Player" value={policyName} onChange={e => setPolicyName(e.target.value)} />
+                      <div className="ad-lbl">Paket adı</div>
+                      <input className="ad-inp mono" placeholder="örn. app.vupvup.descargamusica" value={policyPackage} disabled={!!policyEditing} onChange={e => setPolicyPackage(e.target.value.trim())} />
+                      {policyEditing && <div className="ad-hint">Paket adı linkin parçası olduğu için değiştirilemez.</div>}
 
-          <div style={{ background: "#18181c", border: "1px solid #2c2c33", borderRadius: 12, padding: 18, marginBottom: 24 }}>
-            <h3 style={{ color: "#f4f4f6", fontSize: 15, margin: "0 0 14px 0" }}>➕ Politika Oluştur / Güncelle</h3>
-            <div style={{ display: "grid", gap: 12 }}>
-              <div>
-                <label style={{ color: "#9a9aa6", fontSize: 12, display: "block", marginBottom: 4 }}>Uygulama Adı</label>
-                <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Örn: VupVup Music Player - MP3 Player" value={policyName} onChange={e => setPolicyName(e.target.value)} />
-              </div>
-              <div>
-                <label style={{ color: "#9a9aa6", fontSize: 12, display: "block", marginBottom: 4 }}>Paket Adı</label>
-                <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Örn: app.vupvup.descargamusica" value={policyPackage} onChange={e => setPolicyPackage(e.target.value)} />
-              </div>
-              <div>
-                <label style={{ color: "#9a9aa6", fontSize: 12, display: "block", marginBottom: 4 }}>İletişim E-postası</label>
-                <input type="email" style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Örn: destek@gmail.com" value={policyEmail} onChange={e => setPolicyEmail(e.target.value)} />
-              </div>
-              <div>
-                <label style={{ color: "#9a9aa6", fontSize: 12, display: "block", marginBottom: 4 }}>Geliştirici Adı (Play Console'daki ile birebir)</label>
-                <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Örn: VupVup Apps" value={policyDev} onChange={e => setPolicyDev(e.target.value)} />
-              </div>
-              <div>
-                <label style={{ color: "#9a9aa6", fontSize: 12, display: "block", marginBottom: 4 }}>Geliştirici Adresi (isteğe bağlı, kurumsal hesapta önerilir)</label>
-                <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Örn: Örnek Mah. 1. Sok. No:1, İstanbul, Türkiye" value={policyAddr} onChange={e => setPolicyAddr(e.target.value)} />
-              </div>
-              <button style={{ ...styles.primaryBtn, opacity: policyBusy ? 0.6 : 1 }} disabled={policyBusy} onClick={savePolicy}>
-                {policyBusy ? "Kaydediliyor..." : "Kaydet + Link Oluştur"}
-              </button>
-            </div>
+                      <div className="ad-group">İletişim ve geliştirici</div>
+                      <div className="ad-lbl">İletişim e-postası</div>
+                      <input className="ad-inp" type="email" placeholder="örn. destek@gmail.com" value={policyEmail} onChange={e => setPolicyEmail(e.target.value)} />
+                      <div className="ad-lbl">Geliştirici adı</div>
+                      <input className="ad-inp" placeholder="örn. VupVup Apps" value={policyDev} onChange={e => setPolicyDev(e.target.value)} />
+                      <div className="ad-hint">Play Console'daki geliştirici adıyla birebir aynı olmalı.</div>
+                      <div className="ad-lbl">Geliştirici adresi <span className="ad-opt">isteğe bağlı</span></div>
+                      <input className="ad-inp" placeholder="örn. Örnek Mah. 1. Sok. No:1, İstanbul, Türkiye" value={policyAddr} onChange={e => setPolicyAddr(e.target.value)} />
+                      <div className="ad-hint">Kurumsal hesapta önerilir.</div>
 
-            {policyResult && (
-              <div style={{ marginTop: 16, background: "#0f2a17", border: "1px solid #1f5133", borderRadius: 10, padding: 16 }}>
-                <div style={{ color: "#4ade80", fontWeight: 700, marginBottom: 12 }}>✅ {policyResult.appName} politikası hazır</div>
-                <CredRow label="Link" value={policyResult.url} />
+                      <div className="ad-pv">
+                        <small>SAYFA ADRESİ</small>
+                        <code className="ad-url">{window.location.host}/privacy/{policyPackage.trim() || "paket.adi"}</code>
+                      </div>
+                    </div>
+                    <button type="button" className="ad-btn pri wide" disabled={policyBusy} onClick={savePolicy}>{policyBusy ? "Kaydediliyor…" : policyEditing ? "Kaydet" : "Kaydet ve link oluştur"}</button>
+                  </>
+                )}
               </div>
-            )}
+            </>
+          )}
+        <div style={styles.card} className="ad">
+          <div className="ad-top" style={{ marginBottom: 22 }}>
+            <div><h1>Gizlilik Politikaları</h1><div className="ad-sub">Her uygulama için hazır politika sayfası. Linki kopyala, Play Console'a yapıştır.</div></div>
+            <button type="button" className="ad-btn pri" onClick={() => openPolicySheet(null)}>{adIco("plus")}Politika oluştur</button>
           </div>
+
 
           <h3 style={{ color: "#f4f4f6", fontSize: 15, margin: "0 0 12px 0" }}>Mevcut Politikalar</h3>
           {policyList.length === 0 ? (
@@ -2177,7 +2205,7 @@ function App() {
                     <div style={{ color: "#f4f4f6", fontWeight: 700 }}>{p.appName}</div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <div style={{ color: "#6b6b76", fontSize: 12 }}>{p.email}</div>
-                      <button onClick={() => { setPolicyName(p.appName || ""); setPolicyPackage(p.packageName || ""); setPolicyEmail(p.email || ""); setPolicyDev(p.developerName || ""); setPolicyAddr(p.developerAddress || ""); setPolicyResult(null); window.scrollTo({ top: 0, behavior: "smooth" }); }} title="Düzenle"
+                      <button onClick={() => openPolicySheet(p)} title="Düzenle"
                         style={{ background: "transparent", border: "1px solid #2c2c33", color: "#a78bfa", borderRadius: 6, padding: "4px 8px", cursor: "pointer", fontSize: 14, lineHeight: 1, flexShrink: 0 }}>✏️</button>
                       <button onClick={() => deletePolicy(p)} title="Politikayı sil"
                         style={{ background: "transparent", border: "1px solid #3a2230", color: "#ef4444", borderRadius: 6, padding: "4px 8px", cursor: "pointer", fontSize: 14, lineHeight: 1, flexShrink: 0 }}>🗑️</button>
@@ -2190,7 +2218,7 @@ function App() {
               ))}
             </div>
           )}
-        </div>}
+        </div></>}
 
         {/* GLOBAL & COUNTRY CONFIG (Styled for Dark Theme) */}
         {activeSection === "settings" && <div style={styles.card}>
