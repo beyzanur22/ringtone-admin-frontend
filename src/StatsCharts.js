@@ -59,9 +59,10 @@ export function useRange() {
   return [range, setRange];
 }
 
-export function useStatsSeries({ apiUrl, appKey, scope, range, byApp }) {
+export function useStatsSeries({ apiUrl, appKey, scope, range, byApp, enabled = true }) {
   const [state, setState] = useState({ data: null, loading: true, error: null });
   useEffect(() => {
+    if (!enabled) return undefined;
     let alive = true;
     const load = () => {
       const url = `${apiUrl}/admin/stats-series?range=${range}&appId=${encodeURIComponent(scope)}${byApp ? "&byApp=1" : ""}`;
@@ -75,7 +76,7 @@ export function useStatsSeries({ apiUrl, appKey, scope, range, byApp }) {
     const def = RANGES.find(r => r.key === range) || RANGES[2];
     const id = setInterval(load, def.refresh);
     return () => { alive = false; clearInterval(id); };
-  }, [apiUrl, appKey, scope, range, byApp]);
+  }, [apiUrl, appKey, scope, range, byApp, enabled]);
   return state;
 }
 
