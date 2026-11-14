@@ -109,7 +109,12 @@ function makeTooltip(unit, maxOf, titleOf) {
             <b>{num(p.value)}</b>
             {unit !== "minute" && maxOf && maxOf(row, p.dataKey) != null && <small>tepe {num(maxOf(row, p.dataKey))}</small>}
           </div>
-        ))}
+        )).flatMap((el, i) => (items[i].dataKey === OTHER && row._other && row._other.length ? [el, (
+          <div key="other-list" className="st-tip-sub">
+            {row._other.slice(0, 12).map(([cc, v]) => <span key={cc}>{flag(cc)} {countryName(cc)} <b>{num(v)}</b></span>)}
+            {row._other.length > 12 && <span>+{row._other.length - 12} ülke daha</span>}
+          </div>
+        )] : [el]))}
         {items.length > 1 && <div className="st-tip-r st-tip-t"><span>Toplam</span><b>{num(total)}</b></div>}
         {unit !== "minute" && <div className="st-tip-n">Değerler dönem ortalaması (aktif cihaz)</div>}
       </div>
@@ -175,9 +180,11 @@ export function CountryTrendChart({ data, range, height = 260 }) {
       const row = { ts: p.ts, label: axisLabel(p.ts, data.unit, range) };
       if (p.missing) return { ...row, _missing: true };
       let other = 0;
-      Object.entries(p.c || {}).forEach(([cc, v]) => { if (top.includes(cc)) row[cc] = v; else other += v; });
+      const rest = [];
+      Object.entries(p.c || {}).forEach(([cc, v]) => { if (top.includes(cc)) row[cc] = v; else if (v > 0) { other += v; rest.push([cc, v]); } });
       top.forEach(cc => { if (row[cc] == null) row[cc] = 0; });
       row[OTHER] = Math.round(other * 10) / 10;
+      row._other = rest.sort((a, b) => b[1] - a[1]);
       row._p = p;
       return row;
     });
@@ -185,7 +192,7 @@ export function CountryTrendChart({ data, range, height = 260 }) {
   const maxOf = (row, key) => row._p && row._p.cMax && row._p.cMax[key];
   const series = [...top, OTHER];
   return (
-    <ChartFrame title="Ülkelere göre zaman içinde" sub="En kalabalık 6 ülke + diğerleri">
+    <ChartFrame title="Ülkelere göre zaman içinde" sub="En kalabalık 6 ülke ayrı, kalanlar 'Diğer ülkeler'de toplanır (üstüne gelince listelenir)">
       {!data || !hasData(data.points) ? <Empty loading={!data} /> : (
         <AreaChart height={height} data={rows} theme="dark" margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
           <CartesianGrid stroke="#24242a" vertical={false} />
@@ -195,7 +202,7 @@ export function CountryTrendChart({ data, range, height = 260 }) {
           <Legend wrapperStyle={{ fontSize: 12, color: "#a1a1ab" }} />
           {series.map((cc, i) => (
             <Area key={cc} type="monotone" dataKey={cc} stackId="c"
-              name={cc === OTHER ? OTHER : `${flag(cc)} ${countryName(cc)}`}
+              name={cc === OTHER ? "Diğer ülkeler" : `${flag(cc)} ${countryName(cc)}`}
               stroke={cc === OTHER ? "#6b6b76" : COLORS[i % COLORS.length]}
               fill={cc === OTHER ? "#6b6b76" : COLORS[i % COLORS.length]}
               fillOpacity={0.2} strokeWidth={2} isAnimationActive={false} />
@@ -362,6 +369,8 @@ export const STATS_CSS = `
   .st-tip-r span { flex: 1; color: #b4b4be; }
   .st-tip-r b { font-variant-numeric: tabular-nums; }
   .st-tip-r small { color: #7c7c87; font-size: 11px; margin-left: 4px; }
+  .st-tip-sub { display: flex; flex-wrap: wrap; gap: 3px 10px; padding: 3px 0 6px 17px; font-size: 11.5px; color: #9a9aa6; max-width: 300px; }
+  .st-tip-sub b { color: #e4e4ea; font-weight: 600; }
   .st-tip-t { border-top: 1px solid rgba(255,255,255,0.08); margin-top: 5px; padding-top: 6px; }
   .st-tip-n { color: #6b6b76; font-size: 10.5px; margin-top: 6px; }
   .st-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 14px; }
