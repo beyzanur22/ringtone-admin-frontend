@@ -18,6 +18,19 @@ const APP_KEY = (typeof window !== "undefined" && window.__APP_KEY__) || "";
 let PANEL_APP_ID = (typeof window !== "undefined" && window.__APP_ID__)
   || (typeof localStorage !== "undefined" && localStorage.getItem("panelAppId"))
   || "default";
+// Ana sayfadan gelen kısayollar: /admin/panel#s=<bölüm>&app=<uygulama>
+const PANEL_HASH = (() => {
+  try {
+    const h = new URLSearchParams(String(window.location.hash || "").replace(/^#/, ""));
+    const out = { s: (h.get("s") || "").replace(/[^a-z0-9_]/gi, ""), app: (h.get("app") || "").replace(/[^a-z0-9_-]/gi, "") };
+    if (out.s || out.app) window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    return out;
+  } catch (e) { return { s: "", app: "" }; }
+})();
+if (PANEL_HASH.app && !PANEL_LOCKED) {
+  PANEL_APP_ID = PANEL_HASH.app;
+  try { localStorage.setItem("panelAppId", PANEL_APP_ID); } catch (e) {}
+}
 function setPanelAppId(id) {
   if (PANEL_LOCKED) return; // kilitli izole panelde uygulama değiştirilemez
   PANEL_APP_ID = id || "default";
@@ -1334,6 +1347,7 @@ function App() {
   };
 
   const [activeSection, setActiveSectionState] = useState(() => {
+    if (PANEL_HASH.s) return PANEL_HASH.s;
     try { return localStorage.getItem("panelSection") || "overview"; } catch (e) { return "overview"; }
   });
   const setActiveSection = (k) => { setActiveSectionState(k); try { localStorage.setItem("panelSection", k); } catch (e) {} };
