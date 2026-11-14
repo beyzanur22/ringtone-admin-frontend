@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { StatsSection, useStatsSeries, STATS_CSS } from "./StatsCharts";
 
 /* =========================================================================
@@ -631,6 +631,8 @@ const PANEL_CSS = `
   .da-det small { display: block; color: #6b6b76; font-size: 11px; margin-bottom: 2px; }
   @media (max-width: 900px) { .da-grid { grid-template-columns: minmax(0, 1fr); } .da-side { position: static; } }
   @media (max-width: 560px) { .da-types { grid-template-columns: minmax(0, 1fr); } .da-tag { display: none; } .da-det { padding-left: 14px; } }
+  .pn-content { transition: opacity .15s; }
+  .pn-switching { opacity: 0.5; pointer-events: none; }
   .pn-scrim { display: none; }
   @media (max-width: 900px) {
     .pn-appbar { padding: 4px 16px 10px; }
@@ -1200,7 +1202,37 @@ function App() {
   const [menuQuery, setMenuQuery] = useState("");    // menüde ara
   // Çok uygulamalı: kayıtlı uygulamalar + seçili appId (üstteki dropdown)
   const [apps, setApps] = useState({});
-  const [appId] = useState(PANEL_APP_ID);
+  const [appId, setAppIdState] = useState(PANEL_APP_ID);
+  const [switching, setSwitching] = useState(false);   // uygulama değişirken içerik kilitli
+  const loadedAppRef = useRef(PANEL_APP_ID);
+  // Uygulama değişince sayfayı yenilemeden o uygulamanın verilerini yeniden yükle
+  useEffect(() => {
+    if (loadedAppRef.current === appId) return;
+    loadedAppRef.current = appId;
+    const id = appId;
+    fetch(`${API_URL}/config`, { headers: { "X-App-Key": APP_KEY } })
+      .then(res => res.json())
+      .then(data => { if (PANEL_APP_ID === id) { setConfig(data); setSwitching(false); } })
+      .catch(() => { if (PANEL_APP_ID === id) setSwitching(false); });
+    fetchBlocked();
+    fetchAnnouncements();
+    fetchDeviceActions();
+    fetchApiProviders();
+    fetchYoutubeData();
+    fetchAutoRingtone();
+    fetchFeedbacks();
+    fetchLoginIps();
+    fetchReviewLogs();
+    fetchLiveUsers(liveWindow);
+    fetchVisitorStats();
+    fetchRtUsers(rtWindow);
+  }, [appId]); // eslint-disable-line react-hooks/exhaustive-deps
+  const switchApp = (id) => {
+    if (PANEL_LOCKED || id === appId) return;
+    setPanelAppId(id);
+    setSwitching(true);
+    setAppIdState(id);
+  };
   const fetchApps = () => {
     fetch(`${API_URL}/admin/apps`, { headers: { "X-App-Key": APP_KEY } })
       .then(r => r.json()).then(setApps).catch(() => {});
@@ -1217,7 +1249,7 @@ function App() {
   };
   const pickApp = (id) => {
     setScopeAll(false);
-    if (id !== appId) { setPanelAppId(id); window.location.reload(); }
+    switchApp(id);
   };
   const currentApp = apps[appId] || { name: appId, brandPrimary: "#a78bfa" };
 
@@ -1283,7 +1315,7 @@ function App() {
       .then(r => r.json())
       .then(d => {
         if (!d.ok) return alert("Hata: " + (d.error || "Silinemedi"));
-        if (a.id === appId) { setPanelAppId("default"); window.location.reload(); return; }
+        if (a.id === appId) switchApp("default");
         fetchAppCredentials();
         fetchApps();
       })
@@ -1589,7 +1621,7 @@ function App() {
         )}
       </div>
       </div>
-      <div className="pn-content">
+      <div className={"pn-content" + (switching ? " pn-switching" : "")}>
         {curScreen.tabs.length > 1 && (
           <div className="pn-tabs" role="tablist">
             {curScreen.tabs.map(k => (
