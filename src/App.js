@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StatsSection, useStatsSeries, STATS_CSS } from "./StatsCharts";
+import { StatsSection, VisitorSummary, useStatsSeries, STATS_CSS } from "./StatsCharts";
 
 /* =========================================================================
    ÇOK UYGULAMALI PANEL — appId enjeksiyonu
@@ -914,14 +914,12 @@ function App() {
   const [loginIps, setLoginIps] = useState([]);
   const [liveUsers, setLiveUsers] = useState(null);
   const [reviewLogs, setReviewLogs] = useState(null);
-  const [liveWindow, setLiveWindow] = useState(5);
-  const [visitorStats, setVisitorStats] = useState(null);
-  const [showAllVisitorCountries, setShowAllVisitorCountries] = useState(false);
+  const [liveWindow, setLiveWindow] = useState(1);
   // Canlı cihaz tablosu filtresi: "all" | "newpipe" | "backend" | "unknown"
   const [liveExtractor, setLiveExtractor] = useState("all");
   // Zil sesi modu bölümü — aynı uçtan ?mode=ringtone ile beslenir
   const [rtUsers, setRtUsers] = useState(null);
-  const [rtWindow, setRtWindow] = useState(15);
+  const [rtWindow, setRtWindow] = useState(1);
 
   const API_URL = window.location.hostname === "localhost" ? "http://173.212.249.105" : "";
 
@@ -979,24 +977,19 @@ function App() {
       .then(() => fetchLoginIps());
   };
 
+  // Üstte "Tüm uygulamalar" seçiliyse canlı sayılar da global; yoksa fetch yaması seçili uygulamayı ekler
+  const liveScopeQ = () => (!PANEL_LOCKED && scopeAll ? "&appId=all" : "");
   const fetchLiveUsers = (win) => {
-    fetch(`${API_URL}/admin/active-users?window=${win || 5}`, { headers: { "X-App-Key": APP_KEY } })
+    fetch(`${API_URL}/admin/active-users?window=${win || 1}${liveScopeQ()}`, { headers: { "X-App-Key": APP_KEY } })
       .then(r => r.ok ? r.json() : null)
       .then(data => { if (data && !data.error) setLiveUsers(data); })
-      .catch(() => {});
-  };
-
-  const fetchVisitorStats = () => {
-    fetch(`${API_URL}/admin/visitor-stats`, { headers: { "X-App-Key": APP_KEY } })
-      .then(r => r.ok ? r.json() : null)
-      .then(data => { if (data && !data.error) setVisitorStats(data); })
       .catch(() => {});
   };
 
   // Zil sesi modundaki cihazlar. byMode tüm modları kapsar (pay hesabı için),
   // users/byCountry SADECE ringtone kitlesidir.
   const fetchRtUsers = (win) => {
-    fetch(`${API_URL}/admin/active-users?window=${win || 15}&mode=ringtone`, { headers: { "X-App-Key": APP_KEY } })
+    fetch(`${API_URL}/admin/active-users?window=${win || 1}&mode=ringtone${liveScopeQ()}`, { headers: { "X-App-Key": APP_KEY } })
       .then(r => r.ok ? r.json() : null)
       .then(data => { if (data && !data.error) setRtUsers(data); })
       .catch(() => {});
@@ -1422,7 +1415,6 @@ function App() {
     fetchLoginIps();
     fetchReviewLogs();
     fetchLiveUsers(liveWindow);
-    fetchVisitorStats();
     fetchRtUsers(rtWindow);
   }, [appId]); // eslint-disable-line react-hooks/exhaustive-deps
   const switchApp = (id) => {
@@ -1692,15 +1684,7 @@ function App() {
     fetchLiveUsers(liveWindow);
     const id = setInterval(() => fetchLiveUsers(liveWindow), activeSection === "live" ? 5000 : 30000);
     return () => clearInterval(id);
-  }, [liveWindow, activeSection]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Ziyaretçi özeti: Canlı Kullanıcılar açıkken dakikada bir
-  useEffect(() => {
-    if (activeSection !== "live") return;
-    fetchVisitorStats();
-    const id = setInterval(fetchVisitorStats, 60000);
-    return () => clearInterval(id);
-  }, [activeSection]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [liveWindow, activeSection, scopeAll]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Zil sesi modu: yalnız bölüm açıkken yoklanır (teşhis ekranı, rozeti yok)
   useEffect(() => {
@@ -1708,7 +1692,7 @@ function App() {
     fetchRtUsers(rtWindow);
     const id = setInterval(() => fetchRtUsers(rtWindow), 10000);
     return () => clearInterval(id);
-  }, [rtWindow, activeSection]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [rtWindow, activeSection, scopeAll]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!config) return <div style={{ color: "#9a9aa6", padding: 50, backgroundColor: "#111114", minHeight: "100vh", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif" }}>Yükleniyor...</div>;
 
@@ -1769,7 +1753,7 @@ function App() {
           {/* CANLI KULLANICI ROZETİ — her bölümde görünür */}
           <div className="pn-live" onClick={() => pick("live")}>
             <i />
-            <b>{liveUsers ? liveUsers.online5m : "—"}</b>
+            <b>{liveUsers ? liveUsers.online1m : "—"}</b>
             <span>şu an aktif</span>
           </div>
           <label className="pn-search">
@@ -2942,6 +2926,7 @@ function App() {
               <span style={{ color: "#4ade80", fontSize: 11 }}>● canlı — 5 sn'de bir yenilenir</span>
               <select style={{ ...styles.selectDark, width: "auto", padding: "6px 10px", fontSize: 12 }}
                 value={liveWindow} onChange={e => setLiveWindow(Number(e.target.value))}>
+                <option value={1}>Şu an (son 1 dk)</option>
                 <option value={5}>Son 5 dakika</option>
                 <option value={15}>Son 15 dakika</option>
                 <option value={30}>Son 30 dakika</option>
@@ -2965,9 +2950,9 @@ function App() {
                 <div style={{ flex: "1 1 200px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#15271d", border: "1px solid #1f5133" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                     <span style={{ width: 10, height: 10, borderRadius: "50%", backgroundColor: "#22c55e", boxShadow: "0 0 10px #22c55e" }} />
-                    <span style={{ color: "#5f8b70", fontSize: 12 }}>ŞU AN AKTİF (son 5 dk)</span>
+                    <span style={{ color: "#5f8b70", fontSize: 12 }}>ŞU AN AKTİF (son 1 dk)</span>
                   </div>
-                  <div style={{ color: "#4ade80", fontSize: 46, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{liveUsers.online5m}</div>
+                  <div style={{ color: "#4ade80", fontSize: 46, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{liveUsers.online1m}</div>
                 </div>
                 <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#18181c", border: "1px solid #2c2c33" }}>
                   <div style={{ color: "#9a9aa6", fontSize: 12 }}>SON 15 DAKİKA</div>
@@ -2983,32 +2968,32 @@ function App() {
               {liveUsers.byExtractor && (() => {
                 const ex = liveUsers.byExtractor;
                 const np = ex.newpipe || {}, be = ex.backend || {}, un = ex.unknown || {};
-                const total = (np.online5m || 0) + (be.online5m || 0) + (un.online5m || 0);
+                const total = (np.online1m || 0) + (be.online1m || 0) + (un.online1m || 0);
                 const pct = n => total > 0 ? Math.round((n / total) * 100) : 0;
                 const card = (title, sub, data, color, bg, border) => (
                   <div style={{ flex: "1 1 200px", padding: "18px 20px", borderRadius: 12, backgroundColor: bg, border: `1px solid ${border}` }}>
                     <div style={{ color: "#fff", fontSize: 15, fontWeight: 700 }}>{title}</div>
                     <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 12, marginTop: 3 }}>{sub}</div>
                     <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginTop: 8 }}>
-                      <span style={{ color, fontSize: 34, fontWeight: 800, lineHeight: 1.1 }}>{data.online5m || 0}</span>
-                      <span style={{ color: "#6b6b76", fontSize: 13 }}>%{pct(data.online5m || 0)}</span>
+                      <span style={{ color, fontSize: 34, fontWeight: 800, lineHeight: 1.1 }}>{data.online1m || 0}</span>
+                      <span style={{ color: "#6b6b76", fontSize: 13 }}>%{pct(data.online1m || 0)}</span>
                     </div>
                     <div style={{ color: "#6b6b76", fontSize: 11, marginTop: 6 }}>
                       15 dk: <b style={{ color: "#9a9aa6" }}>{data.online15m || 0}</b> · 1 sa: <b style={{ color: "#9a9aa6" }}>{data.online1h || 0}</b>
                     </div>
                     {/* oran çubuğu */}
                     <div style={{ height: 4, borderRadius: 2, backgroundColor: "#111114", marginTop: 10, overflow: "hidden" }}>
-                      <div style={{ height: "100%", width: `${pct(data.online5m || 0)}%`, backgroundColor: color }} />
+                      <div style={{ height: "100%", width: `${pct(data.online1m || 0)}%`, backgroundColor: color }} />
                     </div>
                   </div>
                 );
                 return (
                   <div style={{ marginBottom: 24 }}>
-                    <SectionHead title="İçerik Kaynağına Göre" sub="Şu an aktif — son 5 dakika" />
+                    <SectionHead title="İçerik Kaynağına Göre" sub="Şu an aktif — son 1 dakika" />
                     <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
                       {card("📱 NewPipe", "Android 13+ — cihazda çözülüyor", np, "#38bdf8", "#0f2230", "#1e4a63")}
                       {card("🖥️ Backend", "Android 12- — sunucu API'leri", be, "#f59e0b", "#2a2113", "#5c4318")}
-                      {un.online5m > 0 && card("❓ Bilinmiyor", "Eski APK — bilgi göndermiyor", un, "#9a9aa6", "#18181c", "#2c2c33")}
+                      {un.online1m > 0 && card("❓ Bilinmiyor", "Eski APK — bilgi göndermiyor", un, "#9a9aa6", "#18181c", "#2c2c33")}
                     </div>
                     {un.online1h > 0 && (
                       <p style={{ color: "#6b6b76", fontSize: 11, margin: "10px 0 0 0" }}>
@@ -3023,31 +3008,31 @@ function App() {
               {liveUsers.byMode && (() => {
                 const m = liveUsers.byMode;
                 const yt = m.youtube || {}, rt = m.ringtone || {}, un = m.unknown || {};
-                const total = (yt.online5m || 0) + (rt.online5m || 0) + (un.online5m || 0);
+                const total = (yt.online1m || 0) + (rt.online1m || 0) + (un.online1m || 0);
                 const pct = n => total > 0 ? Math.round((n / total) * 100) : 0;
                 const card = (title, sub, data, color, bg, border) => (
                   <div style={{ flex: "1 1 200px", padding: "18px 20px", borderRadius: 12, backgroundColor: bg, border: `1px solid ${border}` }}>
                     <div style={{ color: "#fff", fontSize: 15, fontWeight: 700 }}>{title}</div>
                     <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 12, marginTop: 3 }}>{sub}</div>
                     <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginTop: 8 }}>
-                      <span style={{ color, fontSize: 34, fontWeight: 800, lineHeight: 1.1 }}>{data.online5m || 0}</span>
-                      <span style={{ color: "#6b6b76", fontSize: 13 }}>%{pct(data.online5m || 0)}</span>
+                      <span style={{ color, fontSize: 34, fontWeight: 800, lineHeight: 1.1 }}>{data.online1m || 0}</span>
+                      <span style={{ color: "#6b6b76", fontSize: 13 }}>%{pct(data.online1m || 0)}</span>
                     </div>
                     <div style={{ color: "#6b6b76", fontSize: 11, marginTop: 6 }}>
                       15 dk: <b style={{ color: "#9a9aa6" }}>{data.online15m || 0}</b> · 1 sa: <b style={{ color: "#9a9aa6" }}>{data.online1h || 0}</b>
                     </div>
                     <div style={{ height: 4, borderRadius: 2, backgroundColor: "#111114", marginTop: 10, overflow: "hidden" }}>
-                      <div style={{ height: "100%", width: `${pct(data.online5m || 0)}%`, backgroundColor: color }} />
+                      <div style={{ height: "100%", width: `${pct(data.online1m || 0)}%`, backgroundColor: color }} />
                     </div>
                   </div>
                 );
                 return (
                   <div style={{ marginBottom: 24 }}>
-                    <SectionHead title="Uygulama Moduna Göre" sub="Şu an aktif — son 5 dakika" />
+                    <SectionHead title="Uygulama Moduna Göre" sub="Şu an aktif — son 1 dakika" />
                     <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
                       {card("▶️ Müzik", "Normal arayüz", yt, "#4ade80", "#15271d", "#1f5133")}
                       {card("🔔 Zil Sesi", "ASN / ülke kuralı ile", rt, "#0ea5e9", "#0c2d48", "#1e4a63")}
-                      {un.online5m > 0 && card("❓ Bilinmiyor", "Eski APK — mod bildirmiyor", un, "#9a9aa6", "#18181c", "#2c2c33")}
+                      {un.online1m > 0 && card("❓ Bilinmiyor", "Eski APK — mod bildirmiyor", un, "#9a9aa6", "#18181c", "#2c2c33")}
                     </div>
                     <p style={{ color: "#6b6b76", fontSize: 11, margin: "10px 0 0 0" }}>
                       Zil sesi modundakiler de bu toplamın içindedir — detay için soldaki "🔔 Zil Sesi Modu" bölümü.
@@ -3056,94 +3041,8 @@ function App() {
                 );
               })()}
 
-              {/* ZİYARETÇİ ÖZETİ — son 24 saat / son 7 gün, ülke kırılımlı */}
-              {visitorStats && (() => {
-                const vs = visitorStats;
-                const maxDay = Math.max(1, ...(vs.daily || []).map(d => d.count));
-                const rows = showAllVisitorCountries ? vs.byCountry : vs.byCountry.slice(0, 15);
-                const dayLabel = (iso) => new Date(iso + "T00:00:00Z").toLocaleDateString("tr-TR", { day: "numeric", month: "short", weekday: "short", timeZone: "UTC" });
-                const big = (label, value, sub) => (
-                  <div style={{ flex: "1 1 220px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#18181c", border: "1px solid rgba(255,255,255,0.14)" }}>
-                    <div style={{ color: "rgba(255,255,255,0.7)", fontSize: 13, fontWeight: 700 }}>{label}</div>
-                    <div style={{ color: "#fff", fontSize: 40, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{(value || 0).toLocaleString("tr-TR")}</div>
-                    <div style={{ color: "rgba(255,255,255,0.45)", fontSize: 11, marginTop: 4 }}>{sub}</div>
-                  </div>
-                );
-                return (
-                  <div style={{ marginBottom: 28, paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-                    <SectionHead title="Ziyaretçi Özeti" sub="Bu uygulamayı açan benzersiz cihaz sayısı"
-                      right={<span style={{ color: "rgba(255,255,255,0.45)", fontSize: 11 }}>dakikada bir güncellenir</span>} />
-                    <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 18 }}>
-                      {big("SON 24 SAAT", vs.last24h, "Kayan pencere, saatlik")}
-                      {big("SON 7 GÜN", vs.last7d, "Bugün dahil son 7 gün (UTC)")}
-                    </div>
-
-                    {/* günlük çubuklar */}
-                    <div style={{ display: "flex", gap: 8, alignItems: "flex-end", height: 120, padding: "12px 12px 0", background: "#111114", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, marginBottom: 6 }}>
-                      {(vs.daily || []).map((d, i) => (
-                        <div key={d.date} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", height: "100%" }}>
-                          <span style={{ color: "#fff", fontSize: 11, fontWeight: 700, marginBottom: 4 }}>{d.count}</span>
-                          <div title={`${d.date} — ${d.count} cihaz`} style={{ width: "100%", height: `${Math.max(3, (d.count / maxDay) * 75)}%`, background: i === vs.daily.length - 1 ? "#fff" : "rgba(255,255,255,0.45)", borderRadius: "4px 4px 0 0" }} />
-                        </div>
-                      ))}
-                    </div>
-                    <div style={{ display: "flex", gap: 8, padding: "0 12px", marginBottom: 20 }}>
-                      {(vs.daily || []).map(d => (
-                        <span key={d.date} style={{ flex: 1, textAlign: "center", color: "rgba(255,255,255,0.5)", fontSize: 10 }}>{dayLabel(d.date)}</span>
-                      ))}
-                    </div>
-
-                    {/* ülke tablosu */}
-                    {vs.byCountry.length === 0 ? (
-                      <div style={{ padding: 20, textAlign: "center", color: "rgba(255,255,255,0.5)", fontSize: 13, border: "1px dashed rgba(255,255,255,0.15)", borderRadius: 10 }}>
-                        Henüz veri yok — sayım bu sürüm yayına alındıktan sonra birikmeye başlar.
-                      </div>
-                    ) : (
-                      <div style={{ border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, overflow: "hidden" }}>
-                        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
-                          <thead>
-                            <tr style={{ background: "#18181c", color: "rgba(255,255,255,0.7)", textAlign: "left" }}>
-                              <th style={{ padding: "10px 14px", fontWeight: 700 }}>Ülke</th>
-                              <th style={{ padding: "10px 14px", fontWeight: 700, textAlign: "right" }}>Son 24 saat</th>
-                              <th style={{ padding: "10px 14px", fontWeight: 700, textAlign: "right" }}>Son 7 gün</th>
-                              <th style={{ padding: "10px 14px", fontWeight: 700, width: "28%" }}>Pay (7 gün)</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {rows.map(c => {
-                              const share = vs.last7d > 0 ? Math.round((c.last7d / vs.last7d) * 100) : 0;
-                              return (
-                                <tr key={c.country} style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-                                  <td style={{ padding: "9px 14px", color: "#fff", fontWeight: 600 }}>
-                                    {c.country === "XX" ? "🏳️ Bilinmiyor" : `${countryFlag(c.country)} ${countryName(c.country)}`}
-                                    <span style={{ color: "rgba(255,255,255,0.4)", fontFamily: "monospace", fontSize: 11, marginLeft: 6 }}>{c.country !== "XX" ? c.country : ""}</span>
-                                  </td>
-                                  <td style={{ padding: "9px 14px", color: "#fff", textAlign: "right", fontWeight: 700 }}>{c.last24h.toLocaleString("tr-TR")}</td>
-                                  <td style={{ padding: "9px 14px", color: "#fff", textAlign: "right", fontWeight: 700 }}>{c.last7d.toLocaleString("tr-TR")}</td>
-                                  <td style={{ padding: "9px 14px" }}>
-                                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                                      <div style={{ flex: 1, height: 6, background: "rgba(255,255,255,0.1)", borderRadius: 3, overflow: "hidden" }}>
-                                        <div style={{ width: `${share}%`, height: "100%", background: "#fff" }} />
-                                      </div>
-                                      <span style={{ color: "rgba(255,255,255,0.6)", fontSize: 11, width: 34, textAlign: "right" }}>%{share}</span>
-                                    </div>
-                                  </td>
-                                </tr>
-                              );
-                            })}
-                          </tbody>
-                        </table>
-                        {vs.byCountry.length > 15 && (
-                          <button onClick={() => setShowAllVisitorCountries(v => !v)}
-                            style={{ width: "100%", padding: 10, background: "#18181c", border: "none", borderTop: "1px solid rgba(255,255,255,0.08)", color: "#fff", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
-                            {showAllVisitorCountries ? "Daha az göster" : `Tüm ülkeleri göster (${vs.byCountry.length})`}
-                          </button>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                );
-              })()}
+              {/* ZİYARETÇİ ÖZETİ — Anlık / 24 saat / 1 hafta / 30 gün, ülke kırılımlı */}
+              <VisitorSummary apiUrl={API_URL} appKey={APP_KEY} scope={statsScope} scopeLabel={statsScopeLabel} />
 
               {/* CANLI IP LİSTESİ */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, flexWrap: "wrap", gap: 10 }}>
@@ -3237,6 +3136,7 @@ function App() {
               <span style={{ color: "#0ea5e9", fontSize: 11 }}>● 10 sn'de bir yenilenir</span>
               <select style={{ ...styles.selectDark, width: "auto", padding: "6px 10px", fontSize: 12 }}
                 value={rtWindow} onChange={e => setRtWindow(Number(e.target.value))}>
+                <option value={1}>Şu an (son 1 dk)</option>
                 <option value={5}>Son 5 dakika</option>
                 <option value={15}>Son 15 dakika</option>
                 <option value={30}>Son 30 dakika</option>
@@ -3260,21 +3160,74 @@ function App() {
           ) : (() => {
             const bm = rtUsers.byMode || {};
             const rt = bm.ringtone || {}, yt = bm.youtube || {}, un = bm.unknown || {};
-            const tot5 = (rt.online5m || 0) + (yt.online5m || 0) + (un.online5m || 0);
-            const share = tot5 > 0 ? Math.round(((rt.online5m || 0) / tot5) * 100) : 0;
+            const tot5 = (rt.online1m || 0) + (yt.online1m || 0) + (un.online1m || 0);
+            const share = tot5 > 0 ? Math.round(((rt.online1m || 0) / tot5) * 100) : 0;
             const seg = (n) => tot5 > 0 ? (n / tot5) * 100 : 0;
             const ruleCountries = Object.entries(config.countries || {}).filter(([, m]) => m === "ringtone");
             const ruleAsns = config.ringtoneAsns || [];
             return (
             <>
+              {/* CİHAZ LİSTESİ */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, flexWrap: "wrap", gap: 10 }}>
+                <span style={{ color: "#9a9aa6", fontSize: 12 }}>ZİL SESİNDEKİ CİHAZLAR (son {rtUsers.window} dk)</span>
+                <span style={{ color: "#666", fontSize: 11 }}>
+                  {rtUsers.windowCount} cihaz{rtUsers.listed < rtUsers.windowCount ? ` — ilk ${rtUsers.listed} tanesi gösteriliyor` : ""}
+                </span>
+              </div>
+              {(!rtUsers.users || rtUsers.users.length === 0) ? (
+                <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Zil sesi modunda cihaz yok</div>
+              ) : (
+                <div style={{ overflowX: "auto", marginBottom: 24 }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                    <thead>
+                      <tr style={{ borderBottom: "1px solid #3a3a41", color: "#9a9aa6", textAlign: "left" }}>
+                        <th style={{ padding: "8px 10px" }}>IP</th>
+                        <th style={{ padding: "8px 10px" }}>Ülke</th>
+                        <th style={{ padding: "8px 10px" }}>Uygulama</th>
+                        <th style={{ padding: "8px 10px" }}>Kaynak</th>
+                        <th style={{ padding: "8px 10px" }}>Son Aktivite</th>
+                        <th style={{ padding: "8px 10px" }}>İstek</th>
+                        <th style={{ padding: "8px 10px" }}>Endpoint</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {rtUsers.users.map(u => (
+                        <tr key={u.uid} style={{ borderBottom: "1px solid #3a3a41" }}>
+                          <td style={{ padding: "8px 10px", color: "#f4f4f6", fontFamily: "monospace" }}>
+                            <span style={{ display: "inline-block", width: 7, height: 7, borderRadius: "50%", marginRight: 8,
+                              backgroundColor: u.secondsAgo < 120 ? "#0ea5e9" : "#eab308" }} />
+                            {u.ip}
+                          </td>
+                          <td style={{ padding: "8px 10px", color: "#d4d4dc", whiteSpace: "nowrap" }}>
+                            {/^[A-Z]{2}$/.test(u.country || "") ? `${countryFlag(u.country)} ${countryName(u.country)}` : "🌍 Bilinmiyor"}
+                          </td>
+                          <td style={{ padding: "8px 10px", color: "#f4f4f6", fontWeight: 600 }}>
+                            {u.appName || u.appId || "—"}
+                            {u.appId && u.appId !== "default" && <span style={{ color: "#666", fontSize: 11, fontWeight: 400, marginLeft: 6 }}>{(apps[u.appId] || {}).packageName || ""}</span>}
+                          </td>
+                          <td style={{ padding: "8px 10px", color: "#9a9aa6", fontSize: 11 }}>
+                            {u.extractor === "newpipe" ? "NewPipe" : u.extractor === "backend" ? "Backend" : "Bilinmiyor"}
+                            {u.sdk ? ` · SDK ${u.sdk}` : ""}
+                          </td>
+                          <td style={{ padding: "8px 10px", color: "#9a9aa6" }}>
+                            {u.secondsAgo < 60 ? `${u.secondsAgo} sn önce` : `${Math.round(u.secondsAgo / 60)} dk önce`}
+                          </td>
+                          <td style={{ padding: "8px 10px", color: "#38bdf8", fontWeight: 600 }}>{u.hits}</td>
+                          <td style={{ padding: "8px 10px", color: "#666", fontSize: 11 }}>{u.endpoint}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
               {/* SAYAÇLAR */}
               <div style={{ display: "flex", gap: 14, marginBottom: 24, flexWrap: "wrap" }}>
                 <div style={{ flex: "1 1 200px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#0c2d48", border: "1px solid #1e4a63" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                     <span style={{ width: 10, height: 10, borderRadius: "50%", backgroundColor: "#0ea5e9", boxShadow: "0 0 10px #0ea5e9" }} />
-                    <span style={{ color: "#5b8aa6", fontSize: 12 }}>ZİL SESİ MOD AKTİF (son 5 dk)</span>
+                    <span style={{ color: "#5b8aa6", fontSize: 12 }}>ZİL SESİ MOD AKTİF (son 1 dk)</span>
                   </div>
-                  <div style={{ color: "#38bdf8", fontSize: 46, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{rt.online5m || 0}</div>
+                  <div style={{ color: "#38bdf8", fontSize: 46, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{rt.online1m || 0}</div>
                   <div style={{ color: "#5b8aa6", fontSize: 11, marginTop: 4 }}>tüm aktiflerin %{share}'i</div>
                 </div>
                 <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#18181c", border: "1px solid #2c2c33" }}>
@@ -3289,16 +3242,16 @@ function App() {
 
               {/* DAĞILIM ÇUBUĞU */}
               <div style={{ marginBottom: 26 }}>
-                <div style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 8 }}>DAĞILIM (son 5 dk — toplam {tot5})</div>
+                <div style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 8 }}>DAĞILIM (son 1 dk — toplam {tot5})</div>
                 <div style={{ display: "flex", height: 14, borderRadius: 7, overflow: "hidden", backgroundColor: "#111114", border: "1px solid #2c2c33" }}>
-                  <div title={`Müzik: ${yt.online5m || 0}`} style={{ width: `${seg(yt.online5m || 0)}%`, backgroundColor: "#22c55e" }} />
-                  <div title={`Zil sesi: ${rt.online5m || 0}`} style={{ width: `${seg(rt.online5m || 0)}%`, backgroundColor: "#0ea5e9" }} />
-                  <div title={`Bilinmiyor: ${un.online5m || 0}`} style={{ width: `${seg(un.online5m || 0)}%`, backgroundColor: "#475569" }} />
+                  <div title={`Müzik: ${yt.online1m || 0}`} style={{ width: `${seg(yt.online1m || 0)}%`, backgroundColor: "#22c55e" }} />
+                  <div title={`Zil sesi: ${rt.online1m || 0}`} style={{ width: `${seg(rt.online1m || 0)}%`, backgroundColor: "#0ea5e9" }} />
+                  <div title={`Bilinmiyor: ${un.online1m || 0}`} style={{ width: `${seg(un.online1m || 0)}%`, backgroundColor: "#475569" }} />
                 </div>
                 <div style={{ display: "flex", gap: 16, marginTop: 8, fontSize: 11, color: "#9a9aa6", flexWrap: "wrap" }}>
-                  <span><b style={{ color: "#22c55e" }}>●</b> Müzik {yt.online5m || 0}</span>
-                  <span><b style={{ color: "#0ea5e9" }}>●</b> Zil sesi {rt.online5m || 0}</span>
-                  <span><b style={{ color: "#475569" }}>●</b> Bilinmiyor {un.online5m || 0}</span>
+                  <span><b style={{ color: "#22c55e" }}>●</b> Müzik {yt.online1m || 0}</span>
+                  <span><b style={{ color: "#0ea5e9" }}>●</b> Zil sesi {rt.online1m || 0}</span>
+                  <span><b style={{ color: "#475569" }}>●</b> Bilinmiyor {un.online1m || 0}</span>
                 </div>
                 {(un.online1h || 0) > 0 && (
                   <p style={{ color: "#6b6b76", fontSize: 11, margin: "10px 0 0 0" }}>
@@ -3311,7 +3264,7 @@ function App() {
               {/* PAKETE GÖRE — hangi uygulamadan kaç kişi zil sesinde */}
               {rtUsers.byApp && rtUsers.byApp.length > 0 && (
                 <div style={{ marginBottom: 26 }}>
-                  <div style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 10 }}>PAKETE GÖRE (şu an aktif — son 5 dk)</div>
+                  <div style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 10 }}>PAKETE GÖRE (şu an aktif — son 1 dk)</div>
                   <div style={{ overflowX: "auto" }}>
                     <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                       <thead>
@@ -3394,52 +3347,6 @@ function App() {
                 </p>
               </div>
 
-              {/* CİHAZ LİSTESİ */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, flexWrap: "wrap", gap: 10 }}>
-                <span style={{ color: "#9a9aa6", fontSize: 12 }}>ZİL SESİNDEKİ CİHAZLAR (son {rtUsers.window} dk)</span>
-                <span style={{ color: "#666", fontSize: 11 }}>
-                  {rtUsers.windowCount} cihaz{rtUsers.listed < rtUsers.windowCount ? ` — ilk ${rtUsers.listed} tanesi gösteriliyor` : ""}
-                </span>
-              </div>
-              {(!rtUsers.users || rtUsers.users.length === 0) ? (
-                <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Zil sesi modunda cihaz yok</div>
-              ) : (
-                <div style={{ overflowX: "auto" }}>
-                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
-                    <thead>
-                      <tr style={{ borderBottom: "1px solid #3a3a41", color: "#9a9aa6", textAlign: "left" }}>
-                        <th style={{ padding: "8px 10px" }}>IP</th>
-                        <th style={{ padding: "8px 10px" }}>Ülke</th>
-                        <th style={{ padding: "8px 10px" }}>Kaynak</th>
-                        <th style={{ padding: "8px 10px" }}>Son Aktivite</th>
-                        <th style={{ padding: "8px 10px" }}>İstek</th>
-                        <th style={{ padding: "8px 10px" }}>Endpoint</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {rtUsers.users.map(u => (
-                        <tr key={u.uid} style={{ borderBottom: "1px solid #3a3a41" }}>
-                          <td style={{ padding: "8px 10px", color: "#f4f4f6", fontFamily: "monospace" }}>
-                            <span style={{ display: "inline-block", width: 7, height: 7, borderRadius: "50%", marginRight: 8,
-                              backgroundColor: u.secondsAgo < 120 ? "#0ea5e9" : "#eab308" }} />
-                            {u.ip}
-                          </td>
-                          <td style={{ padding: "8px 10px", color: "#d4d4dc" }}>🌍 {u.country}</td>
-                          <td style={{ padding: "8px 10px", color: "#9a9aa6", fontSize: 11 }}>
-                            {u.extractor === "newpipe" ? "NewPipe" : u.extractor === "backend" ? "Backend" : "Bilinmiyor"}
-                            {u.sdk ? ` · SDK ${u.sdk}` : ""}
-                          </td>
-                          <td style={{ padding: "8px 10px", color: "#9a9aa6" }}>
-                            {u.secondsAgo < 60 ? `${u.secondsAgo} sn önce` : `${Math.round(u.secondsAgo / 60)} dk önce`}
-                          </td>
-                          <td style={{ padding: "8px 10px", color: "#38bdf8", fontWeight: 600 }}>{u.hits}</td>
-                          <td style={{ padding: "8px 10px", color: "#666", fontSize: 11 }}>{u.endpoint}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
               <div style={{ color: "#555", fontSize: 11, marginTop: 14 }}>
                 Son güncelleme: {new Date(rtUsers.updatedAt).toLocaleTimeString("tr-TR")}
               </div>

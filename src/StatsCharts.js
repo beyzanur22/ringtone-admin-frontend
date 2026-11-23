@@ -182,10 +182,10 @@ export function VisitorCountryChart({ data, error, height = 320 }) {
   );
 }
 
-export function RangePicker({ range, onChange }) {
+export function RangePicker({ range, onChange, ranges = RANGES }) {
   return (
     <div className="st-range" role="tablist">
-      {RANGES.map(r => (
+      {ranges.map(r => (
         <button key={r.key} type="button" title={r.hint} role="tab" aria-selected={range === r.key}
           className={range === r.key ? "on" : ""} onClick={() => onChange(r.key)}>{r.label}</button>
       ))}
@@ -511,29 +511,139 @@ export const STATS_CSS = `
   .st-tile { background: #141418; border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 12px 14px; }
   .st-tile small { display: block; font-size: 11px; color: #7c7c87; text-transform: uppercase; letter-spacing: .5px; }
   .st-tile b { display: block; font-size: 24px; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .st-cl { display: flex; flex-direction: column; gap: 2px; padding-bottom: 6px; }
+  .st-cl-r { display: grid; grid-template-columns: 26px minmax(120px, 1.2fr) minmax(60px, 2fr) 60px 42px; align-items: center; gap: 10px; padding: 6px 4px; border-radius: 8px; font-size: 13px; }
+  .st-cl-r:hover { background: rgba(255,255,255,0.03); }
+  .st-cl-n { color: #6b6b76; font-size: 11.5px; text-align: right; font-variant-numeric: tabular-nums; }
+  .st-cl-c { color: #e4e4ea; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .st-cl-bar { height: 6px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; }
+  .st-cl-bar i { display: block; height: 100%; background: #a78bfa; border-radius: 3px; }
+  .st-cl-r b { color: #f4f4f6; text-align: right; font-variant-numeric: tabular-nums; }
+  .st-cl-r small { color: #7c7c87; font-size: 11px; text-align: right; }
+  .st-vb { display: flex; gap: 4px; align-items: flex-end; height: 120px; padding: 4px 2px 0; }
+  .st-vb-c { flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; }
+  .st-vb-c span { font-size: 10.5px; font-weight: 700; color: #e4e4ea; margin-bottom: 3px; }
+  .st-vb-c i { display: block; width: 100%; background: #a78bfa; border-radius: 4px 4px 0 0; }
+  .st-vb-c:last-child i { background: #f4f4f6; }
+  .st-vb-l { height: auto; padding: 6px 2px 8px; }
+  .st-vb-l small { flex: 1; min-width: 0; text-align: center; font-size: 10px; color: #7c7c87; white-space: nowrap; overflow: visible; }
+  .st-cl-more { margin-top: 6px; padding: 8px; border: 0; border-radius: 8px; background: #1b1b21; color: #c4c4cc; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
   .recharts-legend-item-text { color: #a1a1ab !important; }
   @media (max-width: 560px) { .st-range button { padding: 6px 8px; font-size: 12px; } .st-tile b { font-size: 20px; } }
 `;
 
 /* Bölüm başına grafik bloğu: aralık seçici + türüne göre grafikler
    kind: "overview" | "ringtone" | "countries" */
+// Ziyaretçi Özeti aralıkları: Anlık (son 1 dk) + kaç kişi girdi (24s/7g/30g)
+const VISITOR_RANGES = RANGES.filter(r => r.key !== "1h")
+  .map(r => r.key === "live" ? { ...r, hint: "Şu an uygulamada olanlar (son 1 dakika)" } : r);
+
+export function CountryList({ rows, total, title, sub, loading, error }) {
+  const [all, setAll] = useState(false);
+  const max = Math.max(1, ...rows.map(r => r.value));
+  const shown = all ? rows : rows.slice(0, 20);
+  return (
+    <ChartFrame title={title} sub={sub}
+      right={<div className="st-total"><b>{num(total)}</b><small>kişi</small></div>}>
+      {!rows.length ? <Empty loading={loading} error={error} /> : (
+        <div className="st-cl">
+          {shown.map((c, i) => (
+            <div key={c.country} className="st-cl-r">
+              <span className="st-cl-n">{i + 1}</span>
+              <span className="st-cl-c">{flag(c.country)} {countryName(c.country)}</span>
+              <span className="st-cl-bar"><i style={{ width: `${(c.value / max) * 100}%` }} /></span>
+              <b>{num(c.value)}</b>
+              <small>%{total > 0 ? Math.round((c.value / total) * 100) : 0}</small>
+            </div>
+          ))}
+          {rows.length > 20 && (
+            <button type="button" className="st-cl-more" onClick={() => setAll(v => !v)}>
+              {all ? "Daha az göster" : `Tüm ülkeleri göster (${rows.length})`}
+            </button>
+          )}
+        </div>
+      )}
+    </ChartFrame>
+  );
+}
+
+export function VisitorSummary({ apiUrl, appKey, scope, scopeLabel }) {
+  const [range, setRangeState] = useState(() => {
+    try { const r = localStorage.getItem("panelVisRange"); if (VISITOR_RANGES.some(x => x.key === r)) return r; } catch (e) {}
+    return "24h";
+  });
+  const setRange = (r) => { setRangeState(r); try { localStorage.setItem("panelVisRange", r); } catch (e) {} };
+  const [state, setState] = useState({ data: null, error: null });
+  useEffect(() => {
+    let alive = true;
+    const load = () => fetch(`${apiUrl}/admin/visitor-series?range=${range}&appId=${encodeURIComponent(scope)}`, { headers: { "X-App-Key": appKey } })
+      .then(r => r.json().then(d => (r.ok ? d : Promise.reject(new Error(d.error || r.status)))))
+      .then(d => alive && setState({ data: d, error: null }))
+      .catch(e => alive && setState(s => ({ ...s, error: e.message || "Bağlantı hatası" })));
+    setState({ data: null, error: null });
+    load();
+    const id = setInterval(load, range === "live" ? 10000 : 60000);
+    return () => { alive = false; clearInterval(id); };
+  }, [apiUrl, appKey, scope, range]);
+  const { data, error } = state;
+  const hint = (VISITOR_RANGES.find(r => r.key === range) || {}).hint;
+  const isNow = range === "live";
+  const label = isNow ? "Şu an aktif" : range === "24h" ? "Son 24 saatte giren" : range === "7d" ? "Son 7 günde giren" : "Son 30 günde giren";
+  const pts = (data && data.points) || [];
+  const maxP = Math.max(1, ...pts.map(p => p.total));
+  const ptLabel = (ts) => data.unit === "hour"
+    ? new Intl.DateTimeFormat("tr-TR", { timeZone: TZ, hour: "2-digit", minute: "2-digit" }).format(new Date(ts))
+    : new Intl.DateTimeFormat("tr-TR", { timeZone: "UTC", day: "numeric", month: "short" }).format(new Date(ts));
+  return (
+    <div style={{ marginBottom: 28 }}>
+      <div className="st-head">
+        <div><h3>Ziyaretçi Özeti</h3><p>{scopeLabel} · {hint}</p></div>
+        <div className="st-head-r"><RangePicker range={range} onChange={setRange} ranges={VISITOR_RANGES} /></div>
+      </div>
+      {!isNow && pts.length > 0 && (
+        <div className="st-card" style={{ marginBottom: 14 }}>
+          <div className="st-vb">
+            {pts.map(p => (
+              <div key={p.ts} className="st-vb-c" title={`${ptLabel(p.ts)} — ${num(p.total)} kişi`}>
+                {pts.length <= 31 && <span>{p.total}</span>}
+                <i style={{ height: `${Math.max(3, (p.total / maxP) * 78)}%` }} />
+              </div>
+            ))}
+          </div>
+          <div className="st-vb st-vb-l">
+            {pts.map((p, i) => <small key={p.ts}>{(pts.length <= 8 || i % Math.ceil(pts.length / 8) === 0) ? ptLabel(p.ts) : ""}</small>)}
+          </div>
+        </div>
+      )}
+      <CountryList rows={(data && data.countries) || []} total={(data && data.total) || 0}
+        title={`${label} kişi · ülkelere göre`}
+        sub={isNow ? "Son 1 dakikada uygulamada olan farklı cihaz · 10 sn'de bir yenilenir" : "Uygulamayı açan farklı cihaz sayısı"}
+        loading={!data && !error} error={error} />
+    </div>
+  );
+}
+
 export function StatsSection({ apiUrl, appKey, scope, scopeLabel, kind, onPickApp, allowByApp }) {
+  return <StatsBlock apiUrl={apiUrl} appKey={appKey} scope={scope} scopeLabel={scopeLabel} kind={kind} onPickApp={onPickApp} allowByApp={allowByApp} />;
+}
+
+function StatsBlock({ apiUrl, appKey, scope, scopeLabel, kind, onPickApp, allowByApp }) {
   const [range, setRange] = useRange();
   const byApp = allowByApp && scope === "all" && kind !== "countries";
   const { data, error } = useStatsSeries({ apiUrl, appKey, scope, range, byApp });
   const [metric, setMetricState] = useState(() => { try { return localStorage.getItem("panelMetric") || "visitors"; } catch (e) { return "visitors"; } });
   const setMetric = (m) => { setMetricState(m); try { localStorage.setItem("panelMetric", m); } catch (e) {} };
   const longRange = ["24h", "7d", "30d"].includes(range);
-  const showVisitors = longRange && metric === "visitors" && (kind === "countries" || kind === "overview");
+  const showVisitors = longRange && metric === "visitors" && kind === "overview";
   const vis = useVisitorSeries({ apiUrl, appKey, scope, range, enabled: showVisitors });
   const hint = (RANGES.find(r => r.key === range) || {}).hint;
-  const title = kind === "ringtone" ? "Zil sesi / müzik grafiği" : kind === "countries" ? "Ülkelere göre aktif kullanıcılar" : "Aktif kullanıcılar";
+  const title = kind === "ringtone" ? "Zil sesi / müzik grafiği" : kind === "countries" ? "İçerik kaynağı" : "Aktif kullanıcılar";
   return (
     <div style={{ marginBottom: 8 }}>
       <div className="st-head">
         <div><h3>{title}</h3><p>{scopeLabel} · {hint}</p></div>
         <div className="st-head-r">
-          {longRange && (kind === "countries" || kind === "overview") && (
+          {longRange && kind === "overview" && (
             <div className="st-seg" title="Kaç kişi girdi: o saatte/günde uygulamayı açan farklı kişi · Aynı anda: o anda aktif kişilerin ortalaması">
               <button type="button" className={metric === "visitors" ? "on" : ""} onClick={() => setMetric("visitors")}>Kaç kişi girdi</button>
               <button type="button" className={metric === "active" ? "on" : ""} onClick={() => setMetric("active")}>Aynı anda (ort.)</button>
@@ -557,7 +667,7 @@ export function StatsSection({ apiUrl, appKey, scope, scopeLabel, kind, onPickAp
           <AppCompareBar data={data} range={range} onPickApp={onPickApp} />
         </div>
       )}
-      {(kind === "countries" || kind === "overview") && (
+      {kind === "overview" && (
         <div className="st-grid">
           {showVisitors
             ? <VisitorCountryChart data={vis.data} error={vis.error} height={320} />
