@@ -567,12 +567,7 @@ export function CountryList({ rows, total, title, sub, loading, error }) {
   );
 }
 
-export function VisitorSummary({ apiUrl, appKey, scope, scopeLabel }) {
-  const [range, setRangeState] = useState(() => {
-    try { const r = localStorage.getItem("panelVisRange"); if (VISITOR_RANGES.some(x => x.key === r)) return r; } catch (e) {}
-    return "24h";
-  });
-  const setRange = (r) => { setRangeState(r); try { localStorage.setItem("panelVisRange", r); } catch (e) {} };
+function useVisitorRange(apiUrl, appKey, scope, range) {
   const [state, setState] = useState({ data: null, error: null });
   useEffect(() => {
     let alive = true;
@@ -585,40 +580,124 @@ export function VisitorSummary({ apiUrl, appKey, scope, scopeLabel }) {
     const id = setInterval(load, range === "live" ? 10000 : 60000);
     return () => { alive = false; clearInterval(id); };
   }, [apiUrl, appKey, scope, range]);
-  const { data, error } = state;
-  const hint = (VISITOR_RANGES.find(r => r.key === range) || {}).hint;
+  return state;
+}
+
+export function VisitorSummary({ apiUrl, appKey, scope, scopeLabel }) {
+  const [range, setRangeState] = useState(() => {
+    try { const r = localStorage.getItem("panelVisRange"); if (VISITOR_RANGES.some(x => x.key === r)) return r; } catch (e) {}
+    return "24h";
+  });
+  const setRange = (r) => { setRangeState(r); try { localStorage.setItem("panelVisRange", r); } catch (e) {} };
+  const [showAll, setShowAll] = useState(false);
+  const now = useVisitorRange(apiUrl, appKey, scope, "live");
+  const d24 = useVisitorRange(apiUrl, appKey, scope, "24h");
+  const d7 = useVisitorRange(apiUrl, appKey, scope, "7d");
+  const d30 = useVisitorRange(apiUrl, appKey, scope, "30d");
+  const byRange = { live: now, "24h": d24, "7d": d7, "30d": d30 };
+  const sel = byRange[range] || d24;
   const isNow = range === "live";
-  const label = isNow ? "Şu an aktif" : range === "24h" ? "Son 24 saatte giren" : range === "7d" ? "Son 7 günde giren" : "Son 30 günde giren";
-  const pts = (data && data.points) || [];
+  // Sütunlar: Anlık'ta son 7 gün; diğerlerinde seçili aralık
+  const barSrc = (isNow ? d7 : sel).data;
+  const pts = (barSrc && barSrc.points) || [];
   const maxP = Math.max(1, ...pts.map(p => p.total));
-  const ptLabel = (ts) => data.unit === "hour"
+  const ptLabel = (ts) => barSrc.unit === "hour"
     ? new Intl.DateTimeFormat("tr-TR", { timeZone: TZ, hour: "2-digit", minute: "2-digit" }).format(new Date(ts))
-    : new Intl.DateTimeFormat("tr-TR", { timeZone: "UTC", day: "numeric", month: "short" }).format(new Date(ts));
+    : new Intl.DateTimeFormat("tr-TR", { timeZone: "UTC", day: "numeric", month: "short", ...(pts.length <= 7 ? { weekday: "short" } : {}) }).format(new Date(ts));
+  const rows = (sel.data && sel.data.countries) || [];
+  const total = (sel.data && sel.data.total) || 0;
+  const shown = showAll ? rows : rows.slice(0, 15);
+  const colLabel = isNow ? "Şu an" : range === "24h" ? "Son 24 saat" : range === "7d" ? "Son 7 gün" : "Son 30 gün";
+  const hint = (VISITOR_RANGES.find(r => r.key === range) || {}).hint;
+  const tot = (st) => (st.data ? (st.data.total || 0).toLocaleString("tr-TR") : "—");
+  const big = (key, label, st, sub) => (
+    <div key={key} onClick={() => setRange(key)} style={{ flex: "1 1 170px", padding: "18px 20px", borderRadius: 12, cursor: "pointer", backgroundColor: "#18181c",
+      border: `1px solid ${range === key ? "#a78bfa" : "rgba(255,255,255,0.14)"}` }}>
+      <div style={{ color: "rgba(255,255,255,0.7)", fontSize: 13, fontWeight: 700 }}>{label}</div>
+      <div style={{ color: "#fff", fontSize: 36, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{tot(st)}</div>
+      <div style={{ color: "rgba(255,255,255,0.45)", fontSize: 11, marginTop: 4 }}>{sub}</div>
+    </div>
+  );
   return (
-    <div style={{ marginBottom: 28 }}>
+    <div style={{ marginBottom: 28, paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.08)" }}>
       <div className="st-head">
         <div><h3>Ziyaretçi Özeti</h3><p>{scopeLabel} · {hint}</p></div>
         <div className="st-head-r"><RangePicker range={range} onChange={setRange} ranges={VISITOR_RANGES} /></div>
       </div>
-      {!isNow && pts.length > 0 && (
-        <div className="st-card" style={{ marginBottom: 14 }}>
-          <div className="st-vb">
-            {pts.map(p => (
-              <div key={p.ts} className="st-vb-c" title={`${ptLabel(p.ts)} — ${num(p.total)} kişi`}>
-                {pts.length <= 31 && <span>{p.total}</span>}
-                <i style={{ height: `${Math.max(3, (p.total / maxP) * 78)}%` }} />
+      <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 18 }}>
+        {big("live", "ŞU AN", now, "Son 1 dakikada uygulamada")}
+        {big("24h", "SON 24 SAAT", d24, "Kayan pencere, saatlik")}
+        {big("7d", "SON 7 GÜN", d7, "Bugün dahil son 7 gün (UTC)")}
+        {big("30d", "SON 30 GÜN", d30, "Bugün dahil son 30 gün (UTC)")}
+      </div>
+
+      {/* sütunlar */}
+      {pts.length > 0 && (
+        <>
+          <div style={{ display: "flex", gap: pts.length > 14 ? 3 : 8, alignItems: "flex-end", height: 120, padding: "12px 12px 0", background: "#111114", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, marginBottom: 6 }}>
+            {pts.map((p, i) => (
+              <div key={p.ts} style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", height: "100%" }}>
+                {pts.length <= 31 && <span style={{ color: "#fff", fontSize: pts.length > 14 ? 9 : 11, fontWeight: 700, marginBottom: 4 }}>{p.total}</span>}
+                <div title={`${ptLabel(p.ts)} — ${p.total} cihaz`} style={{ width: "100%", height: `${Math.max(3, (p.total / maxP) * 75)}%`, background: i === pts.length - 1 ? "#fff" : "rgba(255,255,255,0.45)", borderRadius: "4px 4px 0 0" }} />
               </div>
             ))}
           </div>
-          <div className="st-vb st-vb-l">
-            {pts.map((p, i) => <small key={p.ts}>{(pts.length <= 8 || i % Math.ceil(pts.length / 8) === 0) ? ptLabel(p.ts) : ""}</small>)}
+          <div style={{ display: "flex", gap: pts.length > 14 ? 3 : 8, padding: "0 12px", marginBottom: 20 }}>
+            {pts.map((p, i) => (
+              <span key={p.ts} style={{ flex: 1, minWidth: 0, textAlign: "center", color: "rgba(255,255,255,0.5)", fontSize: 10, whiteSpace: "nowrap", overflow: "visible" }}>
+                {(pts.length <= 8 || i % Math.ceil(pts.length / 8) === 0) ? ptLabel(p.ts) : ""}
+              </span>
+            ))}
           </div>
+        </>
+      )}
+
+      {/* ülke tablosu */}
+      {rows.length === 0 ? (
+        <div style={{ padding: 20, textAlign: "center", color: "rgba(255,255,255,0.5)", fontSize: 13, border: "1px dashed rgba(255,255,255,0.15)", borderRadius: 10 }}>
+          {!sel.data && !sel.error ? "Yükleniyor…" : sel.error ? `Yüklenemedi: ${sel.error}` : "Bu aralıkta veri yok."}
+        </div>
+      ) : (
+        <div style={{ border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, overflow: "hidden" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+            <thead>
+              <tr style={{ background: "#18181c", color: "rgba(255,255,255,0.7)", textAlign: "left" }}>
+                <th style={{ padding: "10px 14px", fontWeight: 700 }}>Ülke</th>
+                <th style={{ padding: "10px 14px", fontWeight: 700, textAlign: "right" }}>{colLabel}</th>
+                <th style={{ padding: "10px 14px", fontWeight: 700, width: "34%" }}>Pay</th>
+              </tr>
+            </thead>
+            <tbody>
+              {shown.map(c => {
+                const share = total > 0 ? Math.round((c.value / total) * 100) : 0;
+                return (
+                  <tr key={c.country} style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+                    <td style={{ padding: "9px 14px", color: "#fff", fontWeight: 600 }}>
+                      {flag(c.country)} {countryName(c.country)}
+                      <span style={{ color: "rgba(255,255,255,0.4)", fontFamily: "monospace", fontSize: 11, marginLeft: 6 }}>{c.country !== "XX" ? c.country : ""}</span>
+                    </td>
+                    <td style={{ padding: "9px 14px", color: "#fff", textAlign: "right", fontWeight: 700 }}>{num(c.value)}</td>
+                    <td style={{ padding: "9px 14px" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <div style={{ flex: 1, height: 6, background: "rgba(255,255,255,0.1)", borderRadius: 3, overflow: "hidden" }}>
+                          <div style={{ width: `${share}%`, height: "100%", background: "#fff" }} />
+                        </div>
+                        <span style={{ color: "rgba(255,255,255,0.6)", fontSize: 11, width: 34, textAlign: "right" }}>%{share}</span>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          {rows.length > 15 && (
+            <button onClick={() => setShowAll(v => !v)}
+              style={{ width: "100%", padding: 10, background: "#18181c", border: "none", borderTop: "1px solid rgba(255,255,255,0.08)", color: "#fff", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
+              {showAll ? "Daha az göster" : `Tüm ülkeleri göster (${rows.length})`}
+            </button>
+          )}
         </div>
       )}
-      <CountryList rows={(data && data.countries) || []} total={(data && data.total) || 0}
-        title={`${label} kişi · ülkelere göre`}
-        sub={isNow ? "Son 1 dakikada uygulamada olan farklı cihaz · 10 sn'de bir yenilenir" : "Uygulamayı açan farklı cihaz sayısı"}
-        loading={!data && !error} error={error} />
     </div>
   );
 }

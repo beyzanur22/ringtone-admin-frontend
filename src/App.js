@@ -2939,7 +2939,6 @@ function App() {
             Uygulamada "aktif" = seçilen süre içinde backend'e istek atmış benzersiz cihaz. Cihaz kimliği: X-Device-Id → token → IP.
           </p>
 
-          <StatsSection apiUrl={API_URL} appKey={APP_KEY} scope={statsScope} scopeLabel={statsScopeLabel} kind="countries" />
 
           {!liveUsers ? (
             <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Yükleniyor...</div>
