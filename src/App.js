@@ -1732,7 +1732,7 @@ function App() {
   );
   const isMonitor = MONITOR_TABS.includes(activeSection);
   const statsScope = PANEL_LOCKED ? appId : (scopeAll ? "all" : appId);
-  const statsScopeLabel = statsScope === "all" ? "Tüm uygulamalar" : (currentApp.name || appId) + (appId === "default" ? " (kayıtsız paketler dahil)" : "");
+  const statsScopeLabel = statsScope === "all" ? "Tüm uygulamalar" : (currentApp.name || appId);
   const allPts = chipStats.data ? chipStats.data.points.filter(x => !x.missing) : [];
   const allCount = allPts.length ? allPts[allPts.length - 1].t : null;
   // En kalabalık uygulama solda; sayı yoksa sona, eşitlikte ada göre
