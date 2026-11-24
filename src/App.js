@@ -435,11 +435,12 @@ const SCREENS = [
   { key: "content", label: "İçerik", tabs: ["blocked", "contentfilter"] },
   { key: "appcontrols", label: "App Controls", tabs: ["appcontrols"] },
   { key: "reach", label: "Kullanıcıya Ulaş", tabs: ["device", "notifications", "popup"] },
-  { key: "monitor", label: "İzleme", tabs: ["live", "ringtonemode", "loginips", "reviewlogs", "albums"] },
+  { key: "monitor", label: "İzleme", tabs: ["live", "loginips", "reviewlogs", "albums"] },
+  { key: "ringtone", label: "Zil Sesi Modu", tabs: ["ringtonemode"] },
   { key: "admin", label: "Yönetim", tabs: ["users", "apps", "privacy"] },
 ];
 const SCREEN_GROUPS = [
-  { title: "Genel", keys: ["overview", "monitor"] },
+  { title: "Genel", keys: ["overview", "monitor", "ringtone"] },
   { title: "Ayarlar", keys: ["countrycfg", "infra", "ads", "content", "appcontrols"] },
   { title: "Kullanıcılar", keys: ["reach"] },
   { title: "Yönetim", keys: ["admin"] },
@@ -479,6 +480,7 @@ const PANEL_ICONS = {
   infra: '<rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/>',
   reach: '<path d="M21 12a8 8 0 0 1-12 7l-6 2 2-5a8 8 0 1 1 16-4z"/>',
   monitor: '<path d="M3 12h4l3 8 4-16 3 8h4"/>',
+  ringtone: '<path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/>',
   admin: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
 };
 const AD_ICONS = {
@@ -1442,10 +1444,21 @@ function App() {
   const chipStats = useStatsSeries({ apiUrl: API_URL, appKey: APP_KEY, scope: "all", range: "live", byApp: !PANEL_LOCKED });
   // Popup Gönder: hedefe uyan cihaz tahmini için seçili uygulamanın son verisi
   const daStats = useStatsSeries({ apiUrl: API_URL, appKey: APP_KEY, scope: appId, range: "live", enabled: activeSection === "device" });
+  // Anlık sayılar TEK kaynaktan (son 1 dk, 5 sn'de bir): üst seçici, sol rozet ve ŞU AN AKTİF aynı sayıyı gösterir
+  const [nowAll, setNowAll] = useState(null);
+  useEffect(() => {
+    if (PANEL_LOCKED) return undefined;
+    const load = () => fetch(`${API_URL}/admin/active-users?window=1&lite=1&appId=all`, { headers: { "X-App-Key": APP_KEY } })
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d && !d.error) setNowAll(d); })
+      .catch(() => {});
+    load();
+    const id = setInterval(load, 5000);
+    return () => clearInterval(id);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const chipCount = (id) => {
-    const a = chipStats.data && chipStats.data.byApp && chipStats.data.byApp.find(x => x.id === id);
-    const pts = a ? a.series.filter(Boolean) : [];
-    return pts.length ? pts[pts.length - 1].t : null;
+    const a = nowAll && nowAll.byApp && nowAll.byApp.find(x => x.id === id);
+    return a ? a.total : null;
   };
   const pickApp = (id) => {
     setScopeAll(false);
@@ -1751,8 +1764,9 @@ function App() {
   const isMonitor = MONITOR_TABS.includes(activeSection);
   const statsScope = PANEL_LOCKED ? appId : (scopeAll ? "all" : appId);
   const statsScopeLabel = statsScope === "all" ? "Tüm uygulamalar" : (currentApp.name || appId);
-  const allPts = chipStats.data ? chipStats.data.points.filter(x => !x.missing) : [];
-  const allCount = allPts.length ? allPts[allPts.length - 1].t : null;
+  const allCount = nowAll ? nowAll.online1m : null;
+  // Rozet + ŞU AN AKTİF = üst seçicide görünen sayı (kilitli panelde kendi uygulaması)
+  const nowCount = PANEL_LOCKED ? (liveUsers ? liveUsers.online1m : null) : (isMonitor && scopeAll ? allCount : chipCount(appId));
   // En kalabalık uygulama solda; sayı yoksa sona, eşitlikte ada göre
   const appChips = Object.values(apps).sort((a, b) =>
     (chipCount(b.id) ?? -1) - (chipCount(a.id) ?? -1) || String(a.name || a.id).localeCompare(String(b.name || b.id), "tr"));
@@ -1771,7 +1785,7 @@ function App() {
           {/* CANLI KULLANICI ROZETİ — her bölümde görünür */}
           <div className="pn-live" onClick={() => pick("live")}>
             <i />
-            <b>{liveUsers ? liveUsers.online1m : "—"}</b>
+            <b>{nowCount ?? "—"}</b>
             <span>şu an aktif</span>
           </div>
           <label className="pn-search">
@@ -2969,7 +2983,7 @@ function App() {
                     <span style={{ width: 10, height: 10, borderRadius: "50%", backgroundColor: "#22c55e", boxShadow: "0 0 10px #22c55e" }} />
                     <span style={{ color: "#5f8b70", fontSize: 12 }}>ŞU AN AKTİF (son 1 dk)</span>
                   </div>
-                  <div style={{ color: "#4ade80", fontSize: 46, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{liveUsers.online1m}</div>
+                  <div style={{ color: "#4ade80", fontSize: 46, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{nowCount ?? liveUsers.online1m}</div>
                 </div>
                 <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#18181c", border: "1px solid #2c2c33" }}>
                   <div style={{ color: "#9a9aa6", fontSize: 12 }}>SON 15 DAKİKA</div>
@@ -3284,6 +3298,7 @@ function App() {
                         <th style={{ padding: "8px 10px" }}>IP</th>
                         <th style={{ padding: "8px 10px" }}>Ülke</th>
                         <th style={{ padding: "8px 10px" }}>Uygulama</th>
+                        <th style={{ padding: "8px 10px" }}>Paket adı</th>
                         <th style={{ padding: "8px 10px" }}>Kaynak</th>
                         <th style={{ padding: "8px 10px" }}>Son Aktivite</th>
                         <th style={{ padding: "8px 10px" }}>İstek</th>
@@ -3303,7 +3318,9 @@ function App() {
                           </td>
                           <td style={{ padding: "8px 10px", color: "#f4f4f6", fontWeight: 600 }}>
                             {u.appName || u.appId || "—"}
-                            {u.appId && u.appId !== "default" && <span style={{ color: "#666", fontSize: 11, fontWeight: 400, marginLeft: 6 }}>{(apps[u.appId] || {}).packageName || ""}</span>}
+                          </td>
+                          <td style={{ padding: "8px 10px", color: "#9a9aa6", fontFamily: "monospace", fontSize: 12 }}>
+                            {u.pkg || (apps[u.appId] || {}).packageName || "bilinmiyor"}
                           </td>
                           <td style={{ padding: "8px 10px", color: "#9a9aa6", fontSize: 11 }}>
                             {u.extractor === "newpipe" ? "NewPipe" : u.extractor === "backend" ? "Backend" : "Bilinmiyor"}
