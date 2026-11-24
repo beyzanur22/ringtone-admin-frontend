@@ -923,7 +923,7 @@ function App() {
   const [liveExtractor, setLiveExtractor] = useState("all");
   // Zil sesi modu bölümü — aynı uçtan ?mode=ringtone ile beslenir
   const [rtUsers, setRtUsers] = useState(null);
-  const [rtWindow, setRtWindow] = useState(1);
+  const [rtWindow, setRtWindow] = useState(60);   // zil sesi cihaz listesi: varsayılan son 1 saat
 
   const API_URL = window.location.hostname === "localhost" ? "http://173.212.249.105" : "";
 
@@ -3289,7 +3289,7 @@ function App() {
                 </span>
               </div>
               {(!rtUsers.users || rtUsers.users.length === 0) ? (
-                <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Zil sesi modunda cihaz yok</div>
+                <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Son {rtUsers.window} dakikada zil sesi moduna giren cihaz yok</div>
               ) : (
                 <div style={{ overflowX: "auto", marginBottom: 24 }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
