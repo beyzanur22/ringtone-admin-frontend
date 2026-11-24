@@ -991,7 +991,7 @@ function App() {
   };
 
   const fetchVisitorStats = () => {
-    fetch(`${API_URL}/admin/visitor-stats`, { headers: { "X-App-Key": APP_KEY } })
+    fetch(`${API_URL}/admin/visitor-stats${!PANEL_LOCKED && scopeAll ? "?appId=all" : ""}`, { headers: { "X-App-Key": APP_KEY } })
       .then(r => r.ok ? r.json() : null)
       .then(data => { if (data && !data.error) setVisitorStats(data); })
       .catch(() => {});
@@ -1715,7 +1715,7 @@ function App() {
     fetchVisitorStats();
     const id = setInterval(fetchVisitorStats, 60000);
     return () => clearInterval(id);
-  }, [activeSection]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [activeSection, scopeAll]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Zil sesi modu: yalnız bölüm açıkken yoklanır (teşhis ekranı, rozeti yok)
   useEffect(() => {
