@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StatsSection, VisitorSummary, useStatsSeries, STATS_CSS } from "./StatsCharts";
+import { StatsSection, useStatsSeries, STATS_CSS } from "./StatsCharts";
 
 /* =========================================================================
    ÇOK UYGULAMALI PANEL — appId enjeksiyonu
@@ -915,6 +915,8 @@ function App() {
   const [liveUsers, setLiveUsers] = useState(null);
   const [reviewLogs, setReviewLogs] = useState(null);
   const [liveWindow, setLiveWindow] = useState(1);
+  const [visitorStats, setVisitorStats] = useState(null);
+  const [showAllVisitorCountries, setShowAllVisitorCountries] = useState(false);
   // Canlı cihaz tablosu filtresi: "all" | "newpipe" | "backend" | "unknown"
   const [liveExtractor, setLiveExtractor] = useState("all");
   // Zil sesi modu bölümü — aynı uçtan ?mode=ringtone ile beslenir
@@ -983,6 +985,13 @@ function App() {
     fetch(`${API_URL}/admin/active-users?window=${win || 1}${liveScopeQ()}`, { headers: { "X-App-Key": APP_KEY } })
       .then(r => r.ok ? r.json() : null)
       .then(data => { if (data && !data.error) setLiveUsers(data); })
+      .catch(() => {});
+  };
+
+  const fetchVisitorStats = () => {
+    fetch(`${API_URL}/admin/visitor-stats`, { headers: { "X-App-Key": APP_KEY } })
+      .then(r => r.ok ? r.json() : null)
+      .then(data => { if (data && !data.error) setVisitorStats(data); })
       .catch(() => {});
   };
 
@@ -1415,6 +1424,7 @@ function App() {
     fetchLoginIps();
     fetchReviewLogs();
     fetchLiveUsers(liveWindow);
+    fetchVisitorStats();
     fetchRtUsers(rtWindow);
   }, [appId]); // eslint-disable-line react-hooks/exhaustive-deps
   const switchApp = (id) => {
@@ -1685,6 +1695,14 @@ function App() {
     const id = setInterval(() => fetchLiveUsers(liveWindow), activeSection === "live" ? 5000 : 30000);
     return () => clearInterval(id);
   }, [liveWindow, activeSection, scopeAll]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Ziyaretçi özeti: Canlı Kullanıcılar açıkken dakikada bir
+  useEffect(() => {
+    if (activeSection !== "live") return;
+    fetchVisitorStats();
+    const id = setInterval(fetchVisitorStats, 60000);
+    return () => clearInterval(id);
+  }, [activeSection]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Zil sesi modu: yalnız bölüm açıkken yoklanır (teşhis ekranı, rozeti yok)
   useEffect(() => {
@@ -3040,8 +3058,94 @@ function App() {
                 );
               })()}
 
-              {/* ZİYARETÇİ ÖZETİ — Anlık / 24 saat / 1 hafta / 30 gün, ülke kırılımlı */}
-              <VisitorSummary apiUrl={API_URL} appKey={APP_KEY} scope={statsScope} scopeLabel={statsScopeLabel} />
+              {/* ZİYARETÇİ ÖZETİ — son 24 saat / son 7 gün, ülke kırılımlı */}
+              {visitorStats && (() => {
+                const vs = visitorStats;
+                const maxDay = Math.max(1, ...(vs.daily || []).map(d => d.count));
+                const rows = showAllVisitorCountries ? vs.byCountry : vs.byCountry.slice(0, 15);
+                const dayLabel = (iso) => new Date(iso + "T00:00:00Z").toLocaleDateString("tr-TR", { day: "numeric", month: "short", weekday: "short", timeZone: "UTC" });
+                const big = (label, value, sub) => (
+                  <div style={{ flex: "1 1 220px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#18181c", border: "1px solid rgba(255,255,255,0.14)" }}>
+                    <div style={{ color: "rgba(255,255,255,0.7)", fontSize: 13, fontWeight: 700 }}>{label}</div>
+                    <div style={{ color: "#fff", fontSize: 40, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{(value || 0).toLocaleString("tr-TR")}</div>
+                    <div style={{ color: "rgba(255,255,255,0.45)", fontSize: 11, marginTop: 4 }}>{sub}</div>
+                  </div>
+                );
+                return (
+                  <div style={{ marginBottom: 28, paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+                    <SectionHead title="Ziyaretçi Özeti" sub="Bu uygulamayı açan benzersiz cihaz sayısı"
+                      right={<span style={{ color: "rgba(255,255,255,0.45)", fontSize: 11 }}>dakikada bir güncellenir</span>} />
+                    <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 18 }}>
+                      {big("SON 24 SAAT", vs.last24h, "Kayan pencere, saatlik")}
+                      {big("SON 7 GÜN", vs.last7d, "Bugün dahil son 7 gün (UTC)")}
+                    </div>
+
+                    {/* günlük çubuklar */}
+                    <div style={{ display: "flex", gap: 8, alignItems: "flex-end", height: 120, padding: "12px 12px 0", background: "#111114", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, marginBottom: 6 }}>
+                      {(vs.daily || []).map((d, i) => (
+                        <div key={d.date} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", height: "100%" }}>
+                          <span style={{ color: "#fff", fontSize: 11, fontWeight: 700, marginBottom: 4 }}>{d.count}</span>
+                          <div title={`${d.date} — ${d.count} cihaz`} style={{ width: "100%", height: `${Math.max(3, (d.count / maxDay) * 75)}%`, background: i === vs.daily.length - 1 ? "#fff" : "rgba(255,255,255,0.45)", borderRadius: "4px 4px 0 0" }} />
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{ display: "flex", gap: 8, padding: "0 12px", marginBottom: 20 }}>
+                      {(vs.daily || []).map(d => (
+                        <span key={d.date} style={{ flex: 1, textAlign: "center", color: "rgba(255,255,255,0.5)", fontSize: 10 }}>{dayLabel(d.date)}</span>
+                      ))}
+                    </div>
+
+                    {/* ülke tablosu */}
+                    {vs.byCountry.length === 0 ? (
+                      <div style={{ padding: 20, textAlign: "center", color: "rgba(255,255,255,0.5)", fontSize: 13, border: "1px dashed rgba(255,255,255,0.15)", borderRadius: 10 }}>
+                        Henüz veri yok — sayım bu sürüm yayına alındıktan sonra birikmeye başlar.
+                      </div>
+                    ) : (
+                      <div style={{ border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, overflow: "hidden" }}>
+                        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                          <thead>
+                            <tr style={{ background: "#18181c", color: "rgba(255,255,255,0.7)", textAlign: "left" }}>
+                              <th style={{ padding: "10px 14px", fontWeight: 700 }}>Ülke</th>
+                              <th style={{ padding: "10px 14px", fontWeight: 700, textAlign: "right" }}>Son 24 saat</th>
+                              <th style={{ padding: "10px 14px", fontWeight: 700, textAlign: "right" }}>Son 7 gün</th>
+                              <th style={{ padding: "10px 14px", fontWeight: 700, width: "28%" }}>Pay (7 gün)</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {rows.map(c => {
+                              const share = vs.last7d > 0 ? Math.round((c.last7d / vs.last7d) * 100) : 0;
+                              return (
+                                <tr key={c.country} style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+                                  <td style={{ padding: "9px 14px", color: "#fff", fontWeight: 600 }}>
+                                    {c.country === "XX" ? "🏳️ Bilinmiyor" : `${countryFlag(c.country)} ${countryName(c.country)}`}
+                                    <span style={{ color: "rgba(255,255,255,0.4)", fontFamily: "monospace", fontSize: 11, marginLeft: 6 }}>{c.country !== "XX" ? c.country : ""}</span>
+                                  </td>
+                                  <td style={{ padding: "9px 14px", color: "#fff", textAlign: "right", fontWeight: 700 }}>{c.last24h.toLocaleString("tr-TR")}</td>
+                                  <td style={{ padding: "9px 14px", color: "#fff", textAlign: "right", fontWeight: 700 }}>{c.last7d.toLocaleString("tr-TR")}</td>
+                                  <td style={{ padding: "9px 14px" }}>
+                                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                      <div style={{ flex: 1, height: 6, background: "rgba(255,255,255,0.1)", borderRadius: 3, overflow: "hidden" }}>
+                                        <div style={{ width: `${share}%`, height: "100%", background: "#fff" }} />
+                                      </div>
+                                      <span style={{ color: "rgba(255,255,255,0.6)", fontSize: 11, width: 34, textAlign: "right" }}>%{share}</span>
+                                    </div>
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                        {vs.byCountry.length > 15 && (
+                          <button onClick={() => setShowAllVisitorCountries(v => !v)}
+                            style={{ width: "100%", padding: 10, background: "#18181c", border: "none", borderTop: "1px solid rgba(255,255,255,0.08)", color: "#fff", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
+                            {showAllVisitorCountries ? "Daha az göster" : `Tüm ülkeleri göster (${vs.byCountry.length})`}
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
 
               {/* CANLI IP LİSTESİ */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, flexWrap: "wrap", gap: 10 }}>
@@ -3150,9 +3254,6 @@ function App() {
             ve her yoklamada sunucuya bildirir. Bu moddayken arama/çalma trafiği olmadığı için
             bu cihazlar "Canlı Kullanıcılar" toplamının içindedir ama orada ayırt edilemez.
           </p>
-
-          <StatsSection apiUrl={API_URL} appKey={APP_KEY} scope={statsScope} scopeLabel={statsScopeLabel}
-            kind="ringtone" allowByApp={!PANEL_LOCKED} onPickApp={pickApp} />
 
           {!rtUsers ? (
             <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Yükleniyor...</div>
