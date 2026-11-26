@@ -102,11 +102,11 @@ function CountryRulePicker({ rule, idx, configKey, config, setConfig }) {
 
   return (
     <div style={{ position: "relative" }}>
-      <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Ülkeler:</label>
+      <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>Ülkeler:</label>
       <select value={mode} onChange={e => {
         const newMode = e.target.value;
         updateRule({ countryMode: newMode, countries: newMode === "all" ? [] : (rule.countries || []) });
-      }} style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 12, width: "100%", marginBottom: 6 }}>
+      }} style={{ background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 12, width: "100%", marginBottom: 6 }}>
         <option value="all">Tüm ülkeler</option>
         <option value="include">Sadece seçtiğim ülkeler</option>
         <option value="exclude">Bu ülkeler HARİÇ</option>
@@ -114,13 +114,13 @@ function CountryRulePicker({ rule, idx, configKey, config, setConfig }) {
       {mode !== "all" && (
         <>
           <div onClick={() => setOpen(!open)}
-            style={{ background: "#141418", color: mode === "exclude" ? "#ef4444" : "#fff", border: `1px solid ${mode === "exclude" ? "#ef4444" : "#2c2c33"}`, borderRadius: 6, padding: "6px 10px", fontSize: 13, cursor: "pointer", minHeight: 30 }}>
+            style={{ background: "#0e0f12", color: mode === "exclude" ? "#ef4444" : "#fff", border: `1px solid ${mode === "exclude" ? "#ef4444" : "#23262d"}`, borderRadius: 6, padding: "6px 10px", fontSize: 13, cursor: "pointer", minHeight: 30 }}>
             {modeLabel}
           </div>
           {open && (
-            <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "#141418", border: "1px solid #444", borderRadius: 6, maxHeight: 250, overflowY: "auto", zIndex: 999, padding: "4px 0" }}>
+            <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "#0e0f12", border: "1px solid #444", borderRadius: 6, maxHeight: 250, overflowY: "auto", zIndex: 999, padding: "4px 0" }}>
               <input type="text" placeholder="Ülke ara..." value={search} onChange={e => setSearch(e.target.value)}
-                style={{ width: "calc(100% - 16px)", margin: "4px 8px", background: "#18181c", color: "#fff", border: "1px solid #444", borderRadius: 4, padding: "4px 8px", fontSize: 12 }} />
+                style={{ width: "calc(100% - 16px)", margin: "4px 8px", background: "#121418", color: "#fff", border: "1px solid #444", borderRadius: 4, padding: "4px 8px", fontSize: 12 }} />
               {filtered.map(c => (
                 <label key={c.code} style={{ display: "flex", alignItems: "center", padding: "4px 10px", fontSize: 12, color: "#ccc", cursor: "pointer" }}>
                   <input type="checkbox" checked={(rule.countries || []).includes(c.code)}
@@ -172,43 +172,43 @@ function DaCountryPicker({ mode, countries, onChange, disabled }) {
   const accent = mode === "exclude" ? "#ef4444" : "#0ea5e9";
 
   const row = c => (
-    <label key={c.code} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 14px", cursor: "pointer", fontSize: 13, color: "#d4d4dc", borderBottom: "1px solid #2c2c33", background: countries.includes(c.code) ? "#0c2d48" : "transparent" }}>
+    <label key={c.code} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 14px", cursor: "pointer", fontSize: 13, color: "#d4d4dc", borderBottom: "1px solid #23262d", background: countries.includes(c.code) ? "#0c2d48" : "transparent" }}>
       <input type="checkbox" checked={countries.includes(c.code)} onChange={() => toggle(c.code)} />
       <span style={{ fontSize: 16 }}>{countryFlag(c.code)}</span>
       <span style={{ flex: 1 }}>{c.name}</span>
-      <span style={{ color: "#6b6b76", fontFamily: "monospace", fontSize: 12 }}>{c.code}</span>
+      <span style={{ color: "#7c828c", fontFamily: "monospace", fontSize: 12 }}>{c.code}</span>
     </label>
   );
 
   return (
     <div style={{ position: "relative", flex: 1, opacity: disabled ? 0.4 : 1, pointerEvents: disabled ? "none" : "auto" }}>
       <div onClick={() => setOpen(!open)}
-        style={{ background: "#1f1f24", border: `1px solid ${open ? accent : "#2c2c33"}`, borderRadius: 8, padding: "8px 12px", minHeight: 42, boxSizing: "border-box", cursor: "pointer", display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
-        {countries.length === 0 && <span style={{ color: "#6b6b76", fontSize: 14 }}>{disabled ? "Tüm ülkelere gönderilir" : "Ülke seçmek için tıkla..."}</span>}
+        style={{ background: "#15171b", border: `1px solid ${open ? accent : "#23262d"}`, borderRadius: 8, padding: "8px 12px", minHeight: 42, boxSizing: "border-box", cursor: "pointer", display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
+        {countries.length === 0 && <span style={{ color: "#7c828c", fontSize: 14 }}>{disabled ? "Tüm ülkelere gönderilir" : "Ülke seçmek için tıkla..."}</span>}
         {countries.map(code => (
           <span key={code} onClick={e => { e.stopPropagation(); toggle(code); }} title="Kaldır"
             style={{ background: mode === "exclude" ? "#450a0a" : "#0c2d48", color: "#fff", border: `1px solid ${accent}`, borderRadius: 999, padding: "2px 10px", fontSize: 12, cursor: "pointer" }}>
             {countryFlag(code)} {countryName(code)} ✕
           </span>
         ))}
-        <span style={{ marginLeft: "auto", color: "#9a9aa6", fontSize: 12 }}>{open ? "▲" : "▼"}</span>
+        <span style={{ marginLeft: "auto", color: "#9aa0aa", fontSize: 12 }}>{open ? "▲" : "▼"}</span>
       </div>
       {open && (
-        <div style={{ position: "absolute", top: "100%", left: 0, right: 0, marginTop: 4, background: "#1f1f24", border: "1px solid #2c2c33", borderRadius: 8, zIndex: 50, boxShadow: "0 12px 32px rgba(0,0,0,.5)" }}>
-          <div style={{ display: "flex", gap: 8, padding: 8, borderBottom: "1px solid #2c2c33" }}>
+        <div style={{ position: "absolute", top: "100%", left: 0, right: 0, marginTop: 4, background: "#15171b", border: "1px solid #23262d", borderRadius: 8, zIndex: 50, boxShadow: "0 12px 32px rgba(0,0,0,.5)" }}>
+          <div style={{ display: "flex", gap: 8, padding: 8, borderBottom: "1px solid #23262d" }}>
             <input autoFocus type="text" placeholder="Ülke ara (Türkiye, TR...)" value={search} onChange={e => setSearch(e.target.value)}
-              style={{ flex: 1, background: "#111114", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "8px 10px", fontSize: 13 }} />
+              style={{ flex: 1, background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "8px 10px", fontSize: 13 }} />
             {countries.length > 0 && <button type="button" onClick={() => onChange([])}
-              style={{ background: "none", border: "1px solid #2c2c33", color: "#f87171", borderRadius: 6, padding: "0 10px", cursor: "pointer", fontSize: 12 }}>Temizle</button>}
+              style={{ background: "none", border: "1px solid #23262d", color: "#f87171", borderRadius: 6, padding: "0 10px", cursor: "pointer", fontSize: 12 }}>Temizle</button>}
             <button type="button" onClick={() => setOpen(false)}
               style={{ background: "#0ea5e9", border: "none", color: "#fff", borderRadius: 6, padding: "0 14px", cursor: "pointer", fontSize: 12 }}>Tamam</button>
           </div>
           <div style={{ maxHeight: 300, overflowY: "auto" }}>
-            {top.length > 0 && <div style={{ padding: "6px 14px", fontSize: 11, color: "#6b6b76", background: "#18181c" }}>SIK KULLANILANLAR</div>}
+            {top.length > 0 && <div style={{ padding: "6px 14px", fontSize: 11, color: "#7c828c", background: "#121418" }}>SIK KULLANILANLAR</div>}
             {top.map(row)}
-            {rest.length > 0 && <div style={{ padding: "6px 14px", fontSize: 11, color: "#6b6b76", background: "#18181c" }}>TÜM ÜLKELER</div>}
+            {rest.length > 0 && <div style={{ padding: "6px 14px", fontSize: 11, color: "#7c828c", background: "#121418" }}>TÜM ÜLKELER</div>}
             {rest.map(row)}
-            {top.length + rest.length === 0 && <div style={{ padding: 14, color: "#6b6b76", fontSize: 13 }}>Sonuç yok</div>}
+            {top.length + rest.length === 0 && <div style={{ padding: 14, color: "#7c828c", fontSize: 13 }}>Sonuç yok</div>}
           </div>
         </div>
       )}
@@ -242,7 +242,7 @@ function CredRow({ label, value }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
       <span style={{ color: "rgba(255,255,255,0.85)", fontSize: 13, fontWeight: 700, minWidth: 80 }}>{label}</span>
-      <code title={value} style={{ flex: 1, minWidth: 0, color: "#fff", fontSize: 14, fontWeight: 500, background: "#111114", border: "1px solid rgba(255,255,255,0.16)", padding: "9px 12px", borderRadius: 8, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</code>
+      <code title={value} style={{ flex: 1, minWidth: 0, color: "#fff", fontSize: 14, fontWeight: 500, background: "#0e0f12", border: "1px solid rgba(255,255,255,0.16)", padding: "9px 12px", borderRadius: 8, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</code>
       <button onClick={copy} className="cred-copy"
         style={{ padding: "8px 14px", fontSize: 12, fontWeight: 700, borderRadius: 8, border: copied ? "1px solid #22c55e" : "1px solid rgba(255,255,255,0.35)", background: copied ? "#14532d" : "transparent", color: copied ? "#4ade80" : "#fff", cursor: "pointer", flexShrink: 0, minWidth: 100 }}>
         {copied ? "✓ Kopyalandı" : "📋 Kopyala"}
@@ -261,7 +261,7 @@ const ALBUM_STATUS = {
   old_version: { t: "Eski sürüm (süresiz)", c: "#fbbf24", bg: "#78350f33" },
   file_only:   { t: "Sadece dosyada",      c: "#fbbf24", bg: "#78350f33" },
   missing:     { t: "Liste yok",           c: "#ef4444", bg: "#7f1d1d33" },
-  unsupported: { t: "Desteklenmiyor → Dünya", c: "#9a9aa6", bg: "#ffffff10" },
+  unsupported: { t: "Desteklenmiyor → Dünya", c: "#9aa0aa", bg: "#ffffff10" },
 };
 const ccFlag = cc => /^[A-Z]{2}$/.test(cc) ? String.fromCodePoint(...[...cc].map(ch => 127397 + ch.charCodeAt(0))) : "🌐";
 const ccName = cc => {
@@ -319,20 +319,20 @@ function AlbumsSection({ apiUrl }) {
     ["Liste yok", count("missing"), "#ef4444"],
   ];
   const pill = (txt, c, bg) => <span style={{ color: c, background: bg, padding: "3px 10px", borderRadius: 6, fontSize: 12, fontWeight: 700, whiteSpace: "nowrap" }}>{txt}</span>;
-  const lvlColor = { ok: "#4ade80", info: "#9a9aa6", warn: "#fbbf24", error: "#ef4444" };
+  const lvlColor = { ok: "#4ade80", info: "#9aa0aa", warn: "#fbbf24", error: "#ef4444" };
 
   return (
     <div style={styles.card}>
       <h2 style={styles.title}>Popüler Albümler</h2>
-      <p style={{ color: "#9a9aa6", fontSize: 13, marginTop: -8, marginBottom: 20 }}>
+      <p style={{ color: "#9aa0aa", fontSize: 13, marginTop: -8, marginBottom: 20 }}>
         Ülke listeleri YouTube Music'ten haftada bir çekilir; uygulama yalnızca bu kayıtları okur. Liste yoksa ya da ülke desteklenmiyorsa dünya listesi gösterilir. Sayfa 15 sn'de bir yenilenir.
       </p>
       {err && <div style={{ background: "#7f1d1d33", color: "#fca5a5", padding: "10px 14px", borderRadius: 10, marginBottom: 16, fontSize: 13 }}>{err}</div>}
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: 10, marginBottom: 22 }}>
         {sum.map(([t, n, c]) => (
-          <div key={t} style={{ background: "#18181c", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, padding: "12px 14px" }}>
-            <div style={{ color: "#9a9aa6", fontSize: 12, fontWeight: 600 }}>{t}</div>
+          <div key={t} style={{ background: "#121418", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, padding: "12px 14px" }}>
+            <div style={{ color: "#9aa0aa", fontSize: 12, fontWeight: 600 }}>{t}</div>
             <div style={{ color: c, fontSize: 24, fontWeight: 800 }}>{data ? n : "…"}</div>
           </div>
         ))}
@@ -346,7 +346,7 @@ function AlbumsSection({ apiUrl }) {
         <button style={{ ...styles.primaryBtn, background: "transparent", color: "#fff", border: "1px solid rgba(255,255,255,0.2)" }} onClick={load}>Yenile</button>
       </div>
       {test && (
-        <div style={{ background: "#18181c", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: 14, marginBottom: 20, fontSize: 13 }}>
+        <div style={{ background: "#121418", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: 14, marginBottom: 20, fontSize: 13 }}>
           <div style={{ marginBottom: 8 }}>
             {ccFlag(test.cc)} <b>{ccName(test.cc)}</b> → {test.served ? <>{ccFlag(test.served)} <b>{ccName(test.served)}</b></> : <b style={{ color: "#ef4444" }}>hiç liste yok (boş)</b>}
             {" "}· {test.albumCount} albüm · {agoTr(test.updatedAt ? Date.now() - test.updatedAt : null)}
@@ -376,25 +376,25 @@ function AlbumsSection({ apiUrl }) {
               return (
                 <React.Fragment key={r.cc}>
                   <tr style={{ ...styles.tr, cursor: "pointer" }} onClick={() => setOpen(open === r.cc ? null : r.cc)}>
-                    <td style={{ ...styles.td, color: "#f4f4f6" }}>{ccFlag(r.cc)} <b>{ccName(r.cc)}</b> <span style={{ color: "#6b6b76" }}>{r.cc}</span>
+                    <td style={{ ...styles.td, color: "#e9ebef" }}>{ccFlag(r.cc)} <b>{ccName(r.cc)}</b> <span style={{ color: "#7c828c" }}>{r.cc}</span>
                       {r.wanted && <span style={{ color: "#60a5fa", fontSize: 11 }}> · sırada</span>}
-                      {!r.tracked && r.supported && <span style={{ color: "#6b6b76", fontSize: 11 }}> · takipte değil</span>}</td>
+                      {!r.tracked && r.supported && <span style={{ color: "#7c828c", fontSize: 11 }}> · takipte değil</span>}</td>
                     <td style={styles.td}>{pill(s.t, s.c, s.bg)}</td>
                     <td style={styles.tdRight}>{r.albumCount || "—"}</td>
                     <td style={{ ...styles.td, color: "#d4d4dc" }}>{agoTr(r.updatedAt ? data.now - r.updatedAt : null)}</td>
-                    <td style={{ ...styles.td, fontSize: 12, color: "#9a9aa6" }}>
+                    <td style={{ ...styles.td, fontSize: 12, color: "#9aa0aa" }}>
                       <span style={{ color: r.inRedis ? "#4ade80" : "#ef4444" }}>Redis {r.inRedis ? "✓" : "✗"}</span> ·{" "}
                       <span style={{ color: r.inFile ? "#4ade80" : "#ef4444" }}>Dosya {r.inFile ? "✓" : "✗"}</span><br />
                       <span style={{ color: full ? "#4ade80" : "#fbbf24" }}>Detay {r.cachedItems}/{r.albumCount}</span> · Yedek {r.itemFiles}/{r.albumCount}
                     </td>
-                    <td style={{ ...styles.tdRight, color: "#9a9aa6" }}>{r.requests ? r.requests.toLocaleString("tr") : "—"}</td>
+                    <td style={{ ...styles.tdRight, color: "#9aa0aa" }}>{r.requests ? r.requests.toLocaleString("tr") : "—"}</td>
                     <td style={styles.tdRight} onClick={e => e.stopPropagation()}>
                       {data.canRefresh && r.supported && r.status !== "fetching" &&
                         <button style={styles.actionBtn} onClick={() => refresh(r.cc)}>Şimdi yenile</button>}
                     </td>
                   </tr>
                   {open === r.cc && (
-                    <tr><td colSpan={7} style={{ padding: "0 15px 14px", color: "#9a9aa6", fontSize: 12 }}>
+                    <tr><td colSpan={7} style={{ padding: "0 15px 14px", color: "#9aa0aa", fontSize: 12 }}>
                       {r.sample.length ? "İlk albümler: " + r.sample.join(" · ") : "Albüm yok"} · liste sürümü v{r.v}
                     </td></tr>
                   )}
@@ -406,18 +406,18 @@ function AlbumsSection({ apiUrl }) {
       </div>
 
       {data && data.unsupportedTop && data.unsupportedTop.length > 0 && (
-        <p style={{ color: "#9a9aa6", fontSize: 12, marginTop: 14 }}>
+        <p style={{ color: "#9aa0aa", fontSize: 12, marginTop: 14 }}>
           YouTube Music listesi olmayan, dünya listesini gören ülkeler: {data.unsupportedTop.map(u => `${ccFlag(u.cc)} ${u.cc}`).join("  ")}
         </p>
       )}
 
       <h3 style={{ fontSize: 15, margin: "26px 0 10px", color: "#fff" }}>Son olaylar</h3>
-      <div style={{ background: "#141418", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 10, padding: 10, maxHeight: 280, overflowY: "auto", fontFamily: "ui-monospace, Menlo, monospace", fontSize: 12 }}>
+      <div style={{ background: "#0e0f12", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 10, padding: 10, maxHeight: 280, overflowY: "auto", fontFamily: "ui-monospace, Menlo, monospace", fontSize: 12 }}>
         {(data && data.log && data.log.length) ? data.log.map((l, i) => (
-          <div key={i} style={{ color: lvlColor[l.level] || "#9a9aa6", padding: "2px 0" }}>
-            <span style={{ color: "#6b6b76" }}>{new Date(l.t).toLocaleString("tr")}</span> {l.cc}: {l.msg}
+          <div key={i} style={{ color: lvlColor[l.level] || "#9aa0aa", padding: "2px 0" }}>
+            <span style={{ color: "#7c828c" }}>{new Date(l.t).toLocaleString("tr")}</span> {l.cc}: {l.msg}
           </div>
-        )) : <div style={{ color: "#6b6b76" }}>Henüz kayıt yok (ilk kontrol sunucu açıldıktan 1 dk sonra çalışır).</div>}
+        )) : <div style={{ color: "#7c828c" }}>Henüz kayıt yok (ilk kontrol sunucu açıldıktan 1 dk sonra çalışır).</div>}
       </div>
     </div>
   );
@@ -428,15 +428,15 @@ function AlbumsSection({ apiUrl }) {
 ========================================================================= */
 // Sol menüde ekranlar; her ekranın sekmeleri içerikte üstte
 const SCREENS = [
-  { key: "countrycfg", label: "Ülke Ayarları", hint: "Genel mod · ülkeye göre mod", tabs: ["settings", "countries"] },
-  { key: "infra", label: "İndirme & Altyapı", hint: "MP3 · API · Cache · YouTube", tabs: ["mp3", "apiproviders", "smartcache", "youtube"] },
-  { key: "ads", label: "Reklamlar", hint: "6 reklam ayarı · ASN", tabs: ["downloadad", "bannerad", "bottombanner", "ringtonead", "adfree", "asn"] },
-  { key: "content", label: "İçerik", hint: "Yasaklı kanallar · filtre", tabs: ["blocked", "contentfilter"] },
-  { key: "appcontrols", label: "App Controls", hint: "Zorunlu review · güncelleme", tabs: ["appcontrols"] },
-  { key: "reach", label: "Kullanıcıya Ulaş", hint: "Popup · bildirim · oylama", tabs: ["device", "notifications", "popup"] },
-  { key: "monitor", label: "İzleme", hint: "Canlı · IP · Değerlendirme · Albüm", tabs: ["live", "loginips", "reviewlogs", "albums"] },
-  { key: "ringtone", label: "Zil Sesi Modu", hint: "Zil sesi modundaki cihazlar", tabs: ["ringtonemode"] },
-  { key: "admin", label: "Yönetim", hint: "Kullanıcılar · uygulamalar · gizlilik", tabs: ["users", "apps", "privacy"] },
+  { key: "countrycfg", label: "Ülke Ayarları", hint: "Genel mod · ülkeye göre mod", desc: "Uygulama hangi ülkede müzik, hangi ülkede zil sesi arayüzüyle açılsın.", tabs: ["settings", "countries"] },
+  { key: "infra", label: "İndirme & Altyapı", hint: "MP3 · API · Cache · YouTube", desc: "MP3 kaynakları, API'ler, önbellek ve YouTube listeleri.", tabs: ["mp3", "apiproviders", "smartcache", "youtube"] },
+  { key: "ads", label: "Reklamlar", hint: "6 reklam ayarı · ASN", desc: "Her reklam yerinin varsayılan ayarı ve ülkeye özel kuralları.", tabs: ["downloadad", "bannerad", "bottombanner", "ringtonead", "adfree", "asn"] },
+  { key: "content", label: "İçerik", hint: "Yasaklı kanallar · filtre", desc: "Aramada ve indirmede görünmeyecek içerikler.", tabs: ["blocked", "contentfilter"] },
+  { key: "appcontrols", label: "App Controls", hint: "Zorunlu review · güncelleme", desc: "Zorunlu değerlendirme ve zorunlu güncelleme.", tabs: ["appcontrols"] },
+  { key: "reach", label: "Kullanıcıya Ulaş", hint: "Popup · bildirim · oylama", desc: "Uygulamadaki kullanıcılara popup, bildirim veya oylama gönder.", tabs: ["device", "notifications", "popup"] },
+  { key: "monitor", label: "İzleme", hint: "Canlı · IP · Değerlendirme · Albüm", desc: "Uygulamayı şu an kimlerin kullandığı ve son girişler.", tabs: ["live", "loginips", "reviewlogs", "albums"] },
+  { key: "ringtone", label: "Zil Sesi Modu", hint: "Zil sesi modundaki cihazlar", desc: "Zil sesi arayüzünde açılan cihazlar ve bunun sebebi olan kurallar.", tabs: ["ringtonemode"] },
+  { key: "admin", label: "Yönetim", hint: "Kullanıcılar · uygulamalar · gizlilik", desc: "Panel kullanıcıları, uygulamalar ve gizlilik politikaları.", tabs: ["users", "apps", "privacy"] },
 ];
 const SCREEN_GROUPS = [
   { title: "İzleme", keys: ["monitor", "ringtone"] },
@@ -515,6 +515,17 @@ function genPassword() {
   (window.crypto || window.msCrypto).getRandomValues(a);
   return [...a].map(x => abc[x % abc.length]).join("");
 }
+// Ayar ekranı yapı taşları: solda başlık + açıklama, sağda satır satır ayarlar
+const V2Sec = ({ title, desc, extra, children }) => (
+  <div className="v2-sec"><div className="v2-sh"><h2>{title}</h2>{desc && <p>{desc}</p>}{extra}</div><div className="v2-box">{children}</div></div>
+);
+const V2Row = ({ title, sub, stack, children }) => (
+  <div className={"v2-row" + (stack ? " stack" : "")}><div className="v2-t"><b>{title}</b>{sub && <span>{sub}</span>}</div><div className="v2-ctl">{children}</div></div>
+);
+const V2Foot = ({ children }) => <div className="v2-foot">{children}</div>;
+const V2Seg = ({ value, options, onChange }) => (
+  <div className="v2-seg">{options.map(([v, l]) => <button key={v} type="button" className={value === v ? "on" : ""} onClick={() => onChange(v)}>{l}</button>)}</div>
+);
 function PanelIcon({ k, fallback }) {
   const d = PANEL_ICONS[k];
   if (!d) return <span className="pn-ico-e">{fallback}</span>;
@@ -522,62 +533,62 @@ function PanelIcon({ k, fallback }) {
 }
 const PANEL_CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-  .pn-root { display: flex; min-height: 100vh; background: #111114; color: #f4f4f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  .pn-root { display: flex; min-height: 100vh; background: #0e0f12; color: #e9ebef; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
   .pn-root svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
   .pn-root ::-webkit-scrollbar { width: 8px; height: 8px; }
   .pn-root ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 4px; }
-  .pn-side { width: 264px; min-width: 264px; background: #15151a; border-right: 1px solid rgba(255,255,255,0.08); height: 100vh; position: sticky; top: 0; display: flex; flex-direction: column; box-sizing: border-box; z-index: 40; }
+  .pn-side { width: 264px; min-width: 264px; background: #0e0f12; border-right: 1px solid rgba(255,255,255,0.08); height: 100vh; position: sticky; top: 0; display: flex; flex-direction: column; box-sizing: border-box; z-index: 40; }
   .pn-side-top { padding: 18px 16px 10px; }
-  .pn-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; text-decoration: none; color: #f4f4f6; }
+  .pn-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; text-decoration: none; color: #e9ebef; }
   .pn-brand b { font-size: 15px; font-weight: 700; }
-  .pn-mark { width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center; background: linear-gradient(135deg, #8b5cf6, #ec4899); color: #fff; box-shadow: 0 6px 18px rgba(139,92,246,0.3); }
+  .pn-mark { width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center; background: linear-gradient(135deg, #3b6fe6, #ec4899); color: #fff; box-shadow: 0 6px 18px rgba(91,140,255,0.3); }
   .pn-mark svg { width: 17px; height: 17px; }
-  .pn-lbl { font-size: 10.5px; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; color: #6b6b76; margin-bottom: 6px; }
-  .pn-app { position: relative; display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; background: #1f1f24; border: 1px solid rgba(255,255,255,0.08); transition: border-color .15s; }
+  .pn-lbl { font-size: 10.5px; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; color: #7c828c; margin-bottom: 6px; }
+  .pn-app { position: relative; display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; background: #15171b; border: 1px solid rgba(255,255,255,0.08); transition: border-color .15s; }
   .pn-app:hover { border-color: rgba(255,255,255,0.18); }
   .pn-av { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-weight: 800; font-size: 13px; color: #fff; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15); }
   .pn-app-t { flex: 1; min-width: 0; }
   .pn-app-t b { display: block; font-size: 13.5px; }
-  .pn-app-t small { display: block; font-size: 11px; color: #6b6b76; font-family: ui-monospace, Menlo, monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .pn-app-sel { flex: 1; min-width: 0; appearance: none; -webkit-appearance: none; background: transparent; border: 0; outline: 0; color: #f4f4f6; font: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer; padding: 6px 0; }
-  .pn-app-i { color: #6b6b76; width: 16px !important; height: 16px !important; pointer-events: none; }
+  .pn-app-t small { display: block; font-size: 11px; color: #7c828c; font-family: ui-monospace, Menlo, monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pn-app-sel { flex: 1; min-width: 0; appearance: none; -webkit-appearance: none; background: transparent; border: 0; outline: 0; color: #e9ebef; font: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer; padding: 6px 0; }
+  .pn-app-i { color: #7c828c; width: 16px !important; height: 16px !important; pointer-events: none; }
   .pn-live { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding: 9px 12px; border-radius: 12px; background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.22); cursor: pointer; transition: background .15s; }
   .pn-live:hover { background: rgba(34,197,94,0.13); }
   .pn-live i { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; animation: pnPulse 2s infinite; }
   @keyframes pnPulse { 0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.6); } 70%, 100% { box-shadow: 0 0 0 7px rgba(34,197,94,0); } }
   .pn-live b { font-size: 15px; color: #4ade80; font-variant-numeric: tabular-nums; }
   .pn-live span { font-size: 12px; color: #6fae86; }
-  .pn-search { display: flex; align-items: center; gap: 8px; margin-top: 12px; height: 34px; padding: 0 10px; border-radius: 10px; background: #141418; border: 1px solid rgba(255,255,255,0.08); color: #6b6b76; }
-  .pn-search:focus-within { border-color: #8b5cf6; color: #f4f4f6; }
+  .pn-search { display: flex; align-items: center; gap: 8px; margin-top: 12px; height: 34px; padding: 0 10px; border-radius: 10px; background: #0e0f12; border: 1px solid rgba(255,255,255,0.08); color: #7c828c; }
+  .pn-search:focus-within { border-color: #3b6fe6; color: #e9ebef; }
   .pn-search svg { width: 15px; height: 15px; }
-  .pn-search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #f4f4f6; font: inherit; font-size: 13px; }
+  .pn-search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #e9ebef; font: inherit; font-size: 13px; }
   .pn-menu { flex: 1; overflow-y: auto; padding: 0 10px 12px; }
-  .pn-grp { font-size: 10.5px; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; color: #6b6b76; padding: 14px 8px 6px; }
-  .pn-mi { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 9px; font-size: 13.5px; font-weight: 550; color: #a1a1ab; cursor: pointer; user-select: none; position: relative; transition: background .12s, color .12s; }
-  .pn-mi:hover { background: rgba(255,255,255,0.05); color: #f4f4f6; }
-  .pn-mi.active { background: rgba(139,92,246,0.15); color: #fff; }
-  .pn-mi.active::before { content: ""; position: absolute; left: -10px; top: 8px; bottom: 8px; width: 3px; border-radius: 0 3px 3px 0; background: #8b5cf6; }
-  .pn-mi.active .pn-ico { color: #c4b5fd; }
+  .pn-grp { font-size: 10.5px; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; color: #7c828c; padding: 14px 8px 6px; }
+  .pn-mi { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 9px; font-size: 13.5px; font-weight: 550; color: #9aa0aa; cursor: pointer; user-select: none; position: relative; transition: background .12s, color .12s; }
+  .pn-mi:hover { background: rgba(255,255,255,0.05); color: #e9ebef; }
+  .pn-mi.active { background: rgba(91,140,255,0.15); color: #fff; }
+  .pn-mi.active::before { content: ""; position: absolute; left: -10px; top: 8px; bottom: 8px; width: 3px; border-radius: 0 3px 3px 0; background: #3b6fe6; }
+  .pn-mi.active .pn-ico { color: #8fb0ff; }
   .pn-mi.has-active { color: #fff; }
-  .pn-mi.has-active::before { content: ""; position: absolute; left: -10px; top: 8px; bottom: 8px; width: 3px; border-radius: 0 3px 3px 0; background: rgba(139,92,246,0.6); }
+  .pn-mi.has-active::before { content: ""; position: absolute; left: -10px; top: 8px; bottom: 8px; width: 3px; border-radius: 0 3px 3px 0; background: rgba(91,140,255,0.6); }
   .pn-sub { padding-left: 22px; font-size: 13px; }
   .pn-ico-e { width: 18px; text-align: center; font-size: 14px; flex-shrink: 0; }
-  .pn-count { font-size: 10.5px; font-weight: 700; color: #6b6b76; background: rgba(255,255,255,0.06); padding: 1px 7px; border-radius: 999px; }
-  .pn-chev { width: 15px !important; height: 15px !important; color: #6b6b76; transition: transform .2s; }
+  .pn-count { font-size: 10.5px; font-weight: 700; color: #7c828c; background: rgba(255,255,255,0.06); padding: 1px 7px; border-radius: 999px; }
+  .pn-chev { width: 15px !important; height: 15px !important; color: #7c828c; transition: transform .2s; }
   .pn-chev.open { transform: rotate(180deg); }
-  .pn-none { color: #6b6b76; font-size: 12.5px; padding: 14px 10px; }
-  .pn-logout { display: flex; align-items: center; gap: 8px; margin: 0; padding: 14px 20px; border-top: 1px solid rgba(255,255,255,0.08); color: #a1a1ab; font-size: 13px; font-weight: 600; text-decoration: none; transition: color .15s, background .15s; }
+  .pn-none { color: #7c828c; font-size: 12.5px; padding: 14px 10px; }
+  .pn-logout { display: flex; align-items: center; gap: 8px; margin: 0; padding: 14px 20px; border-top: 1px solid rgba(255,255,255,0.08); color: #9aa0aa; font-size: 13px; font-weight: 600; text-decoration: none; transition: color .15s, background .15s; }
   .pn-logout:hover { color: #f87171; background: rgba(248,113,113,0.08); }
   .pn-logout svg { width: 16px; height: 16px; }
   .pn-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
   .pn-top { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 12px; padding: 13px 32px; background: rgba(17,17,20,0.84); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.08); }
-  .pn-burger { display: none; background: none; border: 0; color: #f4f4f6; cursor: pointer; padding: 4px; }
-  .pn-crumb { display: flex; align-items: center; gap: 7px; font-size: 13px; color: #6b6b76; min-width: 0; }
-  .pn-crumb b { color: #f4f4f6; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pn-burger { display: none; background: none; border: 0; color: #e9ebef; cursor: pointer; padding: 4px; }
+  .pn-crumb { display: flex; align-items: center; gap: 7px; font-size: 13px; color: #7c828c; min-width: 0; }
+  .pn-crumb b { color: #e9ebef; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .pn-crumb-app { white-space: nowrap; }
   .pn-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .pn-ghost { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: #a1a1ab; background: #18181c; border: 1px solid rgba(255,255,255,0.08); padding: 7px 11px; border-radius: 9px; text-decoration: none; white-space: nowrap; }
-  .pn-ghost:hover { color: #f4f4f6; border-color: rgba(255,255,255,0.18); }
+  .pn-ghost { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: #9aa0aa; background: #121418; border: 1px solid rgba(255,255,255,0.08); padding: 7px 11px; border-radius: 9px; text-decoration: none; white-space: nowrap; }
+  .pn-ghost:hover { color: #e9ebef; border-color: rgba(255,255,255,0.18); }
   .pn-ghost svg { width: 15px; height: 15px; }
   .pn-content { width: 100%; max-width: 1180px; margin: 0 auto; padding: 28px 32px 80px; display: flex; flex-direction: column; gap: 22px; box-sizing: border-box; }
   .pn-content h2 { letter-spacing: -0.3px; }
@@ -586,97 +597,97 @@ const PANEL_CSS = `
   .pn-content button:not(:disabled):hover { filter: brightness(1.08); }
   .pn-content button:not(:disabled):active { transform: translateY(1px); }
   .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]):focus,
-  .pn-content select:focus, .pn-content textarea:focus { border-color: #8b5cf6 !important; box-shadow: 0 0 0 3px rgba(139,92,246,0.18); outline: none; }
-  .pn-root input[type=checkbox] { -webkit-appearance: none; appearance: none; width: 36px; height: 21px; min-width: 36px; border-radius: 999px; background: #34343c; position: relative; cursor: pointer; vertical-align: middle; border: 0; transition: background .18s; }
+  .pn-content select:focus, .pn-content textarea:focus { border-color: #3b6fe6 !important; box-shadow: 0 0 0 3px rgba(91,140,255,0.18); outline: none; }
+  .pn-root input[type=checkbox] { -webkit-appearance: none; appearance: none; width: 36px; height: 21px; min-width: 36px; border-radius: 999px; background: #2c3038; position: relative; cursor: pointer; vertical-align: middle; border: 0; transition: background .18s; }
   .pn-root input[type=checkbox]::after { content: ""; position: absolute; top: 3px; left: 3px; width: 15px; height: 15px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.4); transition: transform .18s; }
   .pn-root input[type=checkbox]:checked { background: #22c55e; }
   .pn-root input[type=checkbox]:checked::after { transform: translateX(15px); }
   .pn-root input[type=checkbox]:disabled { opacity: 0.5; cursor: not-allowed; }
-  .pn-root input[type=radio] { accent-color: #8b5cf6; }
+  .pn-root input[type=radio] { accent-color: #3b6fe6; }
   .pn-head { position: sticky; top: 0; z-index: 20; background: rgba(17,17,20,0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.08); }
   .pn-head .pn-top { position: static; background: none; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: 0; }
   .pn-appbar { display: flex; align-items: center; gap: 8px; padding: 4px 32px 12px; }
   .pn-appbar-scroll { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; overflow-x: auto; padding: 3px 3px 4px; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.14) transparent; }
   .pn-appbar-scroll::-webkit-scrollbar { height: 6px; }
-  .pn-chip { --c: #a78bfa; position: relative; display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; height: 38px; padding: 0 12px 0 5px; border-radius: 11px; background: #18181c; border: 1px solid rgba(255,255,255,0.08); color: #c4c4cc; font: inherit; font-size: 13px; cursor: pointer; user-select: none; transition: border-color .15s, background .15s, color .15s; }
+  .pn-chip { --c: #8fb0ff; position: relative; display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; height: 38px; padding: 0 12px 0 5px; border-radius: 11px; background: #121418; border: 1px solid rgba(255,255,255,0.08); color: #c4c4cc; font: inherit; font-size: 13px; cursor: pointer; user-select: none; transition: border-color .15s, background .15s, color .15s; }
   .pn-chip:hover { border-color: rgba(255,255,255,0.2); color: #fff; }
-  .pn-chip.on { background: #22202b; border-color: var(--c); color: #fff; box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 22%, transparent); }
+  .pn-chip.on { background: #1b1e23; border-color: var(--c); color: #fff; box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 22%, transparent); }
   .pn-chip b { font-weight: 650; white-space: nowrap; }
   .pn-chip .pn-av { width: 28px; height: 28px; border-radius: 8px; font-size: 12px; }
-  .pn-av-all { background: #2a2a33; color: #c4b5fd; }
+  .pn-av-all { background: #16223d; color: #8fb0ff; }
   .pn-av-all svg { width: 15px !important; height: 15px !important; }
-  .pn-chip > svg { width: 14px !important; height: 14px !important; color: #6b6b76; }
-  .pn-chip em { font-style: normal; font-size: 11.5px; font-weight: 700; color: #7c7c87; background: rgba(255,255,255,0.06); padding: 1px 7px; border-radius: 999px; font-variant-numeric: tabular-nums; }
+  .pn-chip > svg { width: 14px !important; height: 14px !important; color: #7c828c; }
+  .pn-chip em { font-style: normal; font-size: 11.5px; font-weight: 700; color: #7c828c; background: rgba(255,255,255,0.06); padding: 1px 7px; border-radius: 999px; font-variant-numeric: tabular-nums; }
   .pn-chip em.live { color: #4ade80; background: rgba(34,197,94,0.12); }
   .pn-chip-x { display: grid; place-items: center; width: 22px; height: 22px; margin-right: -4px; border-radius: 7px; border: 0; background: rgba(248,113,113,0.15); color: #f87171; cursor: pointer; }
   .pn-chip-x:hover { background: #ef4444; color: #fff; }
   .pn-chip-x svg { width: 13px !important; height: 13px !important; stroke-width: 2.4; }
   .pn-appbar-tools { display: inline-flex; gap: 6px; padding-left: 8px; border-left: 1px solid rgba(255,255,255,0.08); flex-shrink: 0; }
-  .pn-tool { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 11px; border-radius: 10px; border: 1px dashed rgba(255,255,255,0.16); background: none; color: #a1a1ab; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .pn-tool { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 11px; border-radius: 10px; border: 1px dashed rgba(255,255,255,0.16); background: none; color: #9aa0aa; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; white-space: nowrap; }
   .pn-tool:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
   .pn-tool.on { border-style: solid; border-color: #ef4444; color: #fca5a5; background: rgba(239,68,68,0.1); }
   .pn-tool svg { width: 15px !important; height: 15px !important; }
-  .pn-tabs { display: flex; gap: 4px; padding: 4px; border-radius: 13px; background: #15151a; border: 1px solid rgba(255,255,255,0.07); overflow-x: auto; }
-  .pn-tabs button { display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0; border: 0; background: none; color: #a1a1ab; font: inherit; font-size: 13px; font-weight: 600; padding: 8px 13px; border-radius: 9px; cursor: pointer; white-space: nowrap; }
+  .pn-tabs { display: flex; gap: 4px; padding: 4px; border-radius: 13px; background: #0e0f12; border: 1px solid rgba(255,255,255,0.07); overflow-x: auto; }
+  .pn-tabs button { display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0; border: 0; background: none; color: #9aa0aa; font: inherit; font-size: 13px; font-weight: 600; padding: 8px 13px; border-radius: 9px; cursor: pointer; white-space: nowrap; }
   .pn-tabs button:hover { color: #fff; background: rgba(255,255,255,0.04); }
-  .pn-tabs button.on { background: #26232f; color: #fff; box-shadow: inset 0 0 0 1px rgba(139,92,246,0.45); }
-  .pn-tabs button.on .pn-ico { color: #c4b5fd; }
+  .pn-tabs button.on { background: #1b1e23; color: #fff; box-shadow: inset 0 0 0 1px rgba(91,140,255,0.45); }
+  .pn-tabs button.on .pn-ico { color: #8fb0ff; }
   .pn-tabs .pn-ico { width: 16px !important; height: 16px !important; }
   .da-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 18px; align-items: start; }
-  .da-step { background: #18181c; border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
-  .da-sh { display: flex; align-items: center; gap: 9px; font-size: 14px; font-weight: 650; color: #f4f4f6; margin-bottom: 12px; }
-  .da-sh b { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 11.5px; background: rgba(139,92,246,0.18); color: #c4b5fd; }
+  .da-step { background: #121418; border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
+  .da-sh { display: flex; align-items: center; gap: 9px; font-size: 14px; font-weight: 650; color: #e9ebef; margin-bottom: 12px; }
+  .da-sh b { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 11.5px; background: rgba(91,140,255,0.18); color: #8fb0ff; }
   .da-types { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-  .da-type { text-align: left; background: #141418; border: 1px solid rgba(255,255,255,0.08); border-radius: 11px; padding: 10px 11px; color: #9a9aa6; cursor: pointer; font: inherit; }
+  .da-type { text-align: left; background: #0e0f12; border: 1px solid rgba(255,255,255,0.08); border-radius: 11px; padding: 10px 11px; color: #9aa0aa; cursor: pointer; font: inherit; }
   .da-type svg { width: 19px !important; height: 19px !important; color: #d4d4dc; display: block; margin-bottom: 6px; }
-  .da-type span { display: block; color: #f4f4f6; font-size: 13px; font-weight: 650; }
+  .da-type span { display: block; color: #e9ebef; font-size: 13px; font-weight: 650; }
   .da-type small { display: block; font-size: 11.5px; margin-top: 2px; line-height: 1.35; }
-  .da-type.on { border-color: #8b5cf6; background: rgba(139,92,246,0.1); box-shadow: 0 0 0 3px rgba(139,92,246,0.15); }
-  .da-type.on svg { color: #c4b5fd; }
-  .da-lbl { display: block; font-size: 12px; color: #9a9aa6; margin: 12px 0 5px; }
+  .da-type.on { border-color: #3b6fe6; background: rgba(91,140,255,0.1); box-shadow: 0 0 0 3px rgba(91,140,255,0.15); }
+  .da-type.on svg { color: #8fb0ff; }
+  .da-lbl { display: block; font-size: 12px; color: #9aa0aa; margin: 12px 0 5px; }
   .da-two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .da-seg { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; border-radius: 10px; background: #141418; border: 1px solid rgba(255,255,255,0.08); }
-  .da-seg button { border: 0; background: none; color: #a1a1ab; font: inherit; font-size: 12.5px; font-weight: 600; padding: 6px 11px; border-radius: 7px; cursor: pointer; white-space: nowrap; }
+  .da-seg { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; border-radius: 10px; background: #0e0f12; border: 1px solid rgba(255,255,255,0.08); }
+  .da-seg button { border: 0; background: none; color: #9aa0aa; font: inherit; font-size: 12.5px; font-weight: 600; padding: 6px 11px; border-radius: 7px; cursor: pointer; white-space: nowrap; }
   .da-seg button:hover { color: #fff; }
-  .da-seg button.on { background: #2a2733; color: #fff; box-shadow: inset 0 0 0 1px rgba(139,92,246,0.5); }
-  .da-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: 13px; color: #a1a1ab; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; }
+  .da-seg button.on { background: #1b1e23; color: #fff; box-shadow: inset 0 0 0 1px rgba(91,140,255,0.5); }
+  .da-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: 13px; color: #9aa0aa; border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; }
   .da-step .da-row:first-of-type { border-top: 0; }
-  .da-hint { font-size: 11.5px; color: #6b6b76; text-align: right; }
+  .da-hint { font-size: 11.5px; color: #7c828c; text-align: right; }
   .da-side { position: sticky; top: 150px; }
-  .da-phone { border: 1px solid rgba(255,255,255,0.12); border-radius: 30px; padding: 10px; background: #0d0d10; max-width: 300px; margin: 0 auto; }
-  .da-screen { position: relative; height: 340px; border-radius: 22px; background: #17171c; overflow: hidden; }
-  .da-app { display: flex; align-items: center; gap: 8px; padding: 14px; font-size: 12.5px; color: #9a9aa6; font-weight: 600; }
-  .da-dlg { position: absolute; left: 14px; right: 14px; top: 105px; background: #26262d; border-radius: 16px; padding: 16px; font-size: 13.5px; color: #f4f4f6; box-shadow: 0 18px 40px rgba(0,0,0,0.55); }
-  .da-muted { color: #7c7c87; font-style: italic; }
+  .da-phone { border: 1px solid rgba(255,255,255,0.12); border-radius: 30px; padding: 10px; background: #0b0c0e; max-width: 300px; margin: 0 auto; }
+  .da-screen { position: relative; height: 340px; border-radius: 22px; background: #121418; overflow: hidden; }
+  .da-app { display: flex; align-items: center; gap: 8px; padding: 14px; font-size: 12.5px; color: #9aa0aa; font-weight: 600; }
+  .da-dlg { position: absolute; left: 14px; right: 14px; top: 105px; background: #1b1e23; border-radius: 16px; padding: 16px; font-size: 13.5px; color: #e9ebef; box-shadow: 0 18px 40px rgba(0,0,0,0.55); }
+  .da-muted { color: #7c828c; font-style: italic; }
   .da-btns { display: flex; justify-content: flex-end; gap: 18px; margin-top: 16px; font-size: 13px; }
-  .da-btns span { color: #a1a1ab; }
-  .da-btns b { color: #a78bfa; }
-  .da-direct { position: absolute; left: 18px; right: 18px; top: 110px; text-align: center; color: #a1a1ab; font-size: 12.5px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-  .da-direct svg { width: 26px !important; height: 26px !important; color: #c4b5fd; }
+  .da-btns span { color: #9aa0aa; }
+  .da-btns b { color: #8fb0ff; }
+  .da-direct { position: absolute; left: 18px; right: 18px; top: 110px; text-align: center; color: #9aa0aa; font-size: 12.5px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .da-direct svg { width: 26px !important; height: 26px !important; color: #8fb0ff; }
   .da-direct code { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; }
   .da-chips { display: flex; flex-wrap: wrap; gap: 5px; margin: 14px 0 10px; }
-  .da-chips span { font-size: 11.5px; color: #c4c4cc; background: #1f1f24; border: 1px solid rgba(255,255,255,0.07); padding: 3px 9px; border-radius: 999px; }
-  .da-match { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; background: rgba(139,92,246,0.08); border: 1px solid rgba(139,92,246,0.3); margin-bottom: 12px; font-size: 12.5px; color: #c4c4cc; }
+  .da-chips span { font-size: 11.5px; color: #c4c4cc; background: #15171b; border: 1px solid rgba(255,255,255,0.07); padding: 3px 9px; border-radius: 999px; }
+  .da-match { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; background: rgba(91,140,255,0.08); border: 1px solid rgba(91,140,255,0.3); margin-bottom: 12px; font-size: 12.5px; color: #c4c4cc; }
   .da-match b { font-size: 22px; color: #fff; font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .da-match small { color: #7c7c87; font-size: 11px; }
+  .da-match small { color: #7c828c; font-size: 11px; }
   .da-hist { border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; overflow: hidden; }
   .da-hr { border-top: 1px solid rgba(255,255,255,0.06); }
   .da-hr:first-child { border-top: 0; }
   .da-hr.act { background: rgba(14,165,233,0.05); }
   .da-hr-main { display: flex; align-items: center; gap: 10px; padding: 10px 14px; cursor: pointer; font-size: 13px; }
   .da-hr-main:hover { background: rgba(255,255,255,0.03); }
-  .da-pill { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 999px; background: #232329; color: #7c7c87; flex-shrink: 0; }
+  .da-pill { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 999px; background: #1b1e23; color: #7c828c; flex-shrink: 0; }
   .da-pill.on { background: rgba(34,197,94,0.14); color: #4ade80; }
-  .da-hr-i { width: 16px !important; height: 16px !important; color: #9a9aa6; }
-  .da-hr-v { flex: 1; min-width: 0; color: #f4f4f6; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .da-tag { font-size: 11.5px; color: #a1a1ab; background: #1f1f24; padding: 2px 8px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
+  .da-hr-i { width: 16px !important; height: 16px !important; color: #9aa0aa; }
+  .da-hr-v { flex: 1; min-width: 0; color: #e9ebef; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .da-tag { font-size: 11.5px; color: #9aa0aa; background: #15171b; padding: 2px 8px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
   .da-cnt { font-size: 12px; color: #4ade80; font-weight: 600; white-space: nowrap; }
   .da-acts { display: inline-flex; gap: 6px; }
-  .da-b { border: 1px solid rgba(255,255,255,0.1); background: #18181c; color: #a1a1ab; font: inherit; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 8px; cursor: pointer; }
+  .da-b { border: 1px solid rgba(255,255,255,0.1); background: #121418; color: #9aa0aa; font: inherit; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 8px; cursor: pointer; }
   .da-b:hover { color: #f87171; border-color: rgba(248,113,113,0.4); }
   .da-b.warn { color: #fbbf24; }
-  .da-det { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px 16px; padding: 4px 14px 14px 52px; font-size: 12.5px; color: #f4f4f6; }
-  .da-det small { display: block; color: #6b6b76; font-size: 11px; margin-bottom: 2px; }
+  .da-det { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px 16px; padding: 4px 14px 14px 52px; font-size: 12.5px; color: #e9ebef; }
+  .da-det small { display: block; color: #7c828c; font-size: 11px; margin-bottom: 2px; }
   @media (max-width: 900px) { .da-grid { grid-template-columns: minmax(0, 1fr); } .da-side { position: static; } }
   @media (max-width: 560px) { .da-types { grid-template-columns: minmax(0, 1fr); } .da-tag { display: none; } .da-det { padding-left: 14px; } }
   .pn-content { transition: opacity .15s; }
@@ -684,158 +695,158 @@ const PANEL_CSS = `
   .ad svg { width: 16px; height: 16px; }
   .ad-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; margin-bottom: 18px; flex-wrap: wrap; }
   .ad h1 { font-size: 26px; font-weight: 750; letter-spacing: -0.5px; margin: 0; }
-  .ad-sub { color: #8b8b96; font-size: 13.5px; margin-top: 4px; }
+  .ad-sub { color: #7c828c; font-size: 13.5px; margin-top: 4px; }
   .ad-tools { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .ad-search { display: flex; align-items: center; gap: 8px; width: 270px; height: 40px; padding: 0 12px; border-radius: 11px; background: #18181c; border: 1px solid rgba(255,255,255,0.08); color: #6b6b76; }
-  .ad-search:focus-within { border-color: #8b5cf6; }
-  .ad-search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #f4f4f6; font: inherit; font-size: 13.5px; box-shadow: none !important; }
+  .ad-search { display: flex; align-items: center; gap: 8px; width: 270px; height: 40px; padding: 0 12px; border-radius: 11px; background: #121418; border: 1px solid rgba(255,255,255,0.08); color: #7c828c; }
+  .ad-search:focus-within { border-color: #3b6fe6; }
+  .ad-search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #e9ebef; font: inherit; font-size: 13.5px; box-shadow: none !important; }
   .ad-btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; height: 40px; padding: 0 16px; border-radius: 11px; font: inherit; font-size: 13.5px; font-weight: 650; border: 0; cursor: pointer; }
-  .ad-btn.pri { background: #8b5cf6; color: #fff; box-shadow: 0 8px 24px rgba(139,92,246,0.3); }
+  .ad-btn.pri { background: #3b6fe6; color: #fff; box-shadow: 0 8px 24px rgba(91,140,255,0.3); }
   .ad-btn.pri:disabled { opacity: .6; }
   .ad-btn.wide { width: 100%; height: 46px; font-size: 14.5px; margin-top: 16px; }
   .ad-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
   .ad-stats.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .ad-st { background: #17171c; border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
+  .ad-st { background: #121418; border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
   .ad-st-ic { width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center; flex-shrink: 0; }
   .ad-st-ic svg { width: 18px; height: 18px; }
-  .ad-st small { display: block; color: #7c7c87; font-size: 11px; font-weight: 650; letter-spacing: .3px; }
+  .ad-st small { display: block; color: #7c828c; font-size: 11px; font-weight: 650; letter-spacing: .3px; }
   .ad-st b { display: block; font-size: 22px; font-weight: 750; font-variant-numeric: tabular-nums; }
   .ad-filters { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
-  .ad-filters button { font: inherit; font-size: 12.5px; font-weight: 600; color: #a1a1ab; padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.08); background: none; cursor: pointer; }
-  .ad-filters button.on { background: #f4f4f6; color: #111114; border-color: #f4f4f6; }
-  .ad-empty { color: #6b6b76; font-size: 13.5px; padding: 40px 0; text-align: center; }
+  .ad-filters button { font: inherit; font-size: 12.5px; font-weight: 600; color: #9aa0aa; padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.08); background: none; cursor: pointer; }
+  .ad-filters button.on { background: #e9ebef; color: #0e0f12; border-color: #e9ebef; }
+  .ad-empty { color: #7c828c; font-size: 13.5px; padding: 40px 0; text-align: center; }
   .ad-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; align-items: start; }
-  .ad-card { --c: #8b5cf6; background: #17171c; border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 16px; position: relative; }
+  .ad-card { --c: #3b6fe6; background: #121418; border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 16px; position: relative; }
   .ad-card.stripe::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; border-radius: 16px 16px 0 0; background: var(--c); }
   .ad-ch { display: flex; align-items: center; gap: 12px; }
   .ad-av { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 17px; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15); }
   .ad-av.round { border-radius: 50%; font-size: 14px; }
   .ad-nm { font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .ad-pk { font-family: ui-monospace, Menlo, monospace; font-size: 11.5px; color: #6b6b76; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ad-pk { font-family: ui-monospace, Menlo, monospace; font-size: 11.5px; color: #7c828c; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .ad-ch > div { flex: 1; }
-  .ad-pk.plain { font-family: inherit; font-size: 12px; color: #7c7c87; }
+  .ad-pk.plain { font-family: inherit; font-size: 12px; color: #7c828c; }
   .ad-live { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #4ade80; background: rgba(34,197,94,0.1); padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
   .ad-live i { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; }
-  .ad-live.z { color: #7c7c87; background: rgba(255,255,255,0.05); }
+  .ad-live.z { color: #7c828c; background: rgba(255,255,255,0.05); }
   .ad-live.z i { background: #55555f; }
   .ad-role { font-size: 11.5px; font-weight: 700; padding: 4px 9px; border-radius: 999px; background: rgba(56,189,248,0.12); color: #38bdf8; white-space: nowrap; }
   .ad-role.sup { background: rgba(251,191,36,0.12); color: #fbbf24; }
   .ad-spark { height: 46px; margin: 12px -4px 6px; }
   .ad-spark svg { width: 100%; height: 46px; }
   .ad-meta { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
-  .ad-tg { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: rgba(255,255,255,0.05); color: #a1a1ab; }
+  .ad-tg { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: rgba(255,255,255,0.05); color: #9aa0aa; }
   .ad-tg svg { width: 13px; height: 13px; stroke-width: 2.2; }
   .ad-tg.ok { background: rgba(34,197,94,0.1); color: #4ade80; }
   .ad-tg.warn { background: rgba(251,191,36,0.12); color: #fbbf24; }
-  .ad-tg.all { background: rgba(139,92,246,0.12); color: #c4b5fd; }
+  .ad-tg.all { background: rgba(91,140,255,0.12); color: #8fb0ff; }
   .ad-access { margin: 14px 0 12px; }
-  .ad-access small { display: block; font-size: 10.5px; font-weight: 700; letter-spacing: .6px; color: #6b6b76; margin-bottom: 7px; }
+  .ad-access small { display: block; font-size: 10.5px; font-weight: 700; letter-spacing: .6px; color: #7c828c; margin-bottom: 7px; }
   .ad-apps, .ad-pick { display: flex; flex-wrap: wrap; gap: 6px; }
-  .ad-mini { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 9px 0 3px; border-radius: 9px; background: #1f1f25; border: 1px solid rgba(255,255,255,0.07); font: inherit; font-size: 12px; font-weight: 600; color: #d4d4dc; }
+  .ad-mini { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 9px 0 3px; border-radius: 9px; background: #15171b; border: 1px solid rgba(255,255,255,0.07); font: inherit; font-size: 12px; font-weight: 600; color: #d4d4dc; }
   .ad-mini .ad-av { width: 22px; height: 22px; border-radius: 7px; font-size: 10.5px; }
-  .ad-mini.more { padding: 0 9px; color: #8b8b96; }
+  .ad-mini.more { padding: 0 9px; color: #7c828c; }
   .ad-mini.sel { cursor: pointer; height: 32px; }
-  .ad-mini.sel.on { border-color: #8b5cf6; background: rgba(139,92,246,0.12); color: #fff; }
-  .ad-mini.sel svg { width: 13px; height: 13px; color: #c4b5fd; stroke-width: 2.4; }
+  .ad-mini.sel.on { border-color: #3b6fe6; background: rgba(91,140,255,0.12); color: #fff; }
+  .ad-mini.sel svg { width: 13px; height: 13px; color: #8fb0ff; stroke-width: 2.4; }
   .ad-acts { display: flex; gap: 8px; align-items: center; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 12px; }
-  .ad-a { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 11px; border-radius: 9px; font: inherit; font-size: 12.5px; font-weight: 650; color: #d4d4dc; background: #1f1f25; border: 1px solid rgba(255,255,255,0.07); cursor: pointer; text-decoration: none; white-space: nowrap; }
+  .ad-a { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 11px; border-radius: 9px; font: inherit; font-size: 12.5px; font-weight: 650; color: #d4d4dc; background: #15171b; border: 1px solid rgba(255,255,255,0.07); cursor: pointer; text-decoration: none; white-space: nowrap; }
   .ad-a:hover { color: #fff; border-color: rgba(255,255,255,0.18); }
   .ad-a svg { width: 15px; height: 15px; }
   .ad-a.ghost { background: none; }
-  .ad-a.ghost.on { color: #c4b5fd; border-color: rgba(139,92,246,0.45); }
-  .ad-a.more { padding: 0 8px; color: #7c7c87; background: none; border-color: transparent; }
+  .ad-a.ghost.on { color: #8fb0ff; border-color: rgba(91,140,255,0.45); }
+  .ad-a.more { padding: 0 8px; color: #7c828c; background: none; border-color: transparent; }
   .ad-more-wrap { margin-left: auto; position: relative; }
-  .ad-menu { position: absolute; right: 0; bottom: 38px; z-index: 30; min-width: 190px; background: #222228; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 5px; box-shadow: 0 18px 40px rgba(0,0,0,0.5); }
+  .ad-menu { position: absolute; right: 0; bottom: 38px; z-index: 30; min-width: 190px; background: #15171b; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 5px; box-shadow: 0 18px 40px rgba(0,0,0,0.5); }
   .ad-menu button { display: flex; align-items: center; gap: 8px; width: 100%; padding: 8px 10px; border-radius: 8px; border: 0; background: none; color: #d4d4dc; font: inherit; font-size: 13px; cursor: pointer; text-align: left; }
   .ad-menu button:hover { background: rgba(255,255,255,0.06); }
   .ad-menu button.danger { color: #f87171; }
   .ad-menu button.danger:hover { background: rgba(248,113,113,0.12); }
-  .ad-cred { background: #111114; border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 4px 10px; margin: 2px 0 12px; }
+  .ad-cred { background: #0e0f12; border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 4px 10px; margin: 2px 0 12px; }
   .ad-cr { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 12.5px; }
   .ad-cr + .ad-cr { border-top: 1px solid rgba(255,255,255,0.05); }
-  .ad-cr span { color: #6b6b76; width: 58px; font-weight: 600; font-size: 11.5px; flex-shrink: 0; }
+  .ad-cr span { color: #7c828c; width: 58px; font-weight: 600; font-size: 11.5px; flex-shrink: 0; }
   .ad-cr code { flex: 1; min-width: 0; font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: #e4e4ea; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: none !important; padding: 0 !important; }
   .ad-cred.big .ad-cr { padding: 10px 0; }
-  .ad-ib { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; border: 0; background: none; color: #8b8b96; cursor: pointer; flex-shrink: 0; }
+  .ad-ib { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; border: 0; background: none; color: #7c828c; cursor: pointer; flex-shrink: 0; }
   .ad-ib:hover { background: rgba(255,255,255,0.06); color: #fff; }
   .ad-scrim { position: fixed; inset: 0; z-index: 60; background: rgba(6,6,9,0.6); }
-  .ad-sheet { position: fixed; top: 0; right: 0; bottom: 0; z-index: 61; width: min(420px, 100vw); background: #18181d; border-left: 1px solid rgba(255,255,255,0.1); box-shadow: -30px 0 60px rgba(0,0,0,0.5); padding: 26px; display: flex; flex-direction: column; box-sizing: border-box; animation: adIn .2s ease-out; }
+  .ad-sheet { position: fixed; top: 0; right: 0; bottom: 0; z-index: 61; width: min(420px, 100vw); background: #121418; border-left: 1px solid rgba(255,255,255,0.1); box-shadow: -30px 0 60px rgba(0,0,0,0.5); padding: 26px; display: flex; flex-direction: column; box-sizing: border-box; animation: adIn .2s ease-out; }
   @keyframes adIn { from { transform: translateX(30px); opacity: 0; } to { transform: none; opacity: 1; } }
   .ad-sheet h2 { font-size: 20px; font-weight: 750; margin: 0; }
   .ad-sheet-body { flex: 1; overflow-y: auto; margin: 0 -6px; padding: 0 6px; }
-  .ad-x { position: absolute; top: 22px; right: 20px; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9px; border: 0; background: none; color: #8b8b96; cursor: pointer; }
+  .ad-x { position: absolute; top: 22px; right: 20px; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9px; border: 0; background: none; color: #7c828c; cursor: pointer; }
   .ad-x:hover { background: rgba(255,255,255,0.06); color: #fff; }
-  .ad-lbl { font-size: 12.5px; font-weight: 600; color: #a1a1ab; margin: 18px 0 7px; }
-  .ad-inp { width: 100%; box-sizing: border-box; height: 42px; border-radius: 11px; background: #111114; border: 1px solid rgba(255,255,255,0.1); padding: 0 13px; font: inherit; font-size: 14px; color: #f4f4f6; outline: 0; }
+  .ad-lbl { font-size: 12.5px; font-weight: 600; color: #9aa0aa; margin: 18px 0 7px; }
+  .ad-inp { width: 100%; box-sizing: border-box; height: 42px; border-radius: 11px; background: #0e0f12; border: 1px solid rgba(255,255,255,0.1); padding: 0 13px; font: inherit; font-size: 14px; color: #e9ebef; outline: 0; }
   .ad-inp:disabled { opacity: .6; }
-  .ad-hint { font-size: 11.5px; color: #6b6b76; margin-top: 6px; }
+  .ad-hint { font-size: 11.5px; color: #7c828c; margin-top: 6px; }
   .ad-pw { display: flex; gap: 6px; align-items: center; position: relative; }
   .ad-pw .ad-a { height: 42px; }
-  .ad-auto { position: absolute; right: 13px; font-size: 11.5px; color: #6b6b76; pointer-events: none; }
-  .ad-seg { display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: #111114; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 10px; }
-  .ad-seg button { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 34px; border: 0; border-radius: 8px; background: none; color: #a1a1ab; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
-  .ad-seg button.on { background: #2a2733; color: #fff; box-shadow: inset 0 0 0 1px rgba(139,92,246,0.5); }
+  .ad-auto { position: absolute; right: 13px; font-size: 11.5px; color: #7c828c; pointer-events: none; }
+  .ad-seg { display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: #0e0f12; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 10px; }
+  .ad-seg button { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 34px; border: 0; border-radius: 8px; background: none; color: #9aa0aa; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .ad-seg button.on { background: #1b1e23; color: #fff; box-shadow: inset 0 0 0 1px rgba(91,140,255,0.5); }
   .ad-sw { display: flex; gap: 9px; align-items: center; }
   .ad-sw button { width: 30px; height: 30px; border-radius: 9px; border: 0; cursor: pointer; padding: 0; }
-  .ad-sw button.on { box-shadow: 0 0 0 2px #18181d, 0 0 0 4px #f4f4f6; }
-  .ad-sw-custom { width: 30px; height: 30px; border-radius: 9px; border: 1px dashed rgba(255,255,255,0.25); display: grid; place-items: center; color: #8b8b96; cursor: pointer; position: relative; overflow: hidden; }
+  .ad-sw button.on { box-shadow: 0 0 0 2px #121418, 0 0 0 4px #e9ebef; }
+  .ad-sw-custom { width: 30px; height: 30px; border-radius: 9px; border: 1px dashed rgba(255,255,255,0.25); display: grid; place-items: center; color: #7c828c; cursor: pointer; position: relative; overflow: hidden; }
   .ad-sw-custom input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-  .ad-pv { margin-top: 22px; background: #111114; border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 14px; }
-  .ad-pv small { display: block; font-size: 11px; font-weight: 700; letter-spacing: .6px; color: #6b6b76; margin-bottom: 10px; }
-  .ad-pvr { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 12.5px; color: #a1a1ab; margin-top: 10px; }
-  .ad-pvr code { font-family: ui-monospace, Menlo, monospace; color: #c4b5fd; font-size: 12px; background: none !important; }
-  .ad-group { font-size: 11px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; color: #6b6b76; margin: 22px 0 -6px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.06); }
+  .ad-pv { margin-top: 22px; background: #0e0f12; border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 14px; }
+  .ad-pv small { display: block; font-size: 11px; font-weight: 700; letter-spacing: .6px; color: #7c828c; margin-bottom: 10px; }
+  .ad-pvr { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 12.5px; color: #9aa0aa; margin-top: 10px; }
+  .ad-pvr code { font-family: ui-monospace, Menlo, monospace; color: #8fb0ff; font-size: 12px; background: none !important; }
+  .ad-group { font-size: 11px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; color: #7c828c; margin: 22px 0 -6px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.06); }
   .ad-sheet-body .ad-group:first-child { border-top: 0; padding-top: 0; margin-top: 18px; }
-  .ad-opt { color: #6b6b76; font-weight: 500; margin-left: 4px; }
+  .ad-opt { color: #7c828c; font-weight: 500; margin-left: 4px; }
   .ad-inp.mono { font-family: ui-monospace, Menlo, monospace; font-size: 13px; }
   .ad-url { display: block; font-family: ui-monospace, Menlo, monospace; font-size: 12.5px; color: #e4e4ea; word-break: break-all; background: none !important; padding: 0 !important; }
-  .ad-note { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; color: #8b8b96; margin-top: 14px; line-height: 1.45; }
+  .ad-note { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; color: #7c828c; margin-top: 14px; line-height: 1.45; }
   .ad-note svg { color: #4ade80; flex-shrink: 0; margin-top: 1px; }
   @media (max-width: 900px) { .ad-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ad-stats.three { grid-template-columns: repeat(3, minmax(0, 1fr)); } .ad-search { width: 100%; } .ad-tools { width: 100%; } }
   @media (max-width: 560px) { .ad-stats.three { grid-template-columns: minmax(0, 1fr); } .ad-grid { grid-template-columns: minmax(0, 1fr); } }
   .sw-wrap { position: relative; }
-  .sw-btn { display: flex; align-items: center; gap: 9px; height: 38px; padding: 0 10px 0 5px; border-radius: 11px; background: #18181c; border: 1px solid rgba(255,255,255,0.1); color: #f4f4f6; font: inherit; font-size: 13.5px; cursor: pointer; max-width: 320px; transition: border-color .15s, background .15s; }
-  .sw-btn:hover, .sw-btn.open { border-color: rgba(139,92,246,0.55); background: #1d1c24; }
+  .sw-btn { display: flex; align-items: center; gap: 9px; height: 38px; padding: 0 10px 0 5px; border-radius: 11px; background: #121418; border: 1px solid rgba(255,255,255,0.1); color: #e9ebef; font: inherit; font-size: 13.5px; cursor: pointer; max-width: 320px; transition: border-color .15s, background .15s; }
+  .sw-btn:hover, .sw-btn.open { border-color: rgba(91,140,255,0.55); background: #1d1c24; }
   .sw-btn.locked { cursor: default; }
   .sw-btn b { font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .sw-btn .pn-av, .sw-item .pn-av { width: 28px; height: 28px; border-radius: 8px; font-size: 12px; }
-  .sw-btn em, .sw-item em { display: inline-flex; align-items: center; gap: 5px; font-style: normal; font-size: 11.5px; font-weight: 700; color: #7c7c87; background: rgba(255,255,255,0.06); padding: 2px 8px; border-radius: 999px; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+  .sw-btn em, .sw-item em { display: inline-flex; align-items: center; gap: 5px; font-style: normal; font-size: 11.5px; font-weight: 700; color: #7c828c; background: rgba(255,255,255,0.06); padding: 2px 8px; border-radius: 999px; font-variant-numeric: tabular-nums; flex-shrink: 0; }
   .sw-btn em i, .sw-item em i { width: 6px; height: 6px; border-radius: 50%; background: #55555f; }
   .sw-btn em.live, .sw-item em.live { color: #4ade80; background: rgba(34,197,94,0.12); }
   .sw-btn em.live i, .sw-item em.live i { background: #22c55e; }
-  .sw-ic { width: 15px !important; height: 15px !important; color: #7c7c87; }
-  .sw-pop { position: absolute; top: calc(100% + 8px); left: 0; z-index: 50; width: 360px; max-width: calc(100vw - 24px); background: #1c1c22; border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; box-shadow: 0 24px 60px rgba(0,0,0,0.55); overflow: hidden; animation: swIn .14s ease-out; }
+  .sw-ic { width: 15px !important; height: 15px !important; color: #7c828c; }
+  .sw-pop { position: absolute; top: calc(100% + 8px); left: 0; z-index: 50; width: 360px; max-width: calc(100vw - 24px); background: #15171b; border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; box-shadow: 0 24px 60px rgba(0,0,0,0.55); overflow: hidden; animation: swIn .14s ease-out; }
   @keyframes swIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
-  .sw-search { display: flex; align-items: center; gap: 8px; padding: 0 12px; height: 46px; border-bottom: 1px solid rgba(255,255,255,0.07); color: #7c7c87; }
+  .sw-search { display: flex; align-items: center; gap: 8px; padding: 0 12px; height: 46px; border-bottom: 1px solid rgba(255,255,255,0.07); color: #7c828c; }
   .sw-search svg { width: 16px; height: 16px; }
-  .sw-search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #f4f4f6; font: inherit; font-size: 14px; box-shadow: none !important; }
-  .sw-search kbd { font: inherit; font-size: 10.5px; color: #6b6b76; border: 1px solid rgba(255,255,255,0.1); border-radius: 5px; padding: 1px 5px; }
+  .sw-search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #e9ebef; font: inherit; font-size: 14px; box-shadow: none !important; }
+  .sw-search kbd { font: inherit; font-size: 10.5px; color: #7c828c; border: 1px solid rgba(255,255,255,0.1); border-radius: 5px; padding: 1px 5px; }
   .sw-list { max-height: 380px; overflow-y: auto; padding: 6px; }
   .sw-item { display: flex; align-items: center; gap: 10px; width: 100%; padding: 7px 8px; border: 0; border-radius: 9px; background: none; color: #d4d4dc; font: inherit; text-align: left; cursor: pointer; }
   .sw-item:hover { background: rgba(255,255,255,0.05); }
-  .sw-item.on { background: rgba(139,92,246,0.14); color: #fff; }
+  .sw-item.on { background: rgba(91,140,255,0.14); color: #fff; }
   .sw-t { flex: 1; min-width: 0; display: flex; flex-direction: column; }
   .sw-t b { font-size: 13.5px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .sw-t small { font-size: 11px; color: #6b6b76; font-family: ui-monospace, Menlo, monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .sw-none { color: #6b6b76; font-size: 13px; padding: 16px; text-align: center; }
-  .sw-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 12px; border-top: 1px solid rgba(255,255,255,0.07); font-size: 11.5px; color: #6b6b76; }
-  .sw-foot button { border: 0; background: none; color: #a78bfa; font: inherit; font-size: 12px; font-weight: 650; cursor: pointer; padding: 0; }
+  .sw-t small { font-size: 11px; color: #7c828c; font-family: ui-monospace, Menlo, monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sw-none { color: #7c828c; font-size: 13px; padding: 16px; text-align: center; }
+  .sw-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 12px; border-top: 1px solid rgba(255,255,255,0.07); font-size: 11.5px; color: #7c828c; }
+  .sw-foot button { border: 0; background: none; color: #8fb0ff; font: inherit; font-size: 12px; font-weight: 650; cursor: pointer; padding: 0; }
   .pn-side { width: 272px; min-width: 272px; }
   .pn-side-top { padding: 18px 14px 6px; }
   .pn-brand { margin-bottom: 14px; padding: 0 4px; }
-  .pn-side .sw-wrap .sw-btn { width: 100%; max-width: none; height: 52px; padding: 0 10px 0 9px; border-radius: 12px; background: #1f1f24; }
+  .pn-side .sw-wrap .sw-btn { width: 100%; max-width: none; height: 52px; padding: 0 10px 0 9px; border-radius: 12px; background: #15171b; }
   .pn-side .sw-wrap .sw-btn b { flex: 1; text-align: left; }
   .pn-side .sw-btn .pn-av { width: 32px; height: 32px; }
   .pn-side .sw-pop { width: 340px; }
   .pn-grp { padding: 16px 10px 6px; }
   .pn-mi { gap: 11px; padding: 7px 10px; border-radius: 10px; color: #d4d4dc; margin-bottom: 2px; }
   .pn-mi.active::before, .pn-mi.has-active::before { display: none; }
-  .pn-ni { width: 32px; height: 32px; border-radius: 9px; background: rgba(255,255,255,0.06); color: #a1a1ab; display: grid; place-items: center; flex-shrink: 0; }
+  .pn-ni { width: 32px; height: 32px; border-radius: 9px; background: rgba(255,255,255,0.06); color: #9aa0aa; display: grid; place-items: center; flex-shrink: 0; }
   .pn-ni .pn-ico { width: 17px !important; height: 17px !important; color: inherit !important; }
-  .pn-mi.active .pn-ni { background: #8b5cf6; color: #fff; }
+  .pn-mi.active .pn-ni { background: #3b6fe6; color: #fff; }
   .pn-mt { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-  .pn-mt b { font-size: 13px; font-weight: 600; color: #f4f4f6; }
-  .pn-mt small { font-size: 11px; font-weight: 400; color: #8b8b96; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pn-mt b { font-size: 13px; font-weight: 600; color: #e9ebef; }
+  .pn-mt small { font-size: 11px; font-weight: 400; color: #7c828c; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .pn-mi.active .pn-mt b { color: #fff; }
   .pn-mi.active .pn-mt small { color: #b4b4be; }
   .pn-top { padding: 14px 32px; }
@@ -844,43 +855,113 @@ const PANEL_CSS = `
   .pn-title h1 { margin: 2px 0 0; font-size: 21px; font-weight: 650; letter-spacing: -0.3px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .pn-tabs { align-self: flex-start; max-width: 100%; scrollbar-width: none; }
   .pn-tabs::-webkit-scrollbar { display: none; }
-  .pn-side .sw-btn.locked { width: 100%; max-width: none; height: 52px; box-sizing: border-box; background: #1f1f24; }
+  .pn-side .sw-btn.locked { width: 100%; max-width: none; height: 52px; box-sizing: border-box; background: #15171b; }
   .pn-side .sw-btn.locked b { flex: 1; }
   .pn-apps-chev { transition: transform .18s; }
   .pn-apps-chev.open { transform: rotate(180deg); }
   .pn-side .sw-wrap .pn-apps { margin-top: 6px; }
   .pn-apps { background: #1a1a20; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 8px 6px 6px; }
-  .pn-apps-h { display: flex; align-items: center; justify-content: space-between; padding: 0 6px 6px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; color: #6b6b76; }
-  .pn-apps-h em { font-style: normal; color: #8b8b96; margin-left: 4px; }
-  .pn-apps-h button { border: 0; background: none; color: #a78bfa; font: inherit; font-size: 11.5px; font-weight: 650; letter-spacing: 0; text-transform: none; cursor: pointer; padding: 0; }
-  .pn-apps-q { display: flex; align-items: center; gap: 7px; height: 32px; margin: 0 2px 6px; padding: 0 9px; border-radius: 9px; background: #141418; border: 1px solid rgba(255,255,255,0.08); color: #6b6b76; }
-  .pn-apps-q:focus-within { border-color: #8b5cf6; }
+  .pn-apps-h { display: flex; align-items: center; justify-content: space-between; padding: 0 6px 6px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; color: #7c828c; }
+  .pn-apps-h em { font-style: normal; color: #7c828c; margin-left: 4px; }
+  .pn-apps-h button { border: 0; background: none; color: #8fb0ff; font: inherit; font-size: 11.5px; font-weight: 650; letter-spacing: 0; text-transform: none; cursor: pointer; padding: 0; }
+  .pn-apps-q { display: flex; align-items: center; gap: 7px; height: 32px; margin: 0 2px 6px; padding: 0 9px; border-radius: 9px; background: #0e0f12; border: 1px solid rgba(255,255,255,0.08); color: #7c828c; }
+  .pn-apps-q:focus-within { border-color: #3b6fe6; }
   .pn-apps-q svg { width: 14px !important; height: 14px !important; }
-  .pn-apps-q input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #f4f4f6; font: inherit; font-size: 12.5px; }
+  .pn-apps-q input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #e9ebef; font: inherit; font-size: 12.5px; }
   .pn-apps-list { max-height: 228px; overflow-y: auto; display: flex; flex-direction: column; gap: 1px; }
   .pn-apps .sw-item { padding: 6px 7px; }
   .pn-apps .sw-item .pn-av { width: 26px; height: 26px; border-radius: 7px; font-size: 11.5px; }
   .pn-apps .sw-t b { font-size: 13px; }
-  .pn-apps .sw-item.on { box-shadow: inset 0 0 0 1px rgba(139,92,246,0.5); }
+  .pn-apps .sw-item.on { box-shadow: inset 0 0 0 1px rgba(91,140,255,0.5); }
   .pn-root { font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-  .pn-side { background: #1c1c22; border-right-color: #2e2e36; }
-  .pn-head { background: rgba(17,17,20,0.92); border-bottom-color: #2e2e36; }
-  .pn-mi:hover { background: #24242b; }
-  .pn-mi.active { background: #2a2440; }
-  .pn-mi.active .pn-mt b { color: #c4b5fd; }
-  .pn-ni { background: #26262d; }
-  .pn-tabs { background: #18181d; border: 1px solid #2e2e36; border-radius: 12px; }
-  .pn-tabs button { font-weight: 500; color: #a1a1ab; }
-  .pn-tabs button.on { background: #2a2a31; color: #f4f4f6; box-shadow: 0 0 0 1px #3a3a42; }
-  .pn-tabs button.on .pn-ico { color: #c4b5fd; }
-  .pn-ghost { background: #1c1c22; border-color: #2e2e36; }
+  .pn-side { background: #15171b; border-right-color: #23262d; }
+  .pn-head { background: rgba(17,17,20,0.92); border-bottom-color: #23262d; }
+  .pn-mi:hover { background: #1b1e23; }
+  .pn-mi.active { background: #16223d; }
+  .pn-mi.active .pn-mt b { color: #8fb0ff; }
+  .pn-ni { background: #1b1e23; }
+  .pn-tabs { background: #121418; border: 1px solid #23262d; border-radius: 12px; }
+  .pn-tabs button { font-weight: 500; color: #9aa0aa; }
+  .pn-tabs button.on { background: #1b1e23; color: #e9ebef; box-shadow: 0 0 0 1px #2c3038; }
+  .pn-tabs button.on .pn-ico { color: #8fb0ff; }
+  .pn-ghost { background: #15171b; border-color: #23262d; }
   .pn-content { gap: 20px; }
   .pn-content h2 { font-weight: 600; }
   .pn-content table { border-collapse: collapse; }
-  .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]), .pn-content select, .pn-content textarea { border-color: #2e2e36; border-radius: 10px; }
-  .pn-root input[type=checkbox]:checked { background: #8b5cf6; }
+  .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]), .pn-content select, .pn-content textarea { border-color: #23262d; border-radius: 10px; }
+  .pn-root input[type=checkbox]:checked { background: #3b6fe6; }
   .pn-live { background: #15271d; border-color: #1f5133; }
   .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]), .pn-content select, .pn-content textarea { box-sizing: border-box; max-width: 100%; }
+  /* v2 — koyu, sade */
+  .pn-root { background: #0e0f12; color: #e9ebef; }
+  .pn-side { background: #0e0f12; border-right-color: #1f2228; }
+  .pn-mark { background: #3b6fe6; box-shadow: none; border-radius: 8px; }
+  .pn-side .sw-wrap .sw-btn { background: #15171b; border-color: #23262d; }
+  .pn-live { background: #13291f; border-color: #1d3d2e; }
+  .pn-live b { color: #5fe0a0; } .pn-live span { color: #8fcfae; }
+  .pn-search { background: #0e0f12; border-color: #23262d; }
+  .pn-grp { color: #6e747e; letter-spacing: .4px; }
+  .pn-mi { color: #e9ebef; }
+  .pn-mi:hover { background: #15171b; }
+  .pn-mi.active { background: #1b1e23; }
+  .pn-ni { background: #15171b; color: #9aa0aa; }
+  .pn-mi.active .pn-ni { background: #3b6fe6; color: #fff; }
+  .pn-mt b { color: #e9ebef; font-weight: 500; }
+  .pn-mi.active .pn-mt b { color: #fff; }
+  .pn-mt small, .pn-mi.active .pn-mt small { color: #7c828c; }
+  .pn-logout { border-top-color: #1f2228; color: #9aa0aa; }
+  .pn-head { background: #0e0f12; border-bottom: 0; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .pn-top { padding: 32px 48px 4px; align-items: flex-start; }
+  .pn-title h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.4px; color: #fff; margin: 0; }
+  .pn-title p { margin: 6px 0 0; font-size: 14px; color: #9aa0aa; }
+  .pn-ghost { background: #15171b; border-color: #23262d; color: #9aa0aa; }
+  .pn-content { margin: 0; max-width: 1100px; padding: 20px 48px 72px; gap: 28px; }
+  .pn-tabs { align-self: stretch; background: none; border: 0; border-bottom: 1px solid #23262d; border-radius: 0; padding: 0; gap: 24px; overflow-x: auto; }
+  .pn-tabs button { padding: 0 0 12px; margin-bottom: -1px; border-radius: 0; background: none !important; border-bottom: 2px solid transparent; color: #9aa0aa; font-weight: 500; font-size: 14px; box-shadow: none !important; }
+  .pn-tabs button:hover { color: #e9ebef; }
+  .pn-tabs button.on { color: #fff; border-bottom-color: #5b8cff; }
+  .pn-tabs .pn-ico { display: none; }
+  .pn-root input[type=checkbox] { background: #2c3038; }
+  .pn-root input[type=checkbox]:checked { background: #3b6fe6; }
+  .pn-root input[type=radio] { accent-color: #3b6fe6; }
+  .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]), .pn-content select, .pn-content textarea { background-color: #0e0f12; border-color: #2c3038; color: #e9ebef; }
+  .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]):focus, .pn-content select:focus, .pn-content textarea:focus { border-color: #5b8cff !important; box-shadow: 0 0 0 3px rgba(91,140,255,0.18); }
+  .v2-stack { display: flex; flex-direction: column; gap: 36px; }
+  .v2-sec { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 32px; }
+  .v2-sh h2 { margin: 0; font-size: 15px; font-weight: 600; color: #fff; letter-spacing: 0; }
+  .v2-sh p { margin: 6px 0 0; font-size: 13px; color: #9aa0aa; line-height: 1.5; }
+  .v2-box { background: #15171b; border: 1px solid #23262d; border-radius: 12px; min-width: 0; }
+  .v2-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 16px 20px; border-top: 1px solid #1f2228; }
+  .v2-box > .v2-row:first-child { border-top: 0; }
+  .v2-row.stack { flex-direction: column; align-items: stretch; gap: 10px; }
+  .v2-row.stack .v2-ctl { justify-content: flex-start; }
+  .v2-row.stack .v2-t { flex: none; }
+  .ad-top h1 { display: none; }
+  .ad-sub { margin-top: 0; }
+  .pn-head { position: static; }
+  .v2-t { min-width: 140px; flex: 1 1 160px; }
+  .v2-t b { display: block; font-size: 14px; font-weight: 500; color: #e9ebef; }
+  .v2-t span { display: block; font-size: 13px; color: #9aa0aa; margin-top: 2px; }
+  .v2-ctl { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+  .v2-foot { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 20px; border-top: 1px solid #1f2228; }
+  .v2-endsave { display: flex; justify-content: flex-end; }
+  .v2-seg { display: inline-flex; border: 1px solid #2c3038; border-radius: 9px; overflow: hidden; }
+  .v2-seg button { border: 0; border-left: 1px solid #2c3038; background: none; color: #9aa0aa; font: inherit; font-size: 13px; padding: 7px 13px; cursor: pointer; }
+  .v2-seg button:first-child { border-left: 0; }
+  .v2-seg button.on { background: #1f2a44; color: #fff; }
+  .v2-info { background: #13291f; color: #5fe0a0; font-size: 13px; justify-content: flex-start; }
+  .v2-info.bad { background: #2e1719; color: #ff8a8a; }
+  .v2-btn { height: 34px; padding: 0 14px; border-radius: 9px; border: 1px solid #2c3038; background: #1b1e23; color: #e9ebef; font: inherit; font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; }
+  .v2-chip { display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 10px; border-radius: 7px; background: #1b1e23; border: 1px solid #2c3038; font-size: 12.5px; color: #c9ced6; }
+  .v2-muted { color: #9aa0aa; font-size: 13px; }
+  .v2-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid #23262d; border-radius: 12px; background: #15171b; margin-bottom: 24px; }
+  .v2-st { padding: 20px 24px; border-left: 1px solid #23262d; }
+  .v2-st:first-child { border-left: 0; }
+  .v2-st small { display: block; font-size: 12.5px; color: #9aa0aa; }
+  .v2-st b { display: block; font-size: 32px; font-weight: 600; line-height: 1.15; color: #fff; margin-top: 6px; letter-spacing: -0.5px; font-variant-numeric: tabular-nums; }
+  .v2-st span { font-size: 12.5px; color: #7c828c; }
+  @media (max-width: 700px) { .v2-stats { grid-template-columns: minmax(0, 1fr); } .v2-st { border-left: 0; border-top: 1px solid #23262d; } .v2-st:first-child { border-top: 0; } }
+  @media (max-width: 900px) { .v2-sec { grid-template-columns: minmax(0, 1fr); gap: 12px; } .pn-top { padding: 20px 16px 4px; } .pn-content { padding: 16px 16px 60px; } }
   .pn-scrim { display: none; }
   @media (max-width: 900px) {
     .pn-appbar { padding: 4px 16px 10px; }
@@ -1525,7 +1606,7 @@ function App() {
     setScopeAll(false);
     switchApp(id);
   };
-  const currentApp = apps[appId] || { name: appId, brandPrimary: "#a78bfa" };
+  const currentApp = apps[appId] || { name: appId, brandPrimary: "#8fb0ff" };
 
   // === UYGULAMALAR (yeni uygulama ekle + izole panel giriş bilgileri) — sadece süper panel ===
   const [appList, setAppList] = useState([]);
@@ -1785,7 +1866,7 @@ function App() {
     return () => clearInterval(id);
   }, [rtWindow, activeSection, scopeAll]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!config) return <div style={{ color: "#9a9aa6", padding: 50, backgroundColor: "#111114", minHeight: "100vh", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif" }}>Yükleniyor...</div>;
+  if (!config) return <div style={{ color: "#9aa0aa", padding: 50, backgroundColor: "#0e0f12", minHeight: "100vh", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif" }}>Yükleniyor...</div>;
 
   // Ekranlar: yalnız erişilebilir sekmeleri olanlar (izole panelde bazı sekmeler yok)
   const itemByKey = Object.fromEntries(menuItems.map(m => [m.key, m]));
@@ -1793,7 +1874,6 @@ function App() {
   const curScreen = screens.find(sc => sc.tabs.includes(activeSection)) || screens[0];
   if (!curScreen.tabs.includes(activeSection)) setTimeout(() => setActiveSection(curScreen.tabs[0]), 0);
   const menuQ = menuQuery.trim().toLocaleLowerCase("tr");
-  const activeLabel = (itemByKey[activeSection] || {}).label || "";
   const brand = currentApp.brandPrimary || "#a78bfa";
   const pick = (key) => {
     const sc = screens.find(x => x.tabs.includes(key));
@@ -1941,11 +2021,8 @@ function App() {
           <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
         </button>
         <div className="pn-title">
-          <div className="pn-crumb">
-            <span>{(SCREEN_GROUPS.find(g => g.keys.includes(curScreen.key)) || {}).title}</span>
-            {curScreen.tabs.length > 1 && <><span className="pn-sep">/</span><b>{activeLabel}</b></>}
-          </div>
           <h1>{curScreen.label}</h1>
+          {curScreen.desc && <p>{curScreen.desc}</p>}
         </div>
         <a className="pn-ghost" href="/admin">
           <svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7v9H3z" /></svg>
@@ -1991,7 +2068,7 @@ function App() {
               </div>
             </div>
             <div className="ad-stats three">
-              {adStat("users", "rgba(139,92,246,.14)", "#c4b5fd", "KULLANICI", userList.length)}
+              {adStat("users", "rgba(91,140,255,.14)", "#8fb0ff", "KULLANICI", userList.length)}
               {adStat("star", "rgba(251,191,36,.12)", "#fbbf24", "SÜPER ADMİN", supers.length)}
               {adStat("lock", "rgba(56,189,248,.12)", "#38bdf8", "UYGULAMA YÖNETİCİSİ", scoped.length)}
             </div>
@@ -2112,7 +2189,7 @@ function App() {
           const cards = [
             ...(def ? [{ id: "default", name: def.name || "Musica", packageName: def.packageName || "", main: true }] : []),
             ...appList,
-          ].map(a => ({ ...a, brand: (apps[a.id] && apps[a.id].brandPrimary) || "#a78bfa", live: chipCount(a.id), pol: !!a.packageName && polSet.has(a.packageName) }));
+          ].map(a => ({ ...a, brand: (apps[a.id] && apps[a.id].brandPrimary) || "#8fb0ff", live: chipCount(a.id), pol: !!a.packageName && polSet.has(a.packageName) }));
           const nopol = cards.filter(c => !c.pol).length;
           const liveN = cards.filter(c => (c.live || 0) > 0).length;
           const shown = cards
@@ -2144,7 +2221,7 @@ function App() {
               </div>
             </div>
             <div className="ad-stats">
-              {adStat("grid", "rgba(139,92,246,.14)", "#c4b5fd", "UYGULAMA", cards.length)}
+              {adStat("grid", "rgba(91,140,255,.14)", "#8fb0ff", "UYGULAMA", cards.length)}
               {adStat("pulse", "rgba(34,197,94,.12)", "#4ade80", "ŞU AN AKTİF", allCount == null ? "—" : allCount)}
               {adStat("bell", "rgba(56,189,248,.12)", "#38bdf8", "ZİL SESİ MODUNDA", lastAll ? lastAll.r : "—")}
               {adStat("warn", "rgba(251,191,36,.12)", "#fbbf24", "POLİTİKASI EKSİK", nopol)}
@@ -2337,19 +2414,19 @@ function App() {
           </div>
 
 
-          <h3 style={{ color: "#f4f4f6", fontSize: 15, margin: "0 0 12px 0" }}>Mevcut Politikalar</h3>
+          <h3 style={{ color: "#e9ebef", fontSize: 15, margin: "0 0 12px 0" }}>Mevcut Politikalar</h3>
           {policyList.length === 0 ? (
-            <p style={{ color: "#6b6b76", fontSize: 13 }}>Henüz politika yok.</p>
+            <p style={{ color: "#7c828c", fontSize: 13 }}>Henüz politika yok.</p>
           ) : (
             <div style={{ display: "grid", gap: 12 }}>
               {policyList.map(p => (
-                <div key={p.packageName} style={{ background: "#18181c", border: "1px solid #2c2c33", borderRadius: 10, padding: 14 }}>
+                <div key={p.packageName} style={{ background: "#121418", border: "1px solid #23262d", borderRadius: 10, padding: 14 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8, gap: 8 }}>
-                    <div style={{ color: "#f4f4f6", fontWeight: 700 }}>{p.appName}</div>
+                    <div style={{ color: "#e9ebef", fontWeight: 700 }}>{p.appName}</div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div style={{ color: "#6b6b76", fontSize: 12 }}>{p.email}</div>
+                      <div style={{ color: "#7c828c", fontSize: 12 }}>{p.email}</div>
                       <button onClick={() => openPolicySheet(p)} title="Düzenle"
-                        style={{ background: "transparent", border: "1px solid #2c2c33", color: "#a78bfa", borderRadius: 6, padding: "4px 8px", cursor: "pointer", fontSize: 14, lineHeight: 1, flexShrink: 0 }}>✏️</button>
+                        style={{ background: "transparent", border: "1px solid #23262d", color: "#8fb0ff", borderRadius: 6, padding: "4px 8px", cursor: "pointer", fontSize: 14, lineHeight: 1, flexShrink: 0 }}>✏️</button>
                       <button onClick={() => deletePolicy(p)} title="Politikayı sil"
                         style={{ background: "transparent", border: "1px solid #3a2230", color: "#ef4444", borderRadius: 6, padding: "4px 8px", cursor: "pointer", fontSize: 14, lineHeight: 1, flexShrink: 0 }}>🗑️</button>
                     </div>
@@ -2364,34 +2441,22 @@ function App() {
         </div></>}
 
         {/* GLOBAL & COUNTRY CONFIG (Styled for Dark Theme) */}
-        {activeSection === "settings" && <div style={styles.card}>
-          <h2 style={styles.title}>Genel Ülke Modu</h2>
-          <div style={styles.inputGroup}>
-            <label style={styles.labelCheckbox}>
-              <input type="checkbox" checked={config.global.enabled}
-                onChange={e => setConfig({ ...config, global: { ...config.global, enabled: e.target.checked } })}
-                style={{ marginRight: 10 }}
-              /> Global Enabled
-            </label>
-            <select style={styles.select} value={config.global.mode}
-              onChange={e => setConfig({ ...config, global: { ...config.global, mode: e.target.value } })}>
-              <option value="youtube">YouTube</option>
-              <option value="ringtone">Ringtone</option>
-            </select>
-          </div>
-          <button style={styles.primaryBtn} onClick={updateConfig}>Ayarları Kaydet</button>
-
-          <div style={{ marginTop: 24, borderTop: "1px solid #2a2a2a", paddingTop: 16 }}>
-            <h3 style={{ color: "#f4f4f6", fontSize: 15, marginBottom: 8 }}>Otomatik Zil Sesi</h3>
-            <p style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 12 }}>
-              Telefon dili ile cihaz ülkesi farklıysa, indirilen MP3 otomatik zil sesi yapılır.
-            </p>
-            {autoRingtone ? (
-              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <span style={{ color: autoRingtone.enabled ? "#22c55e" : "#ef4444", fontWeight: "bold", fontSize: 13 }}>
-                  {autoRingtone.enabled ? "Açık" : "Kapalı"}
-                </span>
-                <button style={{ ...styles.primaryBtn, padding: "6px 16px", fontSize: 12, backgroundColor: autoRingtone.enabled ? "#ef4444" : "#22c55e", color: "#fff" }} onClick={() => {
+        {activeSection === "settings" && <div className="v2-stack">
+          <V2Sec title="Genel mod" desc="Kuralı olmayan tüm ülkeler bu modda açılır.">
+            <V2Row title="Genel modu uygula" sub="Kapalıysa genel mod devreye girmez">
+              <input type="checkbox" aria-label="Genel modu uygula" checked={config.global.enabled}
+                onChange={e => setConfig({ ...config, global: { ...config.global, enabled: e.target.checked } })} />
+            </V2Row>
+            <V2Row title="Açılacak arayüz">
+              <V2Seg value={config.global.mode} onChange={v => setConfig({ ...config, global: { ...config.global, mode: v } })}
+                options={[["youtube", "YouTube"], ["ringtone", "Ringtone"]]} />
+            </V2Row>
+            <V2Foot><button style={styles.primaryBtn} onClick={updateConfig}>Kaydet</button></V2Foot>
+          </V2Sec>
+          <V2Sec title="Otomatik zil sesi" desc="Değişiklik anında kaydedilir.">
+            <V2Row title="İndirilen MP3'ü zil sesi yap" sub="Telefon dili ile cihaz ülkesi farklıysa">
+              {autoRingtone ? (
+                <input type="checkbox" aria-label="Otomatik zil sesi" checked={!!autoRingtone.enabled} onChange={() => {
                   fetch(`${API_URL}/admin/auto-ringtone`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
@@ -2399,84 +2464,53 @@ function App() {
                   }).then(r => r.json()).then(d => {
                     if (d.success) fetchAutoRingtone();
                   }).catch(() => alert("Hata!"));
-                }}>{autoRingtone.enabled ? "Kapat" : "Aç"}</button>
-              </div>
-            ) : <span style={{ color: "#666", fontSize: 12 }}>Yükleniyor...</span>}
-          </div>
+                }} />
+              ) : <span className="v2-muted">Yükleniyor...</span>}
+            </V2Row>
+          </V2Sec>
         </div>}
 
         {/* MP3 İNDİRME PROVIDER KONTROL */}
-        {activeSection === "mp3" && <div style={styles.card}>
-          <h2 style={styles.title}>MP3 İndirme Ayarları</h2>
-          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 16 }}>
-            Bazocam = MP3 formatı | Backend = M4A formatı (yedek). İkisi açıksa Bazocam öncelikli, başarısız olursa Backend devreye girer.
-          </p>
-          <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
-            <label style={{ ...styles.labelCheckbox, padding: "12px 20px", borderRadius: 8, border: "1px solid #2c2c33", background: (config.mp3Provider?.bazocam !== false) ? "#1a3a1a" : "#18181c" }}>
-              <input type="checkbox" checked={config.mp3Provider?.bazocam !== false}
-                onChange={e => setConfig({ ...config, mp3Provider: { ...(config.mp3Provider || {}), bazocam: e.target.checked } })}
-                style={{ marginRight: 10 }}
-              />
-              <span style={{ color: (config.mp3Provider?.bazocam !== false) ? "#4ade80" : "#9a9aa6" }}>Bazocam (MP3)</span>
-            </label>
-            <label style={{ ...styles.labelCheckbox, padding: "12px 20px", borderRadius: 8, border: "1px solid #2c2c33", background: (config.mp3Provider?.backend !== false) ? "#1a2a3a" : "#18181c" }}>
-              <input type="checkbox" checked={config.mp3Provider?.backend !== false}
-                onChange={e => setConfig({ ...config, mp3Provider: { ...(config.mp3Provider || {}), backend: e.target.checked } })}
-                style={{ marginRight: 10 }}
-              />
-              <span style={{ color: (config.mp3Provider?.backend !== false) ? "#60a5fa" : "#9a9aa6" }}>Backend (M4A)</span>
-            </label>
-          </div>
-          <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 6, background: "#141418", fontSize: 12, color: "#aaa" }}>
-            {(config.mp3Provider?.bazocam !== false) && (config.mp3Provider?.backend !== false) && "✅ Bazocam öncelikli — başarısız olursa Backend devreye girer"}
-            {(config.mp3Provider?.bazocam !== false) && (config.mp3Provider?.backend === false) && "⚠️ Sadece Bazocam — başarısız olursa indirme çalışmaz"}
-            {(config.mp3Provider?.bazocam === false) && (config.mp3Provider?.backend !== false) && "🖥️ Sadece Backend — M4A formatında indirilir"}
-            {(config.mp3Provider?.bazocam === false) && (config.mp3Provider?.backend === false) && "🚫 MP3 indirme tamamen kapalı!"}
-          </div>
-          <button style={{ ...styles.primaryBtn, marginTop: 16 }} onClick={updateConfig}>MP3 Ayarlarını Kaydet</button>
+        {activeSection === "mp3" && <div className="v2-stack">
+          <V2Sec title="MP3 kaynakları" desc="İkisi açıksa Bazocam önce denenir, olmazsa Backend devreye girer.">
+            <V2Row title="Bazocam" sub="MP3 formatı · birincil">
+              <input type="checkbox" aria-label="Bazocam" checked={config.mp3Provider?.bazocam !== false}
+                onChange={e => setConfig({ ...config, mp3Provider: { ...(config.mp3Provider || {}), bazocam: e.target.checked } })} />
+            </V2Row>
+            <V2Row title="Backend" sub="M4A formatı · yedek">
+              <input type="checkbox" aria-label="Backend" checked={config.mp3Provider?.backend !== false}
+                onChange={e => setConfig({ ...config, mp3Provider: { ...(config.mp3Provider || {}), backend: e.target.checked } })} />
+            </V2Row>
+            <div className={"v2-row v2-info" + ((config.mp3Provider?.bazocam === false) && (config.mp3Provider?.backend === false) ? " bad" : "")}>
+              {(config.mp3Provider?.bazocam !== false) && (config.mp3Provider?.backend !== false) && "Bazocam öncelikli — başarısız olursa Backend devreye girer"}
+              {(config.mp3Provider?.bazocam !== false) && (config.mp3Provider?.backend === false) && "Sadece Bazocam — başarısız olursa indirme çalışmaz"}
+              {(config.mp3Provider?.bazocam === false) && (config.mp3Provider?.backend !== false) && "Sadece Backend — M4A formatında indirilir"}
+              {(config.mp3Provider?.bazocam === false) && (config.mp3Provider?.backend === false) && "MP3 indirme tamamen kapalı!"}
+            </div>
+            <V2Foot><button style={styles.primaryBtn} onClick={updateConfig}>Kaydet</button></V2Foot>
+          </V2Sec>
         </div>}
 
         {/* İÇERİK FİLTRESİ — canlı yayın engeli + süre limiti */}
-        {activeSection === "contentfilter" && <div style={styles.card}>
-          <h2 style={styles.title}>İçerik Filtresi</h2>
-          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 16 }}>
-            Arama sonuçlarında <b>canlı yayınları</b> ve <b>çok uzun videoları</b> eler. Elenen içerikler aramada görünmez, indirilemez.
-          </p>
-
-          <label style={{ ...styles.labelCheckbox, display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: 8, border: "1px solid #2c2c33", background: (config.contentFilter?.enabled !== false) ? "#1a3a1a" : "#18181c", marginBottom: 12 }}>
-            <input type="checkbox" checked={config.contentFilter?.enabled !== false}
-              onChange={e => setConfig({ ...config, contentFilter: { ...(config.contentFilter || {}), enabled: e.target.checked } })}
-              style={{ marginRight: 10 }}
-            />
-            <span style={{ color: (config.contentFilter?.enabled !== false) ? "#4ade80" : "#9a9aa6" }}>Filtre aktif</span>
-          </label>
-
-          <label style={{ ...styles.labelCheckbox, display: "flex", alignItems: "center", padding: "12px 16px", borderRadius: 8, border: "1px solid #2c2c33", background: (config.contentFilter?.blockLive !== false) ? "#3a1a1a" : "#18181c", marginBottom: 16 }}>
-            <input type="checkbox" checked={config.contentFilter?.blockLive !== false}
-              onChange={e => setConfig({ ...config, contentFilter: { ...(config.contentFilter || {}), blockLive: e.target.checked } })}
-              style={{ marginRight: 10 }}
-            />
-            <span style={{ color: (config.contentFilter?.blockLive !== false) ? "#f87171" : "#9a9aa6" }}>Canlı yayınları engelle</span>
-          </label>
-
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
-            <span style={{ color: "#f4f4f6", fontSize: 14 }}>Maksimum süre:</span>
-            <input type="number" min={1} max={600} step={1}
-              value={config.contentFilter?.maxDurationMinutes ?? 35}
-              onChange={e => setConfig({ ...config, contentFilter: { ...(config.contentFilter || {}), maxDurationMinutes: parseInt(e.target.value, 10) || 0 } })}
-              style={{ ...styles.select, flex: "unset", width: 90, textAlign: "center" }}
-            />
-            <span style={{ color: "#9a9aa6", fontSize: 13 }}>dakika ve üstü elenir</span>
-          </div>
-          <div style={{ padding: "10px 14px", borderRadius: 6, background: "#141418", fontSize: 12, color: "#aaa", marginBottom: 16 }}>
-            Örn: <b>{config.contentFilter?.maxDurationMinutes ?? 35}</b> → {config.contentFilter?.maxDurationMinutes ?? 35} dk ve üzeri videolar aramada çıkmaz.
-          </div>
-
-          <div style={{ padding: "10px 14px", borderRadius: 6, background: "#2a2200", border: "1px solid #4a3a00", fontSize: 12, color: "#d4b062", marginBottom: 16 }}>
-            Bu filtre <b>backend araması</b> (Android 12 ve altı + fallback) için geçerlidir. Android 13+ cihazlar aramayı telefonda NewPipe ile yaptığından bu filtreden etkilenmez.
-          </div>
-
-          <button style={{ ...styles.primaryBtn }} onClick={updateConfig}>İçerik Filtresini Kaydet</button>
+        {activeSection === "contentfilter" && <div className="v2-stack">
+          <V2Sec title="İçerik filtresi" desc="Canlı yayınları ve çok uzun videoları aramadan eler. Android 13+ cihazlar aramayı telefonda NewPipe ile yaptığı için etkilenmez.">
+            <V2Row title="Filtre">
+              <input type="checkbox" aria-label="Filtre" checked={config.contentFilter?.enabled !== false}
+                onChange={e => setConfig({ ...config, contentFilter: { ...(config.contentFilter || {}), enabled: e.target.checked } })} />
+            </V2Row>
+            <V2Row title="Canlı yayınları engelle">
+              <input type="checkbox" aria-label="Canlı yayınları engelle" checked={config.contentFilter?.blockLive !== false}
+                onChange={e => setConfig({ ...config, contentFilter: { ...(config.contentFilter || {}), blockLive: e.target.checked } })} />
+            </V2Row>
+            <V2Row title="En uzun süre" sub={`${config.contentFilter?.maxDurationMinutes ?? 35} dk ve üzeri videolar aramada çıkmaz`}>
+              <input type="number" min={1} max={600} step={1} aria-label="Dakika"
+                value={config.contentFilter?.maxDurationMinutes ?? 35}
+                onChange={e => setConfig({ ...config, contentFilter: { ...(config.contentFilter || {}), maxDurationMinutes: parseInt(e.target.value, 10) || 0 } })}
+                style={{ ...styles.input, width: 80, textAlign: "center" }} />
+              <span className="v2-muted">dakika</span>
+            </V2Row>
+            <V2Foot><button style={styles.primaryBtn} onClick={updateConfig}>Kaydet</button></V2Foot>
+          </V2Sec>
         </div>}
 
         {activeSection === "countries" && <div style={styles.card}>
@@ -2496,7 +2530,7 @@ function App() {
             <div
               onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
               style={{
-                background: "#1e1e2e", border: "1px solid #2c2c33", borderRadius: 8,
+                background: "#1e1e2e", border: "1px solid #23262d", borderRadius: 8,
                 padding: "12px 16px", cursor: "pointer", display: "flex",
                 justifyContent: "space-between", alignItems: "center", color: "#fff"
               }}>
@@ -2505,19 +2539,19 @@ function App() {
                   ? `${Object.keys(config.countries).length} ülke seçili`
                   : "Ülke seç..."}
               </span>
-              <span style={{ fontSize: 12, color: "#9a9aa6" }}>{isCountryDropdownOpen ? "▲" : "▼"}</span>
+              <span style={{ fontSize: 12, color: "#9aa0aa" }}>{isCountryDropdownOpen ? "▲" : "▼"}</span>
             </div>
 
             {isCountryDropdownOpen && (
               <div style={{
                 position: "absolute", top: "100%", left: 0, right: 0, zIndex: 999,
-                background: "#18181c", border: "1px solid #2c2c33", borderRadius: 8,
+                background: "#121418", border: "1px solid #23262d", borderRadius: 8,
                 maxHeight: 300, overflowY: "auto", marginTop: 4
               }}>
                 {/* ARAMA */}
-                <div style={{ padding: 8, borderBottom: "1px solid #2c2c33", position: "sticky", top: 0, background: "#18181c" }}>
+                <div style={{ padding: 8, borderBottom: "1px solid #23262d", position: "sticky", top: 0, background: "#121418" }}>
                   <input
-                    style={{...styles.input, margin: 0, background: "#141418", fontSize: 13}}
+                    style={{...styles.input, margin: 0, background: "#0e0f12", fontSize: 13}}
                     placeholder="Ülke ara..."
                     value={countrySearch}
                     onChange={e => setCountrySearch(e.target.value)}
@@ -2650,16 +2684,16 @@ function App() {
                   <button key={opt.value} onClick={() => setNotifTargetMode(opt.value)}
                     style={{
                       flex: 1, padding: "10px 8px", borderRadius: 8,
-                      border: notifTargetMode === opt.value ? "2px solid #a78bfa" : "1px solid #2c2c33",
-                      background: notifTargetMode === opt.value ? "#2d1f4e" : "#141418",
-                      color: notifTargetMode === opt.value ? "#c4b5fd" : "#9a9aa6",
+                      border: notifTargetMode === opt.value ? "2px solid #8fb0ff" : "1px solid #23262d",
+                      background: notifTargetMode === opt.value ? "#2d1f4e" : "#0e0f12",
+                      color: notifTargetMode === opt.value ? "#8fb0ff" : "#9aa0aa",
                       cursor: "pointer", fontSize: 13, fontWeight: notifTargetMode === opt.value ? 600 : 400
                     }}>
                     {opt.label}
                   </button>
                 ))}
               </div>
-              <p style={{ color: "#666", fontSize: 11, marginTop: 8, marginBottom: 0 }}>
+              <p style={{ color: "#7c828c", fontSize: 11, marginTop: 8, marginBottom: 0 }}>
                 OneSignal "app_mode" etiketine göre filtre uygulanır. Çalışması için Android uygulamasının OneSignal tag göndermesi gerekir.
               </p>
             </div>
@@ -2757,7 +2791,7 @@ function App() {
                 </tr>
               ))}
               {blockedChannels.length === 0 && (
-                <tr><td colSpan="3" style={{...styles.td, textAlign: "center", color: "#9a9aa6", padding: "40px"}}>Henüz yasaklı kanal yok.</td></tr>
+                <tr><td colSpan="3" style={{...styles.td, textAlign: "center", color: "#9aa0aa", padding: "40px"}}>Henüz yasaklı kanal yok.</td></tr>
               )}
             </tbody>
           </table>
@@ -2768,17 +2802,17 @@ function App() {
           <div style={styles.headerRow}>
             <div>
               <h2 style={styles.title}>Global Popup / Duyuru Sistemi</h2>
-              <p style={{ color: "#9a9aa6", fontSize: 13, margin: "-15px 0 0 0" }}>
+              <p style={{ color: "#9aa0aa", fontSize: 13, margin: "-15px 0 0 0" }}>
                 Uygulaması açık olan kullanıcılara anlık popup göster, oy topla.
               </p>
             </div>
-            <button style={{ ...styles.primaryBtn, background: "#7c3aed" }} onClick={() => setIsPopupModalOpen(true)}>
+            <button style={{ ...styles.primaryBtn, background: "#3b6fe6" }} onClick={() => setIsPopupModalOpen(true)}>
               Duyuru Oluştur +
             </button>
           </div>
 
           {announcements.length === 0 ? (
-            <div style={{ textAlign: "center", color: "#9a9aa6", padding: "40px 0" }}>Henüz duyuru yok.</div>
+            <div style={{ textAlign: "center", color: "#9aa0aa", padding: "40px 0" }}>Henüz duyuru yok.</div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 10 }}>
               {announcements.map(ann => {
@@ -2790,7 +2824,7 @@ function App() {
 
                 return (
                   <div key={ann.id} style={{
-                    background: "#18181c", border: `1px solid ${isActive ? "#7c3aed" : "#3a3a41"}`,
+                    background: "#121418", border: `1px solid ${isActive ? "#3b6fe6" : "#2c3038"}`,
                     borderRadius: 10, padding: 20
                   }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
@@ -2798,7 +2832,7 @@ function App() {
                         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
                           <span style={{
                             fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 20,
-                            background: isActive ? "#4c1d95" : "#1f1f1f", color: isActive ? "#c4b5fd" : "#666"
+                            background: isActive ? "#4c1d95" : "#1f1f1f", color: isActive ? "#8fb0ff" : "#7c828c"
                           }}>
                             {isActive ? "● AKTİF" : "● PASİF"}
                           </span>
@@ -2825,12 +2859,12 @@ function App() {
                               BOZUK — yıldız algılanmıyor
                             </span>
                           )}
-                          <span style={{ fontSize: 11, color: "#666" }}>
+                          <span style={{ fontSize: 11, color: "#7c828c" }}>
                             {ann.countries === "all" ? "Tüm ülkeler" : (Array.isArray(ann.countries) ? ann.countries.join(", ") : ann.countries)}
                           </span>
                         </div>
-                        <p style={{ margin: "0 0 4px 0", fontWeight: 700, color: "#f4f4f6", fontSize: 16 }}>{ann.title}</p>
-                        <p style={{ margin: 0, color: "#9a9aa6", fontSize: 13 }}>{ann.message}</p>
+                        <p style={{ margin: "0 0 4px 0", fontWeight: 700, color: "#e9ebef", fontSize: 16 }}>{ann.title}</p>
+                        <p style={{ margin: 0, color: "#9aa0aa", fontSize: 13 }}>{ann.message}</p>
                       </div>
                       <button style={{ ...styles.textBtn, color: "#ef4444", marginLeft: 20 }} onClick={() => deleteAnnouncement(ann.id)}>Sil</button>
                     </div>
@@ -2841,19 +2875,19 @@ function App() {
                         const count = (ann.votes || {})[btn.value] || 0;
                         const pct = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
                         return (
-                          <div key={i} style={{ background: "#0f0f1a", border: "1px solid #2c2c33", borderRadius: 8, padding: "10px 16px", minWidth: 120 }}>
-                            <div style={{ color: "#c4b5fd", fontSize: 13, fontWeight: 600, marginBottom: 6 }}>{btn.label}</div>
+                          <div key={i} style={{ background: "#0f0f1a", border: "1px solid #23262d", borderRadius: 8, padding: "10px 16px", minWidth: 120 }}>
+                            <div style={{ color: "#8fb0ff", fontSize: 13, fontWeight: 600, marginBottom: 6 }}>{btn.label}</div>
                             <div style={{ background: "#1e1e2e", borderRadius: 4, height: 6, marginBottom: 4 }}>
-                              <div style={{ background: "#7c3aed", width: `${pct}%`, height: "100%", borderRadius: 4, transition: "width 0.3s" }} />
+                              <div style={{ background: "#3b6fe6", width: `${pct}%`, height: "100%", borderRadius: 4, transition: "width 0.3s" }} />
                             </div>
-                            <div style={{ color: "#9a9aa6", fontSize: 11 }}>{count} oy · %{pct}</div>
+                            <div style={{ color: "#9aa0aa", fontSize: 11 }}>{count} oy · %{pct}</div>
                           </div>
                         );
                       })}
                     </div>
 
-                    <div style={{ marginTop: 10, display: "flex", gap: 20, fontSize: 12, color: "#666" }}>
-                      <span>Toplam oy: <strong style={{ color: "#a78bfa" }}>{totalVotes}</strong></span>
+                    <div style={{ marginTop: 10, display: "flex", gap: 20, fontSize: 12, color: "#7c828c" }}>
+                      <span>Toplam oy: <strong style={{ color: "#8fb0ff" }}>{totalVotes}</strong></span>
                       {ann.minLaunches > 0 && <span>Min. kullanım: <strong style={{ color: "#f59e0b" }}>{ann.minLaunches}</strong></span>}
                       {ann.startTime && <span>Başlangıç: {new Date(ann.startTime).toLocaleString("tr-TR")}</span>}
                       {ann.endTime && <span>Bitiş: {new Date(ann.endTime).toLocaleString("tr-TR")}</span>}
@@ -2866,28 +2900,28 @@ function App() {
           )}
 
           {/* Geri Bildirimler */}
-          <div style={{ marginTop: 30, borderTop: "1px solid #3a3a41", paddingTop: 24 }}>
+          <div style={{ marginTop: 30, borderTop: "1px solid #2c3038", paddingTop: 24 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-              <h3 style={{ margin: 0, fontSize: 17, fontWeight: 600, color: "#f4f4f6" }}>Kullanıcı Geri Bildirimleri</h3>
+              <h3 style={{ margin: 0, fontSize: 17, fontWeight: 600, color: "#e9ebef" }}>Kullanıcı Geri Bildirimleri</h3>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <span style={{ color: "#9a9aa6", fontSize: 13 }}>Toplam: <b style={{ color: "#f4f4f6" }}>{feedbacks.length}</b></span>
+                <span style={{ color: "#9aa0aa", fontSize: 13 }}>Toplam: <b style={{ color: "#e9ebef" }}>{feedbacks.length}</b></span>
                 <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 14px" }} onClick={fetchFeedbacks}>🔄</button>
               </div>
             </div>
-            <p style={{ color: "#9a9aa6", fontSize: 12, margin: "-8px 0 16px 0" }}>1-3 yıldız veren kullanıcılardan toplanan geri bildirimler</p>
+            <p style={{ color: "#9aa0aa", fontSize: 12, margin: "-8px 0 16px 0" }}>1-3 yıldız veren kullanıcılardan toplanan geri bildirimler</p>
             {feedbacks.length === 0 ? (
-              <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Henüz geri bildirim yok</div>
+              <div style={{ textAlign: "center", padding: 30, color: "#7c828c" }}>Henüz geri bildirim yok</div>
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 {feedbacks.map(fb => (
-                  <div key={fb.id} style={{ background: "#111114", border: "1px solid #3a3a41", borderRadius: 10, padding: 14 }}>
+                  <div key={fb.id} style={{ background: "#0e0f12", border: "1px solid #2c3038", borderRadius: 10, padding: 14 }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                         <span style={{ fontSize: 16 }}>{"⭐".repeat(fb.rating)}</span>
                         <span style={{ color: fb.rating <= 2 ? "#ef4444" : "#f59e0b", fontWeight: 600, fontSize: 13 }}>{fb.rating}/5</span>
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                        {fb.country && <span style={{ color: "#666", fontSize: 11 }}>{fb.country}</span>}
+                        {fb.country && <span style={{ color: "#7c828c", fontSize: 11 }}>{fb.country}</span>}
                         <span style={{ color: "#555", fontSize: 11 }}>{new Date(fb.createdAt).toLocaleString("tr-TR")}</span>
                         <button onClick={() => { if (window.confirm("Silmek istediğine emin misin?")) deleteFeedback(fb.id); }}
                           style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer", fontSize: 12 }}>🗑️</button>
@@ -2918,18 +2952,18 @@ function App() {
           </p>
 
           {!reviewLogs ? (
-            <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Yükleniyor...</div>
+            <div style={{ textAlign: "center", padding: 30, color: "#7c828c" }}>Yükleniyor...</div>
           ) : (
             <>
               <div style={{ display: "flex", gap: 14, marginBottom: 24, flexWrap: "wrap" }}>
                 {[
-                  { label: "POPUP GÖSTERİLDİ", val: reviewLogs.counts?.popup_shown || 0, color: "#9a9aa6", bg: "#18181c", br: "#2c2c33" },
-                  { label: "BUTONA BASILDI", val: reviewLogs.counts?.button_tap || 0, color: "#a78bfa", bg: "#211b34", br: "#4c3d7a" },
+                  { label: "POPUP GÖSTERİLDİ", val: reviewLogs.counts?.popup_shown || 0, color: "#9aa0aa", bg: "#121418", br: "#23262d" },
+                  { label: "BUTONA BASILDI", val: reviewLogs.counts?.button_tap || 0, color: "#8fb0ff", bg: "#211b34", br: "#4c3d7a" },
                   { label: "✅ GOOGLE KABUL ETTİ", val: reviewLogs.counts?.request_ok || 0, color: "#4ade80", bg: "#15271d", br: "#1f5133" },
                   { label: "❌ GOOGLE REDDETTİ", val: reviewLogs.counts?.request_fail || 0, color: "#f87171", bg: "#2a1515", br: "#5c2020" },
                 ].map(c => (
                   <div key={c.label} style={{ flex: "1 1 170px", padding: "16px 18px", borderRadius: 12, backgroundColor: c.bg, border: `1px solid ${c.br}` }}>
-                    <div style={{ color: "#9a9aa6", fontSize: 11 }}>{c.label}</div>
+                    <div style={{ color: "#9aa0aa", fontSize: 11 }}>{c.label}</div>
                     <div style={{ color: c.color, fontSize: 32, fontWeight: 800, marginTop: 6 }}>{c.val}</div>
                   </div>
                 ))}
@@ -2937,20 +2971,20 @@ function App() {
 
               <div style={{ display: "flex", gap: 14, marginBottom: 24, flexWrap: "wrap" }}>
                 <div style={{ flex: "1 1 240px", padding: "16px 18px", borderRadius: 12, backgroundColor: "#0f2230", border: "1px solid #1e4a63" }}>
-                  <div style={{ color: "#9a9aa6", fontSize: 11 }}>KART EKRANDA GÖRÜLDÜ (tahmin)</div>
+                  <div style={{ color: "#9aa0aa", fontSize: 11 }}>KART EKRANDA GÖRÜLDÜ (tahmin)</div>
                   <div style={{ color: "#38bdf8", fontSize: 32, fontWeight: 800, marginTop: 6 }}>{reviewLogs.cardShown || 0}</div>
-                  <div style={{ color: "#6b6b76", fontSize: 10, marginTop: 4 }}>akış 500 ms'den uzun sürdü</div>
+                  <div style={{ color: "#7c828c", fontSize: 10, marginTop: 4 }}>akış 500 ms'den uzun sürdü</div>
                 </div>
-                <div style={{ flex: "1 1 240px", padding: "16px 18px", borderRadius: 12, backgroundColor: "#18181c", border: "1px solid #2c2c33" }}>
-                  <div style={{ color: "#9a9aa6", fontSize: 11 }}>KART AÇILMADI (tahmin)</div>
-                  <div style={{ color: "#9a9aa6", fontSize: 32, fontWeight: 800, marginTop: 6 }}>{reviewLogs.cardNotShown || 0}</div>
-                  <div style={{ color: "#6b6b76", fontSize: 10, marginTop: 4 }}>akış anında bitti — genelde kota dolu</div>
+                <div style={{ flex: "1 1 240px", padding: "16px 18px", borderRadius: 12, backgroundColor: "#121418", border: "1px solid #23262d" }}>
+                  <div style={{ color: "#9aa0aa", fontSize: 11 }}>KART AÇILMADI (tahmin)</div>
+                  <div style={{ color: "#9aa0aa", fontSize: 32, fontWeight: 800, marginTop: 6 }}>{reviewLogs.cardNotShown || 0}</div>
+                  <div style={{ color: "#7c828c", fontSize: 10, marginTop: 4 }}>akış anında bitti — genelde kota dolu</div>
                 </div>
               </div>
 
               {reviewLogs.errorCodes && Object.keys(reviewLogs.errorCodes).length > 0 && (
                 <div style={{ marginBottom: 24 }}>
-                  <div style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 10 }}>GOOGLE HATA KODLARI</div>
+                  <div style={{ color: "#9aa0aa", fontSize: 12, marginBottom: 10 }}>GOOGLE HATA KODLARI</div>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                     {Object.entries(reviewLogs.errorCodes).map(([code, n]) => (
                       <span key={code} style={{ padding: "6px 12px", borderRadius: 20, backgroundColor: "#2a1515", border: "1px solid #5c2020", fontSize: 12, color: "#f87171" }}>
@@ -2961,16 +2995,16 @@ function App() {
                 </div>
               )}
 
-              <div style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 10 }}>
+              <div style={{ color: "#9aa0aa", fontSize: 12, marginBottom: 10 }}>
                 SON KAYITLAR ({reviewLogs.total} toplam)
               </div>
               {(!reviewLogs.logs || reviewLogs.logs.length === 0) ? (
-                <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Henüz log yok</div>
+                <div style={{ textAlign: "center", padding: 30, color: "#7c828c" }}>Henüz log yok</div>
               ) : (
                 <div style={{ overflowX: "auto" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                     <thead>
-                      <tr style={{ borderBottom: "1px solid #3a3a41", color: "#9a9aa6", textAlign: "left" }}>
+                      <tr style={{ borderBottom: "1px solid #2c3038", color: "#9aa0aa", textAlign: "left" }}>
                         <th style={{ padding: "8px 10px" }}>Olay</th>
                         <th style={{ padding: "8px 10px" }}>Detay</th>
                         <th style={{ padding: "8px 10px" }}>Süre</th>
@@ -2982,25 +3016,25 @@ function App() {
                     <tbody>
                       {reviewLogs.logs.map(l => {
                         const map = {
-                          popup_shown: { t: "Popup gösterildi", c: "#9a9aa6" },
-                          button_tap: { t: "Butona basıldı", c: "#a78bfa" },
+                          popup_shown: { t: "Popup gösterildi", c: "#9aa0aa" },
+                          button_tap: { t: "Butona basıldı", c: "#8fb0ff" },
                           request_ok: { t: "✅ Google kabul", c: "#4ade80" },
                           request_fail: { t: "❌ Google ret", c: "#f87171" },
-                          flow_done: { t: l.cardLikelyShown ? "Kart görüldü" : "Kart açılmadı", c: l.cardLikelyShown ? "#38bdf8" : "#6b6b76" },
+                          flow_done: { t: l.cardLikelyShown ? "Kart görüldü" : "Kart açılmadı", c: l.cardLikelyShown ? "#38bdf8" : "#7c828c" },
                         };
                         const s = map[l.event] || { t: l.event, c: "#d4d4dc" };
                         return (
-                          <tr key={l.id} style={{ borderBottom: "1px solid #3a3a41" }}>
+                          <tr key={l.id} style={{ borderBottom: "1px solid #2c3038" }}>
                             <td style={{ padding: "8px 10px", color: s.c, fontWeight: 600 }}>{s.t}</td>
-                            <td style={{ padding: "8px 10px", color: "#9a9aa6", maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis" }}>
+                            <td style={{ padding: "8px 10px", color: "#9aa0aa", maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis" }}>
                               {l.errorCode ? `${l.errorCode} — ` : ""}{l.detail}
                             </td>
-                            <td style={{ padding: "8px 10px", color: "#9a9aa6" }}>{l.durationMs ? `${l.durationMs} ms` : "—"}</td>
+                            <td style={{ padding: "8px 10px", color: "#9aa0aa" }}>{l.durationMs ? `${l.durationMs} ms` : "—"}</td>
                             <td style={{ padding: "8px 10px", color: "#d4d4dc" }}>{l.country}</td>
-                            <td style={{ padding: "8px 10px", color: "#666", fontFamily: "monospace", fontSize: 11 }}>
+                            <td style={{ padding: "8px 10px", color: "#7c828c", fontFamily: "monospace", fontSize: 11 }}>
                               {(l.deviceId || "—").slice(0, 10)}{l.sdk ? ` · SDK ${l.sdk}` : ""}
                             </td>
-                            <td style={{ padding: "8px 10px", color: "#666", fontSize: 11 }}>
+                            <td style={{ padding: "8px 10px", color: "#7c828c", fontSize: 11 }}>
                               {new Date(l.createdAt).toLocaleString("tr-TR")}
                             </td>
                           </tr>
@@ -3030,32 +3064,20 @@ function App() {
               <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 14px" }} onClick={() => fetchLiveUsers(liveWindow)}>Yenile</button>
             </div>
           </div>
-          <p style={{ color: "#9a9aa6", fontSize: 12, margin: "0 0 20px 0" }}>
+          <p style={{ color: "#9aa0aa", fontSize: 12, margin: "0 0 20px 0" }}>
             Uygulamada "aktif" = seçilen süre içinde backend'e istek atmış benzersiz cihaz. Cihaz kimliği: X-Device-Id → token → IP.
           </p>
 
 
           {!liveUsers ? (
-            <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Yükleniyor...</div>
+            <div style={{ textAlign: "center", padding: 30, color: "#7c828c" }}>Yükleniyor...</div>
           ) : (
             <>
               {/* SAYAÇLAR */}
-              <div style={{ display: "flex", gap: 14, marginBottom: 24, flexWrap: "wrap" }}>
-                <div style={{ flex: "1 1 200px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#15271d", border: "1px solid #1f5133" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <span style={{ width: 10, height: 10, borderRadius: "50%", backgroundColor: "#22c55e", boxShadow: "0 0 10px #22c55e" }} />
-                    <span style={{ color: "#5f8b70", fontSize: 12 }}>ŞU AN AKTİF (son 1 dk)</span>
-                  </div>
-                  <div style={{ color: "#4ade80", fontSize: 46, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{nowCount ?? liveUsers.online1m}</div>
-                </div>
-                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#18181c", border: "1px solid #2c2c33" }}>
-                  <div style={{ color: "#9a9aa6", fontSize: 12 }}>SON 15 DAKİKA</div>
-                  <div style={{ color: "#f4f4f6", fontSize: 32, fontWeight: 700, marginTop: 6 }}>{liveUsers.online15m}</div>
-                </div>
-                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#18181c", border: "1px solid #2c2c33" }}>
-                  <div style={{ color: "#9a9aa6", fontSize: 12 }}>SON 1 SAAT</div>
-                  <div style={{ color: "#f4f4f6", fontSize: 32, fontWeight: 700, marginTop: 6 }}>{liveUsers.online1h}</div>
-                </div>
+              <div className="v2-stats">
+                <div className="v2-st"><small>Şu an aktif</small><b style={{ color: "#5fe0a0" }}>{nowCount ?? liveUsers.online1m}</b><span>son 1 dakika</span></div>
+                <div className="v2-st"><small>Son 15 dakika</small><b>{liveUsers.online15m}</b><span>benzersiz cihaz</span></div>
+                <div className="v2-st"><small>Son 1 saat</small><b>{liveUsers.online1h}</b><span>benzersiz cihaz</span></div>
               </div>
 
               {/* NEWPIPE / BACKEND KIRILIMI */}
@@ -3070,13 +3092,13 @@ function App() {
                     <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 12, marginTop: 3 }}>{sub}</div>
                     <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginTop: 8 }}>
                       <span style={{ color, fontSize: 34, fontWeight: 800, lineHeight: 1.1 }}>{data.online1m || 0}</span>
-                      <span style={{ color: "#6b6b76", fontSize: 13 }}>%{pct(data.online1m || 0)}</span>
+                      <span style={{ color: "#7c828c", fontSize: 13 }}>%{pct(data.online1m || 0)}</span>
                     </div>
-                    <div style={{ color: "#6b6b76", fontSize: 11, marginTop: 6 }}>
-                      15 dk: <b style={{ color: "#9a9aa6" }}>{data.online15m || 0}</b> · 1 sa: <b style={{ color: "#9a9aa6" }}>{data.online1h || 0}</b>
+                    <div style={{ color: "#7c828c", fontSize: 11, marginTop: 6 }}>
+                      15 dk: <b style={{ color: "#9aa0aa" }}>{data.online15m || 0}</b> · 1 sa: <b style={{ color: "#9aa0aa" }}>{data.online1h || 0}</b>
                     </div>
                     {/* oran çubuğu */}
-                    <div style={{ height: 4, borderRadius: 2, backgroundColor: "#111114", marginTop: 10, overflow: "hidden" }}>
+                    <div style={{ height: 4, borderRadius: 2, backgroundColor: "#0e0f12", marginTop: 10, overflow: "hidden" }}>
                       <div style={{ height: "100%", width: `${pct(data.online1m || 0)}%`, backgroundColor: color }} />
                     </div>
                   </div>
@@ -3087,10 +3109,10 @@ function App() {
                     <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
                       {card("📱 NewPipe", "Android 13+ — cihazda çözülüyor", np, "#38bdf8", "#0f2230", "#1e4a63")}
                       {card("🖥️ Backend", "Android 12- — sunucu API'leri", be, "#f59e0b", "#2a2113", "#5c4318")}
-                      {un.online1m > 0 && card("❓ Bilinmiyor", "Eski APK — bilgi göndermiyor", un, "#9a9aa6", "#18181c", "#2c2c33")}
+                      {un.online1m > 0 && card("❓ Bilinmiyor", "Eski APK — bilgi göndermiyor", un, "#9aa0aa", "#121418", "#23262d")}
                     </div>
                     {un.online1h > 0 && (
-                      <p style={{ color: "#6b6b76", fontSize: 11, margin: "10px 0 0 0" }}>
+                      <p style={{ color: "#7c828c", fontSize: 11, margin: "10px 0 0 0" }}>
                         "Bilinmiyor" = güncellemeden önceki APK sürümleri. Kullanıcılar güncelledikçe bu sayı düşer.
                       </p>
                     )}
@@ -3110,12 +3132,12 @@ function App() {
                     <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 12, marginTop: 3 }}>{sub}</div>
                     <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginTop: 8 }}>
                       <span style={{ color, fontSize: 34, fontWeight: 800, lineHeight: 1.1 }}>{data.online1m || 0}</span>
-                      <span style={{ color: "#6b6b76", fontSize: 13 }}>%{pct(data.online1m || 0)}</span>
+                      <span style={{ color: "#7c828c", fontSize: 13 }}>%{pct(data.online1m || 0)}</span>
                     </div>
-                    <div style={{ color: "#6b6b76", fontSize: 11, marginTop: 6 }}>
-                      15 dk: <b style={{ color: "#9a9aa6" }}>{data.online15m || 0}</b> · 1 sa: <b style={{ color: "#9a9aa6" }}>{data.online1h || 0}</b>
+                    <div style={{ color: "#7c828c", fontSize: 11, marginTop: 6 }}>
+                      15 dk: <b style={{ color: "#9aa0aa" }}>{data.online15m || 0}</b> · 1 sa: <b style={{ color: "#9aa0aa" }}>{data.online1h || 0}</b>
                     </div>
-                    <div style={{ height: 4, borderRadius: 2, backgroundColor: "#111114", marginTop: 10, overflow: "hidden" }}>
+                    <div style={{ height: 4, borderRadius: 2, backgroundColor: "#0e0f12", marginTop: 10, overflow: "hidden" }}>
                       <div style={{ height: "100%", width: `${pct(data.online1m || 0)}%`, backgroundColor: color }} />
                     </div>
                   </div>
@@ -3126,9 +3148,9 @@ function App() {
                     <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
                       {card("▶️ Müzik", "Normal arayüz", yt, "#4ade80", "#15271d", "#1f5133")}
                       {card("🔔 Zil Sesi", "ASN / ülke kuralı ile", rt, "#0ea5e9", "#0c2d48", "#1e4a63")}
-                      {un.online1m > 0 && card("❓ Bilinmiyor", "Eski APK — mod bildirmiyor", un, "#9a9aa6", "#18181c", "#2c2c33")}
+                      {un.online1m > 0 && card("❓ Bilinmiyor", "Eski APK — mod bildirmiyor", un, "#9aa0aa", "#121418", "#23262d")}
                     </div>
-                    <p style={{ color: "#6b6b76", fontSize: 11, margin: "10px 0 0 0" }}>
+                    <p style={{ color: "#7c828c", fontSize: 11, margin: "10px 0 0 0" }}>
                       Zil sesi modundakiler de bu toplamın içindedir — detay için soldaki "🔔 Zil Sesi Modu" bölümü.
                     </p>
                   </div>
@@ -3142,7 +3164,7 @@ function App() {
                 const rows = showAllVisitorCountries ? vs.byCountry : vs.byCountry.slice(0, 15);
                 const dayLabel = (iso) => new Date(iso + "T00:00:00Z").toLocaleDateString("tr-TR", { day: "numeric", month: "short", weekday: "short", timeZone: "UTC" });
                 const big = (label, value, sub) => (
-                  <div style={{ flex: "1 1 220px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#18181c", border: "1px solid rgba(255,255,255,0.14)" }}>
+                  <div style={{ flex: "1 1 220px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#121418", border: "1px solid rgba(255,255,255,0.14)" }}>
                     <div style={{ color: "rgba(255,255,255,0.7)", fontSize: 13, fontWeight: 700 }}>{label}</div>
                     <div style={{ color: "#fff", fontSize: 40, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{(value || 0).toLocaleString("tr-TR")}</div>
                     <div style={{ color: "rgba(255,255,255,0.45)", fontSize: 11, marginTop: 4 }}>{sub}</div>
@@ -3158,7 +3180,7 @@ function App() {
                     </div>
 
                     {/* günlük çubuklar */}
-                    <div style={{ display: "flex", gap: 8, alignItems: "flex-end", height: 120, padding: "12px 12px 0", background: "#111114", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, marginBottom: 6 }}>
+                    <div style={{ display: "flex", gap: 8, alignItems: "flex-end", height: 120, padding: "12px 12px 0", background: "#0e0f12", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, marginBottom: 6 }}>
                       {(vs.daily || []).map((d, i) => (
                         <div key={d.date} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", height: "100%" }}>
                           <span style={{ color: "#fff", fontSize: 11, fontWeight: 700, marginBottom: 4 }}>{d.count}</span>
@@ -3181,7 +3203,7 @@ function App() {
                       <div style={{ border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, overflow: "hidden" }}>
                         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                           <thead>
-                            <tr style={{ background: "#18181c", color: "rgba(255,255,255,0.7)", textAlign: "left" }}>
+                            <tr style={{ background: "#121418", color: "rgba(255,255,255,0.7)", textAlign: "left" }}>
                               <th style={{ padding: "10px 14px", fontWeight: 700 }}>Ülke</th>
                               <th style={{ padding: "10px 14px", fontWeight: 700, textAlign: "right" }}>Son 24 saat</th>
                               <th style={{ padding: "10px 14px", fontWeight: 700, textAlign: "right" }}>Son 7 gün</th>
@@ -3214,7 +3236,7 @@ function App() {
                         </table>
                         {vs.byCountry.length > 15 && (
                           <button onClick={() => setShowAllVisitorCountries(v => !v)}
-                            style={{ width: "100%", padding: 10, background: "#18181c", border: "none", borderTop: "1px solid rgba(255,255,255,0.08)", color: "#fff", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
+                            style={{ width: "100%", padding: 10, background: "#121418", border: "none", borderTop: "1px solid rgba(255,255,255,0.08)", color: "#fff", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
                             {showAllVisitorCountries ? "Daha az göster" : `Tüm ülkeleri göster (${vs.byCountry.length})`}
                           </button>
                         )}
@@ -3238,25 +3260,25 @@ function App() {
                     ].filter(f => f.key !== "unknown" || f.count > 0).map(f => (
                       <button key={f.key} onClick={() => setLiveExtractor(f.key)}
                         style={{ padding: "5px 11px", borderRadius: 6, fontSize: 11, cursor: "pointer",
-                          backgroundColor: liveExtractor === f.key ? "#3a3a41" : "transparent",
-                          color: liveExtractor === f.key ? "#f4f4f6" : "#9a9aa6",
-                          border: `1px solid ${liveExtractor === f.key ? "#a78bfa" : "#2c2c33"}` }}>
+                          backgroundColor: liveExtractor === f.key ? "#2c3038" : "transparent",
+                          color: liveExtractor === f.key ? "#e9ebef" : "#9aa0aa",
+                          border: `1px solid ${liveExtractor === f.key ? "#8fb0ff" : "#23262d"}` }}>
                         {f.label} {f.count != null ? `(${f.count})` : ""}
                       </button>
                     ))}
                   </div>
-                  <span style={{ color: "#666", fontSize: 11 }}>
+                  <span style={{ color: "#7c828c", fontSize: 11 }}>
                     {liveUsers.windowCount} cihaz{liveUsers.listed < liveUsers.windowCount ? ` — ilk ${liveUsers.listed} tanesi gösteriliyor` : ""}
                   </span>
                 </div>
               </div>
               {(liveExtractor === "all" ? liveUsers.users : liveUsers.users.filter(u => (u.extractor || "unknown") === liveExtractor)).length === 0 ? (
-                <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Şu an aktif kullanıcı yok</div>
+                <div style={{ textAlign: "center", padding: 30, color: "#7c828c" }}>Şu an aktif kullanıcı yok</div>
               ) : (
                 <div style={{ overflowX: "auto" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                     <thead>
-                      <tr style={{ borderBottom: "1px solid #3a3a41", color: "#9a9aa6", textAlign: "left" }}>
+                      <tr style={{ borderBottom: "1px solid #2c3038", color: "#9aa0aa", textAlign: "left" }}>
                         <th style={{ padding: "8px 10px" }}>IP</th>
                         <th style={{ padding: "8px 10px" }}>Ülke</th>
                         <th style={{ padding: "8px 10px" }}>Kaynak</th>
@@ -3267,8 +3289,8 @@ function App() {
                     </thead>
                     <tbody>
                       {(liveExtractor === "all" ? liveUsers.users : liveUsers.users.filter(u => (u.extractor || "unknown") === liveExtractor)).map(u => (
-                        <tr key={u.uid} style={{ borderBottom: "1px solid #3a3a41" }}>
-                          <td style={{ padding: "8px 10px", color: "#f4f4f6", fontFamily: "monospace" }}>
+                        <tr key={u.uid} style={{ borderBottom: "1px solid #2c3038" }}>
+                          <td style={{ padding: "8px 10px", color: "#e9ebef", fontFamily: "monospace" }}>
                             <span style={{ display: "inline-block", width: 7, height: 7, borderRadius: "50%", marginRight: 8,
                               backgroundColor: u.secondsAgo < 120 ? "#22c55e" : "#eab308" }} />
                             {u.ip}
@@ -3279,7 +3301,7 @@ function App() {
                               const map = {
                                 newpipe: { label: "NewPipe", color: "#38bdf8", bg: "#0f2230", border: "#1e4a63" },
                                 backend: { label: "Backend", color: "#f59e0b", bg: "#2a2113", border: "#5c4318" },
-                                unknown: { label: "Bilinmiyor", color: "#9a9aa6", bg: "#18181c", border: "#2c2c33" },
+                                unknown: { label: "Bilinmiyor", color: "#9aa0aa", bg: "#121418", border: "#23262d" },
                               };
                               const s = map[u.extractor] || map.unknown;
                               return (
@@ -3290,11 +3312,11 @@ function App() {
                               );
                             })()}
                           </td>
-                          <td style={{ padding: "8px 10px", color: "#9a9aa6" }}>
+                          <td style={{ padding: "8px 10px", color: "#9aa0aa" }}>
                             {u.secondsAgo < 60 ? `${u.secondsAgo} sn önce` : `${Math.round(u.secondsAgo / 60)} dk önce`}
                           </td>
-                          <td style={{ padding: "8px 10px", color: "#a78bfa", fontWeight: 600 }}>{u.hits}</td>
-                          <td style={{ padding: "8px 10px", color: "#666", fontSize: 11 }}>{u.endpoint}</td>
+                          <td style={{ padding: "8px 10px", color: "#8fb0ff", fontWeight: 600 }}>{u.hits}</td>
+                          <td style={{ padding: "8px 10px", color: "#7c828c", fontSize: 11 }}>{u.endpoint}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -3326,14 +3348,14 @@ function App() {
                 onClick={() => fetchRtUsers(rtWindow)}>Yenile</button>
             </div>
           </div>
-          <p style={{ color: "#9a9aa6", fontSize: 12, margin: "0 0 20px 0" }}>
+          <p style={{ color: "#9aa0aa", fontSize: 12, margin: "0 0 20px 0" }}>
             Zil sesi arayüzünde olan cihazlar. Modu cihaz kendisi seçer (ASN &gt; ülke &gt; global)
             ve her yoklamada sunucuya bildirir. Bu moddayken arama/çalma trafiği olmadığı için
             bu cihazlar "Canlı Kullanıcılar" toplamının içindedir ama orada ayırt edilemez.
           </p>
 
           {!rtUsers ? (
-            <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Yükleniyor...</div>
+            <div style={{ textAlign: "center", padding: 30, color: "#7c828c" }}>Yükleniyor...</div>
           ) : (() => {
             const bm = rtUsers.byMode || {};
             const rt = bm.ringtone || {}, yt = bm.youtube || {}, un = bm.unknown || {};
@@ -3346,18 +3368,18 @@ function App() {
             <>
               {/* CİHAZ LİSTESİ */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, flexWrap: "wrap", gap: 10 }}>
-                <span style={{ color: "#9a9aa6", fontSize: 12 }}>ZİL SESİNDEKİ CİHAZLAR (son {rtUsers.window} dk)</span>
-                <span style={{ color: "#666", fontSize: 11 }}>
+                <span style={{ color: "#9aa0aa", fontSize: 12 }}>ZİL SESİNDEKİ CİHAZLAR (son {rtUsers.window} dk)</span>
+                <span style={{ color: "#7c828c", fontSize: 11 }}>
                   {rtUsers.windowCount} cihaz{rtUsers.listed < rtUsers.windowCount ? ` — ilk ${rtUsers.listed} tanesi gösteriliyor` : ""}
                 </span>
               </div>
               {(!rtUsers.users || rtUsers.users.length === 0) ? (
-                <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Son {rtUsers.window} dakikada zil sesi moduna giren cihaz yok</div>
+                <div style={{ textAlign: "center", padding: 30, color: "#7c828c" }}>Son {rtUsers.window} dakikada zil sesi moduna giren cihaz yok</div>
               ) : (
                 <div style={{ overflowX: "auto", marginBottom: 24 }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                     <thead>
-                      <tr style={{ borderBottom: "1px solid #3a3a41", color: "#9a9aa6", textAlign: "left" }}>
+                      <tr style={{ borderBottom: "1px solid #2c3038", color: "#9aa0aa", textAlign: "left" }}>
                         <th style={{ padding: "8px 10px" }}>IP</th>
                         <th style={{ padding: "8px 10px" }}>Ülke</th>
                         <th style={{ padding: "8px 10px" }}>Uygulama</th>
@@ -3370,8 +3392,8 @@ function App() {
                     </thead>
                     <tbody>
                       {rtUsers.users.map(u => (
-                        <tr key={u.uid} style={{ borderBottom: "1px solid #3a3a41" }}>
-                          <td style={{ padding: "8px 10px", color: "#f4f4f6", fontFamily: "monospace" }}>
+                        <tr key={u.uid} style={{ borderBottom: "1px solid #2c3038" }}>
+                          <td style={{ padding: "8px 10px", color: "#e9ebef", fontFamily: "monospace" }}>
                             <span style={{ display: "inline-block", width: 7, height: 7, borderRadius: "50%", marginRight: 8,
                               backgroundColor: u.secondsAgo < 120 ? "#0ea5e9" : "#eab308" }} />
                             {u.ip}
@@ -3379,21 +3401,21 @@ function App() {
                           <td style={{ padding: "8px 10px", color: "#d4d4dc", whiteSpace: "nowrap" }}>
                             {/^[A-Z]{2}$/.test(u.country || "") ? `${countryFlag(u.country)} ${countryName(u.country)}` : "🌍 Bilinmiyor"}
                           </td>
-                          <td style={{ padding: "8px 10px", color: "#f4f4f6", fontWeight: 600 }}>
+                          <td style={{ padding: "8px 10px", color: "#e9ebef", fontWeight: 600 }}>
                             {u.appName || u.appId || "—"}
                           </td>
-                          <td style={{ padding: "8px 10px", color: "#9a9aa6", fontFamily: "monospace", fontSize: 12 }}>
+                          <td style={{ padding: "8px 10px", color: "#9aa0aa", fontFamily: "monospace", fontSize: 12 }}>
                             {u.pkg || (apps[u.appId] || {}).packageName || "bilinmiyor"}
                           </td>
-                          <td style={{ padding: "8px 10px", color: "#9a9aa6", fontSize: 11 }}>
+                          <td style={{ padding: "8px 10px", color: "#9aa0aa", fontSize: 11 }}>
                             {u.extractor === "newpipe" ? "NewPipe" : u.extractor === "backend" ? "Backend" : "Bilinmiyor"}
                             {u.sdk ? ` · SDK ${u.sdk}` : ""}
                           </td>
-                          <td style={{ padding: "8px 10px", color: "#9a9aa6" }}>
+                          <td style={{ padding: "8px 10px", color: "#9aa0aa" }}>
                             {u.secondsAgo < 60 ? `${u.secondsAgo} sn önce` : `${Math.round(u.secondsAgo / 60)} dk önce`}
                           </td>
                           <td style={{ padding: "8px 10px", color: "#38bdf8", fontWeight: 600 }}>{u.hits}</td>
-                          <td style={{ padding: "8px 10px", color: "#666", fontSize: 11 }}>{u.endpoint}</td>
+                          <td style={{ padding: "8px 10px", color: "#7c828c", fontSize: 11 }}>{u.endpoint}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -3401,40 +3423,27 @@ function App() {
                 </div>
               )}
               {/* SAYAÇLAR */}
-              <div style={{ display: "flex", gap: 14, marginBottom: 24, flexWrap: "wrap" }}>
-                <div style={{ flex: "1 1 200px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#0c2d48", border: "1px solid #1e4a63" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <span style={{ width: 10, height: 10, borderRadius: "50%", backgroundColor: "#0ea5e9", boxShadow: "0 0 10px #0ea5e9" }} />
-                    <span style={{ color: "#5b8aa6", fontSize: 12 }}>ZİL SESİ MOD AKTİF (son 1 dk)</span>
-                  </div>
-                  <div style={{ color: "#38bdf8", fontSize: 46, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{rt.online1m || 0}</div>
-                  <div style={{ color: "#5b8aa6", fontSize: 11, marginTop: 4 }}>tüm aktiflerin %{share}'i</div>
-                </div>
-                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#18181c", border: "1px solid #2c2c33" }}>
-                  <div style={{ color: "#9a9aa6", fontSize: 12 }}>SON 15 DAKİKA</div>
-                  <div style={{ color: "#f4f4f6", fontSize: 32, fontWeight: 700, marginTop: 6 }}>{rt.online15m || 0}</div>
-                </div>
-                <div style={{ flex: "1 1 130px", padding: "20px 22px", borderRadius: 12, backgroundColor: "#18181c", border: "1px solid #2c2c33" }}>
-                  <div style={{ color: "#9a9aa6", fontSize: 12 }}>SON 1 SAAT</div>
-                  <div style={{ color: "#f4f4f6", fontSize: 32, fontWeight: 700, marginTop: 6 }}>{rt.online1h || 0}</div>
-                </div>
+              <div className="v2-stats">
+                <div className="v2-st"><small>Zil sesinde · şu an</small><b style={{ color: "#f5c26b" }}>{rt.online1m || 0}</b><span>tüm aktiflerin %{share}'i</span></div>
+                <div className="v2-st"><small>Son 15 dakika</small><b>{rt.online15m || 0}</b></div>
+                <div className="v2-st"><small>Son 1 saat</small><b>{rt.online1h || 0}</b></div>
               </div>
 
               {/* DAĞILIM ÇUBUĞU */}
               <div style={{ marginBottom: 26 }}>
-                <div style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 8 }}>DAĞILIM (son 1 dk — toplam {tot5})</div>
-                <div style={{ display: "flex", height: 14, borderRadius: 7, overflow: "hidden", backgroundColor: "#111114", border: "1px solid #2c2c33" }}>
+                <div style={{ color: "#9aa0aa", fontSize: 12, marginBottom: 8 }}>DAĞILIM (son 1 dk — toplam {tot5})</div>
+                <div style={{ display: "flex", height: 14, borderRadius: 7, overflow: "hidden", backgroundColor: "#0e0f12", border: "1px solid #23262d" }}>
                   <div title={`Müzik: ${yt.online1m || 0}`} style={{ width: `${seg(yt.online1m || 0)}%`, backgroundColor: "#22c55e" }} />
                   <div title={`Zil sesi: ${rt.online1m || 0}`} style={{ width: `${seg(rt.online1m || 0)}%`, backgroundColor: "#0ea5e9" }} />
                   <div title={`Bilinmiyor: ${un.online1m || 0}`} style={{ width: `${seg(un.online1m || 0)}%`, backgroundColor: "#475569" }} />
                 </div>
-                <div style={{ display: "flex", gap: 16, marginTop: 8, fontSize: 11, color: "#9a9aa6", flexWrap: "wrap" }}>
+                <div style={{ display: "flex", gap: 16, marginTop: 8, fontSize: 11, color: "#9aa0aa", flexWrap: "wrap" }}>
                   <span><b style={{ color: "#22c55e" }}>●</b> Müzik {yt.online1m || 0}</span>
                   <span><b style={{ color: "#0ea5e9" }}>●</b> Zil sesi {rt.online1m || 0}</span>
                   <span><b style={{ color: "#475569" }}>●</b> Bilinmiyor {un.online1m || 0}</span>
                 </div>
                 {(un.online1h || 0) > 0 && (
-                  <p style={{ color: "#6b6b76", fontSize: 11, margin: "10px 0 0 0" }}>
+                  <p style={{ color: "#7c828c", fontSize: 11, margin: "10px 0 0 0" }}>
                     "Bilinmiyor" = modunu bildirmeyen eski APK sürümleri. Bu cihazların bir kısmı zil sesi
                     modunda olabilir; kullanıcılar güncelledikçe sayı düşer.
                   </p>
@@ -3444,11 +3453,11 @@ function App() {
               {/* PAKETE GÖRE — hangi uygulamadan kaç kişi zil sesinde */}
               {rtUsers.byApp && rtUsers.byApp.length > 0 && (
                 <div style={{ marginBottom: 26 }}>
-                  <div style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 10 }}>PAKETE GÖRE (şu an aktif — son 1 dk)</div>
+                  <div style={{ color: "#9aa0aa", fontSize: 12, marginBottom: 10 }}>PAKETE GÖRE (şu an aktif — son 1 dk)</div>
                   <div style={{ overflowX: "auto" }}>
                     <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                       <thead>
-                        <tr style={{ borderBottom: "1px solid #3a3a41", color: "#9a9aa6", textAlign: "left" }}>
+                        <tr style={{ borderBottom: "1px solid #2c3038", color: "#9aa0aa", textAlign: "left" }}>
                           <th style={{ padding: "8px 10px" }}>Uygulama</th>
                           <th style={{ padding: "8px 10px" }}>Paket adı</th>
                           <th style={{ padding: "8px 10px" }}>Zil sesi</th>
@@ -3458,9 +3467,9 @@ function App() {
                       </thead>
                       <tbody>
                         {rtUsers.byApp.map(a => (
-                          <tr key={a.id} style={{ borderBottom: "1px solid #3a3a41" }}>
-                            <td style={{ padding: "8px 10px", color: "#f4f4f6" }}>{a.name}</td>
-                            <td style={{ padding: "8px 10px", color: "#666", fontFamily: "monospace", fontSize: 11 }}>{a.packageName || "—"}</td>
+                          <tr key={a.id} style={{ borderBottom: "1px solid #2c3038" }}>
+                            <td style={{ padding: "8px 10px", color: "#e9ebef" }}>{a.name}</td>
+                            <td style={{ padding: "8px 10px", color: "#7c828c", fontFamily: "monospace", fontSize: 11 }}>{a.packageName || "—"}</td>
                             <td style={{ padding: "8px 10px", color: a.ringtone > 0 ? "#38bdf8" : "#475569", fontWeight: 600 }}>{a.ringtone}</td>
                             <td style={{ padding: "8px 10px", color: "#4ade80" }}>{a.youtube}</td>
                             <td style={{ padding: "8px 10px", color: "#d4d4dc" }}>{a.total}</td>
@@ -3469,7 +3478,7 @@ function App() {
                       </tbody>
                     </table>
                   </div>
-                  <p style={{ color: "#6b6b76", fontSize: 11, margin: "10px 0 0 0" }}>
+                  <p style={{ color: "#7c828c", fontSize: 11, margin: "10px 0 0 0" }}>
                     Paket ayrımı cihazın gönderdiği uygulama paketine göre yapılır. "Uygulamalar"
                     bölümünde kayıtlı olmayan bir paket tanınmaz ve ilk satıra (default) düşer —
                     orada beklediğinden fazla cihaz varsa eksik kayıt olabilir.
@@ -3479,11 +3488,11 @@ function App() {
 
               {/* ÜLKELER — asıl soru: hangi ülkeler zil sesine düşüyor */}
               <div style={{ marginBottom: 26 }}>
-                <div style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 10 }}>
+                <div style={{ color: "#9aa0aa", fontSize: 12, marginBottom: 10 }}>
                   ÜLKELERE GÖRE (zil sesindekiler — son {rtUsers.window} dk)
                 </div>
                 {(!rtUsers.byCountry || rtUsers.byCountry.length === 0) ? (
-                  <div style={{ color: "#666", fontSize: 12 }}>Bu pencerede zil sesi modunda cihaz yok.</div>
+                  <div style={{ color: "#7c828c", fontSize: 12 }}>Bu pencerede zil sesi modunda cihaz yok.</div>
                 ) : (
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                     {rtUsers.byCountry.map(c => (
@@ -3494,19 +3503,19 @@ function App() {
                     ))}
                   </div>
                 )}
-                <p style={{ color: "#6b6b76", fontSize: 11, margin: "10px 0 0 0" }}>
+                <p style={{ color: "#7c828c", fontSize: 11, margin: "10px 0 0 0" }}>
                   Buradaki ülke IP'den gelir. Mod kararı ise SIM → şebeke → IP sırasıyla verilir;
                   VPN/roaming'deki cihazda ikisi farklı çıkabilir.
                 </p>
               </div>
 
               {/* KURAL ↔ GERÇEK */}
-              <div style={{ marginBottom: 26, padding: "14px 16px", borderRadius: 10, backgroundColor: "#18181c", border: "1px solid #2c2c33" }}>
-                <div style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 10 }}>YÜRÜRLÜKTEKİ KURALLAR</div>
+              <div style={{ marginBottom: 26, padding: "14px 16px", borderRadius: 10, backgroundColor: "#121418", border: "1px solid #23262d" }}>
+                <div style={{ color: "#9aa0aa", fontSize: 12, marginBottom: 10 }}>YÜRÜRLÜKTEKİ KURALLAR</div>
                 <div style={{ fontSize: 12, color: "#d4d4dc", marginBottom: 8 }}>
                   Ülke kuralı:{" "}
                   {ruleCountries.length === 0
-                    ? <span style={{ color: "#6b6b76" }}>yok — hiçbir ülke zil sesine ayarlı değil</span>
+                    ? <span style={{ color: "#7c828c" }}>yok — hiçbir ülke zil sesine ayarlı değil</span>
                     : ruleCountries.map(([code]) => (
                         <span key={code} style={{ padding: "3px 9px", borderRadius: 20, backgroundColor: "#0c2d48",
                           border: "1px solid #1e4a63", fontSize: 11, color: "#38bdf8", marginRight: 6 }}>{code}</span>
@@ -3515,13 +3524,13 @@ function App() {
                 <div style={{ fontSize: 12, color: "#d4d4dc" }}>
                   ASN kuralı:{" "}
                   {ruleAsns.length === 0
-                    ? <span style={{ color: "#6b6b76" }}>yok</span>
+                    ? <span style={{ color: "#7c828c" }}>yok</span>
                     : ruleAsns.map(a => (
                         <span key={a} style={{ padding: "3px 9px", borderRadius: 20, backgroundColor: "#2a2113",
                           border: "1px solid #5c4318", fontSize: 11, color: "#f59e0b", marginRight: 6 }}>AS{a}</span>
                       ))}
                 </div>
-                <p style={{ color: "#6b6b76", fontSize: 11, margin: "10px 0 0 0" }}>
+                <p style={{ color: "#7c828c", fontSize: 11, margin: "10px 0 0 0" }}>
                   Ülke kuralı boşken zil sesine yalnızca ASN listesindeki ağlar (Google altyapısı /
                   inceleme sunucuları) düşer — o yüzden sayının düşük olması normaldir.
                 </p>
@@ -3540,19 +3549,19 @@ function App() {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
             <h2 style={{ ...styles.title, margin: 0 }}>Giriş Yapan IP'ler</h2>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <span style={{ color: "#9a9aa6", fontSize: 13 }}>Toplam: <b style={{ color: "#f4f4f6" }}>{loginIps.length}</b></span>
+              <span style={{ color: "#9aa0aa", fontSize: 13 }}>Toplam: <b style={{ color: "#e9ebef" }}>{loginIps.length}</b></span>
               <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 14px" }} onClick={fetchLoginIps}>Yenile</button>
               <button style={{ ...styles.primaryBtn, backgroundColor: "#ef4444", color: "#fff", fontSize: 12, padding: "6px 14px" }} onClick={clearLoginIps}>Listeyi Temizle</button>
             </div>
           </div>
-          <p style={{ color: "#9a9aa6", fontSize: 12, margin: "-8px 0 16px 0" }}>Uygulamaya giriş yapan (config/token çeken) cihazların IP kayıtları — IP başına tek satır, tekrar girişte sayaç artar</p>
+          <p style={{ color: "#9aa0aa", fontSize: 12, margin: "-8px 0 16px 0" }}>Uygulamaya giriş yapan (config/token çeken) cihazların IP kayıtları — IP başına tek satır, tekrar girişte sayaç artar</p>
           {loginIps.length === 0 ? (
-            <div style={{ textAlign: "center", padding: 30, color: "#666" }}>Henüz kayıt yok</div>
+            <div style={{ textAlign: "center", padding: 30, color: "#7c828c" }}>Henüz kayıt yok</div>
           ) : (
             <div style={{ overflowX: "auto" }}>
               <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                 <thead>
-                  <tr style={{ borderBottom: "1px solid #3a3a41", color: "#9a9aa6", textAlign: "left" }}>
+                  <tr style={{ borderBottom: "1px solid #2c3038", color: "#9aa0aa", textAlign: "left" }}>
                     <th style={{ padding: "8px 10px" }}>IP</th>
                     <th style={{ padding: "8px 10px" }}>Ülke</th>
                     <th style={{ padding: "8px 10px" }}>Giriş</th>
@@ -3563,13 +3572,13 @@ function App() {
                 </thead>
                 <tbody>
                   {loginIps.map(entry => (
-                    <tr key={entry.id} style={{ borderBottom: "1px solid #3a3a41" }}>
-                      <td style={{ padding: "8px 10px", color: "#f4f4f6", fontFamily: "monospace" }}>{entry.ip}</td>
+                    <tr key={entry.id} style={{ borderBottom: "1px solid #2c3038" }}>
+                      <td style={{ padding: "8px 10px", color: "#e9ebef", fontFamily: "monospace" }}>{entry.ip}</td>
                       <td style={{ padding: "8px 10px", color: "#d4d4dc" }}>{entry.country || "?"}</td>
-                      <td style={{ padding: "8px 10px", color: "#a78bfa", fontWeight: 600 }}>{entry.count}</td>
-                      <td style={{ padding: "8px 10px", color: "#9a9aa6" }}>{entry.firstSeen ? new Date(entry.firstSeen).toLocaleString("tr-TR") : "-"}</td>
-                      <td style={{ padding: "8px 10px", color: "#9a9aa6" }}>{entry.lastSeen ? new Date(entry.lastSeen).toLocaleString("tr-TR") : "-"}</td>
-                      <td style={{ padding: "8px 10px", color: "#666", fontSize: 11 }}>{entry.endpoint}</td>
+                      <td style={{ padding: "8px 10px", color: "#8fb0ff", fontWeight: 600 }}>{entry.count}</td>
+                      <td style={{ padding: "8px 10px", color: "#9aa0aa" }}>{entry.firstSeen ? new Date(entry.firstSeen).toLocaleString("tr-TR") : "-"}</td>
+                      <td style={{ padding: "8px 10px", color: "#9aa0aa" }}>{entry.lastSeen ? new Date(entry.lastSeen).toLocaleString("tr-TR") : "-"}</td>
+                      <td style={{ padding: "8px 10px", color: "#7c828c", fontSize: 11 }}>{entry.endpoint}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -3688,7 +3697,7 @@ function App() {
               <h3 style={styles.modalTitle}>Duyuru Oluştur</h3>
               <div>
                 <button style={styles.cancelBtn} onClick={() => setIsPopupModalOpen(false)}>İptal</button>
-                <button style={{ ...styles.saveBtn, background: "#7c3aed" }} onClick={createAnnouncement}>Yayınla</button>
+                <button style={{ ...styles.saveBtn, background: "#3b6fe6" }} onClick={createAnnouncement}>Yayınla</button>
               </div>
             </div>
 
@@ -3703,10 +3712,10 @@ function App() {
                   ].map(t => (
                     <div key={t.key} onClick={() => setPopupType(t.key)}
                       style={{ flex: "1 1 260px", padding: "14px 16px", borderRadius: 10, cursor: "pointer",
-                        backgroundColor: popupType === t.key ? "#2d1f4e" : "#18181c",
-                        border: `1px solid ${popupType === t.key ? "#7c3aed" : "#2c2c33"}` }}>
-                      <div style={{ color: popupType === t.key ? "#c4b5fd" : "#d4d4dc", fontSize: 14, fontWeight: 600 }}>{t.title}</div>
-                      <div style={{ color: "#9a9aa6", fontSize: 11, marginTop: 6, lineHeight: 1.5 }}>{t.desc}</div>
+                        backgroundColor: popupType === t.key ? "#2d1f4e" : "#121418",
+                        border: `1px solid ${popupType === t.key ? "#3b6fe6" : "#23262d"}` }}>
+                      <div style={{ color: popupType === t.key ? "#8fb0ff" : "#d4d4dc", fontSize: 14, fontWeight: 600 }}>{t.title}</div>
+                      <div style={{ color: "#9aa0aa", fontSize: 11, marginTop: 6, lineHeight: 1.5 }}>{t.desc}</div>
                     </div>
                   ))}
                 </div>
@@ -3737,7 +3746,7 @@ function App() {
                   <input style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
                     placeholder="⭐ Değerlendir" value={popupReviewBtnLabel}
                     onChange={e => setPopupReviewBtnLabel(e.target.value)} />
-                  <p style={{ color: "#9a9aa6", fontSize: 11, margin: "8px 0 0 0", lineHeight: 1.5 }}>
+                  <p style={{ color: "#9aa0aa", fontSize: 11, margin: "8px 0 0 0", lineHeight: 1.5 }}>
                     Kullanıcı bu butona basınca Google'ın değerlendirme kartı uygulamanın içinde açılır.
                     Puanı Google'ın kartında verir — bu popup puan toplamaz.
                   </p>
@@ -3747,10 +3756,10 @@ function App() {
                 <label style={styles.label}>Butonlar (oy seçenekleri)</label>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
                   {popupButtons.map((btn, i) => (
-                    <div key={i} style={{ background: "#2d1f4e", border: "1px solid #7c3aed", borderRadius: 6, padding: "6px 12px", display: "flex", alignItems: "center", gap: 8 }}>
-                      <span style={{ color: "#c4b5fd", fontSize: 13 }}>{btn.label}</span>
-                      <span style={{ color: "#666", fontSize: 11 }}>({btn.value})</span>
-                      <span style={{ cursor: "pointer", color: "#9a9aa6" }} onClick={() => removePopupButton(i)}>✕</span>
+                    <div key={i} style={{ background: "#2d1f4e", border: "1px solid #3b6fe6", borderRadius: 6, padding: "6px 12px", display: "flex", alignItems: "center", gap: 8 }}>
+                      <span style={{ color: "#8fb0ff", fontSize: 13 }}>{btn.label}</span>
+                      <span style={{ color: "#7c828c", fontSize: 11 }}>({btn.value})</span>
+                      <span style={{ cursor: "pointer", color: "#9aa0aa" }} onClick={() => removePopupButton(i)}>✕</span>
                     </div>
                   ))}
                 </div>
@@ -3759,9 +3768,9 @@ function App() {
                   <input style={{ ...styles.input, flex: 1 }} placeholder="Değer (⭐ varsa otomatik)" value={popupBtnValue} onChange={e => setPopupBtnValue(e.target.value)} />
                   <button style={{ ...styles.primaryBtn, whiteSpace: "nowrap" }} onClick={addPopupButton}>Ekle +</button>
                 </div>
-                <p style={{ color: "#9a9aa6", fontSize: 12, margin: "8px 0 0 0", lineHeight: 1.5 }}>
-                  Etiketi istediğiniz dilde yazın, yeter ki <b style={{ color: "#c4b5fd" }}>1-5 arası ⭐</b> içersin —
-                  değer otomatik <code style={{ color: "#c4b5fd" }}>1_star…5_star</code> olarak yazılır.
+                <p style={{ color: "#9aa0aa", fontSize: 12, margin: "8px 0 0 0", lineHeight: 1.5 }}>
+                  Etiketi istediğiniz dilde yazın, yeter ki <b style={{ color: "#8fb0ff" }}>1-5 arası ⭐</b> içersin —
+                  değer otomatik <code style={{ color: "#8fb0ff" }}>1_star…5_star</code> olarak yazılır.
                   Uygulama kaç yıldız verildiğini buradan anlıyor; yanlışsa
                   1-3'te geri bildirim kutusu, 4-5'te Google değerlendirme kartı açılmaz.
                 </p>
@@ -3808,7 +3817,7 @@ function App() {
                   <input type="number" min="0" max="100"
                     style={{ ...styles.input, width: 80, textAlign: "center" }}
                     value={popupMinLaunches} onChange={e => setPopupMinLaunches(e.target.value)} />
-                  <span style={{ color: "#9a9aa6", fontSize: 12 }}>Uygulamayı en az bu kadar kez açmış kullanıcılara gösterilir</span>
+                  <span style={{ color: "#9aa0aa", fontSize: 12 }}>Uygulamayı en az bu kadar kez açmış kullanıcılara gösterilir</span>
                 </div>
               </div>
 
@@ -3831,13 +3840,13 @@ function App() {
 
               {/* Önizleme */}
               {(popupTitle || popupMessage) && (
-                <div style={{ background: "#0f0f1a", border: "1px solid #2c2c33", borderRadius: 12, padding: 20 }}>
-                  <p style={{ color: "#666", fontSize: 11, margin: "0 0 12px 0", textTransform: "uppercase", letterSpacing: 1 }}>Önizleme</p>
-                  <p style={{ margin: "0 0 8px 0", fontWeight: 700, color: "#f4f4f6", fontSize: 18 }}>{popupTitle || "Başlık"}</p>
-                  <p style={{ margin: "0 0 16px 0", color: "#9a9aa6", fontSize: 14 }}>{popupMessage || "Mesaj..."}</p>
+                <div style={{ background: "#0f0f1a", border: "1px solid #23262d", borderRadius: 12, padding: 20 }}>
+                  <p style={{ color: "#7c828c", fontSize: 11, margin: "0 0 12px 0", textTransform: "uppercase", letterSpacing: 1 }}>Önizleme</p>
+                  <p style={{ margin: "0 0 8px 0", fontWeight: 700, color: "#e9ebef", fontSize: 18 }}>{popupTitle || "Başlık"}</p>
+                  <p style={{ margin: "0 0 16px 0", color: "#9aa0aa", fontSize: 14 }}>{popupMessage || "Mesaj..."}</p>
                   <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                     {popupButtons.map((btn, i) => (
-                      <button key={i} style={{ background: "#7c3aed", color: "#fff", border: "none", padding: "10px 20px", borderRadius: 8, cursor: "pointer", fontSize: 14 }}>
+                      <button key={i} style={{ background: "#3b6fe6", color: "#fff", border: "none", padding: "10px 20px", borderRadius: 8, cursor: "pointer", fontSize: 14 }}>
                         {btn.label}
                       </button>
                     ))}
@@ -3852,13 +3861,13 @@ function App() {
         {/* İNDİRME REKLAMI */}
         {activeSection === "downloadad" && <div style={styles.card}>
           <h2 style={styles.title}>İndirme Reklamı / URL Açma</h2>
-          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
+          <p style={{ color: "#9aa0aa", fontSize: 13, marginBottom: 20 }}>
             Ülke bazlı reklam kuralları. Kullanıcının ülkesine göre URL açma veya AdMob reklamı gösterilir.
           </p>
 
           {/* Varsayılan (Global) Ayarlar */}
-          <div style={{ padding: "16px", background: "#18181c", borderRadius: 8, border: "1px solid #2c2c33", marginBottom: 20 }}>
-            <h3 style={{ color: "#f4f4f6", margin: "0 0 12px 0", fontSize: 15 }}>Varsayılan Ayar (Kural tanımlı olmayan ülkeler)</h3>
+          <div style={{ padding: "16px", background: "#121418", borderRadius: 8, border: "1px solid #23262d", marginBottom: 20 }}>
+            <h3 style={{ color: "#e9ebef", margin: "0 0 12px 0", fontSize: 15 }}>Varsayılan Ayar (Kural tanımlı olmayan ülkeler)</h3>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
               <label style={{ fontSize: 13, color: "#ccc" }}>Aktif:</label>
               <input type="checkbox" checked={config.downloadAd?.enabled || false}
@@ -3870,20 +3879,20 @@ function App() {
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
               <div>
-                <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Tür:</label>
+                <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>Tür:</label>
                 <select value={config.downloadAd?.type || "url"}
                   onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, type: e.target.value } }))}
-                  style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                  style={{ background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                   <option value="url">URL Aç</option>
                   <option value="admob">AdMob</option>
                   <option value="both">URL + AdMob</option>
                 </select>
               </div>
               <div>
-                <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Frekans:</label>
+                <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>Frekans:</label>
                 <select value={config.downloadAd?.showEveryNth || 1}
                   onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, showEveryNth: parseInt(e.target.value) } }))}
-                  style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                  style={{ background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                   <option value={1}>Her indirmede</option>
                   <option value={2}>Her 2</option>
                   <option value={3}>Her 3</option>
@@ -3892,18 +3901,18 @@ function App() {
               </div>
             </div>
             <div style={{ marginTop: 10 }}>
-              <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>URL:</label>
+              <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>URL:</label>
               <input type="text" placeholder="https://..."
                 value={config.downloadAd?.url || ""}
                 onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, url: e.target.value } }))}
-                style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                style={{ width: "100%", background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
             </div>
             <div style={{ marginTop: 10 }}>
-              <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>AdMob Unit ID:</label>
+              <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>AdMob Unit ID:</label>
               <input type="text" placeholder="ca-app-pub-xxx/yyy"
                 value={config.downloadAd?.admobUnitId || ""}
                 onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, admobUnitId: e.target.value } }))}
-                style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                style={{ width: "100%", background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
             </div>
 
             {/* İlk indirmede mutlaka reklam */}
@@ -3915,43 +3924,43 @@ function App() {
 
             {/* Özel oran: N indirmede X reklam */}
             <div style={{ marginTop: 12 }}>
-              <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Özel oran (0 = kapalı, üstteki Frekans kullanılır):</label>
+              <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>Özel oran (0 = kapalı, üstteki Frekans kullanılır):</label>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ color: "#9a9aa6", fontSize: 13 }}>Her</span>
+                <span style={{ color: "#9aa0aa", fontSize: 13 }}>Her</span>
                 <input type="number" min={0} placeholder="10" value={config.downloadAd?.cycleSize || ""}
                   onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, cycleSize: parseInt(e.target.value) || 0 } }))}
-                  style={{ width: 70, background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
-                <span style={{ color: "#9a9aa6", fontSize: 13 }}>indirmede</span>
+                  style={{ width: 70, background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                <span style={{ color: "#9aa0aa", fontSize: 13 }}>indirmede</span>
                 <input type="number" min={0} placeholder="2" value={config.downloadAd?.adsPerCycle || ""}
                   onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, adsPerCycle: parseInt(e.target.value) || 0 } }))}
-                  style={{ width: 70, background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
-                <span style={{ color: "#9a9aa6", fontSize: 13 }}>reklam</span>
+                  style={{ width: 70, background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                <span style={{ color: "#9aa0aa", fontSize: 13 }}>reklam</span>
               </div>
-              <span style={{ color: "#6b6b76", fontSize: 11 }}>Doluysa üstteki "Frekans" yerine bu geçerli (örn. 10 indirmede 2 → ilk kullanıcıdan sonra 10'arlı bloklarda 2 reklam)</span>
+              <span style={{ color: "#7c828c", fontSize: 11 }}>Doluysa üstteki "Frekans" yerine bu geçerli (örn. 10 indirmede 2 → ilk kullanıcıdan sonra 10'arlı bloklarda 2 reklam)</span>
             </div>
           </div>
 
           {/* Ülke Kuralları */}
           <div style={{ marginBottom: 20 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-              <h3 style={{ color: "#f4f4f6", margin: 0, fontSize: 15 }}>Ülke Bazlı Kurallar</h3>
+              <h3 style={{ color: "#e9ebef", margin: 0, fontSize: 15 }}>Ülke Bazlı Kurallar</h3>
               <button onClick={() => {
                 const rules = [...(config.downloadAd?.rules || [])];
                 rules.unshift({ countries: [], enabled: true, type: "url", url: "", admobUnitId: "", showEveryNth: 1, delaySeconds: 0 });
                 setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
-              }} style={{ background: "transparent", color: "#f4f4f6", border: "1px solid #2e2e36", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+              }} style={{ background: "transparent", color: "#e9ebef", border: "1px solid #23262d", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
                 + Kural Ekle
               </button>
             </div>
 
             {(config.downloadAd?.rules || []).length === 0 && (
-              <p style={{ color: "#666", fontSize: 13, textAlign: "center", padding: 20 }}>
+              <p style={{ color: "#7c828c", fontSize: 13, textAlign: "center", padding: 20 }}>
                 Ülke kuralı yok — tüm ülkelere varsayılan ayar uygulanır.
               </p>
             )}
 
             {(config.downloadAd?.rules || []).map((rule, idx) => (
-              <div key={idx} style={{ padding: "14px", background: "#18181c", borderRadius: 8, border: `1px solid ${rule.enabled ? "#f59e0b" : "#2c2c33"}`, marginBottom: 12 }}>
+              <div key={idx} style={{ padding: "14px", background: "#121418", borderRadius: 8, border: `1px solid ${rule.enabled ? "#f59e0b" : "#23262d"}`, marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <span style={{ fontSize: 13, fontWeight: 600, color: "#ccc" }}>Kural #{idx + 1}</span>
@@ -3980,14 +3989,14 @@ function App() {
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
                   <CountryRulePicker rule={rule} idx={idx} configKey="downloadAd" config={config} setConfig={setConfig} />
                   <div>
-                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Tür:</label>
+                    <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>Tür:</label>
                     <select value={rule.type || "url"}
                       onChange={e => {
                         const rules = [...(config.downloadAd?.rules || [])];
                         rules[idx] = { ...rules[idx], type: e.target.value };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value="url">URL Aç</option>
                       <option value="admob">AdMob</option>
                       <option value="both">URL + AdMob</option>
@@ -3997,7 +4006,7 @@ function App() {
 
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
                   <div>
-                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>URL:</label>
+                    <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>URL:</label>
                     <input type="text" placeholder="https://..."
                       value={rule.url || ""}
                       onChange={e => {
@@ -4005,10 +4014,10 @@ function App() {
                         rules[idx] = { ...rules[idx], url: e.target.value };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                   <div>
-                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>AdMob ID:</label>
+                    <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>AdMob ID:</label>
                     <input type="text" placeholder="ca-app-pub-xxx/yyy"
                       value={rule.admobUnitId || ""}
                       onChange={e => {
@@ -4016,20 +4025,20 @@ function App() {
                         rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 </div>
 
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                   <div>
-                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Frekans:</label>
+                    <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>Frekans:</label>
                     <select value={rule.showEveryNth || 1}
                       onChange={e => {
                         const rules = [...(config.downloadAd?.rules || [])];
                         rules[idx] = { ...rules[idx], showEveryNth: parseInt(e.target.value) };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value={1}>Her indirmede</option>
                       <option value={2}>Her 2</option>
                       <option value={3}>Her 3</option>
@@ -4037,14 +4046,14 @@ function App() {
                     </select>
                   </div>
                   <div>
-                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Gecikme:</label>
+                    <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>Gecikme:</label>
                     <select value={rule.delaySeconds || 0}
                       onChange={e => {
                         const rules = [...(config.downloadAd?.rules || [])];
                         rules[idx] = { ...rules[idx], delaySeconds: parseInt(e.target.value) };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value={0}>Anında</option>
                       <option value={1}>1 sn</option>
                       <option value={2}>2 sn</option>
@@ -4058,7 +4067,7 @@ function App() {
           </div>
 
           <button onClick={updateConfig}
-            style={{ background: "#8b5cf6", color: "#fff", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 14, fontWeight: 600, cursor: "pointer", width: "100%" }}>
+            style={{ background: "#3b6fe6", color: "#fff", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 14, fontWeight: 600, cursor: "pointer", width: "100%" }}>
             Ayarları Kaydet
           </button>
         </div>}
@@ -4066,12 +4075,12 @@ function App() {
         {/* BANNER AD / ARAMA REKLAMI */}
         {activeSection === "bannerad" && <div style={styles.card}>
           <h2 style={styles.title}>Arama Sonuçları Banner Reklamı</h2>
-          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
+          <p style={{ color: "#9aa0aa", fontSize: 13, marginBottom: 20 }}>
             Arama sonuçlarında her N. şarkıdan sonra banner reklam gösterilir. Ülke bazlı Google AdMob veya kendi görseliniz.
           </p>
 
           {/* Global Ayar */}
-          <div style={{ padding: "16px", background: "#18181c", borderRadius: 8, border: "1px solid #2c2c33", marginBottom: 20 }}>
+          <div style={{ padding: "16px", background: "#121418", borderRadius: 8, border: "1px solid #23262d", marginBottom: 20 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
               <label style={{ fontSize: 14, color: "#ccc" }}>Banner Reklam Aktif:</label>
               <input type="checkbox" checked={config.bannerAd?.enabled || false}
@@ -4082,10 +4091,10 @@ function App() {
               </span>
             </div>
             <div>
-              <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Her kaç şarkıda bir banner göster:</label>
+              <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>Her kaç şarkıda bir banner göster:</label>
               <select value={config.bannerAd?.showEveryNth || 3}
                 onChange={e => setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, showEveryNth: parseInt(e.target.value) } }))}
-                style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }}>
+                style={{ background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13 }}>
                 <option value={2}>Her 2 şarkıda bir</option>
                 <option value={3}>Her 3 şarkıda bir</option>
                 <option value={4}>Her 4 şarkıda bir</option>
@@ -4095,7 +4104,7 @@ function App() {
           </div>
 
           {/* Belirli pozisyonlar */}
-          <div style={{ marginBottom: 20, padding: "14px 16px", background: "#18181c", borderRadius: 8, border: "1px solid #2c2c33" }}>
+          <div style={{ marginBottom: 20, padding: "14px 16px", background: "#121418", borderRadius: 8, border: "1px solid #23262d" }}>
             <label style={{ fontSize: 13, color: "#ccc", display: "block", marginBottom: 6 }}>
               Belirli pozisyonlar (virgülle ayır, örn: <b>2, 10</b>)
             </label>
@@ -4109,7 +4118,7 @@ function App() {
                 setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, positions: arr } }));
               }}
               placeholder="2, 10"
-              style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%", boxSizing: "border-box" }} />
+              style={{ background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%", boxSizing: "border-box" }} />
             <p style={{ fontSize: 11, color: "#777", marginTop: 6, marginBottom: 0 }}>
               Bu alan doluysa banner <b>tam bu şarkılardan sonra</b> çıkar (örn. 2. ve 10. şarkıdan sonra). Boş bırakırsan yukarıdaki "her kaç şarkıda bir" ayarı kullanılır.
             </p>
@@ -4118,24 +4127,24 @@ function App() {
           {/* Ülke Kuralları */}
           <div style={{ marginBottom: 20 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-              <h3 style={{ color: "#f4f4f6", margin: 0, fontSize: 15 }}>Ülke Bazlı Kurallar</h3>
+              <h3 style={{ color: "#e9ebef", margin: 0, fontSize: 15 }}>Ülke Bazlı Kurallar</h3>
               <button onClick={() => {
                 const rules = [...(config.bannerAd?.rules || [])];
                 rules.push({ countries: [], enabled: true, type: "admob", admobUnitId: "", imageUrl: "", clickUrl: "" });
                 setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
-              }} style={{ background: "transparent", color: "#f4f4f6", border: "1px solid #2e2e36", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+              }} style={{ background: "transparent", color: "#e9ebef", border: "1px solid #23262d", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
                 + Kural Ekle
               </button>
             </div>
 
             {(config.bannerAd?.rules || []).length === 0 && (
-              <p style={{ color: "#666", fontSize: 13, textAlign: "center", padding: 20 }}>
+              <p style={{ color: "#7c828c", fontSize: 13, textAlign: "center", padding: 20 }}>
                 Kural yok — banner reklam gösterilmez.
               </p>
             )}
 
             {(config.bannerAd?.rules || []).map((rule, idx) => (
-              <div key={idx} style={{ padding: "14px", background: "#18181c", borderRadius: 8, border: `1px solid ${rule.enabled ? "#f59e0b" : "#2c2c33"}`, marginBottom: 12 }}>
+              <div key={idx} style={{ padding: "14px", background: "#121418", borderRadius: 8, border: `1px solid ${rule.enabled ? "#f59e0b" : "#23262d"}`, marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <input type="checkbox" checked={rule.enabled}
@@ -4144,7 +4153,7 @@ function App() {
                         rules[idx] = { ...rules[idx], enabled: e.target.checked };
                         setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
                       }} style={{ width: 16, height: 16 }} />
-                    <span style={{ fontSize: 13, fontWeight: 600, color: rule.enabled ? "#f59e0b" : "#666" }}>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: rule.enabled ? "#f59e0b" : "#7c828c" }}>
                       Kural #{idx + 1} {rule.enabled ? "● AKTİF" : "● PASİF"}
                     </span>
                   </div>
@@ -4158,14 +4167,14 @@ function App() {
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
                   <CountryRulePicker rule={rule} idx={idx} configKey="bannerAd" config={config} setConfig={setConfig} />
                   <div>
-                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Tür:</label>
+                    <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>Tür:</label>
                     <select value={rule.type || "admob"}
                       onChange={e => {
                         const rules = [...(config.bannerAd?.rules || [])];
                         rules[idx] = { ...rules[idx], type: e.target.value };
                         setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
                       }}
-                      style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value="admob">Google AdMob</option>
                       <option value="custom">Kendi Görselim (Resim + Link)</option>
                     </select>
@@ -4174,7 +4183,7 @@ function App() {
 
                 {rule.type === "admob" && (
                   <div style={{ marginBottom: 10 }}>
-                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>AdMob Banner Unit ID:</label>
+                    <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>AdMob Banner Unit ID:</label>
                     <input type="text" placeholder="ca-app-pub-xxx/yyy"
                       value={rule.admobUnitId || ""}
                       onChange={e => {
@@ -4182,14 +4191,14 @@ function App() {
                         rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                         setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 )}
 
                 {rule.type === "custom" && (
                   <>
                     <div style={{ marginBottom: 10 }}>
-                      <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Görsel URL:</label>
+                      <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>Görsel URL:</label>
                       <input type="text" placeholder="https://example.com/banner.jpg"
                         value={rule.imageUrl || ""}
                         onChange={e => {
@@ -4197,10 +4206,10 @@ function App() {
                           rules[idx] = { ...rules[idx], imageUrl: e.target.value };
                           setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                     <div>
-                      <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
+                      <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
                       <input type="text" placeholder="https://example.com/landing"
                         value={rule.clickUrl || ""}
                         onChange={e => {
@@ -4208,7 +4217,7 @@ function App() {
                           rules[idx] = { ...rules[idx], clickUrl: e.target.value };
                           setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                   </>
                 )}
@@ -4217,7 +4226,7 @@ function App() {
           </div>
 
           <button onClick={updateConfig}
-            style={{ background: "#8b5cf6", color: "#fff", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 14, fontWeight: 600, cursor: "pointer", width: "100%" }}>
+            style={{ background: "#3b6fe6", color: "#fff", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 14, fontWeight: 600, cursor: "pointer", width: "100%" }}>
             Ayarları Kaydet
           </button>
         </div>}
@@ -4225,7 +4234,7 @@ function App() {
         {/* ALT BANNER REKLAM */}
         {activeSection === "bottombanner" && <div style={styles.card}>
           <h2 style={styles.title}>Alt Banner Reklam</h2>
-          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
+          <p style={{ color: "#9aa0aa", fontSize: 13, marginBottom: 20 }}>
             Ekranın en altında sabit duran banner reklam. Ülke bazlı Google AdMob veya kendi görseliniz.
           </p>
 
@@ -4240,24 +4249,24 @@ function App() {
           </div>
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-            <h3 style={{ color: "#f4f4f6", margin: 0, fontSize: 15 }}>Ülke Bazlı Kurallar</h3>
+            <h3 style={{ color: "#e9ebef", margin: 0, fontSize: 15 }}>Ülke Bazlı Kurallar</h3>
             <button onClick={() => {
               const rules = [...(config.bottomBannerAd?.rules || [])];
               rules.push({ countries: [], enabled: true, type: "admob", admobUnitId: "", imageUrl: "", clickUrl: "" });
               setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
-            }} style={{ background: "transparent", color: "#f4f4f6", border: "1px solid #2e2e36", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+            }} style={{ background: "transparent", color: "#e9ebef", border: "1px solid #23262d", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
               + Kural Ekle
             </button>
           </div>
 
           {(config.bottomBannerAd?.rules || []).length === 0 && (
-            <p style={{ color: "#666", fontSize: 13, textAlign: "center", padding: 20 }}>
+            <p style={{ color: "#7c828c", fontSize: 13, textAlign: "center", padding: 20 }}>
               Kural yok — alt banner gösterilmez.
             </p>
           )}
 
           {(config.bottomBannerAd?.rules || []).map((rule, idx) => (
-            <div key={idx} style={{ padding: "14px", background: "#18181c", borderRadius: 8, border: `1px solid ${rule.enabled ? "#f59e0b" : "#2c2c33"}`, marginBottom: 12 }}>
+            <div key={idx} style={{ padding: "14px", background: "#121418", borderRadius: 8, border: `1px solid ${rule.enabled ? "#f59e0b" : "#23262d"}`, marginBottom: 12 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <input type="checkbox" checked={rule.enabled}
@@ -4266,7 +4275,7 @@ function App() {
                       rules[idx] = { ...rules[idx], enabled: e.target.checked };
                       setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
                     }} style={{ width: 16, height: 16 }} />
-                  <span style={{ fontSize: 13, fontWeight: 600, color: rule.enabled ? "#f59e0b" : "#666" }}>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: rule.enabled ? "#f59e0b" : "#7c828c" }}>
                     Kural #{idx + 1} {rule.enabled ? "● AKTİF" : "● PASİF"}
                   </span>
                 </div>
@@ -4280,14 +4289,14 @@ function App() {
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 10 }}>
                 <CountryRulePicker rule={rule} idx={idx} configKey="bottomBannerAd" config={config} setConfig={setConfig} />
                 <div>
-                  <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Tür:</label>
+                  <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>Tür:</label>
                   <select value={rule.type || "admob"}
                     onChange={e => {
                       const rules = [...(config.bottomBannerAd?.rules || [])];
                       rules[idx] = { ...rules[idx], type: e.target.value };
                       setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
                     }}
-                    style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                    style={{ background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                     <option value="admob">Google AdMob</option>
                     <option value="custom">Kendi Görselim (Resim + Link)</option>
                   </select>
@@ -4296,7 +4305,7 @@ function App() {
 
               {rule.type === "admob" && (
                 <div style={{ marginBottom: 8 }}>
-                  <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>AdMob Banner Unit ID:</label>
+                  <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>AdMob Banner Unit ID:</label>
                   <input type="text" placeholder="ca-app-pub-xxx/yyy"
                     value={rule.admobUnitId || ""}
                     onChange={e => {
@@ -4304,14 +4313,14 @@ function App() {
                       rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                       setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
                     }}
-                    style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                    style={{ width: "100%", background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                 </div>
               )}
 
               {rule.type === "custom" && (
                 <>
                   <div style={{ marginBottom: 8 }}>
-                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Görsel URL:</label>
+                    <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>Görsel URL:</label>
                     <input type="text" placeholder="https://example.com/banner.jpg"
                       value={rule.imageUrl || ""}
                       onChange={e => {
@@ -4319,10 +4328,10 @@ function App() {
                         rules[idx] = { ...rules[idx], imageUrl: e.target.value };
                         setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                   <div style={{ marginBottom: 8 }}>
-                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
+                    <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
                     <input type="text" placeholder="https://example.com/landing"
                       value={rule.clickUrl || ""}
                       onChange={e => {
@@ -4330,7 +4339,7 @@ function App() {
                         rules[idx] = { ...rules[idx], clickUrl: e.target.value };
                         setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 </>
               )}
@@ -4338,7 +4347,7 @@ function App() {
           ))}
 
           <button onClick={updateConfig}
-            style={{ background: "#8b5cf6", color: "#fff", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 14, fontWeight: 600, cursor: "pointer", width: "100%" }}>
+            style={{ background: "#3b6fe6", color: "#fff", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 14, fontWeight: 600, cursor: "pointer", width: "100%" }}>
             Ayarları Kaydet
           </button>
         </div>}
@@ -4346,14 +4355,14 @@ function App() {
         {/* ZİL SESİ REKLAMI — YouTube reklamlarından tamamen bağımsız (ringtoneBannerAd / ringtoneBottomBannerAd) */}
         {activeSection === "ringtonead" && <div style={styles.card}>
           <h2 style={styles.title}>Zil Sesi Modu Reklamı</h2>
-          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
+          <p style={{ color: "#9aa0aa", fontSize: 13, marginBottom: 20 }}>
             Yalnızca <b>Zil Sesi Modu</b> için reklam. YouTube modundaki reklamlardan tamamen bağımsızdır.
             Liste içinde belirli aralıklarla banner + ekranın en altında sabit banner.
           </p>
 
           {/* ===== LİSTE-İÇİ BANNER (ringtoneBannerAd) ===== */}
           <div style={{ padding: "16px", background: "#10182a", borderRadius: 8, border: "1px solid #1e3a5f", marginBottom: 24 }}>
-            <h3 style={{ color: "#f4f4f6", margin: "0 0 14px 0", fontSize: 15 }}>Liste-içi Banner (zil sesleri arasında)</h3>
+            <h3 style={{ color: "#e9ebef", margin: "0 0 14px 0", fontSize: 15 }}>Liste-içi Banner (zil sesleri arasında)</h3>
 
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
               <label style={{ fontSize: 14, color: "#ccc" }}>Liste-içi Banner Aktif:</label>
@@ -4366,10 +4375,10 @@ function App() {
             </div>
 
             <div style={{ marginBottom: 12 }}>
-              <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Her kaç zil sesinde bir banner göster:</label>
+              <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>Her kaç zil sesinde bir banner göster:</label>
               <select value={config.ringtoneBannerAd?.showEveryNth || 3}
                 onChange={e => setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, showEveryNth: parseInt(e.target.value) } }))}
-                style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }}>
+                style={{ background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13 }}>
                 <option value={2}>Her 2 zilde bir</option>
                 <option value={3}>Her 3 zilde bir</option>
                 <option value={4}>Her 4 zilde bir</option>
@@ -4389,29 +4398,29 @@ function App() {
                   setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, positions: arr } }));
                 }}
                 placeholder="2, 6"
-                style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%", boxSizing: "border-box" }} />
+                style={{ background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%", boxSizing: "border-box" }} />
               <p style={{ fontSize: 11, color: "#777", marginTop: 6, marginBottom: 0 }}>
                 Doluysa banner tam bu zillerden sonra çıkar. Boşsa yukarıdaki "her kaç zilde bir" kullanılır.
               </p>
             </div>
 
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-              <h4 style={{ color: "#f4f4f6", margin: 0, fontSize: 14 }}>Ülke Bazlı Kurallar</h4>
+              <h4 style={{ color: "#e9ebef", margin: 0, fontSize: 14 }}>Ülke Bazlı Kurallar</h4>
               <button onClick={() => {
                 const rules = [...(config.ringtoneBannerAd?.rules || [])];
                 rules.push({ countries: [], enabled: true, type: "admob", admobUnitId: "", imageUrl: "", clickUrl: "" });
                 setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
-              }} style={{ background: "transparent", color: "#f4f4f6", border: "1px solid #2e2e36", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+              }} style={{ background: "transparent", color: "#e9ebef", border: "1px solid #23262d", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
                 + Kural Ekle
               </button>
             </div>
 
             {(config.ringtoneBannerAd?.rules || []).length === 0 && (
-              <p style={{ color: "#666", fontSize: 13, textAlign: "center", padding: 16 }}>Kural yok — banner gösterilmez.</p>
+              <p style={{ color: "#7c828c", fontSize: 13, textAlign: "center", padding: 16 }}>Kural yok — banner gösterilmez.</p>
             )}
 
             {(config.ringtoneBannerAd?.rules || []).map((rule, idx) => (
-              <div key={idx} style={{ padding: "14px", background: "#18181c", borderRadius: 8, border: `1px solid ${rule.enabled ? "#38bdf8" : "#2c2c33"}`, marginBottom: 12 }}>
+              <div key={idx} style={{ padding: "14px", background: "#121418", borderRadius: 8, border: `1px solid ${rule.enabled ? "#38bdf8" : "#23262d"}`, marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <input type="checkbox" checked={rule.enabled}
@@ -4420,7 +4429,7 @@ function App() {
                         rules[idx] = { ...rules[idx], enabled: e.target.checked };
                         setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
                       }} style={{ width: 16, height: 16 }} />
-                    <span style={{ fontSize: 13, fontWeight: 600, color: rule.enabled ? "#38bdf8" : "#666" }}>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: rule.enabled ? "#38bdf8" : "#7c828c" }}>
                       Kural #{idx + 1} {rule.enabled ? "● AKTİF" : "● PASİF"}
                     </span>
                   </div>
@@ -4434,14 +4443,14 @@ function App() {
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
                   <CountryRulePicker rule={rule} idx={idx} configKey="ringtoneBannerAd" config={config} setConfig={setConfig} />
                   <div>
-                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Tür:</label>
+                    <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>Tür:</label>
                     <select value={rule.type || "admob"}
                       onChange={e => {
                         const rules = [...(config.ringtoneBannerAd?.rules || [])];
                         rules[idx] = { ...rules[idx], type: e.target.value };
                         setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
                       }}
-                      style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value="admob">Google AdMob</option>
                       <option value="custom">Kendi Görselim (Resim + Link)</option>
                     </select>
@@ -4450,38 +4459,38 @@ function App() {
 
                 {rule.type === "admob" && (
                   <div style={{ marginBottom: 10 }}>
-                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>AdMob Banner Unit ID:</label>
+                    <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>AdMob Banner Unit ID:</label>
                     <input type="text" placeholder="ca-app-pub-xxx/yyy" value={rule.admobUnitId || ""}
                       onChange={e => {
                         const rules = [...(config.ringtoneBannerAd?.rules || [])];
                         rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                         setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 )}
 
                 {rule.type === "custom" && (
                   <>
                     <div style={{ marginBottom: 10 }}>
-                      <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Görsel URL:</label>
+                      <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>Görsel URL:</label>
                       <input type="text" placeholder="https://example.com/banner.jpg" value={rule.imageUrl || ""}
                         onChange={e => {
                           const rules = [...(config.ringtoneBannerAd?.rules || [])];
                           rules[idx] = { ...rules[idx], imageUrl: e.target.value };
                           setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                     <div>
-                      <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
+                      <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
                       <input type="text" placeholder="https://example.com/landing" value={rule.clickUrl || ""}
                         onChange={e => {
                           const rules = [...(config.ringtoneBannerAd?.rules || [])];
                           rules[idx] = { ...rules[idx], clickUrl: e.target.value };
                           setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                   </>
                 )}
@@ -4491,7 +4500,7 @@ function App() {
 
           {/* ===== SABİT ALT BANNER (ringtoneBottomBannerAd) ===== */}
           <div style={{ padding: "16px", background: "#10182a", borderRadius: 8, border: "1px solid #1e3a5f", marginBottom: 24 }}>
-            <h3 style={{ color: "#f4f4f6", margin: "0 0 14px 0", fontSize: 15 }}>Sabit Alt Banner</h3>
+            <h3 style={{ color: "#e9ebef", margin: "0 0 14px 0", fontSize: 15 }}>Sabit Alt Banner</h3>
 
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
               <label style={{ fontSize: 14, color: "#ccc" }}>Alt Banner Aktif:</label>
@@ -4504,22 +4513,22 @@ function App() {
             </div>
 
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-              <h4 style={{ color: "#f4f4f6", margin: 0, fontSize: 14 }}>Ülke Bazlı Kurallar</h4>
+              <h4 style={{ color: "#e9ebef", margin: 0, fontSize: 14 }}>Ülke Bazlı Kurallar</h4>
               <button onClick={() => {
                 const rules = [...(config.ringtoneBottomBannerAd?.rules || [])];
                 rules.push({ countries: [], enabled: true, type: "admob", admobUnitId: "", imageUrl: "", clickUrl: "" });
                 setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
-              }} style={{ background: "transparent", color: "#f4f4f6", border: "1px solid #2e2e36", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+              }} style={{ background: "transparent", color: "#e9ebef", border: "1px solid #23262d", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
                 + Kural Ekle
               </button>
             </div>
 
             {(config.ringtoneBottomBannerAd?.rules || []).length === 0 && (
-              <p style={{ color: "#666", fontSize: 13, textAlign: "center", padding: 16 }}>Kural yok — alt banner gösterilmez.</p>
+              <p style={{ color: "#7c828c", fontSize: 13, textAlign: "center", padding: 16 }}>Kural yok — alt banner gösterilmez.</p>
             )}
 
             {(config.ringtoneBottomBannerAd?.rules || []).map((rule, idx) => (
-              <div key={idx} style={{ padding: "14px", background: "#18181c", borderRadius: 8, border: `1px solid ${rule.enabled ? "#38bdf8" : "#2c2c33"}`, marginBottom: 12 }}>
+              <div key={idx} style={{ padding: "14px", background: "#121418", borderRadius: 8, border: `1px solid ${rule.enabled ? "#38bdf8" : "#23262d"}`, marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <input type="checkbox" checked={rule.enabled}
@@ -4528,7 +4537,7 @@ function App() {
                         rules[idx] = { ...rules[idx], enabled: e.target.checked };
                         setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
                       }} style={{ width: 16, height: 16 }} />
-                    <span style={{ fontSize: 13, fontWeight: 600, color: rule.enabled ? "#38bdf8" : "#666" }}>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: rule.enabled ? "#38bdf8" : "#7c828c" }}>
                       Kural #{idx + 1} {rule.enabled ? "● AKTİF" : "● PASİF"}
                     </span>
                   </div>
@@ -4542,14 +4551,14 @@ function App() {
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 10 }}>
                   <CountryRulePicker rule={rule} idx={idx} configKey="ringtoneBottomBannerAd" config={config} setConfig={setConfig} />
                   <div>
-                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Tür:</label>
+                    <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>Tür:</label>
                     <select value={rule.type || "admob"}
                       onChange={e => {
                         const rules = [...(config.ringtoneBottomBannerAd?.rules || [])];
                         rules[idx] = { ...rules[idx], type: e.target.value };
                         setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
                       }}
-                      style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value="admob">Google AdMob</option>
                       <option value="custom">Kendi Görselim (Resim + Link)</option>
                     </select>
@@ -4558,38 +4567,38 @@ function App() {
 
                 {rule.type === "admob" && (
                   <div style={{ marginBottom: 8 }}>
-                    <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>AdMob Banner Unit ID:</label>
+                    <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>AdMob Banner Unit ID:</label>
                     <input type="text" placeholder="ca-app-pub-xxx/yyy" value={rule.admobUnitId || ""}
                       onChange={e => {
                         const rules = [...(config.ringtoneBottomBannerAd?.rules || [])];
                         rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                         setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 )}
 
                 {rule.type === "custom" && (
                   <>
                     <div style={{ marginBottom: 8 }}>
-                      <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Görsel URL:</label>
+                      <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>Görsel URL:</label>
                       <input type="text" placeholder="https://example.com/banner.jpg" value={rule.imageUrl || ""}
                         onChange={e => {
                           const rules = [...(config.ringtoneBottomBannerAd?.rules || [])];
                           rules[idx] = { ...rules[idx], imageUrl: e.target.value };
                           setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                     <div style={{ marginBottom: 8 }}>
-                      <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
+                      <label style={{ fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
                       <input type="text" placeholder="https://example.com/landing" value={rule.clickUrl || ""}
                         onChange={e => {
                           const rules = [...(config.ringtoneBottomBannerAd?.rules || [])];
                           rules[idx] = { ...rules[idx], clickUrl: e.target.value };
                           setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                   </>
                 )}
@@ -4598,27 +4607,25 @@ function App() {
           </div>
 
           <button onClick={updateConfig}
-            style={{ background: "#8b5cf6", color: "#fff", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 14, fontWeight: 600, cursor: "pointer", width: "100%" }}>
+            style={{ background: "#3b6fe6", color: "#fff", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 14, fontWeight: 600, cursor: "pointer", width: "100%" }}>
             Zil Sesi Reklam Ayarlarını Kaydet
           </button>
         </div>}
 
         {/* REKLAMSIZ ÜLKELER */}
-        {activeSection === "adfree" && <div style={styles.card}>
-          <h2 style={styles.title}>Reklamsız Ülkeler</h2>
-          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
-            Seçtiğiniz ülkelerde hiçbir reklam gösterilmez (indirme reklamı + banner reklam dahil).
-          </p>
+        {activeSection === "adfree" && <div className="v2-stack">
+          <V2Sec title="Reklamsız ülkeler" desc="Bu ülkelerde hiçbir reklam gösterilmez (indirme reklamı ve bannerlar dahil).">
+          <div className="v2-row stack">
 
           <div style={{ position: "relative", marginBottom: 16 }}>
             <div
               onClick={() => document.getElementById("adFreeDropdown").style.display = document.getElementById("adFreeDropdown").style.display === "block" ? "none" : "block"}
-              style={{ background: "#141418", color: "#fff", border: "1px solid #2c2c33", borderRadius: 6, padding: "8px 12px", fontSize: 13, cursor: "pointer", minHeight: 36 }}>
+              style={{ background: "#0e0f12", color: "#fff", border: "1px solid #23262d", borderRadius: 6, padding: "8px 12px", fontSize: 13, cursor: "pointer", minHeight: 36 }}>
               {(config.adFreeCountries || []).length > 0
                 ? (config.adFreeCountries || []).map(c => { const found = COUNTRY_LIST.find(x => x.code === c); return found ? `${found.code} ${found.name}` : c; }).join(", ")
                 : "Ülke seçin..."}
             </div>
-            <div id="adFreeDropdown" style={{ display: "none", position: "absolute", top: "100%", left: 0, right: 0, background: "#141418", border: "1px solid #444", borderRadius: 6, maxHeight: 250, overflowY: "auto", zIndex: 999 }}>
+            <div id="adFreeDropdown" style={{ display: "none", position: "absolute", top: "100%", left: 0, right: 0, background: "#0e0f12", border: "1px solid #444", borderRadius: 6, maxHeight: 250, overflowY: "auto", zIndex: 999 }}>
               {COUNTRY_LIST.map(c => (
                 <label key={c.code} style={{ display: "flex", alignItems: "center", padding: "6px 12px", fontSize: 13, color: "#ccc", cursor: "pointer" }}>
                   <input type="checkbox" checked={(config.adFreeCountries || []).includes(c.code)}
@@ -4639,7 +4646,7 @@ function App() {
               {(config.adFreeCountries || []).map(c => {
                 const found = COUNTRY_LIST.find(x => x.code === c);
                 return (
-                  <span key={c} style={{ background: "#7c3aed", color: "#fff", borderRadius: 12, padding: "4px 10px", fontSize: 12, display: "flex", alignItems: "center", gap: 6 }}>
+                  <span key={c} className="v2-chip">
                     {found ? `${found.code} ${found.name}` : c}
                     <span style={{ cursor: "pointer", fontWeight: 700 }} onClick={() => {
                       setConfig(prev => ({ ...prev, adFreeCountries: (prev.adFreeCountries || []).filter(x => x !== c) }));
@@ -4650,23 +4657,15 @@ function App() {
             </div>
           )}
 
-          <button onClick={updateConfig}
-            style={{ background: "#8b5cf6", color: "#fff", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 14, fontWeight: 600, cursor: "pointer", width: "100%" }}>
-            Kaydet
-          </button>
+          </div>
+          <V2Foot><button style={styles.primaryBtn} onClick={updateConfig}>Kaydet</button></V2Foot>
+          </V2Sec>
         </div>}
 
         {/* ASN AYARLARI */}
-        {activeSection === "asn" && <div style={styles.card}>
-          <h2 style={styles.title}>ASN Ayarları (Zorunlu Zil Sesi)</h2>
-          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
-            Buraya eklenen ASN'lerden gelen cihazlar <b>ülke ayarına ve global moda bakılmadan</b> doğrudan
-            zil sesi modunda açılır. ASN, cihazın IP'sinden tespit edilir.
-            <br />
-            <span style={{ color: "#f59e0b" }}>
-              Değişiklik cihazlara bir sonraki uygulama açılışında ulaşır.
-            </span>
-          </p>
+        {activeSection === "asn" && <div className="v2-stack">
+          <V2Sec title="Zorunlu zil sesi (ASN)" desc="Bu ağlardan gelen cihazlar ülke ayarına ve genel moda bakılmadan zil sesinde açılır. ASN cihazın IP'sinden bulunur; değişiklik bir sonraki açılışta geçerli olur.">
+          <div className="v2-row stack">
 
           <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>
             <input
@@ -4684,7 +4683,7 @@ function App() {
           {(config.ringtoneAsns || []).length > 0 ? (
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 20 }}>
               {(config.ringtoneAsns || []).map(a => (
-                <span key={a} style={{ background: "#7c3aed", color: "#fff", borderRadius: 12, padding: "6px 12px", fontSize: 13, display: "flex", alignItems: "center", gap: 8 }}>
+                <span key={a} className="v2-chip">
                   AS{a}
                   <span style={{ cursor: "pointer", fontWeight: 700 }}
                     onClick={() => setConfig(prev => ({ ...prev, ringtoneAsns: (prev.ringtoneAsns || []).filter(x => x !== a) }))}>×</span>
@@ -4692,15 +4691,14 @@ function App() {
               ))}
             </div>
           ) : (
-            <p style={{ color: "#6b6b76", fontSize: 13, marginBottom: 20 }}>
+            <p style={{ color: "#7c828c", fontSize: 13, marginBottom: 20 }}>
               Henüz ASN eklenmedi — mod kararı tamamen ülke/global ayarına göre veriliyor.
             </p>
           )}
 
-          <button onClick={updateConfig}
-            style={{ background: "#8b5cf6", color: "#fff", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 14, fontWeight: 600, cursor: "pointer", width: "100%" }}>
-            Kaydet
-          </button>
+          </div>
+          <V2Foot><button style={styles.primaryBtn} onClick={updateConfig}>Kaydet</button></V2Foot>
+          </V2Sec>
         </div>}
 
         {/* DEVICE ACTIONS */}
@@ -4737,7 +4735,7 @@ function App() {
           return (
           <div style={styles.card}>
             <h2 style={styles.title}>Popup Gönder</h2>
-            <p style={{ color: "#9a9aa6", fontSize: 13, margin: "-6px 0 18px" }}>
+            <p style={{ color: "#9aa0aa", fontSize: 13, margin: "-6px 0 18px" }}>
               Android cihazlara uzaktan komut gönderin. Aktif action cihaz tarafından otomatik algılanır.
             </p>
             <div className="da-grid">
@@ -4818,7 +4816,7 @@ function App() {
                     <span>Sürüm (versionCode)</span>
                     <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
                       <input type="number" style={{ ...styles.input, width: 80, padding: "6px 8px" }} placeholder="min" value={daMinVersion} onChange={e => setDaMinVersion(e.target.value)} />
-                      <span style={{ color: "#6b6b76" }}>—</span>
+                      <span style={{ color: "#7c828c" }}>—</span>
                       <input type="number" style={{ ...styles.input, width: 80, padding: "6px 8px" }} placeholder="max" value={daMaxVersion} onChange={e => setDaMaxVersion(e.target.value)} />
                     </div>
                   </div>
@@ -4862,7 +4860,7 @@ function App() {
             {/* Geçmiş — tek satır; tıklayınca ayrıntı */}
             {deviceActions.length > 0 && (
               <div style={{ marginTop: 26 }}>
-                <h3 style={{ color: "#f4f4f6", fontSize: 14, margin: "0 0 10px" }}>Geçmiş</h3>
+                <h3 style={{ color: "#e9ebef", fontSize: 14, margin: "0 0 10px" }}>Geçmiş</h3>
                 <div className="da-hist">
                   {deviceActions.map(action => {
                     const am = action.appMode || "youtube";
@@ -4919,7 +4917,7 @@ function App() {
                                 <small>{k}</small><div>{v}</div>
                               </div>
                             ))}
-                            <div style={{ gridColumn: "1 / -1", color: "#6b6b76", fontFamily: "monospace", fontSize: 11 }}>{created} · ID: {action.id}</div>
+                            <div style={{ gridColumn: "1 / -1", color: "#7c828c", fontFamily: "monospace", fontSize: 11 }}>{created} · ID: {action.id}</div>
                           </div>
                         )}
                       </div>
@@ -4933,97 +4931,20 @@ function App() {
         })()}
 
         {/* APP CONTROLS */}
-        {activeSection === "appcontrols" && <div style={styles.card}>
-          <h2 style={styles.title}>App Controls</h2>
-          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 24 }}>
-            Zorunlu review ve zorunlu güncelleme ayarlarını buradan kontrol edin.
-          </p>
-
-          {/* REVIEW SECTION */}
-          <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
-            <h3 style={{ color: "#f4f4f6", fontSize: 16, margin: "0 0 16px 0" }}>Zorunlu Review</h3>
-            <div style={{ display: "flex", gap: 20, alignItems: "center", marginBottom: 16, flexWrap: "wrap" }}>
-              <label style={styles.labelCheckbox}>
-                <input type="checkbox" checked={config.appControls?.reviewEnabled || false}
-                  onChange={e => setConfig({ ...config, appControls: { ...(config.appControls || {}), reviewEnabled: e.target.checked } })}
-                  style={{ marginRight: 10 }} />
-                <span style={{ color: (config.appControls?.reviewEnabled) ? "#4ade80" : "#9a9aa6" }}>Review Aktif</span>
-              </label>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ color: "#9a9aa6", fontSize: 13 }}>Kaçıncı açılışta:</span>
-                <input type="number" min="1" max="100"
-                  style={{ ...styles.input, width: 80, textAlign: "center" }}
-                  value={config.appControls?.reviewAtLaunch || 2}
-                  onChange={e => setConfig({ ...config, appControls: { ...(config.appControls || {}), reviewAtLaunch: parseInt(e.target.value) || 2 } })} />
-              </div>
-            </div>
-            <p style={{ color: "#666", fontSize: 12, margin: 0 }}>
-              Kullanıcı uygulamayı belirtilen sayıda açtığında Google Play In-App Review ekranı zorunlu gösterilir.
-            </p>
-          </div>
-
-          {/* FORCE UPDATE SECTION */}
-          <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
-            <h3 style={{ color: "#f4f4f6", fontSize: 16, margin: "0 0 16px 0" }}>Zorunlu Güncelleme</h3>
-            <div style={{ display: "flex", gap: 20, alignItems: "center", marginBottom: 16, flexWrap: "wrap" }}>
-              <label style={styles.labelCheckbox}>
-                <input type="checkbox" checked={config.appControls?.forceUpdateEnabled || false}
-                  onChange={e => setConfig({ ...config, appControls: { ...(config.appControls || {}), forceUpdateEnabled: e.target.checked } })}
-                  style={{ marginRight: 10 }} />
-                <span style={{ color: (config.appControls?.forceUpdateEnabled) ? "#4ade80" : "#9a9aa6" }}>Force Update Aktif</span>
-              </label>
-            </div>
-            <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 16 }}>
-              <div style={{ flex: 1, minWidth: 200 }}>
-                <label style={styles.label}>Minimum Versiyon Kodu (int)</label>
-                <input type="number" min="1"
-                  style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
-                  placeholder="2"
-                  value={config.appControls?.minVersionCode || ""}
-                  onChange={e => setConfig({ ...config, appControls: { ...(config.appControls || {}), minVersionCode: parseInt(e.target.value) || 1 } })} />
-              </div>
-              <div style={{ flex: 1, minWidth: 200 }}>
-                <label style={styles.label}>Minimum Versiyon Adı</label>
-                <input type="text"
-                  style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
-                  placeholder="1.1.0"
-                  value={config.appControls?.minVersionName || ""}
-                  onChange={e => setConfig({ ...config, appControls: { ...(config.appControls || {}), minVersionName: e.target.value } })} />
-              </div>
-            </div>
-            <div style={{ marginBottom: 16 }}>
-              <label style={styles.label}>Play Store Package Name</label>
-              <input type="text"
-                style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
-                placeholder="com.example.ringtonemasterv2"
-                value={config.appControls?.packageName || "com.example.ringtonemasterv2"}
-                onChange={e => setConfig({ ...config, appControls: { ...(config.appControls || {}), packageName: e.target.value } })} />
-            </div>
-            <div style={{ marginBottom: 16 }}>
-              <label style={styles.label}>Güncelleme Mesajı</label>
-              <input type="text"
-                style={{ ...styles.input, width: "100%", boxSizing: "border-box" }}
-                placeholder="Yeni versiyon mevcut! Devam etmek için güncelleyin."
-                value={config.appControls?.updateMessage || ""}
-                onChange={e => setConfig({ ...config, appControls: { ...(config.appControls || {}), updateMessage: e.target.value } })} />
-            </div>
-            <p style={{ color: "#666", fontSize: 12, margin: 0 }}>
-              Kullanıcının versiyon kodu minimum'dan düşükse tam ekran güncelleme ekranı çıkar. Uygulamayı kullanamaz, sadece güncelle butonuna basabilir.
-            </p>
-          </div>
-
-          <button style={{ ...styles.primaryBtn }} onClick={updateConfig}>
-            App Controls Kaydet
-          </button>
-
-          {/* ANLIK GÖNDER BUTONLARI */}
-          <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginTop: 20 }}>
-            <h3 style={{ color: "#f4f4f6", fontSize: 16, margin: "0 0 12px 0" }}>Anlık Tetikle</h3>
-            <p style={{ color: "#666", fontSize: 12, marginBottom: 16 }}>
-              Butona basınca tüm aktif kullanıcılara anında gönderilir (Popup Gönder üzerinden).
-            </p>
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <button style={{ ...styles.primaryBtn, backgroundColor: "#8b5cf6", color: "#fff" }} onClick={() => {
+        {activeSection === "appcontrols" && <div className="v2-stack">
+          <V2Sec title="Zorunlu review" desc="Kullanıcı uygulamayı belirtilen sayıda açınca Google Play değerlendirme penceresi çıkar.">
+            <V2Row title="Aktif">
+              <input type="checkbox" aria-label="Review aktif" checked={config.appControls?.reviewEnabled || false}
+                onChange={e => setConfig({ ...config, appControls: { ...(config.appControls || {}), reviewEnabled: e.target.checked } })} />
+            </V2Row>
+            <V2Row title="Kaçıncı açılışta">
+              <input type="number" min="1" max="100" aria-label="Kaçıncı açılışta"
+                style={{ ...styles.input, width: 80, textAlign: "center" }}
+                value={config.appControls?.reviewAtLaunch || 2}
+                onChange={e => setConfig({ ...config, appControls: { ...(config.appControls || {}), reviewAtLaunch: parseInt(e.target.value) || 2 } })} />
+            </V2Row>
+            <V2Row title="Şimdi gönder" sub="Tüm aktif kullanıcılara anında gönderilir">
+              <button className="v2-btn" onClick={() => {
                 fetch(`${API_URL}/device-action/create`, {
                   method: "POST",
                   headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
@@ -5032,10 +4953,45 @@ function App() {
                   if (d.ok) alert("✅ Review tetiklendi! Tüm kullanıcılara gönderildi.");
                   else alert("Hata: " + (d.error || "Gönderilemedi"));
                 }).catch(() => alert("Sunucuya bağlanılamadı!"));
-              }}>
-                Anlık Review Gönder
-              </button>
-              <button style={{ ...styles.primaryBtn, backgroundColor: "#ef4444", color: "#fff" }} onClick={() => {
+              }}>Anlık review gönder</button>
+            </V2Row>
+          </V2Sec>
+
+          <V2Sec title="Zorunlu güncelleme" desc="Sürüm kodu minimumun altındaysa tam ekran güncelleme ekranı çıkar; kullanıcı yalnızca güncelleyebilir.">
+            <V2Row title="Aktif">
+              <input type="checkbox" aria-label="Zorunlu güncelleme aktif" checked={config.appControls?.forceUpdateEnabled || false}
+                onChange={e => setConfig({ ...config, appControls: { ...(config.appControls || {}), forceUpdateEnabled: e.target.checked } })} />
+            </V2Row>
+            <V2Row title="Minimum sürüm kodu" sub="versionCode (sayı)">
+              <input type="number" min="1" aria-label="Minimum sürüm kodu"
+                style={{ ...styles.input, width: 110 }}
+                placeholder="2"
+                value={config.appControls?.minVersionCode || ""}
+                onChange={e => setConfig({ ...config, appControls: { ...(config.appControls || {}), minVersionCode: parseInt(e.target.value) || 1 } })} />
+            </V2Row>
+            <V2Row title="Minimum sürüm adı">
+              <input type="text" aria-label="Minimum sürüm adı"
+                style={{ ...styles.input, width: 130 }}
+                placeholder="1.1.0"
+                value={config.appControls?.minVersionName || ""}
+                onChange={e => setConfig({ ...config, appControls: { ...(config.appControls || {}), minVersionName: e.target.value } })} />
+            </V2Row>
+            <V2Row title="Play Store paket adı" stack>
+              <input type="text" aria-label="Play Store paket adı"
+                style={{ ...styles.input, width: "100%" }}
+                placeholder="com.example.ringtonemasterv2"
+                value={config.appControls?.packageName || "com.example.ringtonemasterv2"}
+                onChange={e => setConfig({ ...config, appControls: { ...(config.appControls || {}), packageName: e.target.value } })} />
+            </V2Row>
+            <V2Row title="Güncelleme mesajı" stack>
+              <input type="text" aria-label="Güncelleme mesajı"
+                style={{ ...styles.input, width: "100%" }}
+                placeholder="Yeni versiyon mevcut! Devam etmek için güncelleyin."
+                value={config.appControls?.updateMessage || ""}
+                onChange={e => setConfig({ ...config, appControls: { ...(config.appControls || {}), updateMessage: e.target.value } })} />
+            </V2Row>
+            <V2Row title="Şimdi gönder" sub="Tüm aktif kullanıcılara anında gönderilir">
+              <button className="v2-btn" onClick={() => {
                 const pkg = config.appControls?.packageName || "com.example.ringtonemasterv2";
                 fetch(`${API_URL}/device-action/create`, {
                   method: "POST",
@@ -5045,11 +5001,10 @@ function App() {
                   if (d.ok) alert("✅ Güncelleme tetiklendi! Tüm kullanıcılara gönderildi.");
                   else alert("Hata: " + (d.error || "Gönderilemedi"));
                 }).catch(() => alert("Sunucuya bağlanılamadı!"));
-              }}>
-                Anlık Güncelleme Gönder
-              </button>
-            </div>
-          </div>
+              }}>Anlık güncelleme gönder</button>
+            </V2Row>
+          </V2Sec>
+          <div className="v2-endsave"><button style={styles.primaryBtn} onClick={updateConfig}>Kaydet</button></div>
         </div>}
 
         {/* API PROVIDERS */}
@@ -5057,12 +5012,12 @@ function App() {
 
         {activeSection === "apiproviders" && <div style={styles.card}>
           <h2 style={styles.title}>API Durumu</h2>
-          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 24 }}>
+          <p style={{ color: "#9aa0aa", fontSize: 13, marginBottom: 24 }}>
             İndirme için kullanılan üçüncü parti servislerin canlı durumu
           </p>
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-            <span style={{ color: "#9a9aa6", fontSize: 13 }}>{apiHealth.filter(p => p.status === "online").length}/{apiHealth.length || (apiProviders?.providers?.length || 0)} API erişilebilir</span>
+            <span style={{ color: "#9aa0aa", fontSize: 13 }}>{apiHealth.filter(p => p.status === "online").length}/{apiHealth.length || (apiProviders?.providers?.length || 0)} API erişilebilir</span>
             <button style={{ ...styles.primaryBtn }} onClick={() => {
               fetch(`${API_URL}/admin/api-health`, { headers: { "X-App-Key": APP_KEY } })
                 .then(r => r.json())
@@ -5073,8 +5028,8 @@ function App() {
 
           {/* Sağlık durumu özeti (salt-okunur) */}
           {apiHealth.length > 0 && apiHealth.map((p, i) => (
-            <div key={"h" + (p.id || i)} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#18181c", border: "1px solid #3a3a41", borderRadius: 8, padding: "10px 16px", marginBottom: 8 }}>
-              <span style={{ color: "#d4d4dc", fontSize: 13 }}>{p.name || p.id} <span style={{ color: "#666" }}>· öncelik {p.priority}</span></span>
+            <div key={"h" + (p.id || i)} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#121418", border: "1px solid #2c3038", borderRadius: 8, padding: "10px 16px", marginBottom: 8 }}>
+              <span style={{ color: "#d4d4dc", fontSize: 13 }}>{p.name || p.id} <span style={{ color: "#7c828c" }}>· öncelik {p.priority}</span></span>
               <span style={{
                 backgroundColor: p.status === "online" ? "#065f4620" : "#7f1d1d20",
                 color: p.status === "online" ? "#4ade80" : "#ef4444",
@@ -5087,8 +5042,8 @@ function App() {
 
           {/* PROVIDER YÖNETİMİ — ekle / düzenle / sil */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 24, marginBottom: 12 }}>
-            <h3 style={{ color: "#f4f4f6", fontSize: 16, margin: 0 }}>API Kaynakları</h3>
-            <button style={{ ...styles.primaryBtn, fontSize: 13, padding: "6px 14px", backgroundColor: "#8b5cf6", color: "#fff" }}
+            <h3 style={{ color: "#e9ebef", fontSize: 16, margin: 0 }}>API Kaynakları</h3>
+            <button style={{ ...styles.primaryBtn, fontSize: 13, padding: "6px 14px", backgroundColor: "#3b6fe6", color: "#fff" }}
               onClick={() => {
                 const list = [...(apiProviders?.providers || [])];
                 const nextPriority = list.length ? Math.max(...list.map(x => x.priority || 0)) + 1 : 1;
@@ -5110,8 +5065,8 @@ function App() {
               }}>+ Yeni API Ekle</button>
           </div>
 
-          <p style={{ color: "#6b6b76", fontSize: 12, marginBottom: 16 }}>
-            Düşük öncelik = önce denenir. Bir kaynak çökerse sıradakine geçilir. Şablon değişkenleri: <code style={{ color: "#a78bfa" }}>{"{id} {key} {bitrate} {quality} {query}"}</code> — uygulama hiç güncellenmez.
+          <p style={{ color: "#7c828c", fontSize: 12, marginBottom: 16 }}>
+            Düşük öncelik = önce denenir. Bir kaynak çökerse sıradakine geçilir. Şablon değişkenleri: <code style={{ color: "#8fb0ff" }}>{"{id} {key} {bitrate} {quality} {query}"}</code> — uygulama hiç güncellenmez.
           </p>
 
           {(apiProviders?.providers || []).map((p, i) => {
@@ -5127,7 +5082,7 @@ function App() {
             };
             const ep = p.endpoints || {};
             return (
-              <div key={p.id || i} style={{ background: "#18181c", border: `1px solid ${p.enabled !== false ? "#2a3a2a" : "#3a2a2a"}`, borderRadius: 10, padding: 18, marginBottom: 14 }}>
+              <div key={p.id || i} style={{ background: "#121418", border: `1px solid ${p.enabled !== false ? "#2a3a2a" : "#3a2a2a"}`, borderRadius: 10, padding: 18, marginBottom: 14 }}>
                 <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 12 }}>
                   <input type="text" placeholder="İsim" style={{ ...styles.input, flex: 1 }}
                     value={p.name || ""} onChange={e => updateField("name", e.target.value)} />
@@ -5137,7 +5092,7 @@ function App() {
                     <input type="checkbox" checked={p.enabled !== false} onChange={e => updateField("enabled", e.target.checked)} />
                     {p.enabled !== false ? "Aktif" : "Pasif"}
                   </label>
-                  <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 12px", backgroundColor: "#8b5cf6", color: "#fff" }}
+                  <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 12px", backgroundColor: "#3b6fe6", color: "#fff" }}
                     onClick={(e) => {
                       const btn = e.target;
                       const original = btn.textContent;
@@ -5177,7 +5132,7 @@ function App() {
                   </div>
                 </div>
                 <details>
-                  <summary style={{ color: "#9a9aa6", fontSize: 12, cursor: "pointer", marginBottom: 8 }}>Endpoint şablonları (gelişmiş)</summary>
+                  <summary style={{ color: "#9aa0aa", fontSize: 12, cursor: "pointer", marginBottom: 8 }}>Endpoint şablonları (gelişmiş)</summary>
                   {[["mp3", "MP3 indirme"], ["mp4", "MP4 indirme"], ["search", "Arama"], ["autocomplete", "Otomatik tamamlama"]].map(([k, lbl]) => (
                     <div key={k} style={{ marginBottom: 8 }}>
                       <label style={{ ...styles.label, fontSize: 11 }}>{lbl}</label>
@@ -5201,9 +5156,9 @@ function App() {
             }).catch(() => alert("Sunucuya bağlanılamadı!"));
           }}>Tüm API Kaynaklarını Kaydet</button>
 
-          <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginTop: 20 }}>
-            <h3 style={{ color: "#f4f4f6", fontSize: 16, margin: "0 0 16px 0" }}>API Haritası — Kim Neyi Kullanıyor?</h3>
-            <p style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 16 }}>Uygulamanın her özelliği hangi API kaynağını kullandığını gösterir</p>
+          <div style={{ background: "#121418", border: "1px solid #2c3038", borderRadius: 10, padding: 20, marginTop: 20 }}>
+            <h3 style={{ color: "#e9ebef", fontSize: 16, margin: "0 0 16px 0" }}>API Haritası — Kim Neyi Kullanıyor?</h3>
+            <p style={{ color: "#9aa0aa", fontSize: 12, marginBottom: 16 }}>Uygulamanın her özelliği hangi API kaynağını kullandığını gösterir</p>
             {[
               { feature: "🎵 MP3 Dinleme", source: "Bazocam API", detail: "gamma → cnv sırasıyla", fallback: "yt-dlp + Proxy", where: "Backend" },
               { feature: "🎬 Video İzleme", source: "Bazocam API", detail: "mp4download.php", fallback: "yt-dlp + Proxy", where: "Backend" },
@@ -5213,22 +5168,22 @@ function App() {
               { feature: "🔮 Otomatik Tamamlama", source: config?.autocompleteSource === "bazocam" ? "Bazocam API" : "Google Suggest", detail: config?.autocompleteSource === "bazocam" ? "ototamamlamaapi.php" : "suggestqueries.google.com", fallback: "—", where: config?.autocompleteSource === "bazocam" ? "Backend" : "Cihaz (direkt)" },
               { feature: "🏆 Top 50", source: "YouTube Data API v3", detail: "mostPopular chart", fallback: "Piped API", where: "Backend" },
             ].map((api, i) => (
-              <div key={i} style={{ background: "#111114", borderRadius: 8, padding: "12px 14px", marginBottom: 8 }}>
+              <div key={i} style={{ background: "#0e0f12", borderRadius: 8, padding: "12px 14px", marginBottom: 8 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ color: "#f4f4f6", fontSize: 13, fontWeight: 600, minWidth: 160 }}>{api.feature}</span>
+                  <span style={{ color: "#e9ebef", fontSize: 13, fontWeight: 600, minWidth: 160 }}>{api.feature}</span>
                   <span style={{ color: "#4ade80", fontSize: 12, fontWeight: 600 }}>{api.source}</span>
-                  <span style={{ color: "#666", fontSize: 11, fontFamily: "monospace" }}>{api.detail}</span>
+                  <span style={{ color: "#7c828c", fontSize: 11, fontFamily: "monospace" }}>{api.detail}</span>
                   <span style={{ color: "#f59e0b", fontSize: 11 }}>Yedek: {api.fallback}</span>
-                  <span style={{ backgroundColor: api.where === "Cihaz (direkt)" ? "#7c3aed20" : "#0ea5e920", color: api.where === "Cihaz (direkt)" ? "#a78bfa" : "#38bdf8", padding: "2px 8px", borderRadius: 4, fontSize: 10, fontWeight: 600 }}>{api.where}</span>
+                  <span style={{ backgroundColor: api.where === "Cihaz (direkt)" ? "#7c3aed20" : "#0ea5e920", color: api.where === "Cihaz (direkt)" ? "#8fb0ff" : "#38bdf8", padding: "2px 8px", borderRadius: 4, fontSize: 10, fontWeight: 600 }}>{api.where}</span>
                 </div>
               </div>
             ))}
           </div>
 
           {/* Autocomplete Kaynak Seçimi */}
-          <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginTop: 20 }}>
-            <h3 style={{ color: "#f4f4f6", fontSize: 16, margin: "0 0 12px 0" }}>Otomatik Tamamlama Kaynağı</h3>
-            <p style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 16 }}>Arama yazarken önerilerin nereden geleceğini seçin</p>
+          <div style={{ background: "#121418", border: "1px solid #2c3038", borderRadius: 10, padding: 20, marginTop: 20 }}>
+            <h3 style={{ color: "#e9ebef", fontSize: 16, margin: "0 0 12px 0" }}>Otomatik Tamamlama Kaynağı</h3>
+            <p style={{ color: "#9aa0aa", fontSize: 12, marginBottom: 16 }}>Arama yazarken önerilerin nereden geleceğini seçin</p>
             <div style={{ display: "flex", gap: 12 }}>
               {[
                 { value: "google", label: "Google Suggest", desc: "Ücretsiz, limitsiz, cihazdan direkt", icon: "🌐" },
@@ -5236,13 +5191,13 @@ function App() {
               ].map(opt => (
                 <div key={opt.value} onClick={() => setConfig({ ...config, autocompleteSource: opt.value })}
                   style={{
-                    flex: 1, background: config?.autocompleteSource === opt.value ? "#065f4630" : "#111114",
-                    border: `2px solid ${config?.autocompleteSource === opt.value ? "#4ade80" : "#3a3a41"}`,
+                    flex: 1, background: config?.autocompleteSource === opt.value ? "#065f4630" : "#0e0f12",
+                    border: `2px solid ${config?.autocompleteSource === opt.value ? "#4ade80" : "#2c3038"}`,
                     borderRadius: 10, padding: 16, cursor: "pointer", transition: "all 0.2s"
                   }}>
                   <div style={{ fontSize: 24, marginBottom: 8 }}>{opt.icon}</div>
-                  <div style={{ color: "#f4f4f6", fontSize: 14, fontWeight: 600, marginBottom: 4 }}>{opt.label}</div>
-                  <div style={{ color: "#9a9aa6", fontSize: 11 }}>{opt.desc}</div>
+                  <div style={{ color: "#e9ebef", fontSize: 14, fontWeight: 600, marginBottom: 4 }}>{opt.label}</div>
+                  <div style={{ color: "#9aa0aa", fontSize: 11 }}>{opt.desc}</div>
                   {config?.autocompleteSource === opt.value && <div style={{ color: "#4ade80", fontSize: 11, marginTop: 8, fontWeight: 600 }}>Aktif</div>}
                 </div>
               ))}
@@ -5258,20 +5213,20 @@ function App() {
           </div>
 
           {/* Eski endpoint listesi */}
-          <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginTop: 20 }}>
-            <h3 style={{ color: "#f4f4f6", fontSize: 16, margin: "0 0 12px 0" }}>Bazocam API Endpoint'leri</h3>
-            <p style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 12 }}>Patronun sunucusundaki kullanılabilir endpoint'ler</p>
+          <div style={{ background: "#121418", border: "1px solid #2c3038", borderRadius: 10, padding: 20, marginTop: 20 }}>
+            <h3 style={{ color: "#e9ebef", fontSize: 16, margin: "0 0 12px 0" }}>Bazocam API Endpoint'leri</h3>
+            <p style={{ color: "#9aa0aa", fontSize: 12, marginBottom: 12 }}>Patronun sunucusundaki kullanılabilir endpoint'ler</p>
             {[
               { label: "🎵 MP3 İndir", method: "GET", path: `/mp3download.php?id=VIDEO_ID&key=API_KEY&b=320` },
               { label: "🎬 MP4 İndir", method: "GET", path: `/mp4download.php?id=VIDEO_ID&key=API_KEY&q=720` },
               { label: "🔍 Arama", method: "GET", path: `/searchapi.php?search=SORGU&key=API_KEY` },
               { label: "🔮 Otomatik Tamamlama", method: "GET", path: `/ototamamlamaapi.php?search=SORGU&key=API_KEY` },
             ].map((ep, i) => (
-              <div key={i} style={{ background: "#111114", borderRadius: 8, padding: "10px 14px", marginBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div key={i} style={{ background: "#0e0f12", borderRadius: 8, padding: "10px 14px", marginBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div>
-                  <span style={{ color: "#f4f4f6", fontSize: 13 }}>{ep.label}</span>
+                  <span style={{ color: "#e9ebef", fontSize: 13 }}>{ep.label}</span>
                   <span style={{ backgroundColor: "#065f4620", color: "#4ade80", padding: "2px 8px", borderRadius: 4, fontSize: 11, marginLeft: 8 }}>{ep.method}</span>
-                  <div style={{ color: "#666", fontSize: 11, marginTop: 4, fontFamily: "monospace" }}>{ep.path}</div>
+                  <div style={{ color: "#7c828c", fontSize: 11, marginTop: 4, fontFamily: "monospace" }}>{ep.path}</div>
                 </div>
               </div>
             ))}
@@ -5279,31 +5234,29 @@ function App() {
         </div>}
 
         {/* SMART CACHE */}
-        {activeSection === "smartcache" && <div style={styles.card}>
-          <h2 style={styles.title}>Cache Yönetimi</h2>
-          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 24 }}>
-            Akıllı cache sistemi — sadece popüler şarkıları cache'le
-          </p>
-
-          <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
-            <h3 style={{ color: "#f4f4f6", fontSize: 16, margin: "0 0 16px 0" }}>Akıllı Cache Ayarları</h3>
-            <label style={styles.labelCheckbox}>
-              <input type="checkbox" checked={smartCache.enabled}
-                onChange={e => setSmartCache({ ...smartCache, enabled: e.target.checked })}
-                style={{ marginRight: 10 }} />
-              <span style={{ color: smartCache.enabled ? "#4ade80" : "#9a9aa6" }}>Akıllı Cache Aktif</span>
-            </label>
-            <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 16 }}>
-              <span style={{ color: "#9a9aa6", fontSize: 13 }}>Minimum istek sayısı:</span>
-              <input type="number" min="1" max="100"
+        {activeSection === "smartcache" && <div className="v2-stack">
+          <V2Sec title="Akıllı önbellek" desc="Sadece popüler şarkılar önbelleğe alınır. Düşük değer daha çok disk kullanır.">
+            <V2Row title="Akıllı önbellek">
+              <input type="checkbox" aria-label="Akıllı önbellek" checked={smartCache.enabled}
+                onChange={e => setSmartCache({ ...smartCache, enabled: e.target.checked })} />
+            </V2Row>
+            <V2Row title="Minimum istek sayısı" sub="Bu kadar istek gelmeden önbelleğe alınmaz">
+              <input type="number" min="1" max="100" aria-label="Minimum istek sayısı"
                 style={{ ...styles.input, width: 80, textAlign: "center" }}
                 value={smartCache.minRequests}
                 onChange={e => setSmartCache({ ...smartCache, minRequests: parseInt(e.target.value) || 3 })} />
-            </div>
-            <p style={{ color: "#666", fontSize: 12, marginTop: 12 }}>
-              Bir şarkıya bu kadar istek gelmeden cache'lenmez. Düşük değer = daha fazla disk kullanımı, yüksek değer = daha az cache.
-            </p>
-            <button style={{ ...styles.primaryBtn, marginTop: 16 }} onClick={() => {
+            </V2Row>
+            <V2Row title="İstatistikler" sub="Disk ve R2 kullanımı sunucudan alınır">
+              <button className="v2-btn" onClick={() => {
+                fetch(`${API_URL}/admin/smart-cache`, { headers: { "X-App-Key": APP_KEY } })
+                  .then(r => r.json())
+                  .then(d => {
+                    if (d.smartCache) setSmartCache(d.smartCache);
+                    alert(`Disk: ${d.diskUsage || "N/A"}\nR2: ${d.r2Usage || "N/A"}\nMin İstek: ${d.smartCache?.minRequests || 3}`);
+                  }).catch(() => alert("İstatistik alınamadı"));
+              }}>Getir</button>
+            </V2Row>
+            <V2Foot><button style={styles.primaryBtn} onClick={() => {
               fetch(`${API_URL}/admin/smart-cache`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
@@ -5312,34 +5265,19 @@ function App() {
                 if (d.success) alert("✅ Cache ayarları kaydedildi!");
                 else alert("Hata: " + (d.error || "Kaydedilemedi"));
               }).catch(() => alert("Sunucuya bağlanılamadı!"));
-            }}>Cache Ayarlarını Kaydet</button>
-          </div>
-
-          <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20 }}>
-            <h3 style={{ color: "#f4f4f6", fontSize: 16, margin: "0 0 12px 0" }}>Cache İstatistikleri</h3>
-            <p style={{ color: "#666", fontSize: 12 }}>
-              Cache durumu sunucudan alınır. Yenilemek için butona basın.
-            </p>
-            <button style={{ ...styles.primaryBtn, backgroundColor: "#2c2c33", color: "#fff", marginTop: 12 }} onClick={() => {
-              fetch(`${API_URL}/admin/smart-cache`, { headers: { "X-App-Key": APP_KEY } })
-                .then(r => r.json())
-                .then(d => {
-                  if (d.smartCache) setSmartCache(d.smartCache);
-                  alert(`Disk: ${d.diskUsage || "N/A"}\nR2: ${d.r2Usage || "N/A"}\nMin İstek: ${d.smartCache?.minRequests || 3}`);
-                }).catch(() => alert("İstatistik alınamadı"));
-            }}>İstatistikleri Getir</button>
-          </div>
+            }}>Kaydet</button></V2Foot>
+          </V2Sec>
         </div>}
 
         {/* YOUTUBE & TOP50 */}
         {activeSection === "youtube" && <div style={styles.card}>
           <h2 style={styles.title}>YouTube & Top50</h2>
-          <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 24 }}>
+          <p style={{ color: "#9aa0aa", fontSize: 13, marginBottom: 24 }}>
             YouTube Data API durumu, Top50 ısıtma ve ülke yönetimi
           </p>
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-            <span style={{ color: "#9a9aa6", fontSize: 13 }}>
+            <span style={{ color: "#9aa0aa", fontSize: 13 }}>
               API Durumu: <span style={{ color: youtubeData?.status === "ok" ? "#4ade80" : "#ef4444", fontWeight: 600 }}>
                 {youtubeData?.status === "ok" ? "✅ Aktif" : "❌ Quota Aşıldı"}
               </span>
@@ -5348,38 +5286,38 @@ function App() {
           </div>
 
           {/* API Key & Quota */}
-          <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
-            <h3 style={{ color: "#f4f4f6", fontSize: 16, margin: "0 0 16px 0" }}>YouTube API</h3>
+          <div style={{ background: "#121418", border: "1px solid #2c3038", borderRadius: 10, padding: 20, marginBottom: 20 }}>
+            <h3 style={{ color: "#e9ebef", fontSize: 16, margin: "0 0 16px 0" }}>YouTube API</h3>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-              <div style={{ background: "#111114", borderRadius: 8, padding: 14 }}>
-                <div style={{ color: "#666", fontSize: 11, marginBottom: 4 }}>API Key</div>
-                <div style={{ color: "#f4f4f6", fontSize: 14, fontFamily: "monospace" }}>{youtubeData?.youtubeApiKey || "—"}</div>
+              <div style={{ background: "#0e0f12", borderRadius: 8, padding: 14 }}>
+                <div style={{ color: "#7c828c", fontSize: 11, marginBottom: 4 }}>API Key</div>
+                <div style={{ color: "#e9ebef", fontSize: 14, fontFamily: "monospace" }}>{youtubeData?.youtubeApiKey || "—"}</div>
               </div>
-              <div style={{ background: "#111114", borderRadius: 8, padding: 14 }}>
-                <div style={{ color: "#666", fontSize: 11, marginBottom: 4 }}>API Çağrısı (restart'tan beri)</div>
-                <div style={{ color: "#f4f4f6", fontSize: 14 }}>{youtubeData?.apiCallCount || 0}</div>
+              <div style={{ background: "#0e0f12", borderRadius: 8, padding: 14 }}>
+                <div style={{ color: "#7c828c", fontSize: 11, marginBottom: 4 }}>API Çağrısı (restart'tan beri)</div>
+                <div style={{ color: "#e9ebef", fontSize: 14 }}>{youtubeData?.apiCallCount || 0}</div>
               </div>
-              <div style={{ background: "#111114", borderRadius: 8, padding: 14 }}>
-                <div style={{ color: "#666", fontSize: 11, marginBottom: 4 }}>Quota Aşım Sayısı</div>
+              <div style={{ background: "#0e0f12", borderRadius: 8, padding: 14 }}>
+                <div style={{ color: "#7c828c", fontSize: 11, marginBottom: 4 }}>Quota Aşım Sayısı</div>
                 <div style={{ color: youtubeData?.quotaExceeded > 0 ? "#ef4444" : "#4ade80", fontSize: 14 }}>{youtubeData?.quotaExceeded || 0}</div>
               </div>
-              <div style={{ background: "#111114", borderRadius: 8, padding: 14 }}>
-                <div style={{ color: "#666", fontSize: 11, marginBottom: 4 }}>Cache Süresi</div>
-                <div style={{ color: "#f4f4f6", fontSize: 14 }}>{youtubeData?.cacheDurationMin || 60} dk</div>
+              <div style={{ background: "#0e0f12", borderRadius: 8, padding: 14 }}>
+                <div style={{ color: "#7c828c", fontSize: 11, marginBottom: 4 }}>Cache Süresi</div>
+                <div style={{ color: "#e9ebef", fontSize: 14 }}>{youtubeData?.cacheDurationMin || 60} dk</div>
               </div>
             </div>
           </div>
 
           {/* Warmup Ayarları */}
-          <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
-            <h3 style={{ color: "#f4f4f6", fontSize: 16, margin: "0 0 16px 0" }}>Warmup Ayarları</h3>
+          <div style={{ background: "#121418", border: "1px solid #2c3038", borderRadius: 10, padding: 20, marginBottom: 20 }}>
+            <h3 style={{ color: "#e9ebef", fontSize: 16, margin: "0 0 16px 0" }}>Warmup Ayarları</h3>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-              <span style={{ color: "#9a9aa6", fontSize: 13 }}>Güncelleme aralığı:</span>
+              <span style={{ color: "#9aa0aa", fontSize: 13 }}>Güncelleme aralığı:</span>
               <input type="number" min="10" max="1440"
                 style={{ ...styles.input, width: 80, textAlign: "center" }}
                 defaultValue={youtubeData?.warmupIntervalMin || 50}
                 id="warmupInterval" />
-              <span style={{ color: "#666", fontSize: 12 }}>dakika</span>
+              <span style={{ color: "#7c828c", fontSize: 12 }}>dakika</span>
               <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 14px" }} onClick={() => {
                 const val = parseInt(document.getElementById("warmupInterval").value);
                 if (val < 10 || val > 1440) return alert("10-1440 dakika arası olmalı");
@@ -5392,7 +5330,7 @@ function App() {
                 }).catch(() => alert("Hata!"));
               }}>Uygula</button>
             </div>
-            <button style={{ ...styles.primaryBtn, backgroundColor: "#8b5cf6", color: "#fff" }} onClick={() => {
+            <button style={{ ...styles.primaryBtn, backgroundColor: "#3b6fe6", color: "#fff" }} onClick={() => {
               fetch(`${API_URL}/admin/youtube`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
@@ -5404,13 +5342,13 @@ function App() {
           </div>
 
           {/* Aktif Ülkeler */}
-          <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20 }}>
+          <div style={{ background: "#121418", border: "1px solid #2c3038", borderRadius: 10, padding: 20 }}>
             <h3 style={{ color: "#0ea5e9", fontSize: 16, margin: "0 0 16px 0" }}>Aktif Ülkeler ({youtubeData?.activeRegions?.length || 0})</h3>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
               {(youtubeData?.activeRegions || []).map((r, i) => (
-                <div key={i} style={{ background: "#111114", border: "1px solid #3a3a41", borderRadius: 8, padding: "8px 14px", display: "flex", alignItems: "center", gap: 8 }}>
+                <div key={i} style={{ background: "#0e0f12", border: "1px solid #2c3038", borderRadius: 8, padding: "8px 14px", display: "flex", alignItems: "center", gap: 8 }}>
                   <span style={{ fontSize: 18 }}>{String.fromCodePoint(...r.region.split("").map(c => 127397 + c.charCodeAt(0)))}</span>
-                  <span style={{ color: "#f4f4f6", fontSize: 13, fontWeight: 500 }}>{r.region}</span>
+                  <span style={{ color: "#e9ebef", fontSize: 13, fontWeight: 500 }}>{r.region}</span>
                   <span style={{ color: r.cached ? "#4ade80" : "#ef4444", fontSize: 11 }}>
                     {r.cached ? `${r.trackCount} şarkı` : "cache yok"}
                   </span>
@@ -5430,7 +5368,7 @@ function App() {
               <input type="text" placeholder="Ülke kodu (ör: DE, FR)" maxLength={2}
                 style={{ ...styles.input, width: 160, textTransform: "uppercase" }}
                 value={newRegion} onChange={e => setNewRegion(e.target.value.toUpperCase())} />
-              <button style={{ ...styles.primaryBtn, backgroundColor: "#8b5cf6", color: "#fff" }} onClick={() => {
+              <button style={{ ...styles.primaryBtn, backgroundColor: "#3b6fe6", color: "#fff" }} onClick={() => {
                 if (newRegion.length !== 2) return alert("2 harfli ülke kodu girin (ör: DE, FR, GB)");
                 fetch(`${API_URL}/admin/youtube`, {
                   method: "POST",
@@ -5441,7 +5379,7 @@ function App() {
                 }).catch(() => alert("Hata!"));
               }}>Ülke Ekle</button>
             </div>
-            <p style={{ color: "#666", fontSize: 11, marginTop: 12 }}>
+            <p style={{ color: "#7c828c", fontSize: 11, marginTop: 12 }}>
               Kullanıcılar bir ülkeden istek attığında o ülke otomatik eklenir. Burada manuel ekleme/kaldırma yapabilirsin.
             </p>
           </div>
@@ -5456,52 +5394,52 @@ function App() {
 }
 
 const styles = {
-  container: { backgroundColor: "#111114", minHeight: "100vh", color: "#f4f4f6", fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif", padding: "40px 20px" },
+  container: { backgroundColor: "#0e0f12", minHeight: "100vh", color: "#e9ebef", fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif", padding: "40px 20px" },
   content: { maxWidth: 1000, margin: "0 auto", display: "flex", flexDirection: "column", gap: 30 },
-  card: { backgroundColor: "#1c1c22", padding: "20px 22px", borderRadius: 14, border: "1px solid #2e2e36" },
-  title: { margin: "0 0 18px 0", fontSize: 16, fontWeight: "600", letterSpacing: -0.2, color: "#f4f4f6" },
+  card: { backgroundColor: "#15171b", padding: "20px 22px", borderRadius: 14, border: "1px solid #23262d" },
+  title: { margin: "0 0 18px 0", fontSize: 16, fontWeight: "600", letterSpacing: -0.2, color: "#e9ebef" },
   headerRow: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 },
   inputGroup: { display: "flex", gap: 15, alignItems: "center", flexWrap: "wrap", marginBottom: 25 },
-  labelCheckbox: { fontSize: 14, color: "#f4f4f6", display: "flex", alignItems: "center", gap: 10, cursor: "pointer" },
-  label: { fontSize: 12, color: "#a1a1ab", display: "block", marginBottom: 6, fontWeight: "600" },
-  input: { backgroundColor: "#141418", border: "1px solid #2e2e36", color: "#f4f4f6", padding: "10px 12px", borderRadius: 10, outline: "none", fontSize: 14 },
-  inputDisabled: { backgroundColor: "#18181c", border: "1px solid rgba(255,255,255,0.06)", color: "#6b6b76", padding: "12px 14px", borderRadius: 10, width: "100%", fontSize: 14, boxSizing: "border-box" },
-  select: { backgroundColor: "#141418", border: "1px solid #2e2e36", color: "#f4f4f6", padding: "10px 12px", borderRadius: 10, outline: "none", fontSize: 14, cursor: "pointer" },
-  selectDark: { backgroundColor: "#141418", border: "1px solid #2e2e36", color: "#f4f4f6", padding: "10px 12px", borderRadius: 10, outline: "none", width: "100%", fontSize: 14, cursor: "pointer", boxSizing: "border-box" },
-  primaryBtn: { backgroundColor: "#8b5cf6", color: "#fff", border: "none", padding: "10px 16px", borderRadius: 10, cursor: "pointer", transition: "all 0.2s", fontSize: 13.5, fontWeight: "600" },
+  labelCheckbox: { fontSize: 14, color: "#e9ebef", display: "flex", alignItems: "center", gap: 10, cursor: "pointer" },
+  label: { fontSize: 12, color: "#9aa0aa", display: "block", marginBottom: 6, fontWeight: "600" },
+  input: { backgroundColor: "#0e0f12", border: "1px solid #23262d", color: "#e9ebef", padding: "10px 12px", borderRadius: 10, outline: "none", fontSize: 14 },
+  inputDisabled: { backgroundColor: "#121418", border: "1px solid rgba(255,255,255,0.06)", color: "#7c828c", padding: "12px 14px", borderRadius: 10, width: "100%", fontSize: 14, boxSizing: "border-box" },
+  select: { backgroundColor: "#0e0f12", border: "1px solid #23262d", color: "#e9ebef", padding: "10px 12px", borderRadius: 10, outline: "none", fontSize: 14, cursor: "pointer" },
+  selectDark: { backgroundColor: "#0e0f12", border: "1px solid #23262d", color: "#e9ebef", padding: "10px 12px", borderRadius: 10, outline: "none", width: "100%", fontSize: 14, cursor: "pointer", boxSizing: "border-box" },
+  primaryBtn: { backgroundColor: "#3b6fe6", color: "#fff", border: "none", padding: "10px 16px", borderRadius: 10, cursor: "pointer", transition: "all 0.2s", fontSize: 13.5, fontWeight: "600" },
   textBtn: { backgroundColor: "transparent", color: "#ef4444", border: "none", cursor: "pointer", fontWeight: "500" },
   list: { display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 },
-  listItem: { display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "#18181d", border: "1px solid #2e2e36", padding: "10px 14px", borderRadius: 10, fontSize: 14 },
+  listItem: { display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "#121418", border: "1px solid #23262d", padding: "10px 14px", borderRadius: 10, fontSize: 14 },
   
   table: { width: "100%", borderCollapse: "collapse", fontSize: 14 },
-  th: { textAlign: "left", padding: "10px 14px", color: "#8b8b96", fontWeight: "600", fontSize: 12, background: "#18181d", borderBottom: "1px solid #2e2e36" },
-  thRight: { textAlign: "right", padding: "10px 14px", color: "#8b8b96", fontWeight: "600", fontSize: 12, background: "#18181d", borderBottom: "1px solid #2e2e36" },
-  tr: { borderBottom: "1px solid #2a2a31", transition: "background 0.2s" },
+  th: { textAlign: "left", padding: "10px 14px", color: "#7c828c", fontWeight: "600", fontSize: 12, background: "#121418", borderBottom: "1px solid #23262d" },
+  thRight: { textAlign: "right", padding: "10px 14px", color: "#7c828c", fontWeight: "600", fontSize: 12, background: "#121418", borderBottom: "1px solid #23262d" },
+  tr: { borderBottom: "1px solid #1b1e23", transition: "background 0.2s" },
   td: { padding: "12px 14px", verticalAlign: "top" },
   tdRight: { padding: "12px 14px", textAlign: "right", verticalAlign: "top" },
-  actionBtn: { background: "none", border: "none", color: "#c4b5fd", cursor: "pointer", fontSize: 13, fontWeight: "600", padding: 0 },
+  actionBtn: { background: "none", border: "none", color: "#8fb0ff", cursor: "pointer", fontSize: 13, fontWeight: "600", padding: 0 },
   
   chipContainer: { display: "flex", flexWrap: "wrap", gap: 10 },
-  chip: { backgroundColor: "#18181d", padding: "4px 10px", borderRadius: 8, fontSize: 12.5, color: "#f4f4f6", border: "1px solid #2e2e36" },
+  chip: { backgroundColor: "#121418", padding: "4px 10px", borderRadius: 8, fontSize: 12.5, color: "#e9ebef", border: "1px solid #23262d" },
   
   modalOverlay: { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.65)", backdropFilter: "blur(4px)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1000 },
-  modal: { backgroundColor: "#1c1c22", width: "100%", maxWidth: 650, borderRadius: 16, border: "1px solid #2e2e36", boxShadow: "0 25px 60px rgba(0,0,0,0.6)" },
-  modalHeader: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 24px", borderBottom: "1px solid #2e2e36" },
-  modalTitle: { margin: 0, fontSize: 16, color: "#f4f4f6", fontWeight: "600" },
-  cancelBtn: { backgroundColor: "transparent", color: "#f4f4f6", border: "1px solid #2e2e36", padding: "10px 16px", borderRadius: 10, cursor: "pointer", marginRight: 10, fontSize: 13.5, fontWeight: "600" },
-  saveBtn: { backgroundColor: "#8b5cf6", color: "#fff", border: "none", padding: "10px 16px", borderRadius: 10, cursor: "pointer", fontSize: 13.5, fontWeight: "600" },
+  modal: { backgroundColor: "#15171b", width: "100%", maxWidth: 650, borderRadius: 16, border: "1px solid #23262d", boxShadow: "0 25px 60px rgba(0,0,0,0.6)" },
+  modalHeader: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 24px", borderBottom: "1px solid #23262d" },
+  modalTitle: { margin: 0, fontSize: 16, color: "#e9ebef", fontWeight: "600" },
+  cancelBtn: { backgroundColor: "transparent", color: "#e9ebef", border: "1px solid #23262d", padding: "10px 16px", borderRadius: 10, cursor: "pointer", marginRight: 10, fontSize: 13.5, fontWeight: "600" },
+  saveBtn: { backgroundColor: "#3b6fe6", color: "#fff", border: "none", padding: "10px 16px", borderRadius: 10, cursor: "pointer", fontSize: 13.5, fontWeight: "600" },
   modalBody: { padding: "22px 24px" },
   formGroup: { marginBottom: 25 },
   
-  chipsInputBox: { backgroundColor: "#141418", border: "1px solid #2e2e36", borderRadius: 10, padding: "12px", display: "flex", flexWrap: "wrap", gap: 8, minHeight: 110 },
-  chipEditable: { backgroundColor: "#26262d", padding: "5px 10px", borderRadius: 8, fontSize: 12.5, display: "flex", alignItems: "center", gap: 8, color: "#f4f4f6" },
-  chipClose: { cursor: "pointer", color: "#9a9aa6", fontSize: 14 },
+  chipsInputBox: { backgroundColor: "#0e0f12", border: "1px solid #23262d", borderRadius: 10, padding: "12px", display: "flex", flexWrap: "wrap", gap: 8, minHeight: 110 },
+  chipEditable: { backgroundColor: "#1b1e23", padding: "5px 10px", borderRadius: 8, fontSize: 12.5, display: "flex", alignItems: "center", gap: 8, color: "#e9ebef" },
+  chipClose: { cursor: "pointer", color: "#9aa0aa", fontSize: 14 },
   chipInput: { background: "transparent", border: "none", color: "#fff", outline: "none", flex: 1, minWidth: 200, fontSize: 14 },
   
-  filterBox: { backgroundColor: "#18181d", border: "1px solid #2e2e36", borderRadius: 12, padding: "18px" },
-  multiSelectHeader: { backgroundColor: "#141418", border: "1px solid #2e2e36", color: "#f4f4f6", padding: "10px 12px", borderRadius: 10, cursor: "pointer", fontSize: 14, userSelect: "none" },
-  multiSelectList: { position: "absolute", top: "100%", left: 0, right: 0, backgroundColor: "#1c1c22", border: "1px solid #2e2e36", borderRadius: 10, maxHeight: 250, overflowY: "auto", zIndex: 10, marginTop: 4 },
-  multiSelectItem: { display: "flex", alignItems: "center", padding: "9px 12px", cursor: "pointer", borderBottom: "1px solid #2a2a31", fontSize: 14, color: "#f4f4f6" }
+  filterBox: { backgroundColor: "#121418", border: "1px solid #23262d", borderRadius: 12, padding: "18px" },
+  multiSelectHeader: { backgroundColor: "#0e0f12", border: "1px solid #23262d", color: "#e9ebef", padding: "10px 12px", borderRadius: 10, cursor: "pointer", fontSize: 14, userSelect: "none" },
+  multiSelectList: { position: "absolute", top: "100%", left: 0, right: 0, backgroundColor: "#15171b", border: "1px solid #23262d", borderRadius: 10, maxHeight: 250, overflowY: "auto", zIndex: 10, marginTop: 4 },
+  multiSelectItem: { display: "flex", alignItems: "center", padding: "9px 12px", cursor: "pointer", borderBottom: "1px solid #1b1e23", fontSize: 14, color: "#e9ebef" }
 };
 
 export default App;
