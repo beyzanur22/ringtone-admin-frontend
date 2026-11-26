@@ -846,6 +846,9 @@ const PANEL_CSS = `
   .pn-tabs::-webkit-scrollbar { display: none; }
   .pn-side .sw-btn.locked { width: 100%; max-width: none; height: 52px; box-sizing: border-box; background: #1f1f24; }
   .pn-side .sw-btn.locked b { flex: 1; }
+  .pn-apps-chev { transition: transform .18s; }
+  .pn-apps-chev.open { transform: rotate(180deg); }
+  .pn-side .sw-wrap .pn-apps { margin-top: 6px; }
   .pn-apps { background: #1a1a20; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 8px 6px 6px; }
   .pn-apps-h { display: flex; align-items: center; justify-content: space-between; padding: 0 6px 6px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; color: #6b6b76; }
   .pn-apps-h em { font-style: normal; color: #8b8b96; margin-left: 4px; }
@@ -1429,7 +1432,7 @@ function App() {
   const [swOpen, setSwOpen] = useState(false);
   const [swQuery, setSwQuery] = useState("");
   useEffect(() => {
-    const onKey = (e) => { if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k" && !PANEL_LOCKED) { e.preventDefault(); setSideOpen(true); const el = document.getElementById("pn-app-q"); if (el) el.focus(); } };
+    const onKey = (e) => { if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k" && !PANEL_LOCKED) { e.preventDefault(); setSideOpen(true); setSwOpen(true); setTimeout(() => { const el = document.getElementById("pn-app-q"); if (el) el.focus(); }, 0); } };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
@@ -1830,17 +1833,29 @@ function App() {
           ) : (() => {
             const q = swQuery.trim().toLocaleLowerCase("tr");
             const list = appChips.filter(a => !q || String(a.name || a.id).toLocaleLowerCase("tr").includes(q) || String(a.packageName || "").toLowerCase().includes(q));
-            const choose = (id) => { if (id === "__all") setScopeAll(true); else pickApp(id); setSideOpen(false); };
+            const choose = (id) => { if (id === "__all") setScopeAll(true); else pickApp(id); setSwOpen(false); setSwQuery(""); setSideOpen(false); };
+            const showAll = isMonitor && scopeAll;
+            const n = showAll ? allCount : chipCount(appId);
             return (
+              <div className="sw-wrap">
+                <button type="button" className={"sw-btn" + (swOpen ? " open" : "")} onClick={() => setSwOpen(v => !v)} aria-expanded={swOpen} title="Uygulama seç (⌘K)">
+                  {showAll
+                    ? <span className="pn-av pn-av-all"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></svg></span>
+                    : <span className="pn-av" style={{ background: brand }}>{String(currentApp.name || appId).trim().charAt(0).toLocaleUpperCase("tr")}</span>}
+                  <b>{showAll ? "Tüm uygulamalar" : (currentApp.name || appId)}</b>
+                  {n != null && <em className={n > 0 ? "live" : ""}><i />{n}</em>}
+                  <svg viewBox="0 0 24 24" className={"sw-ic pn-apps-chev" + (swOpen ? " open" : "")}><path d="m6 9 6 6 6-6" /></svg>
+                </button>
+                {swOpen && (
               <div className="pn-apps">
                 <div className="pn-apps-h">
                   <span>Uygulamalar <em>{appChips.length}</em></span>
-                  <button type="button" onClick={() => pick("apps")}>Yönet</button>
+                  <button type="button" onClick={() => { setSwOpen(false); pick("apps"); }}>Yönet</button>
                 </div>
                 {appChips.length > 6 && (
                   <label className="pn-apps-q">
                     <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
-                    <input id="pn-app-q" value={swQuery} onChange={e => setSwQuery(e.target.value)} placeholder="Uygulama ara (⌘K)"
+                    <input id="pn-app-q" autoFocus value={swQuery} onChange={e => setSwQuery(e.target.value)} placeholder="Uygulama ara (⌘K)"
                       onKeyDown={e => { if (e.key === "Enter" && list[0]) { choose(list[0].id); setSwQuery(""); } if (e.key === "Escape") setSwQuery(""); }} />
                   </label>
                 )}
@@ -1865,6 +1880,8 @@ function App() {
                   })}
                   {!list.length && <div className="sw-none">Eşleşen uygulama yok</div>}
                 </div>
+              </div>
+                )}
               </div>
             );
           })()}
