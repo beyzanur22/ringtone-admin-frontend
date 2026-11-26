@@ -323,7 +323,7 @@ function AlbumsSection({ apiUrl }) {
 
   return (
     <div style={styles.card}>
-      <h2 style={styles.title}>💿 Popüler Albümler</h2>
+      <h2 style={styles.title}>Popüler Albümler</h2>
       <p style={{ color: "#9a9aa6", fontSize: 13, marginTop: -8, marginBottom: 20 }}>
         Ülke listeleri YouTube Music'ten haftada bir çekilir; uygulama yalnızca bu kayıtları okur. Liste yoksa ya da ülke desteklenmiyorsa dünya listesi gösterilir. Sayfa 15 sn'de bir yenilenir.
       </p>
@@ -343,7 +343,7 @@ function AlbumsSection({ apiUrl }) {
         <input style={{ ...styles.input, width: 90, textTransform: "uppercase" }} maxLength={2} placeholder="TR" value={testCc}
           onChange={e => setTestCc(e.target.value)} onKeyDown={e => e.key === "Enter" && runTest()} />
         <button style={styles.primaryBtn} onClick={runTest}>Bu ülkeye ne gider?</button>
-        <button style={{ ...styles.primaryBtn, background: "transparent", color: "#fff", border: "1px solid rgba(255,255,255,0.2)" }} onClick={load}>🔄 Yenile</button>
+        <button style={{ ...styles.primaryBtn, background: "transparent", color: "#fff", border: "1px solid rgba(255,255,255,0.2)" }} onClick={load}>Yenile</button>
       </div>
       {test && (
         <div style={{ background: "#18181c", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: 14, marginBottom: 20, fontSize: 13 }}>
@@ -521,6 +521,7 @@ function PanelIcon({ k, fallback }) {
   return <svg className="pn-ico" viewBox="0 0 24 24" dangerouslySetInnerHTML={{ __html: d }} />;
 }
 const PANEL_CSS = `
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
   .pn-root { display: flex; min-height: 100vh; background: #111114; color: #f4f4f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
   .pn-root svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
   .pn-root ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -861,6 +862,25 @@ const PANEL_CSS = `
   .pn-apps .sw-item .pn-av { width: 26px; height: 26px; border-radius: 7px; font-size: 11.5px; }
   .pn-apps .sw-t b { font-size: 13px; }
   .pn-apps .sw-item.on { box-shadow: inset 0 0 0 1px rgba(139,92,246,0.5); }
+  .pn-root { font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  .pn-side { background: #1c1c22; border-right-color: #2e2e36; }
+  .pn-head { background: rgba(17,17,20,0.92); border-bottom-color: #2e2e36; }
+  .pn-mi:hover { background: #24242b; }
+  .pn-mi.active { background: #2a2440; }
+  .pn-mi.active .pn-mt b { color: #c4b5fd; }
+  .pn-ni { background: #26262d; }
+  .pn-tabs { background: #18181d; border: 1px solid #2e2e36; border-radius: 12px; }
+  .pn-tabs button { font-weight: 500; color: #a1a1ab; }
+  .pn-tabs button.on { background: #2a2a31; color: #f4f4f6; box-shadow: 0 0 0 1px #3a3a42; }
+  .pn-tabs button.on .pn-ico { color: #c4b5fd; }
+  .pn-ghost { background: #1c1c22; border-color: #2e2e36; }
+  .pn-content { gap: 20px; }
+  .pn-content h2 { font-weight: 600; }
+  .pn-content table { border-collapse: collapse; }
+  .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]), .pn-content select, .pn-content textarea { border-color: #2e2e36; border-radius: 10px; }
+  .pn-root input[type=checkbox]:checked { background: #8b5cf6; }
+  .pn-live { background: #15271d; border-color: #1f5133; }
+  .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]), .pn-content select, .pn-content textarea { box-sizing: border-box; max-width: 100%; }
   .pn-scrim { display: none; }
   @media (max-width: 900px) {
     .pn-appbar { padding: 4px 16px 10px; }
@@ -2335,7 +2355,7 @@ function App() {
                     </div>
                   </div>
                   <CredRow label="Paket" value={p.packageName} />
-                  {p.developerName ? <CredRow label="Geliştirici" value={p.developerName} /> : <div style={{ color: "#f59e0b", fontSize: 12, margin: "4px 0" }}>⚠️ Geliştirici adı yok — Play reddedebilir</div>}
+                  {p.developerName ? <CredRow label="Geliştirici" value={p.developerName} /> : <div style={{ color: "#f59e0b", fontSize: 12, margin: "4px 0" }}>Geliştirici adı yok — Play reddedebilir</div>}
                   <CredRow label="Link" value={p.url} />
                 </div>
               ))}
@@ -2362,7 +2382,7 @@ function App() {
           <button style={styles.primaryBtn} onClick={updateConfig}>Ayarları Kaydet</button>
 
           <div style={{ marginTop: 24, borderTop: "1px solid #2a2a2a", paddingTop: 16 }}>
-            <h3 style={{ color: "#f4f4f6", fontSize: 15, marginBottom: 8 }}>🔔 Otomatik Zil Sesi</h3>
+            <h3 style={{ color: "#f4f4f6", fontSize: 15, marginBottom: 8 }}>Otomatik Zil Sesi</h3>
             <p style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 12 }}>
               Telefon dili ile cihaz ülkesi farklıysa, indirilen MP3 otomatik zil sesi yapılır.
             </p>
@@ -2397,14 +2417,14 @@ function App() {
                 onChange={e => setConfig({ ...config, mp3Provider: { ...(config.mp3Provider || {}), bazocam: e.target.checked } })}
                 style={{ marginRight: 10 }}
               />
-              <span style={{ color: (config.mp3Provider?.bazocam !== false) ? "#4ade80" : "#9a9aa6" }}>🌐 Bazocam (MP3)</span>
+              <span style={{ color: (config.mp3Provider?.bazocam !== false) ? "#4ade80" : "#9a9aa6" }}>Bazocam (MP3)</span>
             </label>
             <label style={{ ...styles.labelCheckbox, padding: "12px 20px", borderRadius: 8, border: "1px solid #2c2c33", background: (config.mp3Provider?.backend !== false) ? "#1a2a3a" : "#18181c" }}>
               <input type="checkbox" checked={config.mp3Provider?.backend !== false}
                 onChange={e => setConfig({ ...config, mp3Provider: { ...(config.mp3Provider || {}), backend: e.target.checked } })}
                 style={{ marginRight: 10 }}
               />
-              <span style={{ color: (config.mp3Provider?.backend !== false) ? "#60a5fa" : "#9a9aa6" }}>🖥️ Backend (M4A)</span>
+              <span style={{ color: (config.mp3Provider?.backend !== false) ? "#60a5fa" : "#9a9aa6" }}>Backend (M4A)</span>
             </label>
           </div>
           <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 6, background: "#141418", fontSize: 12, color: "#aaa" }}>
@@ -2436,7 +2456,7 @@ function App() {
               onChange={e => setConfig({ ...config, contentFilter: { ...(config.contentFilter || {}), blockLive: e.target.checked } })}
               style={{ marginRight: 10 }}
             />
-            <span style={{ color: (config.contentFilter?.blockLive !== false) ? "#f87171" : "#9a9aa6" }}>📡 Canlı yayınları engelle</span>
+            <span style={{ color: (config.contentFilter?.blockLive !== false) ? "#f87171" : "#9a9aa6" }}>Canlı yayınları engelle</span>
           </label>
 
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
@@ -2453,7 +2473,7 @@ function App() {
           </div>
 
           <div style={{ padding: "10px 14px", borderRadius: 6, background: "#2a2200", border: "1px solid #4a3a00", fontSize: 12, color: "#d4b062", marginBottom: 16 }}>
-            ⚠️ Bu filtre <b>backend araması</b> (Android 12 ve altı + fallback) için geçerlidir. Android 13+ cihazlar aramayı telefonda NewPipe ile yaptığından bu filtreden etkilenmez.
+            Bu filtre <b>backend araması</b> (Android 12 ve altı + fallback) için geçerlidir. Android 13+ cihazlar aramayı telefonda NewPipe ile yaptığından bu filtreden etkilenmez.
           </div>
 
           <button style={{ ...styles.primaryBtn }} onClick={updateConfig}>İçerik Filtresini Kaydet</button>
@@ -2466,8 +2486,8 @@ function App() {
           <div style={{ display: "flex", gap: 10, marginBottom: 15, alignItems: "center" }}>
             <span style={{ color: "#aaa", fontSize: 13 }}>Eklenecek mod:</span>
             <select style={{...styles.select, flex: "unset", width: 150}} value={newCountryMode} onChange={e => setNewCountryMode(e.target.value)}>
-              <option value="youtube">🎬 YouTube</option>
-              <option value="ringtone">🎵 Ringtone</option>
+              <option value="youtube">YouTube</option>
+              <option value="ringtone">Ringtone</option>
             </select>
           </div>
 
@@ -2563,8 +2583,8 @@ function App() {
                         ...prev,
                         countries: { ...prev.countries, [code]: e.target.value }
                       }))}>
-                      <option value="youtube">🎬 YouTube</option>
-                      <option value="ringtone">🎵 Ringtone</option>
+                      <option value="youtube">YouTube</option>
+                      <option value="ringtone">Ringtone</option>
                     </select>
                     <button style={{...styles.textBtn, color: "#ef4444"}} onClick={() => removeCountry(code)}>✕</button>
                   </div>
@@ -2592,7 +2612,7 @@ function App() {
             <div style={{ background: "#1e1e2e", borderRadius: 10, padding: 15 }}>
               <p style={{ color: "#aaa", margin: "0 0 10px 0", fontSize: 13, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}>Hedef Ülke</p>
               <select style={{...styles.input, cursor: "pointer"}} value={notifTargetCountry} onChange={e => setNotifTargetCountry(e.target.value)}>
-                <option value="all">🌍 Tüm Ülkeler</option>
+                <option value="all">Tüm Ülkeler</option>
                 <option value="TR">🇹🇷 Türkiye</option>
                 <option value="US">🇺🇸 ABD</option>
                 <option value="GB">🇬🇧 İngiltere</option>
@@ -2802,7 +2822,7 @@ function App() {
                                 background: "#3b1416", color: "#fca5a5", border: "1px solid #7f1d1d", cursor: "help"
                               }}
                             >
-                              ⚠ BOZUK — yıldız algılanmıyor
+                              BOZUK — yıldız algılanmıyor
                             </span>
                           )}
                           <span style={{ fontSize: 11, color: "#666" }}>
@@ -2848,7 +2868,7 @@ function App() {
           {/* Geri Bildirimler */}
           <div style={{ marginTop: 30, borderTop: "1px solid #3a3a41", paddingTop: 24 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-              <h3 style={{ margin: 0, fontSize: 17, fontWeight: 600, color: "#f4f4f6" }}>📝 Kullanıcı Geri Bildirimleri</h3>
+              <h3 style={{ margin: 0, fontSize: 17, fontWeight: 600, color: "#f4f4f6" }}>Kullanıcı Geri Bildirimleri</h3>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                 <span style={{ color: "#9a9aa6", fontSize: 13 }}>Toplam: <b style={{ color: "#f4f4f6" }}>{feedbacks.length}</b></span>
                 <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 14px" }} onClick={fetchFeedbacks}>🔄</button>
@@ -2867,7 +2887,7 @@ function App() {
                         <span style={{ color: fb.rating <= 2 ? "#ef4444" : "#f59e0b", fontWeight: 600, fontSize: 13 }}>{fb.rating}/5</span>
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                        {fb.country && <span style={{ color: "#666", fontSize: 11 }}>🌍 {fb.country}</span>}
+                        {fb.country && <span style={{ color: "#666", fontSize: 11 }}>{fb.country}</span>}
                         <span style={{ color: "#555", fontSize: 11 }}>{new Date(fb.createdAt).toLocaleString("tr-TR")}</span>
                         <button onClick={() => { if (window.confirm("Silmek istediğine emin misin?")) deleteFeedback(fb.id); }}
                           style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer", fontSize: 12 }}>🗑️</button>
@@ -2885,14 +2905,14 @@ function App() {
         {/* CANLI KULLANICILAR */}
         {activeSection === "reviewlogs" && <div style={styles.card}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-            <h2 style={{ ...styles.title, margin: 0 }}>⭐ Değerlendirme Logları</h2>
+            <h2 style={{ ...styles.title, margin: 0 }}>Değerlendirme Logları</h2>
             <div style={{ display: "flex", gap: 8 }}>
-              <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 14px" }} onClick={fetchReviewLogs}>🔄 Yenile</button>
+              <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 14px" }} onClick={fetchReviewLogs}>Yenile</button>
               <button style={{ ...styles.primaryBtn, backgroundColor: "#7f1d1d", color: "#fff", fontSize: 12, padding: "6px 14px" }} onClick={clearReviewLogs}>Temizle</button>
             </div>
           </div>
           <p style={{ color: "#f59e0b", fontSize: 12, margin: "0 0 20px 0", lineHeight: 1.6 }}>
-            ⚠️ Google, kullanıcının <b>kaç yıldız verdiğini bildirmez</b>. Buradaki loglar Google'ın isteği
+            Google, kullanıcının <b>kaç yıldız verdiğini bildirmez</b>. Buradaki loglar Google'ın isteği
             kabul edip etmediğini ve kartın ekranda kalıp kalmadığını gösterir. Gerçek puan ortalaman
             yalnızca Play Console'da görünür.
           </p>
@@ -2976,7 +2996,7 @@ function App() {
                               {l.errorCode ? `${l.errorCode} — ` : ""}{l.detail}
                             </td>
                             <td style={{ padding: "8px 10px", color: "#9a9aa6" }}>{l.durationMs ? `${l.durationMs} ms` : "—"}</td>
-                            <td style={{ padding: "8px 10px", color: "#d4d4dc" }}>🌍 {l.country}</td>
+                            <td style={{ padding: "8px 10px", color: "#d4d4dc" }}>{l.country}</td>
                             <td style={{ padding: "8px 10px", color: "#666", fontFamily: "monospace", fontSize: 11 }}>
                               {(l.deviceId || "—").slice(0, 10)}{l.sdk ? ` · SDK ${l.sdk}` : ""}
                             </td>
@@ -2996,7 +3016,7 @@ function App() {
 
         {activeSection === "live" && <div style={styles.card}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-            <h2 style={{ ...styles.title, margin: 0 }}>🟢 Canlı Kullanıcılar</h2>
+            <h2 style={{ ...styles.title, margin: 0 }}>Canlı Kullanıcılar</h2>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <span style={{ color: "#4ade80", fontSize: 11 }}>● canlı — 5 sn'de bir yenilenir</span>
               <select style={{ ...styles.selectDark, width: "auto", padding: "6px 10px", fontSize: 12 }}
@@ -3007,7 +3027,7 @@ function App() {
                 <option value={30}>Son 30 dakika</option>
                 <option value={60}>Son 1 saat</option>
               </select>
-              <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 14px" }} onClick={() => fetchLiveUsers(liveWindow)}>🔄 Yenile</button>
+              <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 14px" }} onClick={() => fetchLiveUsers(liveWindow)}>Yenile</button>
             </div>
           </div>
           <p style={{ color: "#9a9aa6", fontSize: 12, margin: "0 0 20px 0" }}>
@@ -3253,7 +3273,7 @@ function App() {
                               backgroundColor: u.secondsAgo < 120 ? "#22c55e" : "#eab308" }} />
                             {u.ip}
                           </td>
-                          <td style={{ padding: "8px 10px", color: "#d4d4dc" }}>🌍 {u.country}</td>
+                          <td style={{ padding: "8px 10px", color: "#d4d4dc" }}>{u.country}</td>
                           <td style={{ padding: "8px 10px" }}>
                             {(() => {
                               const map = {
@@ -3291,7 +3311,7 @@ function App() {
         {/* ZİL SESİ MODU — kim, nereden, hangi kural yüzünden */}
         {activeSection === "ringtonemode" && <div style={styles.card}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6, flexWrap: "wrap", gap: 10 }}>
-            <h2 style={{ ...styles.title, margin: 0 }}>🔔 Zil Sesi Modu</h2>
+            <h2 style={{ ...styles.title, margin: 0 }}>Zil Sesi Modu</h2>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <span style={{ color: "#0ea5e9", fontSize: 11 }}>● 10 sn'de bir yenilenir</span>
               <select style={{ ...styles.selectDark, width: "auto", padding: "6px 10px", fontSize: 12 }}
@@ -3303,7 +3323,7 @@ function App() {
                 <option value={60}>Son 1 saat</option>
               </select>
               <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 14px" }}
-                onClick={() => fetchRtUsers(rtWindow)}>🔄 Yenile</button>
+                onClick={() => fetchRtUsers(rtWindow)}>Yenile</button>
             </div>
           </div>
           <p style={{ color: "#9a9aa6", fontSize: 12, margin: "0 0 20px 0" }}>
@@ -3469,7 +3489,7 @@ function App() {
                     {rtUsers.byCountry.map(c => (
                       <span key={c.country} style={{ padding: "6px 12px", borderRadius: 20, backgroundColor: "#0c2d48",
                         border: "1px solid #1e4a63", fontSize: 12, color: "#d4d4dc" }}>
-                        🌍 {c.country} <b style={{ color: "#38bdf8" }}>{c.count}</b>
+                        {c.country} <b style={{ color: "#38bdf8" }}>{c.count}</b>
                       </span>
                     ))}
                   </div>
@@ -3518,11 +3538,11 @@ function App() {
         {/* GİRİŞ YAPAN IP'LER */}
         {activeSection === "loginips" && <div style={styles.card}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-            <h2 style={{ ...styles.title, margin: 0 }}>🌐 Giriş Yapan IP'ler</h2>
+            <h2 style={{ ...styles.title, margin: 0 }}>Giriş Yapan IP'ler</h2>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <span style={{ color: "#9a9aa6", fontSize: 13 }}>Toplam: <b style={{ color: "#f4f4f6" }}>{loginIps.length}</b></span>
-              <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 14px" }} onClick={fetchLoginIps}>🔄 Yenile</button>
-              <button style={{ ...styles.primaryBtn, backgroundColor: "#ef4444", color: "#fff", fontSize: 12, padding: "6px 14px" }} onClick={clearLoginIps}>🗑 Listeyi Temizle</button>
+              <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 14px" }} onClick={fetchLoginIps}>Yenile</button>
+              <button style={{ ...styles.primaryBtn, backgroundColor: "#ef4444", color: "#fff", fontSize: 12, padding: "6px 14px" }} onClick={clearLoginIps}>Listeyi Temizle</button>
             </div>
           </div>
           <p style={{ color: "#9a9aa6", fontSize: 12, margin: "-8px 0 16px 0" }}>Uygulamaya giriş yapan (config/token çeken) cihazların IP kayıtları — IP başına tek satır, tekrar girişte sayaç artar</p>
@@ -3545,7 +3565,7 @@ function App() {
                   {loginIps.map(entry => (
                     <tr key={entry.id} style={{ borderBottom: "1px solid #3a3a41" }}>
                       <td style={{ padding: "8px 10px", color: "#f4f4f6", fontFamily: "monospace" }}>{entry.ip}</td>
-                      <td style={{ padding: "8px 10px", color: "#d4d4dc" }}>🌍 {entry.country || "?"}</td>
+                      <td style={{ padding: "8px 10px", color: "#d4d4dc" }}>{entry.country || "?"}</td>
                       <td style={{ padding: "8px 10px", color: "#a78bfa", fontWeight: 600 }}>{entry.count}</td>
                       <td style={{ padding: "8px 10px", color: "#9a9aa6" }}>{entry.firstSeen ? new Date(entry.firstSeen).toLocaleString("tr-TR") : "-"}</td>
                       <td style={{ padding: "8px 10px", color: "#9a9aa6" }}>{entry.lastSeen ? new Date(entry.lastSeen).toLocaleString("tr-TR") : "-"}</td>
@@ -3692,7 +3712,7 @@ function App() {
                 </div>
                 {popupType === "vote" && (
                   <p style={{ color: "#f59e0b", fontSize: 11, margin: "10px 0 0 0", lineHeight: 1.5 }}>
-                    ⚠️ Google, yorum isteğini kullanıcının puanına göre filtrelemeyi (review gating) yasaklıyor.
+                    Google, yorum isteğini kullanıcının puanına göre filtrelemeyi (review gating) yasaklıyor.
                     Bu tip politika ihlali sayılabilir. Güvenli olan "Değerlendirme Daveti".
                   </p>
                 )}
@@ -3831,14 +3851,14 @@ function App() {
 
         {/* İNDİRME REKLAMI */}
         {activeSection === "downloadad" && <div style={styles.card}>
-          <h2 style={styles.title}>💰 İndirme Reklamı / URL Açma</h2>
+          <h2 style={styles.title}>İndirme Reklamı / URL Açma</h2>
           <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
             Ülke bazlı reklam kuralları. Kullanıcının ülkesine göre URL açma veya AdMob reklamı gösterilir.
           </p>
 
           {/* Varsayılan (Global) Ayarlar */}
           <div style={{ padding: "16px", background: "#18181c", borderRadius: 8, border: "1px solid #2c2c33", marginBottom: 20 }}>
-            <h3 style={{ color: "#a78bfa", margin: "0 0 12px 0", fontSize: 15 }}>🌍 Varsayılan Ayar (Kural tanımlı olmayan ülkeler)</h3>
+            <h3 style={{ color: "#f4f4f6", margin: "0 0 12px 0", fontSize: 15 }}>Varsayılan Ayar (Kural tanımlı olmayan ülkeler)</h3>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
               <label style={{ fontSize: 13, color: "#ccc" }}>Aktif:</label>
               <input type="checkbox" checked={config.downloadAd?.enabled || false}
@@ -3890,12 +3910,12 @@ function App() {
             <label style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 14, color: config.downloadAd?.forceFirstDownload ? "#22c55e" : "#aaa", fontSize: 13, cursor: "pointer" }}>
               <input type="checkbox" checked={config.downloadAd?.forceFirstDownload || false}
                 onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, forceFirstDownload: e.target.checked } }))} />
-              🎯 İlk indirmede mutlaka reklam (yeni kullanıcının ilk indirmesinde, frekanstan bağımsız — cihaz başına 1 kez)
+              İlk indirmede mutlaka reklam (yeni kullanıcının ilk indirmesinde, frekanstan bağımsız — cihaz başına 1 kez)
             </label>
 
             {/* Özel oran: N indirmede X reklam */}
             <div style={{ marginTop: 12 }}>
-              <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>📊 Özel oran (0 = kapalı, üstteki Frekans kullanılır):</label>
+              <label style={{ fontSize: 12, color: "#9a9aa6", display: "block", marginBottom: 4 }}>Özel oran (0 = kapalı, üstteki Frekans kullanılır):</label>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <span style={{ color: "#9a9aa6", fontSize: 13 }}>Her</span>
                 <input type="number" min={0} placeholder="10" value={config.downloadAd?.cycleSize || ""}
@@ -3914,12 +3934,12 @@ function App() {
           {/* Ülke Kuralları */}
           <div style={{ marginBottom: 20 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-              <h3 style={{ color: "#f59e0b", margin: 0, fontSize: 15 }}>🏳️ Ülke Bazlı Kurallar</h3>
+              <h3 style={{ color: "#f4f4f6", margin: 0, fontSize: 15 }}>Ülke Bazlı Kurallar</h3>
               <button onClick={() => {
                 const rules = [...(config.downloadAd?.rules || [])];
                 rules.unshift({ countries: [], enabled: true, type: "url", url: "", admobUnitId: "", showEveryNth: 1, delaySeconds: 0 });
                 setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
-              }} style={{ background: "#f59e0b", color: "#000", border: "none", borderRadius: 6, padding: "6px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+              }} style={{ background: "transparent", color: "#f4f4f6", border: "1px solid #2e2e36", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
                 + Kural Ekle
               </button>
             </div>
@@ -4038,14 +4058,14 @@ function App() {
           </div>
 
           <button onClick={updateConfig}
-            style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed)", color: "#fff", border: "none", borderRadius: 8, padding: "12px 24px", fontSize: 15, fontWeight: 600, cursor: "pointer", width: "100%" }}>
+            style={{ background: "#8b5cf6", color: "#fff", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 14, fontWeight: 600, cursor: "pointer", width: "100%" }}>
             Ayarları Kaydet
           </button>
         </div>}
 
         {/* BANNER AD / ARAMA REKLAMI */}
         {activeSection === "bannerad" && <div style={styles.card}>
-          <h2 style={styles.title}>📢 Arama Sonuçları Banner Reklamı</h2>
+          <h2 style={styles.title}>Arama Sonuçları Banner Reklamı</h2>
           <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
             Arama sonuçlarında her N. şarkıdan sonra banner reklam gösterilir. Ülke bazlı Google AdMob veya kendi görseliniz.
           </p>
@@ -4077,7 +4097,7 @@ function App() {
           {/* Belirli pozisyonlar */}
           <div style={{ marginBottom: 20, padding: "14px 16px", background: "#18181c", borderRadius: 8, border: "1px solid #2c2c33" }}>
             <label style={{ fontSize: 13, color: "#ccc", display: "block", marginBottom: 6 }}>
-              📍 Belirli pozisyonlar (virgülle ayır, örn: <b>2, 10</b>)
+              Belirli pozisyonlar (virgülle ayır, örn: <b>2, 10</b>)
             </label>
             <input type="text"
               key={JSON.stringify(config.bannerAd?.positions || [])}
@@ -4098,12 +4118,12 @@ function App() {
           {/* Ülke Kuralları */}
           <div style={{ marginBottom: 20 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-              <h3 style={{ color: "#f59e0b", margin: 0, fontSize: 15 }}>🏳️ Ülke Bazlı Kurallar</h3>
+              <h3 style={{ color: "#f4f4f6", margin: 0, fontSize: 15 }}>Ülke Bazlı Kurallar</h3>
               <button onClick={() => {
                 const rules = [...(config.bannerAd?.rules || [])];
                 rules.push({ countries: [], enabled: true, type: "admob", admobUnitId: "", imageUrl: "", clickUrl: "" });
                 setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
-              }} style={{ background: "#f59e0b", color: "#000", border: "none", borderRadius: 6, padding: "6px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+              }} style={{ background: "transparent", color: "#f4f4f6", border: "1px solid #2e2e36", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
                 + Kural Ekle
               </button>
             </div>
@@ -4197,14 +4217,14 @@ function App() {
           </div>
 
           <button onClick={updateConfig}
-            style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed)", color: "#fff", border: "none", borderRadius: 8, padding: "12px 24px", fontSize: 15, fontWeight: 600, cursor: "pointer", width: "100%" }}>
+            style={{ background: "#8b5cf6", color: "#fff", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 14, fontWeight: 600, cursor: "pointer", width: "100%" }}>
             Ayarları Kaydet
           </button>
         </div>}
 
         {/* ALT BANNER REKLAM */}
         {activeSection === "bottombanner" && <div style={styles.card}>
-          <h2 style={styles.title}>📌 Alt Banner Reklam</h2>
+          <h2 style={styles.title}>Alt Banner Reklam</h2>
           <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
             Ekranın en altında sabit duran banner reklam. Ülke bazlı Google AdMob veya kendi görseliniz.
           </p>
@@ -4220,12 +4240,12 @@ function App() {
           </div>
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-            <h3 style={{ color: "#f59e0b", margin: 0, fontSize: 15 }}>🏳️ Ülke Bazlı Kurallar</h3>
+            <h3 style={{ color: "#f4f4f6", margin: 0, fontSize: 15 }}>Ülke Bazlı Kurallar</h3>
             <button onClick={() => {
               const rules = [...(config.bottomBannerAd?.rules || [])];
               rules.push({ countries: [], enabled: true, type: "admob", admobUnitId: "", imageUrl: "", clickUrl: "" });
               setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
-            }} style={{ background: "#f59e0b", color: "#000", border: "none", borderRadius: 6, padding: "6px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+            }} style={{ background: "transparent", color: "#f4f4f6", border: "1px solid #2e2e36", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
               + Kural Ekle
             </button>
           </div>
@@ -4318,14 +4338,14 @@ function App() {
           ))}
 
           <button onClick={updateConfig}
-            style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed)", color: "#fff", border: "none", borderRadius: 8, padding: "12px 24px", fontSize: 15, fontWeight: 600, cursor: "pointer", width: "100%" }}>
+            style={{ background: "#8b5cf6", color: "#fff", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 14, fontWeight: 600, cursor: "pointer", width: "100%" }}>
             Ayarları Kaydet
           </button>
         </div>}
 
         {/* ZİL SESİ REKLAMI — YouTube reklamlarından tamamen bağımsız (ringtoneBannerAd / ringtoneBottomBannerAd) */}
         {activeSection === "ringtonead" && <div style={styles.card}>
-          <h2 style={styles.title}>🔔 Zil Sesi Modu Reklamı</h2>
+          <h2 style={styles.title}>Zil Sesi Modu Reklamı</h2>
           <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
             Yalnızca <b>Zil Sesi Modu</b> için reklam. YouTube modundaki reklamlardan tamamen bağımsızdır.
             Liste içinde belirli aralıklarla banner + ekranın en altında sabit banner.
@@ -4333,7 +4353,7 @@ function App() {
 
           {/* ===== LİSTE-İÇİ BANNER (ringtoneBannerAd) ===== */}
           <div style={{ padding: "16px", background: "#10182a", borderRadius: 8, border: "1px solid #1e3a5f", marginBottom: 24 }}>
-            <h3 style={{ color: "#38bdf8", margin: "0 0 14px 0", fontSize: 15 }}>📢 Liste-içi Banner (zil sesleri arasında)</h3>
+            <h3 style={{ color: "#f4f4f6", margin: "0 0 14px 0", fontSize: 15 }}>Liste-içi Banner (zil sesleri arasında)</h3>
 
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
               <label style={{ fontSize: 14, color: "#ccc" }}>Liste-içi Banner Aktif:</label>
@@ -4359,7 +4379,7 @@ function App() {
 
             <div style={{ marginBottom: 16 }}>
               <label style={{ fontSize: 13, color: "#ccc", display: "block", marginBottom: 6 }}>
-                📍 Belirli pozisyonlar (virgülle ayır, örn: <b>2, 6</b>)
+                Belirli pozisyonlar (virgülle ayır, örn: <b>2, 6</b>)
               </label>
               <input type="text"
                 key={JSON.stringify(config.ringtoneBannerAd?.positions || [])}
@@ -4376,12 +4396,12 @@ function App() {
             </div>
 
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-              <h4 style={{ color: "#f59e0b", margin: 0, fontSize: 14 }}>🏳️ Ülke Bazlı Kurallar</h4>
+              <h4 style={{ color: "#f4f4f6", margin: 0, fontSize: 14 }}>Ülke Bazlı Kurallar</h4>
               <button onClick={() => {
                 const rules = [...(config.ringtoneBannerAd?.rules || [])];
                 rules.push({ countries: [], enabled: true, type: "admob", admobUnitId: "", imageUrl: "", clickUrl: "" });
                 setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
-              }} style={{ background: "#f59e0b", color: "#000", border: "none", borderRadius: 6, padding: "6px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+              }} style={{ background: "transparent", color: "#f4f4f6", border: "1px solid #2e2e36", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
                 + Kural Ekle
               </button>
             </div>
@@ -4471,7 +4491,7 @@ function App() {
 
           {/* ===== SABİT ALT BANNER (ringtoneBottomBannerAd) ===== */}
           <div style={{ padding: "16px", background: "#10182a", borderRadius: 8, border: "1px solid #1e3a5f", marginBottom: 24 }}>
-            <h3 style={{ color: "#38bdf8", margin: "0 0 14px 0", fontSize: 15 }}>📌 Sabit Alt Banner</h3>
+            <h3 style={{ color: "#f4f4f6", margin: "0 0 14px 0", fontSize: 15 }}>Sabit Alt Banner</h3>
 
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
               <label style={{ fontSize: 14, color: "#ccc" }}>Alt Banner Aktif:</label>
@@ -4484,12 +4504,12 @@ function App() {
             </div>
 
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-              <h4 style={{ color: "#f59e0b", margin: 0, fontSize: 14 }}>🏳️ Ülke Bazlı Kurallar</h4>
+              <h4 style={{ color: "#f4f4f6", margin: 0, fontSize: 14 }}>Ülke Bazlı Kurallar</h4>
               <button onClick={() => {
                 const rules = [...(config.ringtoneBottomBannerAd?.rules || [])];
                 rules.push({ countries: [], enabled: true, type: "admob", admobUnitId: "", imageUrl: "", clickUrl: "" });
                 setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
-              }} style={{ background: "#f59e0b", color: "#000", border: "none", borderRadius: 6, padding: "6px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+              }} style={{ background: "transparent", color: "#f4f4f6", border: "1px solid #2e2e36", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
                 + Kural Ekle
               </button>
             </div>
@@ -4578,14 +4598,14 @@ function App() {
           </div>
 
           <button onClick={updateConfig}
-            style={{ background: "linear-gradient(135deg, #38bdf8, #0ea5e9)", color: "#fff", border: "none", borderRadius: 8, padding: "12px 24px", fontSize: 15, fontWeight: 600, cursor: "pointer", width: "100%" }}>
+            style={{ background: "#8b5cf6", color: "#fff", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 14, fontWeight: 600, cursor: "pointer", width: "100%" }}>
             Zil Sesi Reklam Ayarlarını Kaydet
           </button>
         </div>}
 
         {/* REKLAMSIZ ÜLKELER */}
         {activeSection === "adfree" && <div style={styles.card}>
-          <h2 style={styles.title}>🚫 Reklamsız Ülkeler</h2>
+          <h2 style={styles.title}>Reklamsız Ülkeler</h2>
           <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
             Seçtiğiniz ülkelerde hiçbir reklam gösterilmez (indirme reklamı + banner reklam dahil).
           </p>
@@ -4631,14 +4651,14 @@ function App() {
           )}
 
           <button onClick={updateConfig}
-            style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed)", color: "#fff", border: "none", borderRadius: 8, padding: "12px 24px", fontSize: 15, fontWeight: 600, cursor: "pointer", width: "100%" }}>
+            style={{ background: "#8b5cf6", color: "#fff", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 14, fontWeight: 600, cursor: "pointer", width: "100%" }}>
             Kaydet
           </button>
         </div>}
 
         {/* ASN AYARLARI */}
         {activeSection === "asn" && <div style={styles.card}>
-          <h2 style={styles.title}>🌐 ASN Ayarları (Zorunlu Zil Sesi)</h2>
+          <h2 style={styles.title}>ASN Ayarları (Zorunlu Zil Sesi)</h2>
           <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 20 }}>
             Buraya eklenen ASN'lerden gelen cihazlar <b>ülke ayarına ve global moda bakılmadan</b> doğrudan
             zil sesi modunda açılır. ASN, cihazın IP'sinden tespit edilir.
@@ -4678,7 +4698,7 @@ function App() {
           )}
 
           <button onClick={updateConfig}
-            style={{ background: "linear-gradient(135deg, #a78bfa, #7c3aed)", color: "#fff", border: "none", borderRadius: 8, padding: "12px 24px", fontSize: 15, fontWeight: 600, cursor: "pointer", width: "100%" }}>
+            style={{ background: "#8b5cf6", color: "#fff", border: "none", borderRadius: 10, padding: "11px 20px", fontSize: 14, fontWeight: 600, cursor: "pointer", width: "100%" }}>
             Kaydet
           </button>
         </div>}
@@ -4716,7 +4736,7 @@ function App() {
             : daActionType === "package_name" ? "Kullanıcı hiçbir şey görmeden uygulama / Store açılır" : "Play değerlendirme penceresi açılır";
           return (
           <div style={styles.card}>
-            <h2 style={styles.title}>📱 Popup Gönder</h2>
+            <h2 style={styles.title}>Popup Gönder</h2>
             <p style={{ color: "#9a9aa6", fontSize: 13, margin: "-6px 0 18px" }}>
               Android cihazlara uzaktan komut gönderin. Aktif action cihaz tarafından otomatik algılanır.
             </p>
@@ -4762,7 +4782,7 @@ function App() {
                         </div>
                       </div>
                       <label className="da-row" style={{ cursor: "pointer", color: daForceAction ? "#f87171" : undefined }}>
-                        <span>🔒 Zorunlu — kullanıcı kapatamaz, onaya basmak zorunda</span>
+                        <span>Zorunlu — kullanıcı kapatamaz, onaya basmak zorunda</span>
                         <input type="checkbox" checked={daForceAction} onChange={e => setDaForceAction(e.target.checked)} />
                       </label>
                     </>
@@ -4899,7 +4919,7 @@ function App() {
                                 <small>{k}</small><div>{v}</div>
                               </div>
                             ))}
-                            <div style={{ gridColumn: "1 / -1", color: "#6b6b76", fontFamily: "monospace", fontSize: 11 }}>📅 {created} · ID: {action.id}</div>
+                            <div style={{ gridColumn: "1 / -1", color: "#6b6b76", fontFamily: "monospace", fontSize: 11 }}>{created} · ID: {action.id}</div>
                           </div>
                         )}
                       </div>
@@ -4914,14 +4934,14 @@ function App() {
 
         {/* APP CONTROLS */}
         {activeSection === "appcontrols" && <div style={styles.card}>
-          <h2 style={styles.title}>🛡️ App Controls</h2>
+          <h2 style={styles.title}>App Controls</h2>
           <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 24 }}>
             Zorunlu review ve zorunlu güncelleme ayarlarını buradan kontrol edin.
           </p>
 
           {/* REVIEW SECTION */}
           <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
-            <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 16px 0" }}>⭐ Zorunlu Review</h3>
+            <h3 style={{ color: "#f4f4f6", fontSize: 16, margin: "0 0 16px 0" }}>Zorunlu Review</h3>
             <div style={{ display: "flex", gap: 20, alignItems: "center", marginBottom: 16, flexWrap: "wrap" }}>
               <label style={styles.labelCheckbox}>
                 <input type="checkbox" checked={config.appControls?.reviewEnabled || false}
@@ -4944,7 +4964,7 @@ function App() {
 
           {/* FORCE UPDATE SECTION */}
           <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
-            <h3 style={{ color: "#f59e0b", fontSize: 16, margin: "0 0 16px 0" }}>🔄 Zorunlu Güncelleme</h3>
+            <h3 style={{ color: "#f4f4f6", fontSize: 16, margin: "0 0 16px 0" }}>Zorunlu Güncelleme</h3>
             <div style={{ display: "flex", gap: 20, alignItems: "center", marginBottom: 16, flexWrap: "wrap" }}>
               <label style={styles.labelCheckbox}>
                 <input type="checkbox" checked={config.appControls?.forceUpdateEnabled || false}
@@ -4993,17 +5013,17 @@ function App() {
           </div>
 
           <button style={{ ...styles.primaryBtn }} onClick={updateConfig}>
-            💾 App Controls Kaydet
+            App Controls Kaydet
           </button>
 
           {/* ANLIK GÖNDER BUTONLARI */}
           <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginTop: 20 }}>
-            <h3 style={{ color: "#ef4444", fontSize: 16, margin: "0 0 12px 0" }}>🚀 Anlık Tetikle</h3>
+            <h3 style={{ color: "#f4f4f6", fontSize: 16, margin: "0 0 12px 0" }}>Anlık Tetikle</h3>
             <p style={{ color: "#666", fontSize: 12, marginBottom: 16 }}>
               Butona basınca tüm aktif kullanıcılara anında gönderilir (Popup Gönder üzerinden).
             </p>
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <button style={{ ...styles.primaryBtn, backgroundColor: "#7c3aed", color: "#fff" }} onClick={() => {
+              <button style={{ ...styles.primaryBtn, backgroundColor: "#8b5cf6", color: "#fff" }} onClick={() => {
                 fetch(`${API_URL}/device-action/create`, {
                   method: "POST",
                   headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
@@ -5013,7 +5033,7 @@ function App() {
                   else alert("Hata: " + (d.error || "Gönderilemedi"));
                 }).catch(() => alert("Sunucuya bağlanılamadı!"));
               }}>
-                ⭐ Anlık Review Gönder
+                Anlık Review Gönder
               </button>
               <button style={{ ...styles.primaryBtn, backgroundColor: "#ef4444", color: "#fff" }} onClick={() => {
                 const pkg = config.appControls?.packageName || "com.example.ringtonemasterv2";
@@ -5026,7 +5046,7 @@ function App() {
                   else alert("Hata: " + (d.error || "Gönderilemedi"));
                 }).catch(() => alert("Sunucuya bağlanılamadı!"));
               }}>
-                🔄 Anlık Güncelleme Gönder
+                Anlık Güncelleme Gönder
               </button>
             </div>
           </div>
@@ -5036,7 +5056,7 @@ function App() {
         {activeSection === "albums" && !PANEL_LOCKED && <AlbumsSection apiUrl={API_URL} />}
 
         {activeSection === "apiproviders" && <div style={styles.card}>
-          <h2 style={styles.title}>🔌 API Durumu</h2>
+          <h2 style={styles.title}>API Durumu</h2>
           <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 24 }}>
             İndirme için kullanılan üçüncü parti servislerin canlı durumu
           </p>
@@ -5048,7 +5068,7 @@ function App() {
                 .then(r => r.json())
                 .then(d => setApiHealth(d.providers || []))
                 .catch(() => alert("Sağlık kontrolü başarısız"));
-            }}>🔄 Yenile</button>
+            }}>Yenile</button>
           </div>
 
           {/* Sağlık durumu özeti (salt-okunur) */}
@@ -5067,8 +5087,8 @@ function App() {
 
           {/* PROVIDER YÖNETİMİ — ekle / düzenle / sil */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 24, marginBottom: 12 }}>
-            <h3 style={{ color: "#a78bfa", fontSize: 16, margin: 0 }}>🔌 API Kaynakları</h3>
-            <button style={{ ...styles.primaryBtn, fontSize: 13, padding: "6px 14px", backgroundColor: "#16a34a", color: "#fff" }}
+            <h3 style={{ color: "#f4f4f6", fontSize: 16, margin: 0 }}>API Kaynakları</h3>
+            <button style={{ ...styles.primaryBtn, fontSize: 13, padding: "6px 14px", backgroundColor: "#8b5cf6", color: "#fff" }}
               onClick={() => {
                 const list = [...(apiProviders?.providers || [])];
                 const nextPriority = list.length ? Math.max(...list.map(x => x.priority || 0)) + 1 : 1;
@@ -5136,7 +5156,7 @@ function App() {
                         );
                       }).catch(() => alert("❌ Test isteği başarısız — sunucuya bağlanılamadı"))
                         .finally(() => { btn.textContent = original; btn.disabled = false; });
-                    }}>🧪 Test Et</button>
+                    }}>Test Et</button>
                   <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 12px", backgroundColor: "#dc2626", color: "#fff" }}
                     onClick={() => {
                       if (!window.confirm(`"${p.name || p.id}" silinsin mi?`)) return;
@@ -5157,7 +5177,7 @@ function App() {
                   </div>
                 </div>
                 <details>
-                  <summary style={{ color: "#9a9aa6", fontSize: 12, cursor: "pointer", marginBottom: 8 }}>⚙️ Endpoint şablonları (gelişmiş)</summary>
+                  <summary style={{ color: "#9a9aa6", fontSize: 12, cursor: "pointer", marginBottom: 8 }}>Endpoint şablonları (gelişmiş)</summary>
                   {[["mp3", "MP3 indirme"], ["mp4", "MP4 indirme"], ["search", "Arama"], ["autocomplete", "Otomatik tamamlama"]].map(([k, lbl]) => (
                     <div key={k} style={{ marginBottom: 8 }}>
                       <label style={{ ...styles.label, fontSize: 11 }}>{lbl}</label>
@@ -5179,10 +5199,10 @@ function App() {
               if (d.success) { alert("✅ API kaynakları kaydedildi!"); fetchApiProviders(); }
               else alert("Hata: " + (d.error || "Kaydedilemedi"));
             }).catch(() => alert("Sunucuya bağlanılamadı!"));
-          }}>💾 Tüm API Kaynaklarını Kaydet</button>
+          }}>Tüm API Kaynaklarını Kaydet</button>
 
           <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginTop: 20 }}>
-            <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 16px 0" }}>🗺️ API Haritası — Kim Neyi Kullanıyor?</h3>
+            <h3 style={{ color: "#f4f4f6", fontSize: 16, margin: "0 0 16px 0" }}>API Haritası — Kim Neyi Kullanıyor?</h3>
             <p style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 16 }}>Uygulamanın her özelliği hangi API kaynağını kullandığını gösterir</p>
             {[
               { feature: "🎵 MP3 Dinleme", source: "Bazocam API", detail: "gamma → cnv sırasıyla", fallback: "yt-dlp + Proxy", where: "Backend" },
@@ -5207,7 +5227,7 @@ function App() {
 
           {/* Autocomplete Kaynak Seçimi */}
           <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginTop: 20 }}>
-            <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 12px 0" }}>🔮 Otomatik Tamamlama Kaynağı</h3>
+            <h3 style={{ color: "#f4f4f6", fontSize: 16, margin: "0 0 12px 0" }}>Otomatik Tamamlama Kaynağı</h3>
             <p style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 16 }}>Arama yazarken önerilerin nereden geleceğini seçin</p>
             <div style={{ display: "flex", gap: 12 }}>
               {[
@@ -5223,7 +5243,7 @@ function App() {
                   <div style={{ fontSize: 24, marginBottom: 8 }}>{opt.icon}</div>
                   <div style={{ color: "#f4f4f6", fontSize: 14, fontWeight: 600, marginBottom: 4 }}>{opt.label}</div>
                   <div style={{ color: "#9a9aa6", fontSize: 11 }}>{opt.desc}</div>
-                  {config?.autocompleteSource === opt.value && <div style={{ color: "#4ade80", fontSize: 11, marginTop: 8, fontWeight: 600 }}>✅ Aktif</div>}
+                  {config?.autocompleteSource === opt.value && <div style={{ color: "#4ade80", fontSize: 11, marginTop: 8, fontWeight: 600 }}>Aktif</div>}
                 </div>
               ))}
             </div>
@@ -5234,12 +5254,12 @@ function App() {
                 body: JSON.stringify(config)
               }).then(r => r.json()).then(() => alert("✅ Otomatik tamamlama kaynağı güncellendi!"))
                 .catch(() => alert("Hata!"));
-            }}>💾 Kaydet</button>
+            }}>Kaydet</button>
           </div>
 
           {/* Eski endpoint listesi */}
           <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginTop: 20 }}>
-            <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 12px 0" }}>📡 Bazocam API Endpoint'leri</h3>
+            <h3 style={{ color: "#f4f4f6", fontSize: 16, margin: "0 0 12px 0" }}>Bazocam API Endpoint'leri</h3>
             <p style={{ color: "#9a9aa6", fontSize: 12, marginBottom: 12 }}>Patronun sunucusundaki kullanılabilir endpoint'ler</p>
             {[
               { label: "🎵 MP3 İndir", method: "GET", path: `/mp3download.php?id=VIDEO_ID&key=API_KEY&b=320` },
@@ -5260,13 +5280,13 @@ function App() {
 
         {/* SMART CACHE */}
         {activeSection === "smartcache" && <div style={styles.card}>
-          <h2 style={styles.title}>📦 Cache Yönetimi</h2>
+          <h2 style={styles.title}>Cache Yönetimi</h2>
           <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 24 }}>
             Akıllı cache sistemi — sadece popüler şarkıları cache'le
           </p>
 
           <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
-            <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 16px 0" }}>⚡ Akıllı Cache Ayarları</h3>
+            <h3 style={{ color: "#f4f4f6", fontSize: 16, margin: "0 0 16px 0" }}>Akıllı Cache Ayarları</h3>
             <label style={styles.labelCheckbox}>
               <input type="checkbox" checked={smartCache.enabled}
                 onChange={e => setSmartCache({ ...smartCache, enabled: e.target.checked })}
@@ -5292,11 +5312,11 @@ function App() {
                 if (d.success) alert("✅ Cache ayarları kaydedildi!");
                 else alert("Hata: " + (d.error || "Kaydedilemedi"));
               }).catch(() => alert("Sunucuya bağlanılamadı!"));
-            }}>💾 Cache Ayarlarını Kaydet</button>
+            }}>Cache Ayarlarını Kaydet</button>
           </div>
 
           <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20 }}>
-            <h3 style={{ color: "#f59e0b", fontSize: 16, margin: "0 0 12px 0" }}>📊 Cache İstatistikleri</h3>
+            <h3 style={{ color: "#f4f4f6", fontSize: 16, margin: "0 0 12px 0" }}>Cache İstatistikleri</h3>
             <p style={{ color: "#666", fontSize: 12 }}>
               Cache durumu sunucudan alınır. Yenilemek için butona basın.
             </p>
@@ -5307,13 +5327,13 @@ function App() {
                   if (d.smartCache) setSmartCache(d.smartCache);
                   alert(`Disk: ${d.diskUsage || "N/A"}\nR2: ${d.r2Usage || "N/A"}\nMin İstek: ${d.smartCache?.minRequests || 3}`);
                 }).catch(() => alert("İstatistik alınamadı"));
-            }}>📊 İstatistikleri Getir</button>
+            }}>İstatistikleri Getir</button>
           </div>
         </div>}
 
         {/* YOUTUBE & TOP50 */}
         {activeSection === "youtube" && <div style={styles.card}>
-          <h2 style={styles.title}>🎬 YouTube & Top50</h2>
+          <h2 style={styles.title}>YouTube & Top50</h2>
           <p style={{ color: "#9a9aa6", fontSize: 13, marginBottom: 24 }}>
             YouTube Data API durumu, Top50 ısıtma ve ülke yönetimi
           </p>
@@ -5324,12 +5344,12 @@ function App() {
                 {youtubeData?.status === "ok" ? "✅ Aktif" : "❌ Quota Aşıldı"}
               </span>
             </span>
-            <button style={{ ...styles.primaryBtn }} onClick={fetchYoutubeData}>🔄 Yenile</button>
+            <button style={{ ...styles.primaryBtn }} onClick={fetchYoutubeData}>Yenile</button>
           </div>
 
           {/* API Key & Quota */}
           <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
-            <h3 style={{ color: "#a78bfa", fontSize: 16, margin: "0 0 16px 0" }}>🔑 YouTube API</h3>
+            <h3 style={{ color: "#f4f4f6", fontSize: 16, margin: "0 0 16px 0" }}>YouTube API</h3>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
               <div style={{ background: "#111114", borderRadius: 8, padding: 14 }}>
                 <div style={{ color: "#666", fontSize: 11, marginBottom: 4 }}>API Key</div>
@@ -5352,7 +5372,7 @@ function App() {
 
           {/* Warmup Ayarları */}
           <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20, marginBottom: 20 }}>
-            <h3 style={{ color: "#f59e0b", fontSize: 16, margin: "0 0 16px 0" }}>⏱️ Warmup Ayarları</h3>
+            <h3 style={{ color: "#f4f4f6", fontSize: 16, margin: "0 0 16px 0" }}>Warmup Ayarları</h3>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
               <span style={{ color: "#9a9aa6", fontSize: 13 }}>Güncelleme aralığı:</span>
               <input type="number" min="10" max="1440"
@@ -5372,7 +5392,7 @@ function App() {
                 }).catch(() => alert("Hata!"));
               }}>Uygula</button>
             </div>
-            <button style={{ ...styles.primaryBtn, backgroundColor: "#10b981", color: "#fff" }} onClick={() => {
+            <button style={{ ...styles.primaryBtn, backgroundColor: "#8b5cf6", color: "#fff" }} onClick={() => {
               fetch(`${API_URL}/admin/youtube`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "X-App-Key": APP_KEY },
@@ -5380,12 +5400,12 @@ function App() {
               }).then(r => r.json()).then(d => {
                 if (d.success) alert("✅ Top50 manuel ısıtma başlatıldı!");
               }).catch(() => alert("Hata!"));
-            }}>🔥 Şimdi Isıt (Manuel)</button>
+            }}>Şimdi Isıt (Manuel)</button>
           </div>
 
           {/* Aktif Ülkeler */}
           <div style={{ background: "#18181c", border: "1px solid #3a3a41", borderRadius: 10, padding: 20 }}>
-            <h3 style={{ color: "#0ea5e9", fontSize: 16, margin: "0 0 16px 0" }}>🌍 Aktif Ülkeler ({youtubeData?.activeRegions?.length || 0})</h3>
+            <h3 style={{ color: "#0ea5e9", fontSize: 16, margin: "0 0 16px 0" }}>Aktif Ülkeler ({youtubeData?.activeRegions?.length || 0})</h3>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
               {(youtubeData?.activeRegions || []).map((r, i) => (
                 <div key={i} style={{ background: "#111114", border: "1px solid #3a3a41", borderRadius: 8, padding: "8px 14px", display: "flex", alignItems: "center", gap: 8 }}>
@@ -5410,7 +5430,7 @@ function App() {
               <input type="text" placeholder="Ülke kodu (ör: DE, FR)" maxLength={2}
                 style={{ ...styles.input, width: 160, textTransform: "uppercase" }}
                 value={newRegion} onChange={e => setNewRegion(e.target.value.toUpperCase())} />
-              <button style={{ ...styles.primaryBtn, backgroundColor: "#10b981", color: "#fff" }} onClick={() => {
+              <button style={{ ...styles.primaryBtn, backgroundColor: "#8b5cf6", color: "#fff" }} onClick={() => {
                 if (newRegion.length !== 2) return alert("2 harfli ülke kodu girin (ör: DE, FR, GB)");
                 fetch(`${API_URL}/admin/youtube`, {
                   method: "POST",
@@ -5419,7 +5439,7 @@ function App() {
                 }).then(r => r.json()).then(d => {
                   if (d.success) { setNewRegion(""); fetchYoutubeData(); }
                 }).catch(() => alert("Hata!"));
-              }}>➕ Ülke Ekle</button>
+              }}>Ülke Ekle</button>
             </div>
             <p style={{ color: "#666", fontSize: 11, marginTop: 12 }}>
               Kullanıcılar bir ülkeden istek attığında o ülke otomatik eklenir. Burada manuel ekleme/kaldırma yapabilirsin.
@@ -5438,50 +5458,50 @@ function App() {
 const styles = {
   container: { backgroundColor: "#111114", minHeight: "100vh", color: "#f4f4f6", fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif", padding: "40px 20px" },
   content: { maxWidth: 1000, margin: "0 auto", display: "flex", flexDirection: "column", gap: 30 },
-  card: { backgroundColor: "#1f1f24", padding: 24, borderRadius: 16, border: "1px solid rgba(255,255,255,0.08)", boxShadow: "0 1px 0 rgba(255,255,255,0.03) inset" },
-  title: { margin: "0 0 20px 0", paddingBottom: 14, borderBottom: "1px solid rgba(255,255,255,0.08)", fontSize: 19, fontWeight: "750", letterSpacing: -0.3, color: "#fff" },
+  card: { backgroundColor: "#1c1c22", padding: "20px 22px", borderRadius: 14, border: "1px solid #2e2e36" },
+  title: { margin: "0 0 18px 0", fontSize: 16, fontWeight: "600", letterSpacing: -0.2, color: "#f4f4f6" },
   headerRow: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 },
   inputGroup: { display: "flex", gap: 15, alignItems: "center", flexWrap: "wrap", marginBottom: 25 },
-  labelCheckbox: { fontSize: 15, color: "#d4d4dc", display: "flex", alignItems: "center", cursor: "pointer" },
-  label: { fontSize: 13, color: "rgba(255,255,255,0.7)", display: "block", marginBottom: 8, fontWeight: "600" },
-  input: { backgroundColor: "#141418", border: "1px solid rgba(255,255,255,0.1)", color: "#f4f4f6", padding: "10px 14px", borderRadius: 10, outline: "none", fontSize: 14 },
+  labelCheckbox: { fontSize: 14, color: "#f4f4f6", display: "flex", alignItems: "center", gap: 10, cursor: "pointer" },
+  label: { fontSize: 12, color: "#a1a1ab", display: "block", marginBottom: 6, fontWeight: "600" },
+  input: { backgroundColor: "#141418", border: "1px solid #2e2e36", color: "#f4f4f6", padding: "10px 12px", borderRadius: 10, outline: "none", fontSize: 14 },
   inputDisabled: { backgroundColor: "#18181c", border: "1px solid rgba(255,255,255,0.06)", color: "#6b6b76", padding: "12px 14px", borderRadius: 10, width: "100%", fontSize: 14, boxSizing: "border-box" },
-  select: { backgroundColor: "#141418", border: "1px solid rgba(255,255,255,0.1)", color: "#f4f4f6", padding: "10px 14px", borderRadius: 10, outline: "none", fontSize: 14, cursor: "pointer" },
-  selectDark: { backgroundColor: "#141418", border: "1px solid rgba(255,255,255,0.1)", color: "#f4f4f6", padding: "12px 14px", borderRadius: 10, outline: "none", width: "100%", fontSize: 14, cursor: "pointer", boxSizing: "border-box" },
-  primaryBtn: { backgroundColor: "#fff", color: "#111", border: "none", padding: "10px 18px", borderRadius: 10, cursor: "pointer", transition: "all 0.2s", fontSize: 14, fontWeight: "700" },
+  select: { backgroundColor: "#141418", border: "1px solid #2e2e36", color: "#f4f4f6", padding: "10px 12px", borderRadius: 10, outline: "none", fontSize: 14, cursor: "pointer" },
+  selectDark: { backgroundColor: "#141418", border: "1px solid #2e2e36", color: "#f4f4f6", padding: "10px 12px", borderRadius: 10, outline: "none", width: "100%", fontSize: 14, cursor: "pointer", boxSizing: "border-box" },
+  primaryBtn: { backgroundColor: "#8b5cf6", color: "#fff", border: "none", padding: "10px 16px", borderRadius: 10, cursor: "pointer", transition: "all 0.2s", fontSize: 13.5, fontWeight: "600" },
   textBtn: { backgroundColor: "transparent", color: "#ef4444", border: "none", cursor: "pointer", fontWeight: "500" },
   list: { display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 },
-  listItem: { display: "flex", justifyContent: "space-between", backgroundColor: "#18181c", border: "1px solid rgba(255,255,255,0.06)", padding: "12px 18px", borderRadius: 10, fontSize: 14 },
+  listItem: { display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "#18181d", border: "1px solid #2e2e36", padding: "10px 14px", borderRadius: 10, fontSize: 14 },
   
   table: { width: "100%", borderCollapse: "collapse", fontSize: 14 },
-  th: { textAlign: "left", padding: "12px 15px", color: "#6b6b76", fontWeight: "700", fontSize: 12, letterSpacing: 0.3, borderBottom: "1px solid #2c2c33" },
-  thRight: { textAlign: "right", padding: "12px 15px", color: "#6b6b76", fontWeight: "700", fontSize: 12, letterSpacing: 0.3, borderBottom: "1px solid #2c2c33" },
-  tr: { borderBottom: "1px solid #2c2c33", transition: "background 0.2s" },
-  td: { padding: "16px 15px", verticalAlign: "top" },
-  tdRight: { padding: "16px 15px", textAlign: "right", verticalAlign: "top" },
-  actionBtn: { background: "none", border: "none", color: "#0ea5e9", cursor: "pointer", fontSize: 14, padding: 0 },
+  th: { textAlign: "left", padding: "10px 14px", color: "#8b8b96", fontWeight: "600", fontSize: 12, background: "#18181d", borderBottom: "1px solid #2e2e36" },
+  thRight: { textAlign: "right", padding: "10px 14px", color: "#8b8b96", fontWeight: "600", fontSize: 12, background: "#18181d", borderBottom: "1px solid #2e2e36" },
+  tr: { borderBottom: "1px solid #2a2a31", transition: "background 0.2s" },
+  td: { padding: "12px 14px", verticalAlign: "top" },
+  tdRight: { padding: "12px 14px", textAlign: "right", verticalAlign: "top" },
+  actionBtn: { background: "none", border: "none", color: "#c4b5fd", cursor: "pointer", fontSize: 13, fontWeight: "600", padding: 0 },
   
   chipContainer: { display: "flex", flexWrap: "wrap", gap: 10 },
-  chip: { backgroundColor: "#18181c", padding: "6px 12px", borderRadius: 999, fontSize: 13, color: "#f4f4f6", border: "1px solid #2c2c33" },
+  chip: { backgroundColor: "#18181d", padding: "4px 10px", borderRadius: 8, fontSize: 12.5, color: "#f4f4f6", border: "1px solid #2e2e36" },
   
   modalOverlay: { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.65)", backdropFilter: "blur(4px)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1000 },
-  modal: { backgroundColor: "#1f1f24", width: "100%", maxWidth: 650, borderRadius: 18, border: "1px solid rgba(255,255,255,0.1)", boxShadow: "0 25px 60px rgba(0,0,0,0.6)" },
-  modalHeader: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 30px", borderBottom: "1px solid #2c2c33" },
-  modalTitle: { margin: 0, fontSize: 18, color: "#f4f4f6", fontWeight: "600" },
-  cancelBtn: { backgroundColor: "#26262c", color: "#fff", border: "1px solid rgba(255,255,255,0.08)", padding: "10px 18px", borderRadius: 10, cursor: "pointer", marginRight: 12, fontSize: 14 },
-  saveBtn: { backgroundColor: "#fff", color: "#111", border: "none", padding: "10px 18px", borderRadius: 10, cursor: "pointer", fontSize: 14, fontWeight: "700" },
-  modalBody: { padding: "30px" },
+  modal: { backgroundColor: "#1c1c22", width: "100%", maxWidth: 650, borderRadius: 16, border: "1px solid #2e2e36", boxShadow: "0 25px 60px rgba(0,0,0,0.6)" },
+  modalHeader: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 24px", borderBottom: "1px solid #2e2e36" },
+  modalTitle: { margin: 0, fontSize: 16, color: "#f4f4f6", fontWeight: "600" },
+  cancelBtn: { backgroundColor: "transparent", color: "#f4f4f6", border: "1px solid #2e2e36", padding: "10px 16px", borderRadius: 10, cursor: "pointer", marginRight: 10, fontSize: 13.5, fontWeight: "600" },
+  saveBtn: { backgroundColor: "#8b5cf6", color: "#fff", border: "none", padding: "10px 16px", borderRadius: 10, cursor: "pointer", fontSize: 13.5, fontWeight: "600" },
+  modalBody: { padding: "22px 24px" },
   formGroup: { marginBottom: 25 },
   
-  chipsInputBox: { backgroundColor: "#141418", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, padding: "15px", display: "flex", flexWrap: "wrap", gap: 10, minHeight: 120 },
-  chipEditable: { backgroundColor: "#2c2c33", padding: "6px 12px", borderRadius: 6, fontSize: 13, display: "flex", alignItems: "center", gap: 10, color: "#f4f4f6" },
+  chipsInputBox: { backgroundColor: "#141418", border: "1px solid #2e2e36", borderRadius: 10, padding: "12px", display: "flex", flexWrap: "wrap", gap: 8, minHeight: 110 },
+  chipEditable: { backgroundColor: "#26262d", padding: "5px 10px", borderRadius: 8, fontSize: 12.5, display: "flex", alignItems: "center", gap: 8, color: "#f4f4f6" },
   chipClose: { cursor: "pointer", color: "#9a9aa6", fontSize: 14 },
   chipInput: { background: "transparent", border: "none", color: "#fff", outline: "none", flex: 1, minWidth: 200, fontSize: 14 },
   
-  filterBox: { backgroundColor: "#18181c", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: "20px" },
-  multiSelectHeader: { backgroundColor: "#141418", border: "1px solid #8b5cf6", color: "#f4f4f6", padding: "12px 15px", borderRadius: 8, cursor: "pointer", fontSize: 14, userSelect: "none" },
-  multiSelectList: { position: "absolute", top: "100%", left: 0, right: 0, backgroundColor: "#1f1f24", border: "1px solid #2c2c33", borderTop: "none", borderRadius: "0 0 8px 8px", maxHeight: 250, overflowY: "auto", zIndex: 10, marginTop: -2 },
-  multiSelectItem: { display: "flex", alignItems: "center", padding: "10px 15px", cursor: "pointer", borderBottom: "1px solid #2c2c33", fontSize: 14, color: "#d4d4dc" }
+  filterBox: { backgroundColor: "#18181d", border: "1px solid #2e2e36", borderRadius: 12, padding: "18px" },
+  multiSelectHeader: { backgroundColor: "#141418", border: "1px solid #2e2e36", color: "#f4f4f6", padding: "10px 12px", borderRadius: 10, cursor: "pointer", fontSize: 14, userSelect: "none" },
+  multiSelectList: { position: "absolute", top: "100%", left: 0, right: 0, backgroundColor: "#1c1c22", border: "1px solid #2e2e36", borderRadius: 10, maxHeight: 250, overflowY: "auto", zIndex: 10, marginTop: 4 },
+  multiSelectItem: { display: "flex", alignItems: "center", padding: "9px 12px", cursor: "pointer", borderBottom: "1px solid #2a2a31", fontSize: 14, color: "#f4f4f6" }
 };
 
 export default App;
