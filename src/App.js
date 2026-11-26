@@ -428,7 +428,6 @@ function AlbumsSection({ apiUrl }) {
 ========================================================================= */
 // Sol menüde ekranlar; her ekranın sekmeleri içerikte üstte
 const SCREENS = [
-  { key: "overview", label: "Genel Bakış", hint: "Grafikler ve günlük özet", tabs: ["overview"] },
   { key: "countrycfg", label: "Ülke Ayarları", hint: "Genel mod · ülkeye göre mod", tabs: ["settings", "countries"] },
   { key: "infra", label: "İndirme & Altyapı", hint: "MP3 · API · Cache · YouTube", tabs: ["mp3", "apiproviders", "smartcache", "youtube"] },
   { key: "ads", label: "Reklamlar", hint: "6 reklam ayarı · ASN", tabs: ["downloadad", "bannerad", "bottombanner", "ringtonead", "adfree", "asn"] },
@@ -440,12 +439,12 @@ const SCREENS = [
   { key: "admin", label: "Yönetim", hint: "Kullanıcılar · uygulamalar · gizlilik", tabs: ["users", "apps", "privacy"] },
 ];
 const SCREEN_GROUPS = [
-  { title: "İzleme", keys: ["overview", "monitor", "ringtone"] },
+  { title: "İzleme", keys: ["monitor", "ringtone"] },
   { title: "Uygulama Ayarları", keys: ["countrycfg", "infra", "ads", "content", "appcontrols"] },
   { title: "Kullanıcılar", keys: ["reach"] },
   { title: "Yönetim", keys: ["admin"] },
 ];
-const MONITOR_TABS = ["overview", "live", "ringtonemode"];
+const MONITOR_TABS = ["live", "ringtonemode"];
 const PANEL_ICONS = {
   settings: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
   countries: '<path d="M4 21V4M4 4h12l-2 4 2 4H4"/>',
@@ -1421,7 +1420,7 @@ function App() {
 
   const [activeSection, setActiveSectionState] = useState(() => {
     if (PANEL_HASH.s) return PANEL_HASH.s;
-    try { return localStorage.getItem("panelSection") || "overview"; } catch (e) { return "overview"; }
+    try { const v = localStorage.getItem("panelSection"); return v && v !== "overview" ? v : "live"; } catch (e) { return "live"; }
   });
   const setActiveSection = (k) => { setActiveSectionState(k); try { localStorage.setItem("panelSection", k); } catch (e) {} };
   // Üst çubukta "Tümü": izleme grafikleri tüm uygulamaları kapsar (ayar ekranlarını etkilemez)
@@ -1717,7 +1716,6 @@ function App() {
   };
 
   const menuItems = [
-    { key: "overview", icon: "📊", label: "Genel Bakış" },
     ...(!PANEL_LOCKED ? [{ key: "users", icon: "👤", label: "Kullanıcılar" }, { key: "apps", icon: "🗂️", label: "Uygulamalar" }, { key: "privacy", icon: "🔒", label: "Gizlilik Politikaları" }] : []),
     { key: "settings", icon: "⚙️", label: "Genel Ülke Modu" },
     { key: "countries", icon: "🌍", label: "Ülke Ayarları" },
