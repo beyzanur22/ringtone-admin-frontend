@@ -11,16 +11,16 @@ export const RANGES = [
   { key: "30d", label: "30 gün", hint: "Son 30 gün, gün gün", refresh: 300000 },
 ];
 const TZ = "Europe/Istanbul";
-const COLORS = ["#8fb0ff", "#38bdf8", "#22c55e", "#f59e0b", "#f472b6", "#2dd4bf", "#fb7185", "#818cf8"];
+const COLORS = ["#2a39b8", "#0b6aa2", "#0d6b4d", "#8a5a00", "#be185d", "#0f766e", "#be123c", "#3c4fe0"];
 const MODE_SERIES = [
-  { key: "r", name: "Zil sesi", color: "#38bdf8" },
-  { key: "y", name: "Müzik", color: "#22c55e" },
-  { key: "u", name: "Bilinmiyor", color: "#7c828c" },
+  { key: "r", name: "Zil sesi", color: "#0b6aa2" },
+  { key: "y", name: "Müzik", color: "#0d6b4d" },
+  { key: "u", name: "Bilinmiyor", color: "#5f6672" },
 ];
 const EXTRACTOR_SERIES = [
-  { key: "n", name: "NewPipe (Android 13+)", color: "#38bdf8" },
-  { key: "b", name: "Backend (Android 12-)", color: "#f59e0b" },
-  { key: "xu", name: "Bilinmiyor", color: "#7c828c" },
+  { key: "n", name: "NewPipe (Android 13+)", color: "#0b6aa2" },
+  { key: "b", name: "Backend (Android 12-)", color: "#8a5a00" },
+  { key: "xu", name: "Bilinmiyor", color: "#5f6672" },
 ];
 const OTHER = "Diğer";
 
@@ -148,17 +148,17 @@ export function VisitorCountryChart({ data, error, height = 320 }) {
       right={data ? <div className="st-total"><b>{num(data.total)}</b><small>{rangeLabel.toLocaleLowerCase("tr")} farklı kişi</small></div> : null}>
       {!data || !data.points.some(p => p.total > 0) ? <Empty loading={!data && !error} error={error} /> : (
         <LineChart height={height} data={rows} theme="dark" margin={{ top: 10, right: 16, left: 0, bottom: 0 }}>
-          <CartesianGrid stroke="#1b1e23" vertical={false} />
+          <CartesianGrid stroke="#efede8" vertical={false} />
           <XAxis dataKey="label" {...axisProps} minTickGap={12} />
           <YAxis {...axisProps} allowDecimals={false} width={58} tickFormatter={v => num(v)} />
-          <Tooltip content={<Tip />} cursor={{ stroke: "#55555f" }} />
+          <Tooltip content={<Tip />} cursor={{ stroke: "#c9c5bc" }} />
           {series.map((cc, i) => {
-            const col = cc === OTHER ? "#7c828c" : COLORS[i % COLORS.length];
+            const col = cc === OTHER ? "#5f6672" : COLORS[i % COLORS.length];
             return (
               <Line key={cc} type="monotone" dataKey={cc} name={cc === OTHER ? "Diğer ülkeler" : `${flag(cc)} ${countryName(cc)}`}
                 stroke={col} strokeWidth={2} strokeDasharray={cc === OTHER ? "5 4" : undefined}
-                dot={{ r: isHour ? 2.5 : 3.5, fill: col, stroke: "#121418", strokeWidth: 1.5 }}
-                activeDot={{ r: 6, fill: col, stroke: "#fff", strokeWidth: 2 }} isAnimationActive={false} />
+                dot={{ r: isHour ? 2.5 : 3.5, fill: col, stroke: "#ffffff", strokeWidth: 1.5 }}
+                activeDot={{ r: 6, fill: col, stroke: "#16181d", strokeWidth: 2 }} isAnimationActive={false} />
             );
           })}
         </LineChart>
@@ -170,7 +170,7 @@ export function VisitorCountryChart({ data, error, height = 320 }) {
             const i = top.indexOf(c.country);
             return (
               <span key={c.country} className="st-dot">
-                <i style={{ background: i >= 0 ? COLORS[i % COLORS.length] : "#55555f" }} />
+                <i style={{ background: i >= 0 ? COLORS[i % COLORS.length] : "#c9c5bc" }} />
                 {flag(c.country)} {countryName(c.country)} <b>{num(c.value)}</b>
               </span>
             );
@@ -224,7 +224,7 @@ function makeTooltip(unit, maxOf, titleOf) {
   };
 }
 
-const axisProps = { tick: { fill: "#7c828c", fontSize: 11 }, stroke: "#23262d" };
+const axisProps = { tick: { fill: "#5f6672", fontSize: 11 }, stroke: "#e6e3dc" };
 
 function ChartFrame({ title, sub, right, children }) {
   return (
@@ -262,11 +262,11 @@ export function ModeChart({ data, range, title = "Aktif kullanıcılar", sub, he
     <ChartFrame title={title} sub={sub}>
       {!data || !filled.length ? <Empty loading={!data} /> : (
         <AreaChart height={height} data={rows} theme="dark" margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
-          <CartesianGrid stroke="#1b1e23" vertical={false} />
+          <CartesianGrid stroke="#efede8" vertical={false} />
           <XAxis dataKey="label" {...axisProps} minTickGap={18} />
           <YAxis {...axisProps} allowDecimals={false} width={40} />
-          <Tooltip content={makeTooltip(data.unit, maxOf)} cursor={{ stroke: "#55555f" }} />
-          <Legend wrapperStyle={{ fontSize: 12, color: "#9aa0aa" }} />
+          <Tooltip content={makeTooltip(data.unit, maxOf)} cursor={{ stroke: "#c9c5bc" }} />
+          <Legend wrapperStyle={{ fontSize: 12, color: "#4b5260" }} />
           {series.map(s => (
             <Area key={s.key} type="monotone" dataKey={s.key} name={s.name} stackId="m"
               stroke={s.color} fill={s.color} fillOpacity={0.22} strokeWidth={2} isAnimationActive={false} />
@@ -301,15 +301,15 @@ export function CountryTrendChart({ data, range, height = 260 }) {
     <ChartFrame title="Ülkelere göre zaman içinde" sub="Renkli 6 ülke grafikte ayrı çizilir; gri olanlar 'Diğer ülkeler'de toplanır">
       {!data || !hasData(data.points) ? <Empty loading={!data} /> : (
         <AreaChart height={height} data={rows} theme="dark" margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
-          <CartesianGrid stroke="#1b1e23" vertical={false} />
+          <CartesianGrid stroke="#efede8" vertical={false} />
           <XAxis dataKey="label" {...axisProps} minTickGap={18} />
           <YAxis {...axisProps} allowDecimals={false} width={40} />
-          <Tooltip content={makeTooltip(data.unit, maxOf)} cursor={{ stroke: "#55555f" }} />
+          <Tooltip content={makeTooltip(data.unit, maxOf)} cursor={{ stroke: "#c9c5bc" }} />
           {series.map((cc, i) => (
             <Area key={cc} type="monotone" dataKey={cc} stackId="c"
               name={cc === OTHER ? "Diğer ülkeler" : `${flag(cc)} ${countryName(cc)}`}
-              stroke={cc === OTHER ? "#7c828c" : COLORS[i % COLORS.length]}
-              fill={cc === OTHER ? "#7c828c" : COLORS[i % COLORS.length]}
+              stroke={cc === OTHER ? "#5f6672" : COLORS[i % COLORS.length]}
+              fill={cc === OTHER ? "#5f6672" : COLORS[i % COLORS.length]}
               fillOpacity={0.2} strokeWidth={2} isAnimationActive={false} />
           ))}
         </AreaChart>
@@ -321,7 +321,7 @@ export function CountryTrendChart({ data, range, height = 260 }) {
             const i = top.indexOf(c.country);
             return (
               <span key={c.country} className="st-dot">
-                <i style={{ background: i >= 0 ? COLORS[i % COLORS.length] : "#55555f" }} />
+                <i style={{ background: i >= 0 ? COLORS[i % COLORS.length] : "#c9c5bc" }} />
                 {flag(c.country)} {countryName(c.country)} <b>{num(c.value)}</b>
               </span>
             );
@@ -346,13 +346,13 @@ export function CountryBarChart({ data, range }) {
         <BarChart horizontal height={Math.max(120, rows.length * 22 + 8)} data={rows} theme="dark"
           margin={{ top: 0, right: 30, left: 0, bottom: 0 }} barCategoryGap={5}>
           <XAxis type="number" hide allowDecimals={false} />
-          <YAxis type="category" dataKey="name" tick={{ fill: "#9aa0aa", fontSize: 11 }} axisLine={false} tickLine={false} width={112} interval={0} />
-          <Tooltip cursor={{ fill: "rgba(255,255,255,0.04)" }}
+          <YAxis type="category" dataKey="name" tick={{ fill: "#4b5260", fontSize: 11 }} axisLine={false} tickLine={false} width={112} interval={0} />
+          <Tooltip cursor={{ fill: "#5f6672" }}
             content={({ active, payload }) => active && payload && payload.length ? (
               <div className="st-tip"><div className="st-tip-h">{payload[0].payload.name}</div>
                 <div className="st-tip-r"><span>Aktif cihaz</span><b>{num(payload[0].value)}</b></div></div>) : null} />
-          <Bar dataKey="value" name="Aktif cihaz" fill="#8fb0ff" radius={[0, 4, 4, 0]} isAnimationActive={false}>
-            <LabelList dataKey="value" position="right" fill="#d4d4dc" fontSize={11} formatter={num} />
+          <Bar dataKey="value" name="Aktif cihaz" fill="#2a39b8" radius={[0, 4, 4, 0]} isAnimationActive={false}>
+            <LabelList dataKey="value" position="right" fill="#2b2f37" fontSize={11} formatter={num} />
           </Bar>
         </BarChart>
       )}
@@ -382,7 +382,7 @@ export function AppTrendChart({ data, range, metric: metricProp, height = 280 })
       return row;
     });
     const series = top.map((a, i) => ({ key: a.id, name: a.name, color: COLORS[i % COLORS.length] }));
-    if (rest.length) series.push({ key: OTHER, name: `${OTHER} (${rest.length})`, color: "#7c828c" });
+    if (rest.length) series.push({ key: OTHER, name: `${OTHER} (${rest.length})`, color: "#5f6672" });
     return { rows, series };
   }, [data, range, metric]);
   const maxOf = (row, key) => row._p && row._p[key];
@@ -393,11 +393,11 @@ export function AppTrendChart({ data, range, metric: metricProp, height = 280 })
       ))}</div>}>
       {!series.length ? <Empty loading={!data} /> : (
         <LineChart height={height} data={rows} theme="dark" margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
-          <CartesianGrid stroke="#1b1e23" vertical={false} />
+          <CartesianGrid stroke="#efede8" vertical={false} />
           <XAxis dataKey="label" {...axisProps} minTickGap={18} />
           <YAxis {...axisProps} allowDecimals={false} width={40} />
-          <Tooltip content={makeTooltip(data.unit, maxOf)} cursor={{ stroke: "#55555f" }} />
-          <Legend wrapperStyle={{ fontSize: 12, color: "#9aa0aa" }} />
+          <Tooltip content={makeTooltip(data.unit, maxOf)} cursor={{ stroke: "#c9c5bc" }} />
+          <Legend wrapperStyle={{ fontSize: 12, color: "#4b5260" }} />
           {series.map(s => (
             <Line key={s.key} type="monotone" dataKey={s.key} name={s.name} stroke={s.color}
               strokeWidth={2} dot={false} activeDot={{ r: 4 }} isAnimationActive={false} />
@@ -430,8 +430,8 @@ export function AppCompareBar({ data, range, onPickApp }) {
           margin={{ top: 4, right: 24, left: 8, bottom: 0 }}>
           <XAxis type="number" {...axisProps} allowDecimals={false} />
           <YAxis type="category" dataKey="name" {...axisProps} width={150} />
-          <Tooltip content={makeTooltip("minute", null, row => row.name)} cursor={{ fill: "rgba(255,255,255,0.04)" }} />
-          <Legend wrapperStyle={{ fontSize: 12, color: "#9aa0aa" }} />
+          <Tooltip content={makeTooltip("minute", null, row => row.name)} cursor={{ fill: "#5f6672" }} />
+          <Legend wrapperStyle={{ fontSize: 12, color: "#4b5260" }} />
           {MODE_SERIES.map((s, i) => (
             <Bar key={s.key} dataKey={s.name} name={s.name} stackId="a" fill={s.color} isAnimationActive={false}
               cursor={onPickApp ? "pointer" : undefined}
@@ -452,11 +452,11 @@ export function StatTiles({ data }) {
   const peak = pts.reduce((m, p) => Math.max(m, p.tMax || p.t || 0), 0);
   const avg = pts.length ? pts.reduce((x, p) => x + p.t, 0) / pts.length : 0;
   const tiles = [
-    { k: data.unit === "minute" ? "Şu an" : data.unit === "hour" ? "Bu saat (ort.)" : "Bugün (ort.)", v: last ? last.t : null, c: "#e9ebef" },
-    { k: "Zil sesi", v: last ? last.r : null, c: "#38bdf8" },
-    { k: "Müzik", v: last ? last.y : null, c: "#4ade80" },
-    { k: "Aralık ortalaması", v: pts.length ? avg : null, c: "#8fb0ff" },
-    { k: "Aralık tepesi", v: pts.length ? peak : null, c: "#fbbf24" },
+    { k: data.unit === "minute" ? "Şu an" : data.unit === "hour" ? "Bu saat (ort.)" : "Bugün (ort.)", v: last ? last.t : null, c: "#16181d" },
+    { k: "Zil sesi", v: last ? last.r : null, c: "#0b6aa2" },
+    { k: "Müzik", v: last ? last.y : null, c: "#0d6b4d" },
+    { k: "Aralık ortalaması", v: pts.length ? avg : null, c: "#2a39b8" },
+    { k: "Aralık tepesi", v: pts.length ? peak : null, c: "#8a5a00" },
   ];
   return (
     <div className="st-tiles">
@@ -469,67 +469,87 @@ export function StatTiles({ data }) {
 
 export const STATS_CSS = `
   .st-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
-  .st-head h3 { margin: 0; font-size: 15px; color: #e9ebef; }
-  .st-head p { margin: 2px 0 0; font-size: 12px; color: #7c828c; }
-  .st-range, .st-seg { display: inline-flex; max-width: 100%; overflow-x: auto; scrollbar-width: none; padding: 3px; gap: 2px; border-radius: 10px; background: #0e0f12; border: 1px solid rgba(255,255,255,0.08); }
-  .st-range button, .st-seg button { border: 0; background: none; color: #9aa0aa; font: inherit; font-size: 12.5px; font-weight: 600; padding: 6px 11px; border-radius: 7px; cursor: pointer; white-space: nowrap; }
+  .st-head h3 { margin: 0; font-size: 15px; color: #16181d; }
+  .st-head p { margin: 2px 0 0; font-size: 12px; color: #5f6672; }
+  .st-range, .st-seg { display: inline-flex; max-width: 100%; overflow-x: auto; scrollbar-width: none; padding: 3px; gap: 2px; border-radius: 10px; background: #faf9f7; border: 1px solid #e6e3dc; }
+  .st-range button, .st-seg button { border: 0; background: none; color: #4b5260; font: inherit; font-size: 12.5px; font-weight: 600; padding: 6px 11px; border-radius: 7px; cursor: pointer; white-space: nowrap; }
   .st-seg button { font-size: 11.5px; padding: 4px 9px; }
-  .st-range button:hover, .st-seg button:hover { color: #e9ebef; }
-  .st-range button.on, .st-seg button.on { background: #3b6fe6; color: #fff; }
+  .st-range button:hover, .st-seg button:hover { color: #16181d; }
+  .st-range button.on, .st-seg button.on { background: #3c4fe0; color: #fff; }
   .st-grid { display: grid; gap: 14px; margin-bottom: 26px; }
   .st-grid.two { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); }
   .st-grid.main-side { grid-template-columns: minmax(0, 3fr) minmax(210px, 1fr); align-items: start; }
   @media (max-width: 900px) { .st-grid.two, .st-grid.main-side { grid-template-columns: minmax(0, 1fr); } }
-  .st-card { background: #0e0f12; border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 14px 14px 8px; min-width: 0; }
+  .st-card { background: #faf9f7; border: 1px solid #e6e3dc; border-radius: 14px; padding: 14px 14px 8px; min-width: 0; }
   .st-card-h { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
-  .st-card-h b { display: block; font-size: 13.5px; color: #e9ebef; }
-  .st-card-h small { display: block; font-size: 11.5px; color: #7c828c; margin-top: 2px; }
-  .st-empty { height: 180px; display: grid; place-items: center; color: #7c828c; font-size: 13px; text-align: center; padding: 0 20px; }
-  .st-tip { background: #121418; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px; box-shadow: 0 12px 30px rgba(0,0,0,0.45); min-width: 180px; font-size: 12.5px; color: #e4e4ea; }
-  .st-tip-h { font-weight: 700; margin-bottom: 7px; color: #fff; }
+  .st-card-h b { display: block; font-size: 13.5px; color: #16181d; }
+  .st-card-h small { display: block; font-size: 11.5px; color: #5f6672; margin-top: 2px; }
+  .st-empty { height: 180px; display: grid; place-items: center; color: #5f6672; font-size: 13px; text-align: center; padding: 0 20px; }
+  .st-tip { background: #ffffff; border: 1px solid #dcd8cf; border-radius: 10px; padding: 10px 12px; box-shadow: 0 12px 30px rgba(22,24,29,0.113); min-width: 180px; font-size: 12.5px; color: #16181d; }
+  .st-tip-h { font-weight: 700; margin-bottom: 7px; color: #16181d; }
   .st-tip-r { display: flex; align-items: center; gap: 8px; padding: 2px 0; }
   .st-tip-r i { width: 9px; height: 9px; border-radius: 3px; flex-shrink: 0; }
-  .st-tip-r span { flex: 1; color: #b4b4be; }
+  .st-tip-r span { flex: 1; color: #4b5260; }
   .st-tip-r b { font-variant-numeric: tabular-nums; }
-  .st-tip-r small { color: #7c828c; font-size: 11px; margin-left: 4px; }
-  .st-dots { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; padding: 12px 4px 6px; margin-top: 6px; border-top: 1px solid rgba(255,255,255,0.06); }
-  .st-dots small { width: 100%; font-size: 11px; font-weight: 600; color: #7c828c; letter-spacing: .3px; margin-bottom: 2px; }
-  .st-dot { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: #c4c4cc; white-space: nowrap; }
+  .st-tip-r small { color: #5f6672; font-size: 11px; margin-left: 4px; }
+  .st-dots { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; padding: 12px 4px 6px; margin-top: 6px; border-top: 1px solid #e6e3dc; }
+  .st-dots small { width: 100%; font-size: 11px; font-weight: 600; color: #5f6672; letter-spacing: .3px; margin-bottom: 2px; }
+  .st-dot { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: #2b2f37; white-space: nowrap; }
   .st-dot i { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .st-dot b { color: #e9ebef; font-weight: 650; font-variant-numeric: tabular-nums; }
-  .st-dot.more { color: #7c828c; }
+  .st-dot b { color: #16181d; font-weight: 650; font-variant-numeric: tabular-nums; }
+  .st-dot.more { color: #5f6672; }
   .st-head-r { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
   .st-total { text-align: right; }
-  .st-total b { display: block; font-size: 22px; font-weight: 750; color: #e9ebef; font-variant-numeric: tabular-nums; line-height: 1.1; }
-  .st-total small { font-size: 11px; color: #7c828c; }
+  .st-total b { display: block; font-size: 22px; font-weight: 750; color: #16181d; font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .st-total small { font-size: 11px; color: #5f6672; }
   .st-tip-big b { font-size: 15px; }
-  .st-tip-sub { display: flex; flex-wrap: wrap; gap: 3px 10px; padding: 3px 0 6px 17px; font-size: 11.5px; color: #9aa0aa; max-width: 300px; }
-  .st-tip-sub b { color: #e4e4ea; font-weight: 600; }
-  .st-tip-t { border-top: 1px solid rgba(255,255,255,0.08); margin-top: 5px; padding-top: 6px; }
-  .st-tip-n { color: #7c828c; font-size: 10.5px; margin-top: 6px; }
+  .st-tip-sub { display: flex; flex-wrap: wrap; gap: 3px 10px; padding: 3px 0 6px 17px; font-size: 11.5px; color: #4b5260; max-width: 300px; }
+  .st-tip-sub b { color: #16181d; font-weight: 600; }
+  .st-tip-t { border-top: 1px solid #e6e3dc; margin-top: 5px; padding-top: 6px; }
+  .st-tip-n { color: #5f6672; font-size: 10.5px; margin-top: 6px; }
   .st-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 14px; }
-  .st-tile { background: #0e0f12; border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 12px 14px; }
-  .st-tile small { display: block; font-size: 11px; color: #7c828c; text-transform: uppercase; letter-spacing: .5px; }
+  .st-tile { background: #faf9f7; border: 1px solid #e6e3dc; border-radius: 12px; padding: 12px 14px; }
+  .st-tile small { display: block; font-size: 11px; color: #5f6672; text-transform: uppercase; letter-spacing: .5px; }
   .st-tile b { display: block; font-size: 24px; margin-top: 4px; font-variant-numeric: tabular-nums; }
   .st-cl { display: flex; flex-direction: column; gap: 2px; padding-bottom: 6px; }
   .st-cl-r { display: grid; grid-template-columns: 26px minmax(120px, 1.2fr) minmax(60px, 2fr) 60px 42px; align-items: center; gap: 10px; padding: 6px 4px; border-radius: 8px; font-size: 13px; }
-  .st-cl-r:hover { background: rgba(255,255,255,0.03); }
-  .st-cl-n { color: #7c828c; font-size: 11.5px; text-align: right; font-variant-numeric: tabular-nums; }
-  .st-cl-c { color: #e4e4ea; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .st-cl-bar { height: 6px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; }
-  .st-cl-bar i { display: block; height: 100%; background: #8fb0ff; border-radius: 3px; }
-  .st-cl-r b { color: #e9ebef; text-align: right; font-variant-numeric: tabular-nums; }
-  .st-cl-r small { color: #7c828c; font-size: 11px; text-align: right; }
+  .st-cl-r:hover { background: rgba(22,24,29,0.03); }
+  .st-cl-n { color: #5f6672; font-size: 11.5px; text-align: right; font-variant-numeric: tabular-nums; }
+  .st-cl-c { color: #16181d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .st-cl-bar { height: 6px; background: rgba(22,24,29,0.042); border-radius: 3px; overflow: hidden; }
+  .st-cl-bar i { display: block; height: 100%; background: #3c4fe0; border-radius: 3px; }
+  .st-cl-r b { color: #16181d; text-align: right; font-variant-numeric: tabular-nums; }
+  .st-cl-r small { color: #5f6672; font-size: 11px; text-align: right; }
   .st-vb { display: flex; gap: 4px; align-items: flex-end; height: 120px; padding: 4px 2px 0; }
   .st-vb-c { flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; }
-  .st-vb-c span { font-size: 10.5px; font-weight: 700; color: #e4e4ea; margin-bottom: 3px; }
-  .st-vb-c i { display: block; width: 100%; background: #8fb0ff; border-radius: 4px 4px 0 0; }
-  .st-vb-c:last-child i { background: #e9ebef; }
+  .st-vb-c span { font-size: 10.5px; font-weight: 700; color: #16181d; margin-bottom: 3px; }
+  .st-vb-c i { display: block; width: 100%; background: #3c4fe0; border-radius: 4px 4px 0 0; }
+  .st-vb-c:last-child i { background: #16181d; }
   .st-vb-l { height: auto; padding: 6px 2px 8px; }
-  .st-vb-l small { flex: 1; min-width: 0; text-align: center; font-size: 10px; color: #7c828c; white-space: nowrap; overflow: visible; }
-  .st-cl-more { margin-top: 6px; padding: 8px; border: 0; border-radius: 8px; background: #121418; color: #c4c4cc; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
-  .recharts-legend-item-text { color: #9aa0aa !important; }
+  .st-vb-l small { flex: 1; min-width: 0; text-align: center; font-size: 10px; color: #5f6672; white-space: nowrap; overflow: visible; }
+  .st-cl-more { margin-top: 6px; padding: 8px; border: 0; border-radius: 8px; background: #ffffff; color: #2b2f37; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
+  .recharts-legend-item-text { color: #4b5260 !important; }
   @media (max-width: 560px) { .st-range button { padding: 6px 8px; font-size: 12px; } .st-tile b { font-size: 20px; } }
+  .st-range, .st-seg { background: #ecebe6; border: 0; }
+  .st-range button.on, .st-seg button.on { background: #16181d; color: #fff; }
+  .st-range button, .st-seg button { color: #4b5260; font-weight: 500; }
+  .lb-card { background: #fff; border: 1px solid #e6e3dc; border-radius: 12px; padding: 18px 20px 14px; margin-bottom: 24px; min-width: 0; }
+  .lb-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  .lb-head h3 { margin: 0; font-size: 15px; font-weight: 600; color: #16181d; }
+  .lb-head p { margin: 3px 0 0; font-size: 12.5px; color: #5f6672; }
+  .lb-ctrl { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .lb-plot { display: flex; align-items: flex-end; border-bottom: 1px solid #e6e3dc; }
+  .lb-c { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch; height: 100%; }
+  .lb-v { text-align: center; font-weight: 600; color: #5f6672; margin-bottom: 4px; white-space: nowrap; font-variant-numeric: tabular-nums; line-height: 1.2; }
+  .lb-c.now .lb-v { color: #16181d; }
+  .lb-stack { display: flex; flex-direction: column; gap: 1px; border-radius: 4px 4px 0 0; overflow: hidden; }
+  .lb-stack i { display: block; min-height: 1px; }
+  .lb-x { display: flex; padding-top: 7px; }
+  .lb-x small { flex: 1; min-width: 0; text-align: center; font-size: 11px; color: #5f6672; white-space: nowrap; overflow: visible; font-variant-numeric: tabular-nums; }
+  .lb-legend { display: flex; gap: 16px; margin-top: 10px; font-size: 12.5px; color: #4b5260; }
+  .lb-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .lb-legend i { width: 10px; height: 10px; border-radius: 3px; }
+  @media (max-width: 560px) { .lb-v { font-size: 8px !important; letter-spacing: -0.3px; } .lb-plot, .lb-x { gap: 2px !important; } .lb-x small { font-size: 9.5px; } }
 `;
 
 /* Bölüm başına grafik bloğu: aralık seçici + türüne göre grafikler
@@ -611,15 +631,15 @@ export function VisitorSummary({ apiUrl, appKey, scope, scopeLabel }) {
   const hint = (VISITOR_RANGES.find(r => r.key === range) || {}).hint;
   const tot = (st) => (st.data ? (st.data.total || 0).toLocaleString("tr-TR") : "—");
   const big = (key, label, st, sub) => (
-    <div key={key} onClick={() => setRange(key)} style={{ flex: "1 1 170px", padding: "18px 20px", borderRadius: 12, cursor: "pointer", backgroundColor: "#121418",
-      border: `1px solid ${range === key ? "#8fb0ff" : "rgba(255,255,255,0.14)"}` }}>
-      <div style={{ color: "rgba(255,255,255,0.7)", fontSize: 13, fontWeight: 700 }}>{label}</div>
-      <div style={{ color: "#fff", fontSize: 36, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{tot(st)}</div>
-      <div style={{ color: "rgba(255,255,255,0.45)", fontSize: 11, marginTop: 4 }}>{sub}</div>
+    <div key={key} onClick={() => setRange(key)} style={{ flex: "1 1 170px", padding: "18px 20px", borderRadius: 12, cursor: "pointer", backgroundColor: "#ffffff",
+      border: `1px solid ${range === key ? "#3c4fe0" : "#dcd8cf"}` }}>
+      <div style={{ color: "#4b5260", fontSize: 13, fontWeight: 700 }}>{label}</div>
+      <div style={{ color: "#16181d", fontSize: 36, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{tot(st)}</div>
+      <div style={{ color: "#5f6672", fontSize: 11, marginTop: 4 }}>{sub}</div>
     </div>
   );
   return (
-    <div style={{ marginBottom: 28, paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+    <div style={{ marginBottom: 28, paddingTop: 20, borderTop: "1px solid #e6e3dc" }}>
       <div className="st-head">
         <div><h3>Ziyaretçi Özeti</h3><p>{scopeLabel} · {hint}</p></div>
         <div className="st-head-r"><RangePicker range={range} onChange={setRange} ranges={VISITOR_RANGES} /></div>
@@ -634,17 +654,17 @@ export function VisitorSummary({ apiUrl, appKey, scope, scopeLabel }) {
       {/* sütunlar */}
       {pts.length > 0 && (
         <>
-          <div style={{ display: "flex", gap: pts.length > 14 ? 3 : 8, alignItems: "flex-end", height: 120, padding: "12px 12px 0", background: "#0e0f12", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, marginBottom: 6 }}>
+          <div style={{ display: "flex", gap: pts.length > 14 ? 3 : 8, alignItems: "flex-end", height: 120, padding: "12px 12px 0", background: "#faf9f7", border: "1px solid #e6e3dc", borderRadius: 10, marginBottom: 6 }}>
             {pts.map((p, i) => (
               <div key={p.ts} style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", height: "100%" }}>
-                {pts.length <= 31 && <span style={{ color: "#fff", fontSize: pts.length > 14 ? 9 : 11, fontWeight: 700, marginBottom: 4 }}>{p.total}</span>}
-                <div title={`${ptLabel(p.ts)} — ${p.total} cihaz`} style={{ width: "100%", height: `${Math.max(3, (p.total / maxP) * 75)}%`, background: i === pts.length - 1 ? "#fff" : "rgba(255,255,255,0.45)", borderRadius: "4px 4px 0 0" }} />
+                {pts.length <= 31 && <span style={{ color: "#16181d", fontSize: pts.length > 14 ? 9 : 11, fontWeight: 700, marginBottom: 4 }}>{p.total}</span>}
+                <div title={`${ptLabel(p.ts)} — ${p.total} cihaz`} style={{ width: "100%", height: `${Math.max(3, (p.total / maxP) * 75)}%`, background: i === pts.length - 1 ? "#16181d" : "rgba(22,24,29,0.27)", borderRadius: "4px 4px 0 0" }} />
               </div>
             ))}
           </div>
           <div style={{ display: "flex", gap: pts.length > 14 ? 3 : 8, padding: "0 12px", marginBottom: 20 }}>
             {pts.map((p, i) => (
-              <span key={p.ts} style={{ flex: 1, minWidth: 0, textAlign: "center", color: "rgba(255,255,255,0.5)", fontSize: 10, whiteSpace: "nowrap", overflow: "visible" }}>
+              <span key={p.ts} style={{ flex: 1, minWidth: 0, textAlign: "center", color: "#4b5260", fontSize: 10, whiteSpace: "nowrap", overflow: "visible" }}>
                 {(pts.length <= 8 || i % Math.ceil(pts.length / 8) === 0) ? ptLabel(p.ts) : ""}
               </span>
             ))}
@@ -654,14 +674,14 @@ export function VisitorSummary({ apiUrl, appKey, scope, scopeLabel }) {
 
       {/* ülke tablosu */}
       {rows.length === 0 ? (
-        <div style={{ padding: 20, textAlign: "center", color: "rgba(255,255,255,0.5)", fontSize: 13, border: "1px dashed rgba(255,255,255,0.15)", borderRadius: 10 }}>
+        <div style={{ padding: 20, textAlign: "center", color: "#4b5260", fontSize: 13, border: "1px dashed #dcd8cf", borderRadius: 10 }}>
           {!sel.data && !sel.error ? "Yükleniyor…" : sel.error ? `Yüklenemedi: ${sel.error}` : "Bu aralıkta veri yok."}
         </div>
       ) : (
-        <div style={{ border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, overflow: "hidden" }}>
+        <div style={{ border: "1px solid #e6e3dc", borderRadius: 10, overflow: "hidden" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
             <thead>
-              <tr style={{ background: "#121418", color: "rgba(255,255,255,0.7)", textAlign: "left" }}>
+              <tr style={{ background: "#ffffff", color: "#4b5260", textAlign: "left" }}>
                 <th style={{ padding: "10px 14px", fontWeight: 700 }}>Ülke</th>
                 <th style={{ padding: "10px 14px", fontWeight: 700, textAlign: "right" }}>{colLabel}</th>
                 <th style={{ padding: "10px 14px", fontWeight: 700, width: "34%" }}>Pay</th>
@@ -671,18 +691,18 @@ export function VisitorSummary({ apiUrl, appKey, scope, scopeLabel }) {
               {shown.map(c => {
                 const share = total > 0 ? Math.round((c.value / total) * 100) : 0;
                 return (
-                  <tr key={c.country} style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-                    <td style={{ padding: "9px 14px", color: "#fff", fontWeight: 600 }}>
+                  <tr key={c.country} style={{ borderTop: "1px solid #e6e3dc" }}>
+                    <td style={{ padding: "9px 14px", color: "#16181d", fontWeight: 600 }}>
                       {flag(c.country)} {countryName(c.country)}
-                      <span style={{ color: "rgba(255,255,255,0.4)", fontFamily: "monospace", fontSize: 11, marginLeft: 6 }}>{c.country !== "XX" ? c.country : ""}</span>
+                      <span style={{ color: "#5f6672", fontFamily: "monospace", fontSize: 11, marginLeft: 6 }}>{c.country !== "XX" ? c.country : ""}</span>
                     </td>
-                    <td style={{ padding: "9px 14px", color: "#fff", textAlign: "right", fontWeight: 700 }}>{num(c.value)}</td>
+                    <td style={{ padding: "9px 14px", color: "#16181d", textAlign: "right", fontWeight: 700 }}>{num(c.value)}</td>
                     <td style={{ padding: "9px 14px" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <div style={{ flex: 1, height: 6, background: "rgba(255,255,255,0.1)", borderRadius: 3, overflow: "hidden" }}>
-                          <div style={{ width: `${share}%`, height: "100%", background: "#fff" }} />
+                        <div style={{ flex: 1, height: 6, background: "rgba(22,24,29,0.06)", borderRadius: 3, overflow: "hidden" }}>
+                          <div style={{ width: `${share}%`, height: "100%", background: "#16181d" }} />
                         </div>
-                        <span style={{ color: "rgba(255,255,255,0.6)", fontSize: 11, width: 34, textAlign: "right" }}>%{share}</span>
+                        <span style={{ color: "#4b5260", fontSize: 11, width: 34, textAlign: "right" }}>%{share}</span>
                       </div>
                     </td>
                   </tr>
@@ -692,7 +712,7 @@ export function VisitorSummary({ apiUrl, appKey, scope, scopeLabel }) {
           </table>
           {rows.length > 15 && (
             <button onClick={() => setShowAll(v => !v)}
-              style={{ width: "100%", padding: 10, background: "#121418", border: "none", borderTop: "1px solid rgba(255,255,255,0.08)", color: "#fff", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
+              style={{ width: "100%", padding: 10, background: "#ffffff", border: "none", borderTop: "1px solid #e6e3dc", color: "#16181d", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
               {showAll ? "Daha az göster" : `Tüm ülkeleri göster (${rows.length})`}
             </button>
           )}
@@ -757,6 +777,145 @@ function StatsBlock({ apiUrl, appKey, scope, scopeLabel, kind, onPickApp, allowB
         <div className="st-grid">
           <ModeChart data={data} range={range} series={EXTRACTOR_SERIES} height={240}
             title="İçerik kaynağına göre" sub="NewPipe cihazda çözer, Backend sunucu API'lerini kullanır · üstüne gel: saat ve kişi sayısı" />
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ===== Açık tema: sütun üstü sayılı çubuk grafik ===== */
+export const BAR_COLORS = { music: "#3c4fe0", ring: "#b9c1f5", unknown: "#d6d3cc", single: "#3c4fe0", now: "#16181d" };
+const LIVE_RANGES = [
+  { key: "live", label: "Anlık", hint: "Son 15 dakika, dakika dakika" },
+  { key: "1h", label: "Saatlik", hint: "Son 1 saat, 5 dakikalık dilimler" },
+  { key: "24h", label: "24 saat", hint: "Son 24 saat, saat saat" },
+  { key: "7d", label: "1 hafta", hint: "Son 7 gün, gün gün" },
+  { key: "30d", label: "30 gün", hint: "Son 30 gün, gün gün" },
+];
+const intTR = (v) => Math.round(Number(v) || 0).toLocaleString("tr-TR");
+const shortTR = (v) => {
+  const n = Math.round(Number(v) || 0);
+  if (n >= 10000) return Math.round(n / 1000) + "B";
+  if (n >= 1000) return (n / 1000).toFixed(1).replace(".", ",") + "B";
+  return String(n);
+};
+
+// bars: [{ key, label, title, total, segs: [{ v, color }] (alttan üste), missing }]
+export function LabeledBars({ bars, height = 220 }) {
+  const max = Math.max(1, ...bars.map(b => b.total || 0));
+  const dense = bars.length > 16;
+  const plotH = height - 22;
+  const step = Math.ceil(bars.length / 8);
+  return (
+    <div className="lb">
+      <div className="lb-plot" style={{ height, gap: dense ? 3 : 6 }}>
+        {bars.map((b, i) => {
+          const last = i === bars.length - 1;
+          const h = b.missing ? 0 : Math.max(2, Math.round(((b.total || 0) / max) * plotH));
+          return (
+            <div key={b.key} className={"lb-c" + (last ? " now" : "")} title={b.title}>
+              <span className="lb-v" style={{ fontSize: dense ? 9.5 : 11 }}>{b.missing ? "–" : (dense ? shortTR(b.total) : intTR(b.total))}</span>
+              <div className="lb-stack" style={{ height: h }}>
+                {b.segs.slice().reverse().map((sg, j) => sg.v > 0 && (
+                  <i key={j} style={{ flex: sg.v, background: last && b.segs.length === 1 ? BAR_COLORS.now : sg.color }} />
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div className="lb-x" style={{ gap: dense ? 3 : 6 }}>
+        {bars.map((b, i) => (
+          <small key={b.key}>{bars.length <= 8 || i % step === 0 || i === bars.length - 1 ? b.label : ""}</small>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const istDay = (ts) => new Intl.DateTimeFormat("en-CA", { timeZone: TZ }).format(new Date(ts));
+function groupAvg(points, keyOf) {
+  const groups = [];
+  points.forEach(p => {
+    const k = keyOf(p);
+    let g = groups[groups.length - 1];
+    if (!g || g.k !== k) { g = { k, ts: p.ts, pts: [] }; groups.push(g); }
+    if (!p.missing) g.pts.push(p);
+  });
+  return groups.map(g => {
+    const n = g.pts.length;
+    const avg = (f) => (n ? g.pts.reduce((a, p) => a + (Number(p[f]) || 0), 0) / n : 0);
+    return { ts: g.ts, missing: !n, t: avg("t"), r: avg("r"), y: avg("y"), u: avg("u") };
+  });
+}
+
+export function LiveActivityChart({ apiUrl, appKey, scope, scopeLabel }) {
+  const [range, setRangeState] = useState(() => {
+    try { const r = localStorage.getItem("panelLiveRange"); if (LIVE_RANGES.some(x => x.key === r)) return r; } catch (e) {}
+    return "24h";
+  });
+  const setRange = (r) => { setRangeState(r); try { localStorage.setItem("panelLiveRange", r); } catch (e) {} };
+  const [metric, setMetricState] = useState(() => { try { return localStorage.getItem("panelLiveMetric") || "visitors"; } catch (e) { return "visitors"; } });
+  const setMetric = (m) => { setMetricState(m); try { localStorage.setItem("panelLiveMetric", m); } catch (e) {} };
+  const visOk = ["24h", "7d", "30d"].includes(range);
+  const useVis = visOk && metric === "visitors";
+  const st = useStatsSeries({ apiUrl, appKey, scope, range, enabled: !useVis });
+  const vs = useVisitorSeries({ apiUrl, appKey, scope, range, enabled: useVis });
+  const src = useVis ? vs : st;
+
+  const bars = useMemo(() => {
+    const d = src.data;
+    if (!d || !d.points) return [];
+    if (useVis) {
+      const lab = (ts) => d.unit === "hour"
+        ? new Intl.DateTimeFormat("tr-TR", { timeZone: TZ, hour: "2-digit", minute: "2-digit" }).format(new Date(ts))
+        : new Intl.DateTimeFormat("tr-TR", { timeZone: "UTC", day: "numeric", month: "short", ...(d.points.length <= 7 ? { weekday: "short" } : {}) }).format(new Date(ts));
+      return d.points.map(p => ({
+        key: p.ts, label: lab(p.ts), total: p.total, title: `${lab(p.ts)} — ${intTR(p.total)} kişi girdi`,
+        segs: [{ v: p.total, color: BAR_COLORS.single }],
+      }));
+    }
+    let pts = d.points;
+    if (range === "1h") pts = groupAvg(pts, p => Math.floor(p.ts / 300000));
+    else if (range === "7d") pts = groupAvg(pts, p => istDay(p.ts));
+    const lab = (ts) => (range === "7d" ? fmt({ weekday: "short", day: "numeric", month: "short" }).format(new Date(ts)) : axisLabel(ts, range === "30d" ? "day" : range === "24h" ? "hour" : "minute", range));
+    return pts.map(p => {
+      const t = Math.round(p.t || 0), y = p.y || 0, r = p.r || 0, u = p.u || 0;
+      return {
+        key: p.ts, label: lab(p.ts), total: t, missing: p.missing,
+        title: p.missing ? `${lab(p.ts)} — veri yok` : `${lab(p.ts)} — Müzik ${intTR(y)} · Zil sesi ${intTR(r)}${u >= 0.5 ? ` · Bilinmiyor ${intTR(u)}` : ""}`,
+        segs: [{ v: y, color: BAR_COLORS.music }, { v: r, color: BAR_COLORS.ring }, { v: u, color: BAR_COLORS.unknown }],
+      };
+    });
+  }, [src.data, useVis, range]);
+
+  const hint = (LIVE_RANGES.find(r => r.key === range) || {}).hint;
+  return (
+    <div className="lb-card">
+      <div className="lb-head">
+        <div>
+          <h3>{useVis ? "Kaç kişi girdi" : "Aynı anda aktif kişi"}</h3>
+          <p>{scopeLabel} · {hint}{useVis ? " · benzersiz cihaz" : (range === "live" ? "" : " · dönem ortalaması")}</p>
+        </div>
+        <div className="lb-ctrl">
+          {visOk && (
+            <div className="st-seg">
+              <button type="button" className={metric === "visitors" ? "on" : ""} onClick={() => setMetric("visitors")}>Kaç kişi girdi</button>
+              <button type="button" className={metric === "active" ? "on" : ""} onClick={() => setMetric("active")}>Aynı anda</button>
+            </div>
+          )}
+          <RangePicker range={range} onChange={setRange} ranges={LIVE_RANGES} />
+        </div>
+      </div>
+      {!bars.length ? (
+        <div className="st-empty">{!src.data && !src.error ? "Yükleniyor…" : src.error ? `Grafik yüklenemedi: ${src.error}` : "Bu aralıkta henüz veri yok."}</div>
+      ) : (
+        <LabeledBars bars={bars} />
+      )}
+      {!useVis && bars.length > 0 && (
+        <div className="lb-legend">
+          <span><i style={{ background: BAR_COLORS.music }} />Müzik</span>
+          <span><i style={{ background: BAR_COLORS.ring }} />Zil sesi</span>
         </div>
       )}
     </div>
