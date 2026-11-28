@@ -430,7 +430,8 @@ function AlbumsSection({ apiUrl }) {
 const SCREENS = [
   { key: "countrycfg", label: "Ülke Ayarları", hint: "Genel mod · ülkeye göre mod", desc: "Uygulama hangi ülkede müzik, hangi ülkede zil sesi arayüzüyle açılsın.", tabs: ["settings", "countries"] },
   { key: "infra", label: "İndirme & Altyapı", hint: "MP3 · API · Cache · YouTube", desc: "MP3 kaynakları, API'ler, önbellek ve YouTube listeleri.", tabs: ["mp3", "apiproviders", "smartcache", "youtube"] },
-  { key: "ads", label: "Reklamlar", hint: "6 reklam ayarı · ASN", desc: "Her reklam yerinin varsayılan ayarı ve ülkeye özel kuralları.", tabs: ["downloadad", "bannerad", "bottombanner", "ringtonead", "adfree", "asn"] },
+  { key: "ads", label: "Reklamlar", hint: "5 reklam ayarı", desc: "Her reklam yerinin varsayılan ayarı ve ülkeye özel kuralları.", tabs: ["downloadad", "bannerad", "bottombanner", "ringtonead", "adfree"] },
+  { key: "asnscr", label: "ASN Ayarları", hint: "Zorunlu zil sesi ağları", desc: "Bu ağlardan gelen cihazlar ülke ayarına bakılmadan zil sesinde açılır.", tabs: ["asn"] },
   { key: "content", label: "İçerik", hint: "Yasaklı kanallar · filtre", desc: "Aramada ve indirmede görünmeyecek içerikler.", tabs: ["blocked", "contentfilter"] },
   { key: "appcontrols", label: "App Controls", hint: "Zorunlu review · güncelleme", desc: "Zorunlu değerlendirme ve zorunlu güncelleme.", tabs: ["appcontrols"] },
   { key: "reach", label: "Kullanıcıya Ulaş", hint: "Popup · bildirim · oylama", desc: "Uygulamadaki kullanıcılara popup, bildirim veya oylama gönder.", tabs: ["device", "notifications", "popup"] },
@@ -442,7 +443,7 @@ const SCREENS = [
 ];
 const SCREEN_GROUPS = [
   { title: "İzleme", keys: ["allapps", "monitor", "visitorscr", "ringtone"] },
-  { title: "Uygulama Ayarları", keys: ["countrycfg", "infra", "ads", "content", "appcontrols"] },
+  { title: "Uygulama Ayarları", keys: ["countrycfg", "infra", "ads", "asnscr", "content", "appcontrols"] },
   { title: "Kullanıcılar", keys: ["reach"] },
   { title: "Yönetim", keys: ["admin"] },
 ];
@@ -476,6 +477,7 @@ const PANEL_ICONS = {
   ringtonead: '<path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/>',
   adfree: '<path d="M3 11v2a1 1 0 0 0 1 1h3l5 4V6L7 10H4a1 1 0 0 0-1 1z"/><path d="m16 9 5 6M21 9l-5 6"/>',
   asn: '<path d="M13 7 9 3 5 7l4 4M17 11l4 4-4 4-4-4M8 12l4 4M16 8l-4 4"/><path d="M19 21a9 9 0 0 0-2-6"/>',
+  asnscr: '<path d="M13 7 9 3 5 7l4 4M17 11l4 4-4 4-4-4M8 12l4 4M16 8l-4 4"/><path d="M19 21a9 9 0 0 0-2-6"/>',
   smartcache: '<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/>',
   youtube: '<rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9 5 3-5 3z"/>',
   overview: '<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
@@ -1083,7 +1085,11 @@ const PANEL_CSS = `
   .pn-menu .pn-mt small { display: none; }
   .pn-menu .pn-mt b { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .pn-menu .pn-mi.active .pn-mt b { font-weight: 600; }
-  .pn-menu .pn-mbadge { padding: 0 6px; font-size: 10.5px; }
+  .pn-menu .pn-mbadge, .pn-mbadge { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; padding: 3px 9px 3px 8px; border-radius: 999px;
+    background: #d3f4de; border: 1px solid #9fe3b6; color: #107a37; font-size: 11.5px; font-weight: 700; font-style: normal; font-variant-numeric: tabular-nums; line-height: 1; }
+  .pn-mbadge i { width: 7px; height: 7px; border-radius: 50%; background: #1db954; flex-shrink: 0; animation: pnSpot 1.6s ease-in-out infinite; }
+  @keyframes pnSpot { 0% { opacity: 1; box-shadow: 0 0 0 0 rgba(29,185,84,0.55); } 60% { opacity: .45; box-shadow: 0 0 0 5px rgba(29,185,84,0); } 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(29,185,84,0); } }
+  @media (prefers-reduced-motion: reduce) { .pn-mbadge i { animation: none; } }
   .pn-menu .pn-none { background: none; }
 
   /* ===== Seçenekler: tek ortak görünüm (sekme, segment, filtre) ===== */
@@ -2053,8 +2059,8 @@ function App() {
       className={"pn-mi" + (curScreen.key === sc.key ? " active" : "")}>
       <span className="pn-ni"><PanelIcon k={sc.key} fallback="•" /></span>
       <span className="pn-mt"><b>{sc.label}</b>{sc.hint && <small>{sc.hint}</small>}</span>
-      {sc.key === "allapps" && allCount != null && <em className="pn-mbadge">{allCount.toLocaleString("tr-TR")}</em>}
-      {sc.key === "monitor" && chipCount(appId) != null && <em className="pn-mbadge">{chipCount(appId).toLocaleString("tr-TR")}</em>}
+      {sc.key === "allapps" && allCount != null && <em className="pn-mbadge"><i />{allCount.toLocaleString("tr-TR")}</em>}
+      {sc.key === "monitor" && chipCount(appId) != null && <em className="pn-mbadge"><i />{chipCount(appId).toLocaleString("tr-TR")}</em>}
     </div>
   );
   const isMonitor = MONITOR_TABS.includes(activeSection);
