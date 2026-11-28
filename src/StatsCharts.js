@@ -148,7 +148,7 @@ export function VisitorCountryChart({ data, error, height = 320 }) {
       right={data ? <div className="st-total"><b>{num(data.total)}</b><small>{rangeLabel.toLocaleLowerCase("tr")} farklı kişi</small></div> : null}>
       {!data || !data.points.some(p => p.total > 0) ? <Empty loading={!data && !error} error={error} /> : (
         <LineChart height={height} data={rows} theme="dark" margin={{ top: 10, right: 16, left: 0, bottom: 0 }}>
-          <CartesianGrid stroke="#efede8" vertical={false} />
+          <CartesianGrid stroke="#e3e0d9" vertical={false} />
           <XAxis dataKey="label" {...axisProps} minTickGap={12} />
           <YAxis {...axisProps} allowDecimals={false} width={58} tickFormatter={v => num(v)} />
           <Tooltip content={<Tip />} cursor={{ stroke: "#c9c5bc" }} />
@@ -224,7 +224,7 @@ function makeTooltip(unit, maxOf, titleOf) {
   };
 }
 
-const axisProps = { tick: { fill: "#5f6672", fontSize: 11 }, stroke: "#e6e3dc" };
+const axisProps = { tick: { fill: "#5f6672", fontSize: 11 }, stroke: "#d9d5cc" };
 
 function ChartFrame({ title, sub, right, children }) {
   return (
@@ -262,7 +262,7 @@ export function ModeChart({ data, range, title = "Aktif kullanıcılar", sub, he
     <ChartFrame title={title} sub={sub}>
       {!data || !filled.length ? <Empty loading={!data} /> : (
         <AreaChart height={height} data={rows} theme="dark" margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
-          <CartesianGrid stroke="#efede8" vertical={false} />
+          <CartesianGrid stroke="#e3e0d9" vertical={false} />
           <XAxis dataKey="label" {...axisProps} minTickGap={18} />
           <YAxis {...axisProps} allowDecimals={false} width={40} />
           <Tooltip content={makeTooltip(data.unit, maxOf)} cursor={{ stroke: "#c9c5bc" }} />
@@ -301,7 +301,7 @@ export function CountryTrendChart({ data, range, height = 260 }) {
     <ChartFrame title="Ülkelere göre zaman içinde" sub="Renkli 6 ülke grafikte ayrı çizilir; gri olanlar 'Diğer ülkeler'de toplanır">
       {!data || !hasData(data.points) ? <Empty loading={!data} /> : (
         <AreaChart height={height} data={rows} theme="dark" margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
-          <CartesianGrid stroke="#efede8" vertical={false} />
+          <CartesianGrid stroke="#e3e0d9" vertical={false} />
           <XAxis dataKey="label" {...axisProps} minTickGap={18} />
           <YAxis {...axisProps} allowDecimals={false} width={40} />
           <Tooltip content={makeTooltip(data.unit, maxOf)} cursor={{ stroke: "#c9c5bc" }} />
@@ -393,7 +393,7 @@ export function AppTrendChart({ data, range, metric: metricProp, height = 280 })
       ))}</div>}>
       {!series.length ? <Empty loading={!data} /> : (
         <LineChart height={height} data={rows} theme="dark" margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
-          <CartesianGrid stroke="#efede8" vertical={false} />
+          <CartesianGrid stroke="#e3e0d9" vertical={false} />
           <XAxis dataKey="label" {...axisProps} minTickGap={18} />
           <YAxis {...axisProps} allowDecimals={false} width={40} />
           <Tooltip content={makeTooltip(data.unit, maxOf)} cursor={{ stroke: "#c9c5bc" }} />
@@ -471,7 +471,7 @@ export const STATS_CSS = `
   .st-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
   .st-head h3 { margin: 0; font-size: 15px; color: #16181d; }
   .st-head p { margin: 2px 0 0; font-size: 12px; color: #5f6672; }
-  .st-range, .st-seg { display: inline-flex; max-width: 100%; overflow-x: auto; scrollbar-width: none; padding: 3px; gap: 2px; border-radius: 10px; background: #faf9f7; border: 1px solid #e6e3dc; }
+  .st-range, .st-seg { display: inline-flex; max-width: 100%; overflow-x: auto; scrollbar-width: none; padding: 3px; gap: 2px; border-radius: 10px; background: #eeebe5; border: 1px solid #d9d5cc; }
   .st-range button, .st-seg button { border: 0; background: none; color: #4b5260; font: inherit; font-size: 12.5px; font-weight: 600; padding: 6px 11px; border-radius: 7px; cursor: pointer; white-space: nowrap; }
   .st-seg button { font-size: 11.5px; padding: 4px 9px; }
   .st-range button:hover, .st-seg button:hover { color: #16181d; }
@@ -480,19 +480,19 @@ export const STATS_CSS = `
   .st-grid.two { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); }
   .st-grid.main-side { grid-template-columns: minmax(0, 3fr) minmax(210px, 1fr); align-items: start; }
   @media (max-width: 900px) { .st-grid.two, .st-grid.main-side { grid-template-columns: minmax(0, 1fr); } }
-  .st-card { background: #faf9f7; border: 1px solid #e6e3dc; border-radius: 14px; padding: 14px 14px 8px; min-width: 0; }
+  .st-card { background: #eeebe5; border: 1px solid #d9d5cc; border-radius: 14px; padding: 14px 14px 8px; min-width: 0; }
   .st-card-h { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
   .st-card-h b { display: block; font-size: 13.5px; color: #16181d; }
   .st-card-h small { display: block; font-size: 11.5px; color: #5f6672; margin-top: 2px; }
   .st-empty { height: 180px; display: grid; place-items: center; color: #5f6672; font-size: 13px; text-align: center; padding: 0 20px; }
-  .st-tip { background: #ffffff; border: 1px solid #dcd8cf; border-radius: 10px; padding: 10px 12px; box-shadow: 0 12px 30px rgba(22,24,29,0.113); min-width: 180px; font-size: 12.5px; color: #16181d; }
+  .st-tip { background: #f4f2ed; border: 1px solid #cdc8be; border-radius: 10px; padding: 10px 12px; box-shadow: 0 12px 30px rgba(22,24,29,0.113); min-width: 180px; font-size: 12.5px; color: #16181d; }
   .st-tip-h { font-weight: 700; margin-bottom: 7px; color: #16181d; }
   .st-tip-r { display: flex; align-items: center; gap: 8px; padding: 2px 0; }
   .st-tip-r i { width: 9px; height: 9px; border-radius: 3px; flex-shrink: 0; }
   .st-tip-r span { flex: 1; color: #4b5260; }
   .st-tip-r b { font-variant-numeric: tabular-nums; }
   .st-tip-r small { color: #5f6672; font-size: 11px; margin-left: 4px; }
-  .st-dots { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; padding: 12px 4px 6px; margin-top: 6px; border-top: 1px solid #e6e3dc; }
+  .st-dots { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; padding: 12px 4px 6px; margin-top: 6px; border-top: 1px solid #d9d5cc; }
   .st-dots small { width: 100%; font-size: 11px; font-weight: 600; color: #5f6672; letter-spacing: .3px; margin-bottom: 2px; }
   .st-dot { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: #2b2f37; white-space: nowrap; }
   .st-dot i { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
@@ -505,10 +505,10 @@ export const STATS_CSS = `
   .st-tip-big b { font-size: 15px; }
   .st-tip-sub { display: flex; flex-wrap: wrap; gap: 3px 10px; padding: 3px 0 6px 17px; font-size: 11.5px; color: #4b5260; max-width: 300px; }
   .st-tip-sub b { color: #16181d; font-weight: 600; }
-  .st-tip-t { border-top: 1px solid #e6e3dc; margin-top: 5px; padding-top: 6px; }
+  .st-tip-t { border-top: 1px solid #d9d5cc; margin-top: 5px; padding-top: 6px; }
   .st-tip-n { color: #5f6672; font-size: 10.5px; margin-top: 6px; }
   .st-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 14px; }
-  .st-tile { background: #faf9f7; border: 1px solid #e6e3dc; border-radius: 12px; padding: 12px 14px; }
+  .st-tile { background: #eeebe5; border: 1px solid #d9d5cc; border-radius: 12px; padding: 12px 14px; }
   .st-tile small { display: block; font-size: 11px; color: #5f6672; text-transform: uppercase; letter-spacing: .5px; }
   .st-tile b { display: block; font-size: 24px; margin-top: 4px; font-variant-numeric: tabular-nums; }
   .st-cl { display: flex; flex-direction: column; gap: 2px; padding-bottom: 6px; }
@@ -527,18 +527,18 @@ export const STATS_CSS = `
   .st-vb-c:last-child i { background: #16181d; }
   .st-vb-l { height: auto; padding: 6px 2px 8px; }
   .st-vb-l small { flex: 1; min-width: 0; text-align: center; font-size: 10px; color: #5f6672; white-space: nowrap; overflow: visible; }
-  .st-cl-more { margin-top: 6px; padding: 8px; border: 0; border-radius: 8px; background: #ffffff; color: #2b2f37; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
+  .st-cl-more { margin-top: 6px; padding: 8px; border: 0; border-radius: 8px; background: #f4f2ed; color: #2b2f37; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
   .recharts-legend-item-text { color: #4b5260 !important; }
   @media (max-width: 560px) { .st-range button { padding: 6px 8px; font-size: 12px; } .st-tile b { font-size: 20px; } }
-  .st-range, .st-seg { background: #ecebe6; border: 0; }
+  .st-range, .st-seg { background: #e3e0d9; border: 0; }
   .st-range button.on, .st-seg button.on { background: #16181d; color: #fff; }
   .st-range button, .st-seg button { color: #4b5260; font-weight: 500; }
-  .lb-card { background: #fff; border: 1px solid #e6e3dc; border-radius: 12px; padding: 18px 20px 14px; margin-bottom: 24px; min-width: 0; }
+  .lb-card { background: #f4f2ed; border: 1px solid #d9d5cc; border-radius: 12px; padding: 18px 20px 14px; margin-bottom: 24px; min-width: 0; }
   .lb-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
   .lb-head h3 { margin: 0; font-size: 15px; font-weight: 600; color: #16181d; }
   .lb-head p { margin: 3px 0 0; font-size: 12.5px; color: #5f6672; }
   .lb-ctrl { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-  .lb-plot { display: flex; align-items: flex-end; border-bottom: 1px solid #e6e3dc; }
+  .lb-plot { display: flex; align-items: flex-end; border-bottom: 1px solid #d9d5cc; }
   .lb-c { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch; height: 100%; }
   .lb-v { text-align: center; font-weight: 600; color: #5f6672; margin-bottom: 4px; white-space: nowrap; font-variant-numeric: tabular-nums; line-height: 1.2; }
   .lb-c.now .lb-v { color: #16181d; }
@@ -631,15 +631,15 @@ export function VisitorSummary({ apiUrl, appKey, scope, scopeLabel }) {
   const hint = (VISITOR_RANGES.find(r => r.key === range) || {}).hint;
   const tot = (st) => (st.data ? (st.data.total || 0).toLocaleString("tr-TR") : "—");
   const big = (key, label, st, sub) => (
-    <div key={key} onClick={() => setRange(key)} style={{ flex: "1 1 170px", padding: "18px 20px", borderRadius: 12, cursor: "pointer", backgroundColor: "#ffffff",
-      border: `1px solid ${range === key ? "#3c4fe0" : "#dcd8cf"}` }}>
+    <div key={key} onClick={() => setRange(key)} style={{ flex: "1 1 170px", padding: "18px 20px", borderRadius: 12, cursor: "pointer", backgroundColor: "#f4f2ed",
+      border: `1px solid ${range === key ? "#3c4fe0" : "#cdc8be"}` }}>
       <div style={{ color: "#4b5260", fontSize: 13, fontWeight: 700 }}>{label}</div>
       <div style={{ color: "#16181d", fontSize: 36, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{tot(st)}</div>
       <div style={{ color: "#5f6672", fontSize: 11, marginTop: 4 }}>{sub}</div>
     </div>
   );
   return (
-    <div style={{ marginBottom: 28, paddingTop: 20, borderTop: "1px solid #e6e3dc" }}>
+    <div style={{ marginBottom: 28, paddingTop: 20, borderTop: "1px solid #d9d5cc" }}>
       <div className="st-head">
         <div><h3>Ziyaretçi Özeti</h3><p>{scopeLabel} · {hint}</p></div>
         <div className="st-head-r"><RangePicker range={range} onChange={setRange} ranges={VISITOR_RANGES} /></div>
@@ -654,7 +654,7 @@ export function VisitorSummary({ apiUrl, appKey, scope, scopeLabel }) {
       {/* sütunlar */}
       {pts.length > 0 && (
         <>
-          <div style={{ display: "flex", gap: pts.length > 14 ? 3 : 8, alignItems: "flex-end", height: 120, padding: "12px 12px 0", background: "#faf9f7", border: "1px solid #e6e3dc", borderRadius: 10, marginBottom: 6 }}>
+          <div style={{ display: "flex", gap: pts.length > 14 ? 3 : 8, alignItems: "flex-end", height: 120, padding: "12px 12px 0", background: "#eeebe5", border: "1px solid #d9d5cc", borderRadius: 10, marginBottom: 6 }}>
             {pts.map((p, i) => (
               <div key={p.ts} style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", height: "100%" }}>
                 {pts.length <= 31 && <span style={{ color: "#16181d", fontSize: pts.length > 14 ? 9 : 11, fontWeight: 700, marginBottom: 4 }}>{p.total}</span>}
@@ -674,14 +674,14 @@ export function VisitorSummary({ apiUrl, appKey, scope, scopeLabel }) {
 
       {/* ülke tablosu */}
       {rows.length === 0 ? (
-        <div style={{ padding: 20, textAlign: "center", color: "#4b5260", fontSize: 13, border: "1px dashed #dcd8cf", borderRadius: 10 }}>
+        <div style={{ padding: 20, textAlign: "center", color: "#4b5260", fontSize: 13, border: "1px dashed #cdc8be", borderRadius: 10 }}>
           {!sel.data && !sel.error ? "Yükleniyor…" : sel.error ? `Yüklenemedi: ${sel.error}` : "Bu aralıkta veri yok."}
         </div>
       ) : (
-        <div style={{ border: "1px solid #e6e3dc", borderRadius: 10, overflow: "hidden" }}>
+        <div style={{ border: "1px solid #d9d5cc", borderRadius: 10, overflow: "hidden" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
             <thead>
-              <tr style={{ background: "#ffffff", color: "#4b5260", textAlign: "left" }}>
+              <tr style={{ background: "#f4f2ed", color: "#4b5260", textAlign: "left" }}>
                 <th style={{ padding: "10px 14px", fontWeight: 700 }}>Ülke</th>
                 <th style={{ padding: "10px 14px", fontWeight: 700, textAlign: "right" }}>{colLabel}</th>
                 <th style={{ padding: "10px 14px", fontWeight: 700, width: "34%" }}>Pay</th>
@@ -691,7 +691,7 @@ export function VisitorSummary({ apiUrl, appKey, scope, scopeLabel }) {
               {shown.map(c => {
                 const share = total > 0 ? Math.round((c.value / total) * 100) : 0;
                 return (
-                  <tr key={c.country} style={{ borderTop: "1px solid #e6e3dc" }}>
+                  <tr key={c.country} style={{ borderTop: "1px solid #d9d5cc" }}>
                     <td style={{ padding: "9px 14px", color: "#16181d", fontWeight: 600 }}>
                       {flag(c.country)} {countryName(c.country)}
                       <span style={{ color: "#5f6672", fontFamily: "monospace", fontSize: 11, marginLeft: 6 }}>{c.country !== "XX" ? c.country : ""}</span>
@@ -712,7 +712,7 @@ export function VisitorSummary({ apiUrl, appKey, scope, scopeLabel }) {
           </table>
           {rows.length > 15 && (
             <button onClick={() => setShowAll(v => !v)}
-              style={{ width: "100%", padding: 10, background: "#ffffff", border: "none", borderTop: "1px solid #e6e3dc", color: "#16181d", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
+              style={{ width: "100%", padding: 10, background: "#f4f2ed", border: "none", borderTop: "1px solid #d9d5cc", color: "#16181d", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
               {showAll ? "Daha az göster" : `Tüm ülkeleri göster (${rows.length})`}
             </button>
           )}
