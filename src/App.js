@@ -907,7 +907,7 @@ const PANEL_CSS = `
   .pn-mark { background: #3c4fe0; box-shadow: none; border-radius: 8px; }
   .pn-side .sw-wrap .sw-btn { background: #f4f2ed; border-color: #d9d5cc; }
   .pn-live { background: #dcf2e8; border-color: #bfe3cf; }
-  .pn-live b { color: #0d6b4d; } .pn-live span { color: #8fcfae; }
+  .pn-live b { color: #0d6b4d; } .pn-live span { color: #0d6b4d; }
   .pn-search { background: #eeebe5; border-color: #d9d5cc; }
   .pn-grp { color: #6e747e; letter-spacing: .4px; }
   .pn-mi { color: #16181d; }
@@ -961,7 +961,12 @@ const PANEL_CSS = `
   .v2-info { background: #dcf2e8; color: #0d6b4d; font-size: 13px; justify-content: flex-start; }
   .v2-info.bad { background: #fdecea; color: #b42318; }
   .v2-btn { height: 34px; padding: 0 14px; border-radius: 9px; border: 1px solid #cdc8be; background: #e8e5de; color: #16181d; font: inherit; font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; }
-  .v2-chip { display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 10px; border-radius: 7px; background: #e8e5de; border: 1px solid #cdc8be; font-size: 12.5px; color: #c9ced6; }
+  .v2-chip { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 4px 0 11px; border-radius: 8px; background: #f8f7f3; border: 1px solid #d6d2c8; box-shadow: 0 1px 1px rgba(22,24,29,0.04); font-size: 12.5px; font-weight: 500; color: #16181d; }
+  .v2-chip > span:last-child { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 6px; color: #6b7078; font-family: inherit; font-size: 15px; line-height: 1; transition: background .12s, color .12s; }
+  .v2-chip > span:last-child:hover { background: #fdecea; color: #b42318; }
+  .pn-content input::placeholder, .pn-content textarea::placeholder { color: #8a8f98; }
+  .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]), .pn-content select, .pn-content textarea { background-color: #f8f7f3; border-color: #cdc8be; }
+  .v2-chip.mono { font-family: 'Geist Mono', ui-monospace, monospace; }
   .v2-muted { color: #4b5260; font-size: 13px; }
   .v2-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid #d9d5cc; border-radius: 12px; background: #f4f2ed; margin-bottom: 24px; }
   .v2-st { padding: 20px 24px; border-left: 1px solid #d9d5cc; }
@@ -3534,7 +3539,7 @@ function App() {
               )}
               {/* SAYAÇLAR */}
               <div className="v2-stats">
-                <div className="v2-st"><small>Zil sesinde · şu an</small><b style={{ color: "#f5c26b" }}>{rt.online1m || 0}</b><span>tüm aktiflerin %{share}'i</span></div>
+                <div className="v2-st"><small>Zil sesinde · şu an</small><b style={{ color: "#8a5a00" }}>{rt.online1m || 0}</b><span>tüm aktiflerin %{share}'i</span></div>
                 <div className="v2-st"><small>Son 15 dakika</small><b>{rt.online15m || 0}</b></div>
                 <div className="v2-st"><small>Son 1 saat</small><b>{rt.online1h || 0}</b></div>
               </div>
@@ -4793,9 +4798,9 @@ function App() {
           {(config.ringtoneAsns || []).length > 0 ? (
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 20 }}>
               {(config.ringtoneAsns || []).map(a => (
-                <span key={a} className="v2-chip">
+                <span key={a} className="v2-chip mono">
                   AS{a}
-                  <span style={{ cursor: "pointer", fontWeight: 700 }}
+                  <span role="button" aria-label={`AS${a} kaldır`} title="Kaldır" style={{ cursor: "pointer", fontWeight: 600 }}
                     onClick={() => setConfig(prev => ({ ...prev, ringtoneAsns: (prev.ringtoneAsns || []).filter(x => x !== a) }))}>×</span>
                 </span>
               ))}
@@ -5512,10 +5517,10 @@ const styles = {
   inputGroup: { display: "flex", gap: 15, alignItems: "center", flexWrap: "wrap", marginBottom: 25 },
   labelCheckbox: { fontSize: 14, color: "#16181d", display: "flex", alignItems: "center", gap: 10, cursor: "pointer" },
   label: { fontSize: 12, color: "#4b5260", display: "block", marginBottom: 6, fontWeight: "600" },
-  input: { backgroundColor: "#eeebe5", border: "1px solid #d9d5cc", color: "#16181d", padding: "10px 12px", borderRadius: 10, outline: "none", fontSize: 14 },
+  input: { backgroundColor: "#f8f7f3", border: "1px solid #cdc8be", color: "#16181d", padding: "10px 12px", borderRadius: 10, outline: "none", fontSize: 14 },
   inputDisabled: { backgroundColor: "#f4f2ed", border: "1px solid #d9d5cc", color: "#5f6672", padding: "12px 14px", borderRadius: 10, width: "100%", fontSize: 14, boxSizing: "border-box" },
-  select: { backgroundColor: "#eeebe5", border: "1px solid #d9d5cc", color: "#16181d", padding: "10px 12px", borderRadius: 10, outline: "none", fontSize: 14, cursor: "pointer" },
-  selectDark: { backgroundColor: "#eeebe5", border: "1px solid #d9d5cc", color: "#16181d", padding: "10px 12px", borderRadius: 10, outline: "none", width: "100%", fontSize: 14, cursor: "pointer", boxSizing: "border-box" },
+  select: { backgroundColor: "#f8f7f3", border: "1px solid #cdc8be", color: "#16181d", padding: "10px 12px", borderRadius: 10, outline: "none", fontSize: 14, cursor: "pointer" },
+  selectDark: { backgroundColor: "#f8f7f3", border: "1px solid #cdc8be", color: "#16181d", padding: "10px 12px", borderRadius: 10, outline: "none", width: "100%", fontSize: 14, cursor: "pointer", boxSizing: "border-box" },
   primaryBtn: { backgroundColor: "#16181d", color: "#fff", border: "none", padding: "10px 16px", borderRadius: 10, cursor: "pointer", transition: "all 0.2s", fontSize: 13.5, fontWeight: "600" },
   textBtn: { backgroundColor: "transparent", color: "#b42318", border: "none", cursor: "pointer", fontWeight: "500" },
   list: { display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 },
@@ -5541,13 +5546,13 @@ const styles = {
   modalBody: { padding: "22px 24px" },
   formGroup: { marginBottom: 25 },
   
-  chipsInputBox: { backgroundColor: "#eeebe5", border: "1px solid #d9d5cc", borderRadius: 10, padding: "12px", display: "flex", flexWrap: "wrap", gap: 8, minHeight: 110 },
+  chipsInputBox: { backgroundColor: "#f8f7f3", border: "1px solid #cdc8be", borderRadius: 10, padding: "12px", display: "flex", flexWrap: "wrap", gap: 8, minHeight: 110 },
   chipEditable: { backgroundColor: "#e8e5de", padding: "5px 10px", borderRadius: 8, fontSize: 12.5, display: "flex", alignItems: "center", gap: 8, color: "#16181d" },
   chipClose: { cursor: "pointer", color: "#4b5260", fontSize: 14 },
   chipInput: { background: "transparent", border: "none", color: "#16181d", outline: "none", flex: 1, minWidth: 200, fontSize: 14 },
   
   filterBox: { backgroundColor: "#f4f2ed", border: "1px solid #d9d5cc", borderRadius: 12, padding: "18px" },
-  multiSelectHeader: { backgroundColor: "#eeebe5", border: "1px solid #d9d5cc", color: "#16181d", padding: "10px 12px", borderRadius: 10, cursor: "pointer", fontSize: 14, userSelect: "none" },
+  multiSelectHeader: { backgroundColor: "#f8f7f3", border: "1px solid #cdc8be", color: "#16181d", padding: "10px 12px", borderRadius: 10, cursor: "pointer", fontSize: 14, userSelect: "none" },
   multiSelectList: { position: "absolute", top: "100%", left: 0, right: 0, backgroundColor: "#f4f2ed", border: "1px solid #d9d5cc", borderRadius: 10, maxHeight: 250, overflowY: "auto", zIndex: 10, marginTop: 4 },
   multiSelectItem: { display: "flex", alignItems: "center", padding: "9px 12px", cursor: "pointer", borderBottom: "1px solid #e3e0d9", fontSize: 14, color: "#16181d" }
 };
