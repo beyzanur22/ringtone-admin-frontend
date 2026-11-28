@@ -1122,6 +1122,10 @@ const PANEL_CSS = `
   .ad-filters button { background: #f4f2ed; border-color: #d6d2c8; color: #4b5260; font-weight: 500; }
   .ad-filters button:hover { background: #ebe8e1; color: #16181d; }
   .ad-filters button.on { background: #e8ebfd; color: #2a39b8; border-color: #b9c1f5; font-weight: 600; }
+
+  /* ===== Geniş ekran: içerik sağa kadar uzar, ayar formları okunur genişlikte kalır ===== */
+  .pn-content { max-width: 1640px; }
+  .v2-stack, .v2-sec { max-width: 1180px; }
 `;
 
 function App() {
