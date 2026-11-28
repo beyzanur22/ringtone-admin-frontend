@@ -364,7 +364,7 @@ function AlbumsSection({ apiUrl }) {
       )}
 
       <div style={{ overflowX: "auto" }}>
-        <table style={styles.table}>
+        <table className="lv-at" style={styles.table}>
           <thead><tr>
             <th style={styles.th}>Ülke</th><th style={styles.th}>Durum</th><th style={styles.thRight}>Albüm</th>
             <th style={styles.th}>Son güncelleme</th><th style={styles.th}>Önbellek</th><th style={styles.thRight}>İstek</th><th style={styles.th}></th>
@@ -1122,6 +1122,37 @@ const PANEL_CSS = `
   .ad-filters button { background: #f4f2ed; border-color: #d6d2c8; color: #4b5260; font-weight: 500; }
   .ad-filters button:hover { background: #ebe8e1; color: #16181d; }
   .ad-filters button.on { background: #e8ebfd; color: #2a39b8; border-color: #b9c1f5; font-weight: 600; }
+
+  /* ===== Geniş ekran: içerik sağa kadar uzar, ayar formları okunur genişlikte kalır ===== */
+  .pn-content { max-width: 1640px; }
+  .v2-stack, .v2-sec { max-width: 1180px; }
+
+  /* ===== Dar ekran: her şey taşmadan sığar ===== */
+  .pn-main { min-width: 0; }
+  .pn-content > * { min-width: 0; }
+  .v2-row { flex-wrap: wrap; }
+  .pn-content input:not([type=checkbox]):not([type=radio]), .pn-content select, .pn-content textarea { min-width: 0; }
+  .v2-ctl { margin-left: auto; min-width: 0; max-width: 100%; }
+  .pn-content th, .pn-content td { overflow-wrap: break-word; }
+  .pn-content td[style*="monospace"] { white-space: nowrap; }
+  .lv-table table { min-width: 0; }
+  @media (max-width: 1100px) {
+    .v2-sec { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+    .pn-content table th, .pn-content table td { padding-left: 8px !important; padding-right: 8px !important; }
+    .lv-zt th:nth-child(8), .lv-zt td:nth-child(8), .lv-zt th:nth-child(4), .lv-zt td:nth-child(4) { display: none; }
+    .lv-dt th:nth-child(6), .lv-dt td:nth-child(6) { display: none; }
+  }
+  @media (max-width: 700px) {
+    .pn-content td span { white-space: normal !important; }
+    .pn-content td[style*="monospace"] { white-space: normal; overflow-wrap: anywhere; }
+    .hide-sm { display: none; }
+    .lv-dt th:nth-child(6), .lv-dt td:nth-child(6), .lv-dt th:nth-child(5), .lv-dt td:nth-child(5) { display: none; }
+    .lv-zt th:nth-child(4), .lv-zt td:nth-child(4), .lv-zt th:nth-child(7), .lv-zt td:nth-child(7) { display: none; }
+    .lv-at th:nth-child(5), .lv-at td:nth-child(5), .lv-at th:nth-child(6), .lv-at td:nth-child(6) { display: none; }
+    .pn-content table { font-size: 12px !important; }
+    .lv-grid { grid-template-columns: minmax(0, 1fr); }
+    .lv-row-n small { white-space: normal; }
+  }
 `;
 
 function App() {
@@ -3290,7 +3321,7 @@ function App() {
               <div className="lv-card lv-dev">
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, flexWrap: "wrap", gap: 10 }}>
                 <SectionHead title="Şu An Aktif Cihazlar" sub={`Son ${liveUsers.window} dakika`} />
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", minWidth: 0 }}>
                   {/* KAYNAK FİLTRESİ */}
                   <div className="pn-seg sm">
                     {[
@@ -3313,7 +3344,7 @@ function App() {
                 <div style={{ textAlign: "center", padding: 30, color: "#5f6672" }}>Şu an aktif kullanıcı yok</div>
               ) : (
                 <div style={{ overflowX: "auto" }}>
-                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                  <table className="lv-dt" style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                     <thead>
                       <tr style={{ borderBottom: "1px solid #cdc8be", color: "#4b5260", textAlign: "left" }}>
                         <th style={{ padding: "8px 10px" }}>IP</th>
@@ -3415,7 +3446,7 @@ function App() {
                             <th className="r">Son 24 saat</th>
                             <th className="r">Son 7 gün</th>
                             <th className="r">Son 30 gün</th>
-                            <th style={{ width: "26%" }}>Pay (7 gün)</th>
+                            <th className="hide-sm" style={{ width: "26%" }}>Pay (7 gün)</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -3430,7 +3461,7 @@ function App() {
                                 <td className="r n">{fmtN(c.last24h)}</td>
                                 <td className="r n">{fmtN(c.last7d)}</td>
                                 <td className="r n">{visitor30 ? fmtN(c.last30d) : "—"}</td>
-                                <td>
+                                <td className="hide-sm">
                                   <div className="lv-share"><div><i style={{ width: `${share}%` }} /></div><span>%{share}</span></div>
                                 </td>
                               </tr>
@@ -3498,7 +3529,7 @@ function App() {
                 <div style={{ textAlign: "center", padding: 30, color: "#5f6672" }}>Son {rtUsers.window} dakikada zil sesi moduna giren cihaz yok</div>
               ) : (
                 <div style={{ overflowX: "auto", marginBottom: 24 }}>
-                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                  <table className="lv-zt" style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                     <thead>
                       <tr style={{ borderBottom: "1px solid #cdc8be", color: "#4b5260", textAlign: "left" }}>
                         <th style={{ padding: "8px 10px" }}>IP</th>
@@ -3633,7 +3664,7 @@ function App() {
               {/* KURAL ↔ GERÇEK */}
               <div style={{ marginBottom: 26, padding: "14px 16px", borderRadius: 10, backgroundColor: "#f4f2ed", border: "1px solid #d9d5cc" }}>
                 <div style={{ color: "#4b5260", fontSize: 12, marginBottom: 10 }}>YÜRÜRLÜKTEKİ KURALLAR</div>
-                <div style={{ fontSize: 12, color: "#2b2f37", marginBottom: 8 }}>
+                <div style={{ fontSize: 12, color: "#2b2f37", marginBottom: 8, display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6 }}>
                   Ülke kuralı:{" "}
                   {ruleCountries.length === 0
                     ? <span style={{ color: "#5f6672" }}>yok — hiçbir ülke zil sesine ayarlı değil</span>
@@ -3642,7 +3673,7 @@ function App() {
                           border: "1px solid #b9dcf1", fontSize: 11, color: "#0b6aa2", marginRight: 6 }}>{code}</span>
                       ))}
                 </div>
-                <div style={{ fontSize: 12, color: "#2b2f37" }}>
+                <div style={{ fontSize: 12, color: "#2b2f37", display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6 }}>
                   ASN kuralı:{" "}
                   {ruleAsns.length === 0
                     ? <span style={{ color: "#5f6672" }}>yok</span>
@@ -5290,7 +5321,7 @@ function App() {
               { feature: "🏆 Top 50", source: "YouTube Data API v3", detail: "mostPopular chart", fallback: "Piped API", where: "Backend" },
             ].map((api, i) => (
               <div key={i} style={{ background: "#eeebe5", borderRadius: 8, padding: "12px 14px", marginBottom: 8 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "6px 12px" }}>
                   <span style={{ color: "#16181d", fontSize: 13, fontWeight: 600, minWidth: 160 }}>{api.feature}</span>
                   <span style={{ color: "#0d6b4d", fontSize: 12, fontWeight: 600 }}>{api.source}</span>
                   <span style={{ color: "#5f6672", fontSize: 11, fontFamily: "monospace" }}>{api.detail}</span>
