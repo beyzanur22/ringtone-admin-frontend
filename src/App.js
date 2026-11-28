@@ -106,7 +106,7 @@ function CountryRulePicker({ rule, idx, configKey, config, setConfig }) {
       <select value={mode} onChange={e => {
         const newMode = e.target.value;
         updateRule({ countryMode: newMode, countries: newMode === "all" ? [] : (rule.countries || []) });
-      }} style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 12, width: "100%", marginBottom: 6 }}>
+      }} style={{ background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 12, width: "100%", marginBottom: 6 }}>
         <option value="all">Tüm ülkeler</option>
         <option value="include">Sadece seçtiğim ülkeler</option>
         <option value="exclude">Bu ülkeler HARİÇ</option>
@@ -114,13 +114,13 @@ function CountryRulePicker({ rule, idx, configKey, config, setConfig }) {
       {mode !== "all" && (
         <>
           <div onClick={() => setOpen(!open)}
-            style={{ background: "#eeebe5", color: mode === "exclude" ? "#b42318" : "#16181d", border: `1px solid ${mode === "exclude" ? "#d92d20" : "#d9d5cc"}`, borderRadius: 6, padding: "6px 10px", fontSize: 13, cursor: "pointer", minHeight: 30 }}>
+            style={{ background: "#e4e1da", color: mode === "exclude" ? "#b42318" : "#16181d", border: `1px solid ${mode === "exclude" ? "#d92d20" : "#cdc8be"}`, borderRadius: 6, padding: "6px 10px", fontSize: 13, cursor: "pointer", minHeight: 30 }}>
             {modeLabel}
           </div>
           {open && (
-            <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "#eeebe5", border: "1px solid #cdc8be", borderRadius: 6, maxHeight: 250, overflowY: "auto", zIndex: 999, padding: "4px 0" }}>
+            <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "#e4e1da", border: "1px solid #c0bab0", borderRadius: 6, maxHeight: 250, overflowY: "auto", zIndex: 999, padding: "4px 0" }}>
               <input type="text" placeholder="Ülke ara..." value={search} onChange={e => setSearch(e.target.value)}
-                style={{ width: "calc(100% - 16px)", margin: "4px 8px", background: "#f4f2ed", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 4, padding: "4px 8px", fontSize: 12 }} />
+                style={{ width: "calc(100% - 16px)", margin: "4px 8px", background: "#ebe8e2", color: "#16181d", border: "1px solid #c0bab0", borderRadius: 4, padding: "4px 8px", fontSize: 12 }} />
               {filtered.map(c => (
                 <label key={c.code} style={{ display: "flex", alignItems: "center", padding: "4px 10px", fontSize: 12, color: "#2b2f37", cursor: "pointer" }}>
                   <input type="checkbox" checked={(rule.countries || []).includes(c.code)}
@@ -172,19 +172,19 @@ function DaCountryPicker({ mode, countries, onChange, disabled }) {
   const accent = mode === "exclude" ? "#b42318" : "#0b6aa2";
 
   const row = c => (
-    <label key={c.code} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 14px", cursor: "pointer", fontSize: 13, color: "#2b2f37", borderBottom: "1px solid #d9d5cc", background: countries.includes(c.code) ? "#e2f1fb" : "transparent" }}>
+    <label key={c.code} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 14px", cursor: "pointer", fontSize: 13, color: "#2b2f37", borderBottom: "1px solid #cdc8be", background: countries.includes(c.code) ? "#e2f1fb" : "transparent" }}>
       <input type="checkbox" checked={countries.includes(c.code)} onChange={() => toggle(c.code)} />
       <span style={{ fontSize: 16 }}>{countryFlag(c.code)}</span>
       <span style={{ flex: 1 }}>{c.name}</span>
-      <span style={{ color: "#5f6672", fontFamily: "monospace", fontSize: 12 }}>{c.code}</span>
+      <span style={{ color: "#565c68", fontFamily: "monospace", fontSize: 12 }}>{c.code}</span>
     </label>
   );
 
   return (
     <div style={{ position: "relative", flex: 1, opacity: disabled ? 0.4 : 1, pointerEvents: disabled ? "none" : "auto" }}>
       <div onClick={() => setOpen(!open)}
-        style={{ background: "#f4f2ed", border: `1px solid ${open ? accent : "#23262d"}`, borderRadius: 8, padding: "8px 12px", minHeight: 42, boxSizing: "border-box", cursor: "pointer", display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
-        {countries.length === 0 && <span style={{ color: "#5f6672", fontSize: 14 }}>{disabled ? "Tüm ülkelere gönderilir" : "Ülke seçmek için tıkla..."}</span>}
+        style={{ background: "#ebe8e2", border: `1px solid ${open ? accent : "#23262d"}`, borderRadius: 8, padding: "8px 12px", minHeight: 42, boxSizing: "border-box", cursor: "pointer", display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
+        {countries.length === 0 && <span style={{ color: "#565c68", fontSize: 14 }}>{disabled ? "Tüm ülkelere gönderilir" : "Ülke seçmek için tıkla..."}</span>}
         {countries.map(code => (
           <span key={code} onClick={e => { e.stopPropagation(); toggle(code); }} title="Kaldır"
             style={{ background: mode === "exclude" ? "#fdecea" : "#e2f1fb", color: "#16181d", border: `1px solid ${accent}`, borderRadius: 999, padding: "2px 10px", fontSize: 12, cursor: "pointer" }}>
@@ -194,21 +194,21 @@ function DaCountryPicker({ mode, countries, onChange, disabled }) {
         <span style={{ marginLeft: "auto", color: "#4b5260", fontSize: 12 }}>{open ? "▲" : "▼"}</span>
       </div>
       {open && (
-        <div style={{ position: "absolute", top: "100%", left: 0, right: 0, marginTop: 4, background: "#f4f2ed", border: "1px solid #d9d5cc", borderRadius: 8, zIndex: 50, boxShadow: "0 12px 32px rgba(22,24,29,0.12)" }}>
-          <div style={{ display: "flex", gap: 8, padding: 8, borderBottom: "1px solid #d9d5cc" }}>
+        <div style={{ position: "absolute", top: "100%", left: 0, right: 0, marginTop: 4, background: "#ebe8e2", border: "1px solid #cdc8be", borderRadius: 8, zIndex: 50, boxShadow: "0 12px 32px rgba(22,24,29,0.12)" }}>
+          <div style={{ display: "flex", gap: 8, padding: 8, borderBottom: "1px solid #cdc8be" }}>
             <input autoFocus type="text" placeholder="Ülke ara (Türkiye, TR...)" value={search} onChange={e => setSearch(e.target.value)}
-              style={{ flex: 1, background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "8px 10px", fontSize: 13 }} />
+              style={{ flex: 1, background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "8px 10px", fontSize: 13 }} />
             {countries.length > 0 && <button type="button" onClick={() => onChange([])}
-              style={{ background: "none", border: "1px solid #d9d5cc", color: "#b42318", borderRadius: 6, padding: "0 10px", cursor: "pointer", fontSize: 12 }}>Temizle</button>}
+              style={{ background: "none", border: "1px solid #cdc8be", color: "#b42318", borderRadius: 6, padding: "0 10px", cursor: "pointer", fontSize: 12 }}>Temizle</button>}
             <button type="button" onClick={() => setOpen(false)}
               style={{ background: "#0ea5e9", border: "none", color: "#fff", borderRadius: 6, padding: "0 14px", cursor: "pointer", fontSize: 12 }}>Tamam</button>
           </div>
           <div style={{ maxHeight: 300, overflowY: "auto" }}>
-            {top.length > 0 && <div style={{ padding: "6px 14px", fontSize: 11, color: "#5f6672", background: "#f4f2ed" }}>SIK KULLANILANLAR</div>}
+            {top.length > 0 && <div style={{ padding: "6px 14px", fontSize: 11, color: "#565c68", background: "#ebe8e2" }}>SIK KULLANILANLAR</div>}
             {top.map(row)}
-            {rest.length > 0 && <div style={{ padding: "6px 14px", fontSize: 11, color: "#5f6672", background: "#f4f2ed" }}>TÜM ÜLKELER</div>}
+            {rest.length > 0 && <div style={{ padding: "6px 14px", fontSize: 11, color: "#565c68", background: "#ebe8e2" }}>TÜM ÜLKELER</div>}
             {rest.map(row)}
-            {top.length + rest.length === 0 && <div style={{ padding: 14, color: "#5f6672", fontSize: 13 }}>Sonuç yok</div>}
+            {top.length + rest.length === 0 && <div style={{ padding: 14, color: "#565c68", fontSize: 13 }}>Sonuç yok</div>}
           </div>
         </div>
       )}
@@ -242,9 +242,9 @@ function CredRow({ label, value }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
       <span style={{ color: "#2b2f37", fontSize: 13, fontWeight: 700, minWidth: 80 }}>{label}</span>
-      <code title={value} style={{ flex: 1, minWidth: 0, color: "#16181d", fontSize: 14, fontWeight: 500, background: "#eeebe5", border: "1px solid #cdc8be", padding: "9px 12px", borderRadius: 8, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</code>
+      <code title={value} style={{ flex: 1, minWidth: 0, color: "#16181d", fontSize: 14, fontWeight: 500, background: "#e4e1da", border: "1px solid #c0bab0", padding: "9px 12px", borderRadius: 8, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</code>
       <button onClick={copy} className="cred-copy"
-        style={{ padding: "8px 14px", fontSize: 12, fontWeight: 700, borderRadius: 8, border: copied ? "1px solid #12805c" : "1px solid #cdc8be", background: copied ? "#dcf2e8" : "transparent", color: copied ? "#0d6b4d" : "#16181d", cursor: "pointer", flexShrink: 0, minWidth: 100 }}>
+        style={{ padding: "8px 14px", fontSize: 12, fontWeight: 700, borderRadius: 8, border: copied ? "1px solid #12805c" : "1px solid #c0bab0", background: copied ? "#dcf2e8" : "transparent", color: copied ? "#0d6b4d" : "#16181d", cursor: "pointer", flexShrink: 0, minWidth: 100 }}>
         {copied ? "✓ Kopyalandı" : "📋 Kopyala"}
       </button>
     </div>
@@ -331,7 +331,7 @@ function AlbumsSection({ apiUrl }) {
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: 10, marginBottom: 22 }}>
         {sum.map(([t, n, c]) => (
-          <div key={t} style={{ background: "#f4f2ed", border: "1px solid #d9d5cc", borderRadius: 12, padding: "12px 14px" }}>
+          <div key={t} style={{ background: "#ebe8e2", border: "1px solid #cdc8be", borderRadius: 12, padding: "12px 14px" }}>
             <div style={{ color: "#4b5260", fontSize: 12, fontWeight: 600 }}>{t}</div>
             <div style={{ color: c, fontSize: 24, fontWeight: 800 }}>{data ? n : "…"}</div>
           </div>
@@ -343,10 +343,10 @@ function AlbumsSection({ apiUrl }) {
         <input style={{ ...styles.input, width: 90, textTransform: "uppercase" }} maxLength={2} placeholder="TR" value={testCc}
           onChange={e => setTestCc(e.target.value)} onKeyDown={e => e.key === "Enter" && runTest()} />
         <button style={styles.primaryBtn} onClick={runTest}>Bu ülkeye ne gider?</button>
-        <button style={{ ...styles.primaryBtn, background: "transparent", color: "#16181d", border: "1px solid #cdc8be" }} onClick={load}>Yenile</button>
+        <button style={{ ...styles.primaryBtn, background: "transparent", color: "#16181d", border: "1px solid #c0bab0" }} onClick={load}>Yenile</button>
       </div>
       {test && (
-        <div style={{ background: "#f4f2ed", border: "1px solid #d9d5cc", borderRadius: 12, padding: 14, marginBottom: 20, fontSize: 13 }}>
+        <div style={{ background: "#ebe8e2", border: "1px solid #cdc8be", borderRadius: 12, padding: 14, marginBottom: 20, fontSize: 13 }}>
           <div style={{ marginBottom: 8 }}>
             {ccFlag(test.cc)} <b>{ccName(test.cc)}</b> → {test.served ? <>{ccFlag(test.served)} <b>{ccName(test.served)}</b></> : <b style={{ color: "#b42318" }}>hiç liste yok (boş)</b>}
             {" "}· {test.albumCount} albüm · {agoTr(test.updatedAt ? Date.now() - test.updatedAt : null)}
@@ -355,7 +355,7 @@ function AlbumsSection({ apiUrl }) {
           <div style={{ display: "flex", gap: 8, overflowX: "auto" }}>
             {(test.albums || []).map(a => (
               <div key={a.id} style={{ width: 84, flexShrink: 0 }} title={`${a.artist} — ${a.title}`}>
-                <img src={a.cover} alt="" style={{ width: 84, height: 84, borderRadius: 8, objectFit: "cover", background: "#e3e0d9" }} />
+                <img src={a.cover} alt="" style={{ width: 84, height: 84, borderRadius: 8, objectFit: "cover", background: "#d8d4cc" }} />
                 <div style={{ fontSize: 11, color: "#2b2f37", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{a.title}</div>
               </div>
             ))}
@@ -376,9 +376,9 @@ function AlbumsSection({ apiUrl }) {
               return (
                 <React.Fragment key={r.cc}>
                   <tr style={{ ...styles.tr, cursor: "pointer" }} onClick={() => setOpen(open === r.cc ? null : r.cc)}>
-                    <td style={{ ...styles.td, color: "#16181d" }}>{ccFlag(r.cc)} <b>{ccName(r.cc)}</b> <span style={{ color: "#5f6672" }}>{r.cc}</span>
+                    <td style={{ ...styles.td, color: "#16181d" }}>{ccFlag(r.cc)} <b>{ccName(r.cc)}</b> <span style={{ color: "#565c68" }}>{r.cc}</span>
                       {r.wanted && <span style={{ color: "#2a39b8", fontSize: 11 }}> · sırada</span>}
-                      {!r.tracked && r.supported && <span style={{ color: "#5f6672", fontSize: 11 }}> · takipte değil</span>}</td>
+                      {!r.tracked && r.supported && <span style={{ color: "#565c68", fontSize: 11 }}> · takipte değil</span>}</td>
                     <td style={styles.td}>{pill(s.t, s.c, s.bg)}</td>
                     <td style={styles.tdRight}>{r.albumCount || "—"}</td>
                     <td style={{ ...styles.td, color: "#2b2f37" }}>{agoTr(r.updatedAt ? data.now - r.updatedAt : null)}</td>
@@ -412,12 +412,12 @@ function AlbumsSection({ apiUrl }) {
       )}
 
       <h3 style={{ fontSize: 15, margin: "26px 0 10px", color: "#16181d" }}>Son olaylar</h3>
-      <div style={{ background: "#eeebe5", border: "1px solid #d9d5cc", borderRadius: 10, padding: 10, maxHeight: 280, overflowY: "auto", fontFamily: "ui-monospace, Menlo, monospace", fontSize: 12 }}>
+      <div style={{ background: "#e4e1da", border: "1px solid #cdc8be", borderRadius: 10, padding: 10, maxHeight: 280, overflowY: "auto", fontFamily: "ui-monospace, Menlo, monospace", fontSize: 12 }}>
         {(data && data.log && data.log.length) ? data.log.map((l, i) => (
           <div key={i} style={{ color: lvlColor[l.level] || "#4b5260", padding: "2px 0" }}>
-            <span style={{ color: "#5f6672" }}>{new Date(l.t).toLocaleString("tr")}</span> {l.cc}: {l.msg}
+            <span style={{ color: "#565c68" }}>{new Date(l.t).toLocaleString("tr")}</span> {l.cc}: {l.msg}
           </div>
-        )) : <div style={{ color: "#5f6672" }}>Henüz kayıt yok (ilk kontrol sunucu açıldıktan 1 dk sonra çalışır).</div>}
+        )) : <div style={{ color: "#565c68" }}>Henüz kayıt yok (ilk kontrol sunucu açıldıktan 1 dk sonra çalışır).</div>}
       </div>
     </div>
   );
@@ -544,37 +544,37 @@ function PanelIcon({ k, fallback }) {
 }
 const PANEL_CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap');
-  .pn-root { display: flex; min-height: 100vh; background: #eeebe5; color: #16181d; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  .pn-root { display: flex; min-height: 100vh; background: #e4e1da; color: #16181d; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
   .pn-root svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
   .pn-root ::-webkit-scrollbar { width: 8px; height: 8px; }
   .pn-root ::-webkit-scrollbar-thumb { background: rgba(22,24,29,0.072); border-radius: 4px; }
-  .pn-side { width: 264px; min-width: 264px; background: #eeebe5; border-right: 1px solid #d9d5cc; height: 100vh; position: sticky; top: 0; display: flex; flex-direction: column; box-sizing: border-box; z-index: 40; }
+  .pn-side { width: 264px; min-width: 264px; background: #e4e1da; border-right: 1px solid #cdc8be; height: 100vh; position: sticky; top: 0; display: flex; flex-direction: column; box-sizing: border-box; z-index: 40; }
   .pn-side-top { padding: 18px 16px 10px; }
   .pn-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; text-decoration: none; color: #16181d; }
   .pn-brand b { font-size: 15px; font-weight: 700; }
   .pn-mark { width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center; background: linear-gradient(135deg, #3c4fe0, #ec4899); color: #fff; box-shadow: 0 6px 18px rgba(60,79,224,0.3); }
   .pn-mark svg { width: 17px; height: 17px; }
-  .pn-lbl { font-size: 10.5px; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; color: #5f6672; margin-bottom: 6px; }
-  .pn-app { position: relative; display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; background: #f4f2ed; border: 1px solid #d9d5cc; transition: border-color .15s; }
-  .pn-app:hover { border-color: #cdc8be; }
+  .pn-lbl { font-size: 10.5px; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; color: #565c68; margin-bottom: 6px; }
+  .pn-app { position: relative; display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; background: #ebe8e2; border: 1px solid #cdc8be; transition: border-color .15s; }
+  .pn-app:hover { border-color: #c0bab0; }
   .pn-av { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-weight: 800; font-size: 13px; color: #16181d; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(22,24,29,0.075); }
   .pn-app-t { flex: 1; min-width: 0; }
   .pn-app-t b { display: block; font-size: 13.5px; }
-  .pn-app-t small { display: block; font-size: 11px; color: #5f6672; font-family: ui-monospace, Menlo, monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pn-app-t small { display: block; font-size: 11px; color: #565c68; font-family: ui-monospace, Menlo, monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .pn-app-sel { flex: 1; min-width: 0; appearance: none; -webkit-appearance: none; background: transparent; border: 0; outline: 0; color: #16181d; font: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer; padding: 6px 0; }
-  .pn-app-i { color: #5f6672; width: 16px !important; height: 16px !important; pointer-events: none; }
+  .pn-app-i { color: #565c68; width: 16px !important; height: 16px !important; pointer-events: none; }
   .pn-live { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding: 9px 12px; border-radius: 12px; background: rgba(18,128,92,0.08); border: 1px solid rgba(18,128,92,0.22); cursor: pointer; transition: background .15s; }
   .pn-live:hover { background: rgba(18,128,92,0.13); }
   .pn-live i { width: 8px; height: 8px; border-radius: 50%; background: #12805c; animation: pnPulse 2s infinite; }
   @keyframes pnPulse { 0% { box-shadow: 0 0 0 0 rgba(18,128,92,0.6); } 70%, 100% { box-shadow: 0 0 0 7px rgba(18,128,92,0); } }
   .pn-live b { font-size: 15px; color: #0d6b4d; font-variant-numeric: tabular-nums; }
   .pn-live span { font-size: 12px; color: #0d6b4d; }
-  .pn-search { display: flex; align-items: center; gap: 8px; margin-top: 12px; height: 34px; padding: 0 10px; border-radius: 10px; background: #eeebe5; border: 1px solid #d9d5cc; color: #5f6672; }
+  .pn-search { display: flex; align-items: center; gap: 8px; margin-top: 12px; height: 34px; padding: 0 10px; border-radius: 10px; background: #e4e1da; border: 1px solid #cdc8be; color: #565c68; }
   .pn-search:focus-within { border-color: #3c4fe0; color: #16181d; }
   .pn-search svg { width: 15px; height: 15px; }
   .pn-search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #16181d; font: inherit; font-size: 13px; }
   .pn-menu { flex: 1; overflow-y: auto; padding: 0 10px 12px; }
-  .pn-grp { font-size: 10.5px; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; color: #5f6672; padding: 14px 8px 6px; }
+  .pn-grp { font-size: 10.5px; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; color: #565c68; padding: 14px 8px 6px; }
   .pn-mi { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 9px; font-size: 13.5px; font-weight: 550; color: #4b5260; cursor: pointer; user-select: none; position: relative; transition: background .12s, color .12s; }
   .pn-mi:hover { background: rgba(22,24,29,0.03); color: #16181d; }
   .pn-mi.active { background: rgba(60,79,224,0.15); color: #16181d; }
@@ -584,22 +584,22 @@ const PANEL_CSS = `
   .pn-mi.has-active::before { content: ""; position: absolute; left: -10px; top: 8px; bottom: 8px; width: 3px; border-radius: 0 3px 3px 0; background: rgba(60,79,224,0.6); }
   .pn-sub { padding-left: 22px; font-size: 13px; }
   .pn-ico-e { width: 18px; text-align: center; font-size: 14px; flex-shrink: 0; }
-  .pn-count { font-size: 10.5px; font-weight: 700; color: #5f6672; background: rgba(22,24,29,0.036); padding: 1px 7px; border-radius: 999px; }
-  .pn-chev { width: 15px !important; height: 15px !important; color: #5f6672; transition: transform .2s; }
+  .pn-count { font-size: 10.5px; font-weight: 700; color: #565c68; background: rgba(22,24,29,0.036); padding: 1px 7px; border-radius: 999px; }
+  .pn-chev { width: 15px !important; height: 15px !important; color: #565c68; transition: transform .2s; }
   .pn-chev.open { transform: rotate(180deg); }
-  .pn-none { color: #5f6672; font-size: 12.5px; padding: 14px 10px; }
-  .pn-logout { display: flex; align-items: center; gap: 8px; margin: 0; padding: 14px 20px; border-top: 1px solid #d9d5cc; color: #4b5260; font-size: 13px; font-weight: 600; text-decoration: none; transition: color .15s, background .15s; }
+  .pn-none { color: #565c68; font-size: 12.5px; padding: 14px 10px; }
+  .pn-logout { display: flex; align-items: center; gap: 8px; margin: 0; padding: 14px 20px; border-top: 1px solid #cdc8be; color: #4b5260; font-size: 13px; font-weight: 600; text-decoration: none; transition: color .15s, background .15s; }
   .pn-logout:hover { color: #b42318; background: rgba(217,45,32,0.08); }
   .pn-logout svg { width: 16px; height: 16px; }
   .pn-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-  .pn-top { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 12px; padding: 13px 32px; background: rgba(17,17,20,0.84); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid #d9d5cc; }
+  .pn-top { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 12px; padding: 13px 32px; background: rgba(17,17,20,0.84); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid #cdc8be; }
   .pn-burger { display: none; background: none; border: 0; color: #16181d; cursor: pointer; padding: 4px; }
-  .pn-crumb { display: flex; align-items: center; gap: 7px; font-size: 13px; color: #5f6672; min-width: 0; }
+  .pn-crumb { display: flex; align-items: center; gap: 7px; font-size: 13px; color: #565c68; min-width: 0; }
   .pn-crumb b { color: #16181d; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .pn-crumb-app { white-space: nowrap; }
   .pn-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .pn-ghost { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: #4b5260; background: #f4f2ed; border: 1px solid #d9d5cc; padding: 7px 11px; border-radius: 9px; text-decoration: none; white-space: nowrap; }
-  .pn-ghost:hover { color: #16181d; border-color: #cdc8be; }
+  .pn-ghost { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: #4b5260; background: #ebe8e2; border: 1px solid #cdc8be; padding: 7px 11px; border-radius: 9px; text-decoration: none; white-space: nowrap; }
+  .pn-ghost:hover { color: #16181d; border-color: #c0bab0; }
   .pn-ghost svg { width: 15px; height: 15px; }
   .pn-content { width: 100%; max-width: 1180px; margin: 0 auto; padding: 28px 32px 80px; display: flex; flex-direction: column; gap: 22px; box-sizing: border-box; }
   .pn-content h2 { letter-spacing: -0.3px; }
@@ -609,47 +609,47 @@ const PANEL_CSS = `
   .pn-content button:not(:disabled):active { transform: translateY(1px); }
   .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]):focus,
   .pn-content select:focus, .pn-content textarea:focus { border-color: #3c4fe0 !important; box-shadow: 0 0 0 3px rgba(60,79,224,0.18); outline: none; }
-  .pn-root input[type=checkbox] { -webkit-appearance: none; appearance: none; width: 36px; height: 21px; min-width: 36px; border-radius: 999px; background: #d9d5cc; position: relative; cursor: pointer; vertical-align: middle; border: 0; transition: background .18s; }
+  .pn-root input[type=checkbox] { -webkit-appearance: none; appearance: none; width: 36px; height: 21px; min-width: 36px; border-radius: 999px; background: #cdc8be; position: relative; cursor: pointer; vertical-align: middle; border: 0; transition: background .18s; }
   .pn-root input[type=checkbox]::after { content: ""; position: absolute; top: 3px; left: 3px; width: 15px; height: 15px; border-radius: 50%; background: #16181d; box-shadow: 0 1px 3px rgba(22,24,29,0.1); transition: transform .18s; }
   .pn-root input[type=checkbox]:checked { background: #12805c; }
   .pn-root input[type=checkbox]:checked::after { transform: translateX(15px); }
   .pn-root input[type=checkbox]:disabled { opacity: 0.5; cursor: not-allowed; }
   .pn-root input[type=radio] { accent-color: #3c4fe0; }
-  .pn-head { position: sticky; top: 0; z-index: 20; background: rgba(17,17,20,0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid #d9d5cc; }
+  .pn-head { position: sticky; top: 0; z-index: 20; background: rgba(17,17,20,0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid #cdc8be; }
   .pn-head .pn-top { position: static; background: none; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: 0; }
   .pn-appbar { display: flex; align-items: center; gap: 8px; padding: 4px 32px 12px; }
-  .pn-appbar-scroll { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; overflow-x: auto; padding: 3px 3px 4px; scrollbar-width: thin; scrollbar-color: #5f6672 transparent; }
+  .pn-appbar-scroll { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; overflow-x: auto; padding: 3px 3px 4px; scrollbar-width: thin; scrollbar-color: #565c68 transparent; }
   .pn-appbar-scroll::-webkit-scrollbar { height: 6px; }
-  .pn-chip { --c: #2a39b8; position: relative; display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; height: 38px; padding: 0 12px 0 5px; border-radius: 11px; background: #f4f2ed; border: 1px solid #d9d5cc; color: #2b2f37; font: inherit; font-size: 13px; cursor: pointer; user-select: none; transition: border-color .15s, background .15s, color .15s; }
-  .pn-chip:hover { border-color: #cdc8be; color: #16181d; }
-  .pn-chip.on { background: #e8e5de; border-color: var(--c); color: #16181d; box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 22%, transparent); }
+  .pn-chip { --c: #2a39b8; position: relative; display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; height: 38px; padding: 0 12px 0 5px; border-radius: 11px; background: #ebe8e2; border: 1px solid #cdc8be; color: #2b2f37; font: inherit; font-size: 13px; cursor: pointer; user-select: none; transition: border-color .15s, background .15s, color .15s; }
+  .pn-chip:hover { border-color: #c0bab0; color: #16181d; }
+  .pn-chip.on { background: #dedad2; border-color: var(--c); color: #16181d; box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 22%, transparent); }
   .pn-chip b { font-weight: 650; white-space: nowrap; }
   .pn-chip .pn-av { width: 28px; height: 28px; border-radius: 8px; font-size: 12px; }
   .pn-av-all { background: #e8ebfd; color: #2a39b8; }
   .pn-av-all svg { width: 15px !important; height: 15px !important; }
-  .pn-chip > svg { width: 14px !important; height: 14px !important; color: #5f6672; }
-  .pn-chip em { font-style: normal; font-size: 11.5px; font-weight: 700; color: #5f6672; background: rgba(22,24,29,0.036); padding: 1px 7px; border-radius: 999px; font-variant-numeric: tabular-nums; }
+  .pn-chip > svg { width: 14px !important; height: 14px !important; color: #565c68; }
+  .pn-chip em { font-style: normal; font-size: 11.5px; font-weight: 700; color: #565c68; background: rgba(22,24,29,0.036); padding: 1px 7px; border-radius: 999px; font-variant-numeric: tabular-nums; }
   .pn-chip em.live { color: #0d6b4d; background: rgba(18,128,92,0.12); }
   .pn-chip-x { display: grid; place-items: center; width: 22px; height: 22px; margin-right: -4px; border-radius: 7px; border: 0; background: rgba(217,45,32,0.15); color: #b42318; cursor: pointer; }
   .pn-chip-x:hover { background: #d92d20; color: #fff; }
   .pn-chip-x svg { width: 13px !important; height: 13px !important; stroke-width: 2.4; }
-  .pn-appbar-tools { display: inline-flex; gap: 6px; padding-left: 8px; border-left: 1px solid #d9d5cc; flex-shrink: 0; }
-  .pn-tool { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 11px; border-radius: 10px; border: 1px dashed #cdc8be; background: none; color: #4b5260; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; white-space: nowrap; }
-  .pn-tool:hover { color: #16181d; border-color: #cdc8be; }
+  .pn-appbar-tools { display: inline-flex; gap: 6px; padding-left: 8px; border-left: 1px solid #cdc8be; flex-shrink: 0; }
+  .pn-tool { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 11px; border-radius: 10px; border: 1px dashed #c0bab0; background: none; color: #4b5260; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .pn-tool:hover { color: #16181d; border-color: #c0bab0; }
   .pn-tool.on { border-style: solid; border-color: #d92d20; color: #b42318; background: rgba(217,45,32,0.1); }
   .pn-tool svg { width: 15px !important; height: 15px !important; }
-  .pn-tabs { display: flex; gap: 4px; padding: 4px; border-radius: 13px; background: #eeebe5; border: 1px solid #d9d5cc; overflow-x: auto; }
+  .pn-tabs { display: flex; gap: 4px; padding: 4px; border-radius: 13px; background: #e4e1da; border: 1px solid #cdc8be; overflow-x: auto; }
   .pn-tabs button { display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0; border: 0; background: none; color: #4b5260; font: inherit; font-size: 13px; font-weight: 600; padding: 8px 13px; border-radius: 9px; cursor: pointer; white-space: nowrap; }
   .pn-tabs button:hover { color: #16181d; background: rgba(22,24,29,0.03); }
-  .pn-tabs button.on { background: #e8e5de; color: #16181d; box-shadow: inset 0 0 0 1px rgba(60,79,224,0.45); }
+  .pn-tabs button.on { background: #dedad2; color: #16181d; box-shadow: inset 0 0 0 1px rgba(60,79,224,0.45); }
   .pn-tabs button.on .pn-ico { color: #2a39b8; }
   .pn-tabs .pn-ico { width: 16px !important; height: 16px !important; }
   .da-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 18px; align-items: start; }
-  .da-step { background: #f4f2ed; border: 1px solid #d9d5cc; border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
+  .da-step { background: #ebe8e2; border: 1px solid #cdc8be; border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
   .da-sh { display: flex; align-items: center; gap: 9px; font-size: 14px; font-weight: 650; color: #16181d; margin-bottom: 12px; }
   .da-sh b { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 11.5px; background: rgba(60,79,224,0.18); color: #2a39b8; }
   .da-types { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-  .da-type { text-align: left; background: #eeebe5; border: 1px solid #d9d5cc; border-radius: 11px; padding: 10px 11px; color: #4b5260; cursor: pointer; font: inherit; }
+  .da-type { text-align: left; background: #e4e1da; border: 1px solid #cdc8be; border-radius: 11px; padding: 10px 11px; color: #4b5260; cursor: pointer; font: inherit; }
   .da-type svg { width: 19px !important; height: 19px !important; color: #2b2f37; display: block; margin-bottom: 6px; }
   .da-type span { display: block; color: #16181d; font-size: 13px; font-weight: 650; }
   .da-type small { display: block; font-size: 11.5px; margin-top: 2px; line-height: 1.35; }
@@ -657,19 +657,19 @@ const PANEL_CSS = `
   .da-type.on svg { color: #2a39b8; }
   .da-lbl { display: block; font-size: 12px; color: #4b5260; margin: 12px 0 5px; }
   .da-two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .da-seg { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; border-radius: 10px; background: #eeebe5; border: 1px solid #d9d5cc; }
+  .da-seg { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; border-radius: 10px; background: #e4e1da; border: 1px solid #cdc8be; }
   .da-seg button { border: 0; background: none; color: #4b5260; font: inherit; font-size: 12.5px; font-weight: 600; padding: 6px 11px; border-radius: 7px; cursor: pointer; white-space: nowrap; }
   .da-seg button:hover { color: #16181d; }
-  .da-seg button.on { background: #e8e5de; color: #16181d; box-shadow: inset 0 0 0 1px rgba(60,79,224,0.5); }
-  .da-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: 13px; color: #4b5260; border-top: 1px solid #d9d5cc; flex-wrap: wrap; }
+  .da-seg button.on { background: #dedad2; color: #16181d; box-shadow: inset 0 0 0 1px rgba(60,79,224,0.5); }
+  .da-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: 13px; color: #4b5260; border-top: 1px solid #cdc8be; flex-wrap: wrap; }
   .da-step .da-row:first-of-type { border-top: 0; }
-  .da-hint { font-size: 11.5px; color: #5f6672; text-align: right; }
+  .da-hint { font-size: 11.5px; color: #565c68; text-align: right; }
   .da-side { position: sticky; top: 150px; }
-  .da-phone { border: 1px solid #cdc8be; border-radius: 30px; padding: 10px; background: #0b0c0e; max-width: 300px; margin: 0 auto; }
-  .da-screen { position: relative; height: 340px; border-radius: 22px; background: #f4f2ed; overflow: hidden; }
+  .da-phone { border: 1px solid #c0bab0; border-radius: 30px; padding: 10px; background: #0b0c0e; max-width: 300px; margin: 0 auto; }
+  .da-screen { position: relative; height: 340px; border-radius: 22px; background: #ebe8e2; overflow: hidden; }
   .da-app { display: flex; align-items: center; gap: 8px; padding: 14px; font-size: 12.5px; color: #4b5260; font-weight: 600; }
-  .da-dlg { position: absolute; left: 14px; right: 14px; top: 105px; background: #e8e5de; border-radius: 16px; padding: 16px; font-size: 13.5px; color: #16181d; box-shadow: 0 18px 40px rgba(22,24,29,0.12); }
-  .da-muted { color: #5f6672; font-style: italic; }
+  .da-dlg { position: absolute; left: 14px; right: 14px; top: 105px; background: #dedad2; border-radius: 16px; padding: 16px; font-size: 13.5px; color: #16181d; box-shadow: 0 18px 40px rgba(22,24,29,0.12); }
+  .da-muted { color: #565c68; font-style: italic; }
   .da-btns { display: flex; justify-content: flex-end; gap: 18px; margin-top: 16px; font-size: 13px; }
   .da-btns span { color: #4b5260; }
   .da-btns b { color: #2a39b8; }
@@ -677,28 +677,28 @@ const PANEL_CSS = `
   .da-direct svg { width: 26px !important; height: 26px !important; color: #2a39b8; }
   .da-direct code { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; }
   .da-chips { display: flex; flex-wrap: wrap; gap: 5px; margin: 14px 0 10px; }
-  .da-chips span { font-size: 11.5px; color: #2b2f37; background: #f4f2ed; border: 1px solid #d9d5cc; padding: 3px 9px; border-radius: 999px; }
+  .da-chips span { font-size: 11.5px; color: #2b2f37; background: #ebe8e2; border: 1px solid #cdc8be; padding: 3px 9px; border-radius: 999px; }
   .da-match { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; background: rgba(60,79,224,0.08); border: 1px solid rgba(60,79,224,0.3); margin-bottom: 12px; font-size: 12.5px; color: #2b2f37; }
   .da-match b { font-size: 22px; color: #16181d; font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .da-match small { color: #5f6672; font-size: 11px; }
-  .da-hist { border: 1px solid #d9d5cc; border-radius: 14px; overflow: hidden; }
-  .da-hr { border-top: 1px solid #d9d5cc; }
+  .da-match small { color: #565c68; font-size: 11px; }
+  .da-hist { border: 1px solid #cdc8be; border-radius: 14px; overflow: hidden; }
+  .da-hr { border-top: 1px solid #cdc8be; }
   .da-hr:first-child { border-top: 0; }
   .da-hr.act { background: rgba(11,106,162,0.05); }
   .da-hr-main { display: flex; align-items: center; gap: 10px; padding: 10px 14px; cursor: pointer; font-size: 13px; }
   .da-hr-main:hover { background: rgba(22,24,29,0.03); }
-  .da-pill { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 999px; background: #e8e5de; color: #5f6672; flex-shrink: 0; }
+  .da-pill { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 999px; background: #dedad2; color: #565c68; flex-shrink: 0; }
   .da-pill.on { background: rgba(18,128,92,0.14); color: #0d6b4d; }
   .da-hr-i { width: 16px !important; height: 16px !important; color: #4b5260; }
   .da-hr-v { flex: 1; min-width: 0; color: #16181d; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .da-tag { font-size: 11.5px; color: #4b5260; background: #f4f2ed; padding: 2px 8px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
+  .da-tag { font-size: 11.5px; color: #4b5260; background: #ebe8e2; padding: 2px 8px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
   .da-cnt { font-size: 12px; color: #0d6b4d; font-weight: 600; white-space: nowrap; }
   .da-acts { display: inline-flex; gap: 6px; }
-  .da-b { border: 1px solid #d9d5cc; background: #f4f2ed; color: #4b5260; font: inherit; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 8px; cursor: pointer; }
+  .da-b { border: 1px solid #cdc8be; background: #ebe8e2; color: #4b5260; font: inherit; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 8px; cursor: pointer; }
   .da-b:hover { color: #b42318; border-color: rgba(217,45,32,0.4); }
   .da-b.warn { color: #8a5a00; }
   .da-det { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px 16px; padding: 4px 14px 14px 52px; font-size: 12.5px; color: #16181d; }
-  .da-det small { display: block; color: #5f6672; font-size: 11px; margin-bottom: 2px; }
+  .da-det small { display: block; color: #565c68; font-size: 11px; margin-bottom: 2px; }
   @media (max-width: 900px) { .da-grid { grid-template-columns: minmax(0, 1fr); } .da-side { position: static; } }
   @media (max-width: 560px) { .da-types { grid-template-columns: minmax(0, 1fr); } .da-tag { display: none; } .da-det { padding-left: 14px; } }
   .pn-content { transition: opacity .15s; }
@@ -706,9 +706,9 @@ const PANEL_CSS = `
   .ad svg { width: 16px; height: 16px; }
   .ad-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; margin-bottom: 18px; flex-wrap: wrap; }
   .ad h1 { font-size: 26px; font-weight: 750; letter-spacing: -0.5px; margin: 0; }
-  .ad-sub { color: #5f6672; font-size: 13.5px; margin-top: 4px; }
+  .ad-sub { color: #565c68; font-size: 13.5px; margin-top: 4px; }
   .ad-tools { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .ad-search { display: flex; align-items: center; gap: 8px; width: 270px; height: 40px; padding: 0 12px; border-radius: 11px; background: #f4f2ed; border: 1px solid #d9d5cc; color: #5f6672; }
+  .ad-search { display: flex; align-items: center; gap: 8px; width: 270px; height: 40px; padding: 0 12px; border-radius: 11px; background: #ebe8e2; border: 1px solid #cdc8be; color: #565c68; }
   .ad-search:focus-within { border-color: #3c4fe0; }
   .ad-search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #16181d; font: inherit; font-size: 13.5px; box-shadow: none !important; }
   .ad-btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; height: 40px; padding: 0 16px; border-radius: 11px; font: inherit; font-size: 13.5px; font-weight: 650; border: 0; cursor: pointer; }
@@ -717,28 +717,28 @@ const PANEL_CSS = `
   .ad-btn.wide { width: 100%; height: 46px; font-size: 14.5px; margin-top: 16px; }
   .ad-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
   .ad-stats.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .ad-st { background: #f4f2ed; border: 1px solid #d9d5cc; border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
+  .ad-st { background: #ebe8e2; border: 1px solid #cdc8be; border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
   .ad-st-ic { width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center; flex-shrink: 0; }
   .ad-st-ic svg { width: 18px; height: 18px; }
-  .ad-st small { display: block; color: #5f6672; font-size: 11px; font-weight: 650; letter-spacing: .3px; }
+  .ad-st small { display: block; color: #565c68; font-size: 11px; font-weight: 650; letter-spacing: .3px; }
   .ad-st b { display: block; font-size: 22px; font-weight: 750; font-variant-numeric: tabular-nums; }
   .ad-filters { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
-  .ad-filters button { font: inherit; font-size: 12.5px; font-weight: 600; color: #4b5260; padding: 6px 12px; border-radius: 999px; border: 1px solid #d9d5cc; background: none; cursor: pointer; }
+  .ad-filters button { font: inherit; font-size: 12.5px; font-weight: 600; color: #4b5260; padding: 6px 12px; border-radius: 999px; border: 1px solid #cdc8be; background: none; cursor: pointer; }
   .ad-filters button.on { background: #16181d; color: #ffffff; border-color: #16181d; }
-  .ad-empty { color: #5f6672; font-size: 13.5px; padding: 40px 0; text-align: center; }
+  .ad-empty { color: #565c68; font-size: 13.5px; padding: 40px 0; text-align: center; }
   .ad-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; align-items: start; }
-  .ad-card { --c: #3c4fe0; background: #f4f2ed; border: 1px solid #d9d5cc; border-radius: 16px; padding: 16px; position: relative; }
+  .ad-card { --c: #3c4fe0; background: #ebe8e2; border: 1px solid #cdc8be; border-radius: 16px; padding: 16px; position: relative; }
   .ad-card.stripe::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; border-radius: 16px 16px 0 0; background: var(--c); }
   .ad-ch { display: flex; align-items: center; gap: 12px; }
   .ad-av { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; color: #16181d; font-weight: 800; font-size: 17px; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(22,24,29,0.075); }
   .ad-av.round { border-radius: 50%; font-size: 14px; }
   .ad-nm { font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .ad-pk { font-family: ui-monospace, Menlo, monospace; font-size: 11.5px; color: #5f6672; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ad-pk { font-family: ui-monospace, Menlo, monospace; font-size: 11.5px; color: #565c68; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .ad-ch > div { flex: 1; }
-  .ad-pk.plain { font-family: inherit; font-size: 12px; color: #5f6672; }
+  .ad-pk.plain { font-family: inherit; font-size: 12px; color: #565c68; }
   .ad-live { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #0d6b4d; background: rgba(18,128,92,0.1); padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
   .ad-live i { width: 6px; height: 6px; border-radius: 50%; background: #12805c; }
-  .ad-live.z { color: #5f6672; background: rgba(22,24,29,0.03); }
+  .ad-live.z { color: #565c68; background: rgba(22,24,29,0.03); }
   .ad-live.z i { background: #c9c5bc; }
   .ad-role { font-size: 11.5px; font-weight: 700; padding: 4px 9px; border-radius: 999px; background: rgba(11,106,162,0.12); color: #0b6aa2; white-space: nowrap; }
   .ad-role.sup { background: rgba(217,119,6,0.12); color: #8a5a00; }
@@ -751,101 +751,101 @@ const PANEL_CSS = `
   .ad-tg.warn { background: rgba(217,119,6,0.12); color: #8a5a00; }
   .ad-tg.all { background: rgba(60,79,224,0.12); color: #2a39b8; }
   .ad-access { margin: 14px 0 12px; }
-  .ad-access small { display: block; font-size: 10.5px; font-weight: 700; letter-spacing: .6px; color: #5f6672; margin-bottom: 7px; }
+  .ad-access small { display: block; font-size: 10.5px; font-weight: 700; letter-spacing: .6px; color: #565c68; margin-bottom: 7px; }
   .ad-apps, .ad-pick { display: flex; flex-wrap: wrap; gap: 6px; }
-  .ad-mini { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 9px 0 3px; border-radius: 9px; background: #f4f2ed; border: 1px solid #d9d5cc; font: inherit; font-size: 12px; font-weight: 600; color: #2b2f37; }
+  .ad-mini { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 9px 0 3px; border-radius: 9px; background: #ebe8e2; border: 1px solid #cdc8be; font: inherit; font-size: 12px; font-weight: 600; color: #2b2f37; }
   .ad-mini .ad-av { width: 22px; height: 22px; border-radius: 7px; font-size: 10.5px; }
-  .ad-mini.more { padding: 0 9px; color: #5f6672; }
+  .ad-mini.more { padding: 0 9px; color: #565c68; }
   .ad-mini.sel { cursor: pointer; height: 32px; }
   .ad-mini.sel.on { border-color: #3c4fe0; background: rgba(60,79,224,0.12); color: #16181d; }
   .ad-mini.sel svg { width: 13px; height: 13px; color: #2a39b8; stroke-width: 2.4; }
-  .ad-acts { display: flex; gap: 8px; align-items: center; border-top: 1px solid #d9d5cc; padding-top: 12px; }
-  .ad-a { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 11px; border-radius: 9px; font: inherit; font-size: 12.5px; font-weight: 650; color: #2b2f37; background: #f4f2ed; border: 1px solid #d9d5cc; cursor: pointer; text-decoration: none; white-space: nowrap; }
-  .ad-a:hover { color: #16181d; border-color: #cdc8be; }
+  .ad-acts { display: flex; gap: 8px; align-items: center; border-top: 1px solid #cdc8be; padding-top: 12px; }
+  .ad-a { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 11px; border-radius: 9px; font: inherit; font-size: 12.5px; font-weight: 650; color: #2b2f37; background: #ebe8e2; border: 1px solid #cdc8be; cursor: pointer; text-decoration: none; white-space: nowrap; }
+  .ad-a:hover { color: #16181d; border-color: #c0bab0; }
   .ad-a svg { width: 15px; height: 15px; }
   .ad-a.ghost { background: none; }
   .ad-a.ghost.on { color: #2a39b8; border-color: rgba(60,79,224,0.45); }
-  .ad-a.more { padding: 0 8px; color: #5f6672; background: none; border-color: transparent; }
+  .ad-a.more { padding: 0 8px; color: #565c68; background: none; border-color: transparent; }
   .ad-more-wrap { margin-left: auto; position: relative; }
-  .ad-menu { position: absolute; right: 0; bottom: 38px; z-index: 30; min-width: 190px; background: #f4f2ed; border: 1px solid #d9d5cc; border-radius: 12px; padding: 5px; box-shadow: 0 18px 40px rgba(22,24,29,0.12); }
+  .ad-menu { position: absolute; right: 0; bottom: 38px; z-index: 30; min-width: 190px; background: #ebe8e2; border: 1px solid #cdc8be; border-radius: 12px; padding: 5px; box-shadow: 0 18px 40px rgba(22,24,29,0.12); }
   .ad-menu button { display: flex; align-items: center; gap: 8px; width: 100%; padding: 8px 10px; border-radius: 8px; border: 0; background: none; color: #2b2f37; font: inherit; font-size: 13px; cursor: pointer; text-align: left; }
   .ad-menu button:hover { background: rgba(22,24,29,0.036); }
   .ad-menu button.danger { color: #b42318; }
   .ad-menu button.danger:hover { background: rgba(217,45,32,0.12); }
-  .ad-cred { background: #eeebe5; border: 1px solid #d9d5cc; border-radius: 12px; padding: 4px 10px; margin: 2px 0 12px; }
+  .ad-cred { background: #e4e1da; border: 1px solid #cdc8be; border-radius: 12px; padding: 4px 10px; margin: 2px 0 12px; }
   .ad-cr { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 12.5px; }
-  .ad-cr + .ad-cr { border-top: 1px solid #d9d5cc; }
-  .ad-cr span { color: #5f6672; width: 58px; font-weight: 600; font-size: 11.5px; flex-shrink: 0; }
+  .ad-cr + .ad-cr { border-top: 1px solid #cdc8be; }
+  .ad-cr span { color: #565c68; width: 58px; font-weight: 600; font-size: 11.5px; flex-shrink: 0; }
   .ad-cr code { flex: 1; min-width: 0; font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: #16181d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: none !important; padding: 0 !important; }
   .ad-cred.big .ad-cr { padding: 10px 0; }
-  .ad-ib { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; border: 0; background: none; color: #5f6672; cursor: pointer; flex-shrink: 0; }
+  .ad-ib { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; border: 0; background: none; color: #565c68; cursor: pointer; flex-shrink: 0; }
   .ad-ib:hover { background: rgba(22,24,29,0.036); color: #16181d; }
   .ad-scrim { position: fixed; inset: 0; z-index: 60; background: rgba(6,6,9,0.6); }
-  .ad-sheet { position: fixed; top: 0; right: 0; bottom: 0; z-index: 61; width: min(420px, 100vw); background: #f4f2ed; border-left: 1px solid #d9d5cc; box-shadow: -30px 0 60px rgba(22,24,29,0.12); padding: 26px; display: flex; flex-direction: column; box-sizing: border-box; animation: adIn .2s ease-out; }
+  .ad-sheet { position: fixed; top: 0; right: 0; bottom: 0; z-index: 61; width: min(420px, 100vw); background: #ebe8e2; border-left: 1px solid #cdc8be; box-shadow: -30px 0 60px rgba(22,24,29,0.12); padding: 26px; display: flex; flex-direction: column; box-sizing: border-box; animation: adIn .2s ease-out; }
   @keyframes adIn { from { transform: translateX(30px); opacity: 0; } to { transform: none; opacity: 1; } }
   .ad-sheet h2 { font-size: 20px; font-weight: 750; margin: 0; }
   .ad-sheet-body { flex: 1; overflow-y: auto; margin: 0 -6px; padding: 0 6px; }
-  .ad-x { position: absolute; top: 22px; right: 20px; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9px; border: 0; background: none; color: #5f6672; cursor: pointer; }
+  .ad-x { position: absolute; top: 22px; right: 20px; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9px; border: 0; background: none; color: #565c68; cursor: pointer; }
   .ad-x:hover { background: rgba(22,24,29,0.036); color: #16181d; }
   .ad-lbl { font-size: 12.5px; font-weight: 600; color: #4b5260; margin: 18px 0 7px; }
-  .ad-inp { width: 100%; box-sizing: border-box; height: 42px; border-radius: 11px; background: #eeebe5; border: 1px solid #d9d5cc; padding: 0 13px; font: inherit; font-size: 14px; color: #16181d; outline: 0; }
+  .ad-inp { width: 100%; box-sizing: border-box; height: 42px; border-radius: 11px; background: #e4e1da; border: 1px solid #cdc8be; padding: 0 13px; font: inherit; font-size: 14px; color: #16181d; outline: 0; }
   .ad-inp:disabled { opacity: .6; }
-  .ad-hint { font-size: 11.5px; color: #5f6672; margin-top: 6px; }
+  .ad-hint { font-size: 11.5px; color: #565c68; margin-top: 6px; }
   .ad-pw { display: flex; gap: 6px; align-items: center; position: relative; }
   .ad-pw .ad-a { height: 42px; }
-  .ad-auto { position: absolute; right: 13px; font-size: 11.5px; color: #5f6672; pointer-events: none; }
-  .ad-seg { display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: #eeebe5; border: 1px solid #d9d5cc; margin-bottom: 10px; }
+  .ad-auto { position: absolute; right: 13px; font-size: 11.5px; color: #565c68; pointer-events: none; }
+  .ad-seg { display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: #e4e1da; border: 1px solid #cdc8be; margin-bottom: 10px; }
   .ad-seg button { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 34px; border: 0; border-radius: 8px; background: none; color: #4b5260; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
-  .ad-seg button.on { background: #e8e5de; color: #16181d; box-shadow: inset 0 0 0 1px rgba(60,79,224,0.5); }
+  .ad-seg button.on { background: #dedad2; color: #16181d; box-shadow: inset 0 0 0 1px rgba(60,79,224,0.5); }
   .ad-sw { display: flex; gap: 9px; align-items: center; }
   .ad-sw button { width: 30px; height: 30px; border-radius: 9px; border: 0; cursor: pointer; padding: 0; }
-  .ad-sw button.on { box-shadow: 0 0 0 2px #f4f2ed, 0 0 0 4px #16181d; }
-  .ad-sw-custom { width: 30px; height: 30px; border-radius: 9px; border: 1px dashed #cdc8be; display: grid; place-items: center; color: #5f6672; cursor: pointer; position: relative; overflow: hidden; }
+  .ad-sw button.on { box-shadow: 0 0 0 2px #ebe8e2, 0 0 0 4px #16181d; }
+  .ad-sw-custom { width: 30px; height: 30px; border-radius: 9px; border: 1px dashed #c0bab0; display: grid; place-items: center; color: #565c68; cursor: pointer; position: relative; overflow: hidden; }
   .ad-sw-custom input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-  .ad-pv { margin-top: 22px; background: #eeebe5; border: 1px solid #d9d5cc; border-radius: 14px; padding: 14px; }
-  .ad-pv small { display: block; font-size: 11px; font-weight: 700; letter-spacing: .6px; color: #5f6672; margin-bottom: 10px; }
+  .ad-pv { margin-top: 22px; background: #e4e1da; border: 1px solid #cdc8be; border-radius: 14px; padding: 14px; }
+  .ad-pv small { display: block; font-size: 11px; font-weight: 700; letter-spacing: .6px; color: #565c68; margin-bottom: 10px; }
   .ad-pvr { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 12.5px; color: #4b5260; margin-top: 10px; }
   .ad-pvr code { font-family: ui-monospace, Menlo, monospace; color: #2a39b8; font-size: 12px; background: none !important; }
-  .ad-group { font-size: 11px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; color: #5f6672; margin: 22px 0 -6px; padding-top: 16px; border-top: 1px solid #d9d5cc; }
+  .ad-group { font-size: 11px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; color: #565c68; margin: 22px 0 -6px; padding-top: 16px; border-top: 1px solid #cdc8be; }
   .ad-sheet-body .ad-group:first-child { border-top: 0; padding-top: 0; margin-top: 18px; }
-  .ad-opt { color: #5f6672; font-weight: 500; margin-left: 4px; }
+  .ad-opt { color: #565c68; font-weight: 500; margin-left: 4px; }
   .ad-inp.mono { font-family: ui-monospace, Menlo, monospace; font-size: 13px; }
   .ad-url { display: block; font-family: ui-monospace, Menlo, monospace; font-size: 12.5px; color: #16181d; word-break: break-all; background: none !important; padding: 0 !important; }
-  .ad-note { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; color: #5f6672; margin-top: 14px; line-height: 1.45; }
+  .ad-note { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; color: #565c68; margin-top: 14px; line-height: 1.45; }
   .ad-note svg { color: #0d6b4d; flex-shrink: 0; margin-top: 1px; }
   @media (max-width: 900px) { .ad-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ad-stats.three { grid-template-columns: repeat(3, minmax(0, 1fr)); } .ad-search { width: 100%; } .ad-tools { width: 100%; } }
   @media (max-width: 560px) { .ad-stats.three { grid-template-columns: minmax(0, 1fr); } .ad-grid { grid-template-columns: minmax(0, 1fr); } }
   .sw-wrap { position: relative; }
-  .sw-btn { display: flex; align-items: center; gap: 9px; height: 38px; padding: 0 10px 0 5px; border-radius: 11px; background: #f4f2ed; border: 1px solid #d9d5cc; color: #16181d; font: inherit; font-size: 13.5px; cursor: pointer; max-width: 320px; transition: border-color .15s, background .15s; }
-  .sw-btn:hover, .sw-btn.open { border-color: rgba(60,79,224,0.55); background: #f4f2ed; }
+  .sw-btn { display: flex; align-items: center; gap: 9px; height: 38px; padding: 0 10px 0 5px; border-radius: 11px; background: #ebe8e2; border: 1px solid #cdc8be; color: #16181d; font: inherit; font-size: 13.5px; cursor: pointer; max-width: 320px; transition: border-color .15s, background .15s; }
+  .sw-btn:hover, .sw-btn.open { border-color: rgba(60,79,224,0.55); background: #ebe8e2; }
   .sw-btn.locked { cursor: default; }
   .sw-btn b { font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .sw-btn .pn-av, .sw-item .pn-av { width: 28px; height: 28px; border-radius: 8px; font-size: 12px; }
-  .sw-btn em, .sw-item em { display: inline-flex; align-items: center; gap: 5px; font-style: normal; font-size: 11.5px; font-weight: 700; color: #5f6672; background: rgba(22,24,29,0.036); padding: 2px 8px; border-radius: 999px; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+  .sw-btn em, .sw-item em { display: inline-flex; align-items: center; gap: 5px; font-style: normal; font-size: 11.5px; font-weight: 700; color: #565c68; background: rgba(22,24,29,0.036); padding: 2px 8px; border-radius: 999px; font-variant-numeric: tabular-nums; flex-shrink: 0; }
   .sw-btn em i, .sw-item em i { width: 6px; height: 6px; border-radius: 50%; background: #c9c5bc; }
   .sw-btn em.live, .sw-item em.live { color: #0d6b4d; background: rgba(18,128,92,0.12); }
   .sw-btn em.live i, .sw-item em.live i { background: #12805c; }
-  .sw-ic { width: 15px !important; height: 15px !important; color: #5f6672; }
-  .sw-pop { position: absolute; top: calc(100% + 8px); left: 0; z-index: 50; width: 360px; max-width: calc(100vw - 24px); background: #f4f2ed; border: 1px solid #d9d5cc; border-radius: 14px; box-shadow: 0 24px 60px rgba(22,24,29,0.12); overflow: hidden; animation: swIn .14s ease-out; }
+  .sw-ic { width: 15px !important; height: 15px !important; color: #565c68; }
+  .sw-pop { position: absolute; top: calc(100% + 8px); left: 0; z-index: 50; width: 360px; max-width: calc(100vw - 24px); background: #ebe8e2; border: 1px solid #cdc8be; border-radius: 14px; box-shadow: 0 24px 60px rgba(22,24,29,0.12); overflow: hidden; animation: swIn .14s ease-out; }
   @keyframes swIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
-  .sw-search { display: flex; align-items: center; gap: 8px; padding: 0 12px; height: 46px; border-bottom: 1px solid #d9d5cc; color: #5f6672; }
+  .sw-search { display: flex; align-items: center; gap: 8px; padding: 0 12px; height: 46px; border-bottom: 1px solid #cdc8be; color: #565c68; }
   .sw-search svg { width: 16px; height: 16px; }
   .sw-search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #16181d; font: inherit; font-size: 14px; box-shadow: none !important; }
-  .sw-search kbd { font: inherit; font-size: 10.5px; color: #5f6672; border: 1px solid #d9d5cc; border-radius: 5px; padding: 1px 5px; }
+  .sw-search kbd { font: inherit; font-size: 10.5px; color: #565c68; border: 1px solid #cdc8be; border-radius: 5px; padding: 1px 5px; }
   .sw-list { max-height: 380px; overflow-y: auto; padding: 6px; }
   .sw-item { display: flex; align-items: center; gap: 10px; width: 100%; padding: 7px 8px; border: 0; border-radius: 9px; background: none; color: #2b2f37; font: inherit; text-align: left; cursor: pointer; }
   .sw-item:hover { background: rgba(22,24,29,0.03); }
   .sw-item.on { background: rgba(60,79,224,0.14); color: #16181d; }
   .sw-t { flex: 1; min-width: 0; display: flex; flex-direction: column; }
   .sw-t b { font-size: 13.5px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .sw-t small { font-size: 11px; color: #5f6672; font-family: ui-monospace, Menlo, monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .sw-none { color: #5f6672; font-size: 13px; padding: 16px; text-align: center; }
-  .sw-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 12px; border-top: 1px solid #d9d5cc; font-size: 11.5px; color: #5f6672; }
+  .sw-t small { font-size: 11px; color: #565c68; font-family: ui-monospace, Menlo, monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sw-none { color: #565c68; font-size: 13px; padding: 16px; text-align: center; }
+  .sw-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 12px; border-top: 1px solid #cdc8be; font-size: 11.5px; color: #565c68; }
   .sw-foot button { border: 0; background: none; color: #2a39b8; font: inherit; font-size: 12px; font-weight: 650; cursor: pointer; padding: 0; }
   .pn-side { width: 272px; min-width: 272px; }
   .pn-side-top { padding: 18px 14px 6px; }
   .pn-brand { margin-bottom: 14px; padding: 0 4px; }
-  .pn-side .sw-wrap .sw-btn { width: 100%; max-width: none; height: 52px; padding: 0 10px 0 9px; border-radius: 12px; background: #f4f2ed; }
+  .pn-side .sw-wrap .sw-btn { width: 100%; max-width: none; height: 52px; padding: 0 10px 0 9px; border-radius: 12px; background: #ebe8e2; }
   .pn-side .sw-wrap .sw-btn b { flex: 1; text-align: left; }
   .pn-side .sw-btn .pn-av { width: 32px; height: 32px; }
   .pn-side .sw-pop { width: 340px; }
@@ -857,7 +857,7 @@ const PANEL_CSS = `
   .pn-mi.active .pn-ni { background: #3c4fe0; color: #fff; }
   .pn-mt { flex: 1; min-width: 0; display: flex; flex-direction: column; }
   .pn-mt b { font-size: 13px; font-weight: 600; color: #16181d; }
-  .pn-mt small { font-size: 11px; font-weight: 400; color: #5f6672; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pn-mt small { font-size: 11px; font-weight: 400; color: #565c68; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .pn-mi.active .pn-mt b { color: #16181d; }
   .pn-mi.active .pn-mt small { color: #4b5260; }
   .pn-top { padding: 14px 32px; }
@@ -866,16 +866,16 @@ const PANEL_CSS = `
   .pn-title h1 { margin: 2px 0 0; font-size: 21px; font-weight: 650; letter-spacing: -0.3px; color: #16181d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .pn-tabs { align-self: flex-start; max-width: 100%; scrollbar-width: none; }
   .pn-tabs::-webkit-scrollbar { display: none; }
-  .pn-side .sw-btn.locked { width: 100%; max-width: none; height: 52px; box-sizing: border-box; background: #f4f2ed; }
+  .pn-side .sw-btn.locked { width: 100%; max-width: none; height: 52px; box-sizing: border-box; background: #ebe8e2; }
   .pn-side .sw-btn.locked b { flex: 1; }
   .pn-apps-chev { transition: transform .18s; }
   .pn-apps-chev.open { transform: rotate(180deg); }
   .pn-side .sw-wrap .pn-apps { margin-top: 6px; }
-  .pn-apps { background: #f4f2ed; border: 1px solid #d9d5cc; border-radius: 12px; padding: 8px 6px 6px; }
-  .pn-apps-h { display: flex; align-items: center; justify-content: space-between; padding: 0 6px 6px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; color: #5f6672; }
-  .pn-apps-h em { font-style: normal; color: #5f6672; margin-left: 4px; }
+  .pn-apps { background: #ebe8e2; border: 1px solid #cdc8be; border-radius: 12px; padding: 8px 6px 6px; }
+  .pn-apps-h { display: flex; align-items: center; justify-content: space-between; padding: 0 6px 6px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; color: #565c68; }
+  .pn-apps-h em { font-style: normal; color: #565c68; margin-left: 4px; }
   .pn-apps-h button { border: 0; background: none; color: #2a39b8; font: inherit; font-size: 11.5px; font-weight: 650; letter-spacing: 0; text-transform: none; cursor: pointer; padding: 0; }
-  .pn-apps-q { display: flex; align-items: center; gap: 7px; height: 32px; margin: 0 2px 6px; padding: 0 9px; border-radius: 9px; background: #eeebe5; border: 1px solid #d9d5cc; color: #5f6672; }
+  .pn-apps-q { display: flex; align-items: center; gap: 7px; height: 32px; margin: 0 2px 6px; padding: 0 9px; border-radius: 9px; background: #e4e1da; border: 1px solid #cdc8be; color: #565c68; }
   .pn-apps-q:focus-within { border-color: #3c4fe0; }
   .pn-apps-q svg { width: 14px !important; height: 14px !important; }
   .pn-apps-q input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #16181d; font: inherit; font-size: 12.5px; }
@@ -885,64 +885,64 @@ const PANEL_CSS = `
   .pn-apps .sw-t b { font-size: 13px; }
   .pn-apps .sw-item.on { box-shadow: inset 0 0 0 1px rgba(60,79,224,0.5); }
   .pn-root { font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-  .pn-side { background: #f4f2ed; border-right-color: #d9d5cc; }
-  .pn-head { background: rgba(17,17,20,0.92); border-bottom-color: #d9d5cc; }
-  .pn-mi:hover { background: #e8e5de; }
-  .pn-mi.active { background: #f4f2ed; box-shadow: 0 0 0 1px #d9d5cc; }
+  .pn-side { background: #ebe8e2; border-right-color: #cdc8be; }
+  .pn-head { background: rgba(17,17,20,0.92); border-bottom-color: #cdc8be; }
+  .pn-mi:hover { background: #dedad2; }
+  .pn-mi.active { background: #ebe8e2; box-shadow: 0 0 0 1px #cdc8be; }
   .pn-mi.active .pn-mt b { color: #2a39b8; }
-  .pn-ni { background: #e8e5de; }
-  .pn-tabs { background: #f4f2ed; border: 1px solid #d9d5cc; border-radius: 12px; }
+  .pn-ni { background: #dedad2; }
+  .pn-tabs { background: #ebe8e2; border: 1px solid #cdc8be; border-radius: 12px; }
   .pn-tabs button { font-weight: 500; color: #4b5260; }
-  .pn-tabs button.on { background: #e8e5de; color: #16181d; box-shadow: 0 0 0 1px #cdc8be; }
+  .pn-tabs button.on { background: #dedad2; color: #16181d; box-shadow: 0 0 0 1px #c0bab0; }
   .pn-tabs button.on .pn-ico { color: #2a39b8; }
-  .pn-ghost { background: #f4f2ed; border-color: #d9d5cc; }
+  .pn-ghost { background: #ebe8e2; border-color: #cdc8be; }
   .pn-content { gap: 20px; }
   .pn-content h2 { font-weight: 600; }
   .pn-content table { border-collapse: collapse; }
-  .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]), .pn-content select, .pn-content textarea { border-color: #d9d5cc; border-radius: 10px; }
+  .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]), .pn-content select, .pn-content textarea { border-color: #cdc8be; border-radius: 10px; }
   .pn-root input[type=checkbox]:checked { background: #3c4fe0; }
   .pn-live { background: #e4f4ec; border-color: #bfe3cf; }
   .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]), .pn-content select, .pn-content textarea { box-sizing: border-box; max-width: 100%; }
   /* v2 — koyu, sade */
-  .pn-root { background: #eeebe5; color: #16181d; }
-  .pn-side { background: #eeebe5; border-right-color: #e3e0d9; }
+  .pn-root { background: #e4e1da; color: #16181d; }
+  .pn-side { background: #e4e1da; border-right-color: #d8d4cc; }
   .pn-mark { background: #3c4fe0; box-shadow: none; border-radius: 8px; }
-  .pn-side .sw-wrap .sw-btn { background: #f4f2ed; border-color: #d9d5cc; }
+  .pn-side .sw-wrap .sw-btn { background: #ebe8e2; border-color: #cdc8be; }
   .pn-live { background: #dcf2e8; border-color: #bfe3cf; }
   .pn-live b { color: #0d6b4d; } .pn-live span { color: #0d6b4d; }
-  .pn-search { background: #eeebe5; border-color: #d9d5cc; }
+  .pn-search { background: #e4e1da; border-color: #cdc8be; }
   .pn-grp { color: #6e747e; letter-spacing: .4px; }
   .pn-mi { color: #16181d; }
-  .pn-mi:hover { background: #f4f2ed; }
-  .pn-mi.active { background: #e8e5de; }
-  .pn-ni { background: #f4f2ed; color: #4b5260; }
+  .pn-mi:hover { background: #ebe8e2; }
+  .pn-mi.active { background: #dedad2; }
+  .pn-ni { background: #ebe8e2; color: #4b5260; }
   .pn-mi.active .pn-ni { background: #3c4fe0; color: #fff; }
   .pn-mt b { color: #16181d; font-weight: 500; }
   .pn-mi.active .pn-mt b { color: #16181d; }
-  .pn-mt small, .pn-mi.active .pn-mt small { color: #5f6672; }
-  .pn-logout { border-top-color: #e3e0d9; color: #4b5260; }
-  .pn-head { background: #eeebe5; border-bottom: 0; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .pn-mt small, .pn-mi.active .pn-mt small { color: #565c68; }
+  .pn-logout { border-top-color: #d8d4cc; color: #4b5260; }
+  .pn-head { background: #e4e1da; border-bottom: 0; backdrop-filter: none; -webkit-backdrop-filter: none; }
   .pn-top { padding: 32px 48px 4px; align-items: flex-start; }
   .pn-title h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.4px; color: #16181d; margin: 0; }
   .pn-title p { margin: 6px 0 0; font-size: 14px; color: #4b5260; }
-  .pn-ghost { background: #f4f2ed; border-color: #d9d5cc; color: #4b5260; }
+  .pn-ghost { background: #ebe8e2; border-color: #cdc8be; color: #4b5260; }
   .pn-content { margin: 0; max-width: 1100px; padding: 20px 48px 72px; gap: 28px; }
-  .pn-tabs { align-self: stretch; background: none; border: 0; border-bottom: 1px solid #d9d5cc; border-radius: 0; padding: 0; gap: 24px; overflow-x: auto; }
+  .pn-tabs { align-self: stretch; background: none; border: 0; border-bottom: 1px solid #cdc8be; border-radius: 0; padding: 0; gap: 24px; overflow-x: auto; }
   .pn-tabs button { padding: 0 0 12px; margin-bottom: -1px; border-radius: 0; background: none !important; border-bottom: 2px solid transparent; color: #4b5260; font-weight: 500; font-size: 14px; box-shadow: none !important; }
   .pn-tabs button:hover { color: #16181d; }
   .pn-tabs button.on { color: #16181d; border-bottom-color: #5b8cff; }
   .pn-tabs .pn-ico { display: none; }
-  .pn-root input[type=checkbox] { background: #d9d5cc; }
+  .pn-root input[type=checkbox] { background: #cdc8be; }
   .pn-root input[type=checkbox]:checked { background: #3c4fe0; }
   .pn-root input[type=radio] { accent-color: #3c4fe0; }
-  .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]), .pn-content select, .pn-content textarea { background-color: #eeebe5; border-color: #cdc8be; color: #16181d; }
+  .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]), .pn-content select, .pn-content textarea { background-color: #e4e1da; border-color: #c0bab0; color: #16181d; }
   .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]):focus, .pn-content select:focus, .pn-content textarea:focus { border-color: #5b8cff !important; box-shadow: 0 0 0 3px rgba(60,79,224,0.18); }
   .v2-stack { display: flex; flex-direction: column; gap: 36px; }
   .v2-sec { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 32px; }
   .v2-sh h2 { margin: 0; font-size: 15px; font-weight: 600; color: #16181d; letter-spacing: 0; }
   .v2-sh p { margin: 6px 0 0; font-size: 13px; color: #4b5260; line-height: 1.5; }
-  .v2-box { background: #f4f2ed; border: 1px solid #d9d5cc; border-radius: 12px; min-width: 0; }
-  .v2-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 16px 20px; border-top: 1px solid #e3e0d9; }
+  .v2-box { background: #ebe8e2; border: 1px solid #cdc8be; border-radius: 12px; min-width: 0; }
+  .v2-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 16px 20px; border-top: 1px solid #d8d4cc; }
   .v2-box > .v2-row:first-child { border-top: 0; }
   .v2-row.stack { flex-direction: column; align-items: stretch; gap: 10px; }
   .v2-row.stack .v2-ctl { justify-content: flex-start; }
@@ -954,29 +954,29 @@ const PANEL_CSS = `
   .v2-t b { display: block; font-size: 14px; font-weight: 500; color: #16181d; }
   .v2-t span { display: block; font-size: 13px; color: #4b5260; margin-top: 2px; }
   .v2-ctl { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
-  .v2-foot { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 20px; border-top: 1px solid #e3e0d9; }
+  .v2-foot { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 20px; border-top: 1px solid #d8d4cc; }
   .v2-endsave { display: flex; justify-content: flex-end; }
-  .v2-seg { display: inline-flex; border: 1px solid #cdc8be; border-radius: 9px; overflow: hidden; }
-  .v2-seg button { border: 0; border-left: 1px solid #cdc8be; background: none; color: #4b5260; font: inherit; font-size: 13px; padding: 7px 13px; cursor: pointer; }
+  .v2-seg { display: inline-flex; border: 1px solid #c0bab0; border-radius: 9px; overflow: hidden; }
+  .v2-seg button { border: 0; border-left: 1px solid #c0bab0; background: none; color: #4b5260; font: inherit; font-size: 13px; padding: 7px 13px; cursor: pointer; }
   .v2-seg button:first-child { border-left: 0; }
   .v2-seg button.on { background: #e8ebfd; color: #16181d; }
   .v2-info { background: #dcf2e8; color: #0d6b4d; font-size: 13px; justify-content: flex-start; }
   .v2-info.bad { background: #fdecea; color: #b42318; }
-  .v2-btn { height: 34px; padding: 0 14px; border-radius: 9px; border: 1px solid #cdc8be; background: #e8e5de; color: #16181d; font: inherit; font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; }
-  .v2-chip { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 4px 0 11px; border-radius: 8px; background: #f8f7f3; border: 1px solid #d6d2c8; box-shadow: 0 1px 1px rgba(22,24,29,0.04); font-size: 12.5px; font-weight: 500; color: #16181d; }
-  .v2-chip > span:last-child { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 6px; color: #6b7078; font-family: inherit; font-size: 15px; line-height: 1; transition: background .12s, color .12s; }
+  .v2-btn { height: 34px; padding: 0 14px; border-radius: 9px; border: 1px solid #c0bab0; background: #dedad2; color: #16181d; font: inherit; font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; }
+  .v2-chip { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 4px 0 11px; border-radius: 8px; background: #f1efea; border: 1px solid #cac5ba; box-shadow: 0 1px 1px rgba(22,24,29,0.04); font-size: 12.5px; font-weight: 500; color: #16181d; }
+  .v2-chip > span:last-child { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 6px; color: #61666e; font-family: inherit; font-size: 15px; line-height: 1; transition: background .12s, color .12s; }
   .v2-chip > span:last-child:hover { background: #fdecea; color: #b42318; }
   .pn-content input::placeholder, .pn-content textarea::placeholder { color: #8a8f98; }
-  .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]), .pn-content select, .pn-content textarea { background-color: #f8f7f3; border-color: #cdc8be; }
+  .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]), .pn-content select, .pn-content textarea { background-color: #f1efea; border-color: #c0bab0; }
   .v2-chip.mono { font-family: 'Geist Mono', ui-monospace, monospace; }
   .v2-muted { color: #4b5260; font-size: 13px; }
-  .v2-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid #d9d5cc; border-radius: 12px; background: #f4f2ed; margin-bottom: 24px; }
-  .v2-st { padding: 20px 24px; border-left: 1px solid #d9d5cc; }
+  .v2-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid #cdc8be; border-radius: 12px; background: #ebe8e2; margin-bottom: 24px; }
+  .v2-st { padding: 20px 24px; border-left: 1px solid #cdc8be; }
   .v2-st:first-child { border-left: 0; }
   .v2-st small { display: block; font-size: 12.5px; color: #4b5260; }
   .v2-st b { display: block; font-size: 32px; font-weight: 600; line-height: 1.15; color: #16181d; margin-top: 6px; letter-spacing: -0.5px; font-variant-numeric: tabular-nums; }
-  .v2-st span { font-size: 12.5px; color: #5f6672; }
-  @media (max-width: 700px) { .v2-stats { grid-template-columns: minmax(0, 1fr); } .v2-st { border-left: 0; border-top: 1px solid #d9d5cc; } .v2-st:first-child { border-top: 0; } }
+  .v2-st span { font-size: 12.5px; color: #565c68; }
+  @media (max-width: 700px) { .v2-stats { grid-template-columns: minmax(0, 1fr); } .v2-st { border-left: 0; border-top: 1px solid #cdc8be; } .v2-st:first-child { border-top: 0; } }
   @media (max-width: 900px) { .v2-sec { grid-template-columns: minmax(0, 1fr); gap: 12px; } .pn-top { padding: 20px 16px 4px; } .pn-content { padding: 16px 16px 60px; } }
   .pn-scrim { display: none; }
   @media (max-width: 900px) {
@@ -991,95 +991,95 @@ const PANEL_CSS = `
   @media (max-width: 560px) { .pn-ghost span, .pn-crumb-app, .pn-sep { display: none; } .pn-tool span { display: none; } .pn-tool { padding: 0 9px; } .pn-chip { height: 34px; } }
 
   /* ===== Açık Stüdyo (B) — kabuk ===== */
-  .pn-root { background: #e7e5df; color: #16181d; font-family: Geist, Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-feature-settings: "tnum" 0; }
-  .pn-side { background: #eceae4; border-right: 1px solid #d9d5cc; }
+  .pn-root { background: #dcd9d2; color: #16181d; font-family: Geist, Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-feature-settings: "tnum" 0; }
+  .pn-side { background: #e2dfd8; border-right: 1px solid #cdc8be; }
   .pn-mark { background: #16181d; color: #fff; border-radius: 8px; box-shadow: none; }
   .pn-brand b { font-weight: 600; }
-  .pn-side .sw-wrap .sw-btn { background: #f4f2ed; border: 1px solid #d9d5cc; box-shadow: 0 1px 2px rgba(22,24,29,0.04); }
+  .pn-side .sw-wrap .sw-btn { background: #ebe8e2; border: 1px solid #cdc8be; box-shadow: 0 1px 2px rgba(22,24,29,0.04); }
   .pn-live { background: #dcf2e8; border-color: #bfe3cf; }
   .pn-live b { color: #0d6b4d; } .pn-live span { color: #0d6b4d; }
   .pn-live i { background: #12805c; }
-  .pn-search { background: #f4f2ed; border-color: #d9d5cc; }
-  .pn-grp { color: #5f6672; font-weight: 500; text-transform: none; letter-spacing: 0; font-size: 11.5px; }
+  .pn-search { background: #ebe8e2; border-color: #cdc8be; }
+  .pn-grp { color: #565c68; font-weight: 500; text-transform: none; letter-spacing: 0; font-size: 11.5px; }
   .pn-mi { color: #2b2f37; }
-  .pn-mi:hover { background: #e3e0d9; }
-  .pn-mi.active { background: #f4f2ed; box-shadow: 0 0 0 1px #d9d5cc; }
+  .pn-mi:hover { background: #d8d4cc; }
+  .pn-mi.active { background: #ebe8e2; box-shadow: 0 0 0 1px #cdc8be; }
   .pn-ni { background: transparent; color: #4b5260; }
   .pn-mi.active .pn-ni { background: #16181d; color: #fff; }
   .pn-mt b { color: #16181d; font-weight: 500; }
   .pn-mi.active .pn-mt b { color: #16181d; font-weight: 600; }
-  .pn-mt small, .pn-mi.active .pn-mt small { color: #5f6672; }
+  .pn-mt small, .pn-mi.active .pn-mt small { color: #565c68; }
   .pn-mbadge { margin-left: auto; font-size: 11px; font-weight: 600; color: #0d6b4d; background: #dcf2e8; border-radius: 999px; padding: 1px 7px; font-variant-numeric: tabular-nums; }
-  .pn-logout { color: #4b5260; border-top-color: #d9d5cc; }
-  .pn-head { background: #e7e5df; }
+  .pn-logout { color: #4b5260; border-top-color: #cdc8be; }
+  .pn-head { background: #dcd9d2; }
   .pn-title h1 { font-weight: 600; }
-  .pn-title p { color: #5f6672; }
-  .pn-ghost { background: #f4f2ed; border-color: #d9d5cc; color: #2b2f37; }
+  .pn-title p { color: #565c68; }
+  .pn-ghost { background: #ebe8e2; border-color: #cdc8be; color: #2b2f37; }
   .pn-tabs { border-bottom: 0; gap: 4px; flex-wrap: wrap; }
   .pn-tabs button { padding: 7px 12px; margin: 0; border: 0 !important; border-radius: 8px; color: #4b5260; font-size: 13px; }
-  .pn-tabs button:hover { background: #e3e0d9 !important; color: #16181d; }
+  .pn-tabs button:hover { background: #d8d4cc !important; color: #16181d; }
   .pn-tabs button.on { background: #16181d !important; color: #fff; }
-  .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]), .pn-content select, .pn-content textarea { background-color: #f4f2ed; border-color: #cdc8be; color: #16181d; }
+  .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]), .pn-content select, .pn-content textarea { background-color: #ebe8e2; border-color: #c0bab0; color: #16181d; }
   .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]):focus, .pn-content select:focus, .pn-content textarea:focus { border-color: #3c4fe0 !important; box-shadow: 0 0 0 3px rgba(60,79,224,0.15); }
-  .pn-root input[type=checkbox] { background: #cdc8be; }
-  .pn-root input[type=checkbox]::after { background: #f4f2ed; box-shadow: 0 1px 2px rgba(22,24,29,0.2); }
+  .pn-root input[type=checkbox] { background: #c0bab0; }
+  .pn-root input[type=checkbox]::after { background: #ebe8e2; box-shadow: 0 1px 2px rgba(22,24,29,0.2); }
   .pn-root input[type=checkbox]:checked { background: #16181d; }
-  .v2-stats { background: #f4f2ed; border-color: #d9d5cc; }
+  .v2-stats { background: #ebe8e2; border-color: #cdc8be; }
   .v2-st b.v2-now { color: #0d6b4d; }
   @media (max-width: 900px) { .pn-side.open { box-shadow: 20px 0 50px rgba(22,24,29,0.12); } }
 
   /* ===== İzleme / Ziyaretçi: kartlar, kırılımlar, tablo ===== */
   .lv-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin: 0 0 24px; }
-  .lv-card { background: #f4f2ed; border: 1px solid #d9d5cc; border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .lv-card { background: #ebe8e2; border: 1px solid #cdc8be; border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
   .lv-card-h b { display: block; font-size: 14px; font-weight: 600; color: #16181d; }
-  .lv-card-h small { display: block; font-size: 12px; color: #5f6672; margin-top: 2px; }
+  .lv-card-h small { display: block; font-size: 12px; color: #565c68; margin-top: 2px; }
   .lv-split { display: flex; gap: 2px; height: 8px; border-radius: 4px; overflow: hidden; margin: 2px 0 4px; }
   .lv-split i { display: block; height: 100%; }
-  .lv-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid #e8e5de; }
+  .lv-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid #dedad2; }
   .lv-row.link { cursor: pointer; border-radius: 8px; }
-  .lv-row.link:hover { background: #eeebe5; }
+  .lv-row.link:hover { background: #e4e1da; }
   .lv-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
   .lv-av { width: 26px !important; height: 26px !important; font-size: 12px !important; border-radius: 7px !important; flex-shrink: 0; }
   .lv-row-t { flex: 1; min-width: 0; display: flex; flex-direction: column; }
   .lv-row-t b { font-size: 13.5px; font-weight: 600; color: #16181d; }
-  .lv-row-t small { font-size: 11.5px; color: #5f6672; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lv-row-t small { font-size: 11.5px; color: #565c68; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .lv-row-n { display: flex; flex-direction: column; align-items: flex-end; text-align: right; }
   .lv-row-n b { font-size: 14px; font-weight: 600; color: #16181d; font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .lv-row-n small { font-size: 11px; color: #5f6672; white-space: nowrap; font-variant-numeric: tabular-nums; }
-  .lv-note { margin: 2px 0 0; font-size: 11.5px; color: #5f6672; line-height: 1.45; }
-  .lv-empty { padding: 28px; text-align: center; color: #5f6672; font-size: 13px; border: 1px dashed #cdc8be; border-radius: 12px; background: #f4f2ed; }
+  .lv-row-n small { font-size: 11px; color: #565c68; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .lv-note { margin: 2px 0 0; font-size: 11.5px; color: #565c68; line-height: 1.45; }
+  .lv-empty { padding: 28px; text-align: center; color: #565c68; font-size: 13px; border: 1px dashed #c0bab0; border-radius: 12px; background: #ebe8e2; }
   .lv-sub-h { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
   .lv-sub-h b { display: block; font-size: 15px; font-weight: 600; color: #16181d; }
-  .lv-sub-h small { display: block; font-size: 12.5px; color: #5f6672; margin-top: 2px; }
-  .lv-sub-h > span { font-size: 12px; color: #5f6672; }
-  .lv-table { background: #f4f2ed; border: 1px solid #d9d5cc; border-radius: 12px; overflow: hidden; }
+  .lv-sub-h small { display: block; font-size: 12.5px; color: #565c68; margin-top: 2px; }
+  .lv-sub-h > span { font-size: 12px; color: #565c68; }
+  .lv-table { background: #ebe8e2; border: 1px solid #cdc8be; border-radius: 12px; overflow: hidden; }
   .lv-table table { width: 100%; border-collapse: collapse; min-width: 640px; }
-  .lv-table th { font-size: 12px; font-weight: 600; color: #5f6672; text-align: left; padding: 11px 16px; background: #eeebe5; border-bottom: 1px solid #d9d5cc; white-space: nowrap; }
-  .lv-table td { font-size: 13.5px; color: #2b2f37; padding: 10px 16px; border-bottom: 1px solid #e3e0d9; }
+  .lv-table th { font-size: 12px; font-weight: 600; color: #565c68; text-align: left; padding: 11px 16px; background: #e4e1da; border-bottom: 1px solid #cdc8be; white-space: nowrap; }
+  .lv-table td { font-size: 13.5px; color: #2b2f37; padding: 10px 16px; border-bottom: 1px solid #d8d4cc; }
   .lv-table tr:last-child td { border-bottom: 0; }
   .lv-table .r { text-align: right; }
   .lv-table .n { font-weight: 600; color: #16181d; font-variant-numeric: tabular-nums; }
   .lv-table td b { font-weight: 600; color: #16181d; }
-  .lv-cc { margin-left: 6px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11.5px; color: #5f6672; }
+  .lv-cc { margin-left: 6px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11.5px; color: #565c68; }
   .lv-share { display: flex; align-items: center; gap: 10px; }
-  .lv-share > div { flex: 1; height: 6px; border-radius: 3px; background: #e3e0d9; overflow: hidden; }
+  .lv-share > div { flex: 1; height: 6px; border-radius: 3px; background: #d8d4cc; overflow: hidden; }
   .lv-share i { display: block; height: 100%; background: #3c4fe0; border-radius: 3px; }
   .lv-share span { width: 36px; text-align: right; font-size: 12px; color: #4b5260; font-variant-numeric: tabular-nums; }
   .lv-wrap { display: flex; flex-direction: column; }
   .lv-wrap > h2, .lv-wrap > div:first-child h2 { color: #16181d; }
   .lv-dev { gap: 0; }
-  .lv-dev table th { background: #eeebe5; }
-  .lv-more { width: 100%; padding: 11px; border: 0; border-top: 1px solid #d9d5cc; background: #eeebe5; color: #16181d; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; }
+  .lv-dev table th { background: #e4e1da; }
+  .lv-more { width: 100%; padding: 11px; border: 0; border-top: 1px solid #cdc8be; background: #e4e1da; color: #16181d; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; }
 
   /* ===== Sol menü: sıkı liste, maddeler arası çizgi ===== */
   .pn-menu { padding: 0 12px 12px; }
-  .pn-grp { padding: 16px 10px 6px; font-size: 11px; font-weight: 600; color: #5f6672; text-transform: uppercase; letter-spacing: .5px; }
-  .pn-list { border: 1px solid #d9d5cc; border-radius: 10px; overflow: hidden; background: #f1efea; }
-  .pn-menu .pn-mi { margin: 0; padding: 0 12px; height: 38px; gap: 10px; border-radius: 0; box-shadow: none; border-bottom: 1px solid #dedad2; }
+  .pn-grp { padding: 16px 10px 6px; font-size: 11px; font-weight: 600; color: #565c68; text-transform: uppercase; letter-spacing: .5px; }
+  .pn-list { border: 1px solid #cdc8be; border-radius: 10px; overflow: hidden; background: #e8e5de; }
+  .pn-menu .pn-mi { margin: 0; padding: 0 12px; height: 38px; gap: 10px; border-radius: 0; box-shadow: none; border-bottom: 1px solid #d2cec5; }
   .pn-menu .pn-mi:last-child { border-bottom: 0; }
-  .pn-menu .pn-mi:hover { background: #e8e5de; }
-  .pn-menu .pn-mi.active { background: #e3e0d9; box-shadow: inset 3px 0 0 #16181d; }
-  .pn-menu .pn-ni { width: 18px; height: 18px; border-radius: 0; background: none !important; color: #5f6672; }
+  .pn-menu .pn-mi:hover { background: #dedad2; }
+  .pn-menu .pn-mi.active { background: #d8d4cc; box-shadow: inset 3px 0 0 #16181d; }
+  .pn-menu .pn-ni { width: 18px; height: 18px; border-radius: 0; background: none !important; color: #565c68; }
   .pn-menu .pn-ni .pn-ico { width: 16px !important; height: 16px !important; }
   .pn-menu .pn-mi.active .pn-ni { color: #16181d; }
   .pn-menu .pn-mt small { display: none; }
@@ -1095,7 +1095,7 @@ const PANEL_CSS = `
   /* ===== Seçenekler: tek ortak görünüm (sekme, segment, filtre) ===== */
   .pn-tabs, .pn-seg, .da-seg, .ad-seg, .v2-seg {
     display: inline-flex; flex-wrap: nowrap; gap: 2px; padding: 3px; max-width: 100%; overflow-x: auto; scrollbar-width: none;
-    background: #e3e0d9 !important; border: 1px solid #d6d2c8 !important; border-radius: 11px !important; box-shadow: inset 0 1px 2px rgba(22,24,29,0.05);
+    background: #d8d4cc !important; border: 1px solid #cac5ba !important; border-radius: 11px !important; box-shadow: inset 0 1px 2px rgba(22,24,29,0.05);
   }
   .pn-tabs::-webkit-scrollbar, .pn-seg::-webkit-scrollbar { display: none; }
   .pn-tabs { align-self: flex-start; }
@@ -1111,16 +1111,16 @@ const PANEL_CSS = `
     background: rgba(22,24,29,0.05) !important; color: #16181d !important;
   }
   .pn-tabs button.on, .pn-seg button.on, .da-seg button.on, .ad-seg button.on, .v2-seg button.on {
-    background: #f8f7f3 !important; color: #16181d !important; font-weight: 600 !important;
-    box-shadow: 0 1px 2px rgba(22,24,29,0.12), 0 0 0 1px #cfcac0 !important;
+    background: #f1efea !important; color: #16181d !important; font-weight: 600 !important;
+    box-shadow: 0 1px 2px rgba(22,24,29,0.12), 0 0 0 1px #c3bdb2 !important;
   }
-  .pn-tabs .pn-ico { display: inline-block !important; width: 15px !important; height: 15px !important; color: #6b7078; }
+  .pn-tabs .pn-ico { display: inline-block !important; width: 15px !important; height: 15px !important; color: #61666e; }
   .pn-tabs button.on .pn-ico { color: #3c4fe0; }
   .pn-seg.sm button { padding: 5px 10px !important; font-size: 12px !important; }
   .ad-seg { display: flex; }
   .ad-seg button { flex: 1; }
-  .ad-filters button { background: #f4f2ed; border-color: #d6d2c8; color: #4b5260; font-weight: 500; }
-  .ad-filters button:hover { background: #ebe8e1; color: #16181d; }
+  .ad-filters button { background: #ebe8e2; border-color: #cac5ba; color: #4b5260; font-weight: 500; }
+  .ad-filters button:hover { background: #e1ded6; color: #16181d; }
   .ad-filters button.on { background: #e8ebfd; color: #2a39b8; border-color: #b9c1f5; font-weight: 600; }
 
   /* ===== Geniş ekran: içerik sağa kadar uzar, ayar formları okunur genişlikte kalır ===== */
@@ -2058,7 +2058,7 @@ function App() {
     return () => clearInterval(id);
   }, [rtWindow, activeSection, scopeAll]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!config) return <div style={{ color: "#4b5260", padding: 50, backgroundColor: "#eeebe5", minHeight: "100vh", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif" }}>Yükleniyor...</div>;
+  if (!config) return <div style={{ color: "#4b5260", padding: 50, backgroundColor: "#e4e1da", minHeight: "100vh", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif" }}>Yükleniyor...</div>;
 
   // Ekranlar: yalnız erişilebilir sekmeleri olanlar (izole panelde bazı sekmeler yok)
   const itemByKey = Object.fromEntries(menuItems.map(m => [m.key, m]));
@@ -2603,17 +2603,17 @@ function App() {
 
           <h3 style={{ color: "#16181d", fontSize: 15, margin: "0 0 12px 0" }}>Mevcut Politikalar</h3>
           {policyList.length === 0 ? (
-            <p style={{ color: "#5f6672", fontSize: 13 }}>Henüz politika yok.</p>
+            <p style={{ color: "#565c68", fontSize: 13 }}>Henüz politika yok.</p>
           ) : (
             <div style={{ display: "grid", gap: 12 }}>
               {policyList.map(p => (
-                <div key={p.packageName} style={{ background: "#f4f2ed", border: "1px solid #d9d5cc", borderRadius: 10, padding: 14 }}>
+                <div key={p.packageName} style={{ background: "#ebe8e2", border: "1px solid #cdc8be", borderRadius: 10, padding: 14 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8, gap: 8 }}>
                     <div style={{ color: "#16181d", fontWeight: 700 }}>{p.appName}</div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div style={{ color: "#5f6672", fontSize: 12 }}>{p.email}</div>
+                      <div style={{ color: "#565c68", fontSize: 12 }}>{p.email}</div>
                       <button onClick={() => openPolicySheet(p)} title="Düzenle"
-                        style={{ background: "transparent", border: "1px solid #d9d5cc", color: "#2a39b8", borderRadius: 6, padding: "4px 8px", cursor: "pointer", fontSize: 14, lineHeight: 1, flexShrink: 0 }}>✏️</button>
+                        style={{ background: "transparent", border: "1px solid #cdc8be", color: "#2a39b8", borderRadius: 6, padding: "4px 8px", cursor: "pointer", fontSize: 14, lineHeight: 1, flexShrink: 0 }}>✏️</button>
                       <button onClick={() => deletePolicy(p)} title="Politikayı sil"
                         style={{ background: "transparent", border: "1px solid #3a2230", color: "#b42318", borderRadius: 6, padding: "4px 8px", cursor: "pointer", fontSize: 14, lineHeight: 1, flexShrink: 0 }}>🗑️</button>
                     </div>
@@ -2717,7 +2717,7 @@ function App() {
             <div
               onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
               style={{
-                background: "#f4f2ed", border: "1px solid #d9d5cc", borderRadius: 8,
+                background: "#ebe8e2", border: "1px solid #cdc8be", borderRadius: 8,
                 padding: "12px 16px", cursor: "pointer", display: "flex",
                 justifyContent: "space-between", alignItems: "center", color: "#16181d"
               }}>
@@ -2732,13 +2732,13 @@ function App() {
             {isCountryDropdownOpen && (
               <div style={{
                 position: "absolute", top: "100%", left: 0, right: 0, zIndex: 999,
-                background: "#f4f2ed", border: "1px solid #d9d5cc", borderRadius: 8,
+                background: "#ebe8e2", border: "1px solid #cdc8be", borderRadius: 8,
                 maxHeight: 300, overflowY: "auto", marginTop: 4
               }}>
                 {/* ARAMA */}
-                <div style={{ padding: 8, borderBottom: "1px solid #d9d5cc", position: "sticky", top: 0, background: "#f4f2ed" }}>
+                <div style={{ padding: 8, borderBottom: "1px solid #cdc8be", position: "sticky", top: 0, background: "#ebe8e2" }}>
                   <input
-                    style={{...styles.input, margin: 0, background: "#eeebe5", fontSize: 13}}
+                    style={{...styles.input, margin: 0, background: "#e4e1da", fontSize: 13}}
                     placeholder="Ülke ara..."
                     value={countrySearch}
                     onChange={e => setCountrySearch(e.target.value)}
@@ -2754,12 +2754,12 @@ function App() {
                       onClick={() => toggleCountry(c.code)}
                       style={{
                         padding: "10px 14px", cursor: "pointer", display: "flex",
-                        alignItems: "center", gap: 10, borderBottom: "1px solid #d9d5cc",
+                        alignItems: "center", gap: 10, borderBottom: "1px solid #cdc8be",
                         background: isSelected ? "#e8ebfd" : "transparent"
                       }}>
                       <div style={{
                         width: 18, height: 18, borderRadius: 4,
-                        border: isSelected ? "none" : "2px solid #cdc8be",
+                        border: isSelected ? "none" : "2px solid #c0bab0",
                         background: isSelected ? "#3b82f6" : "transparent",
                         display: "flex", alignItems: "center", justifyContent: "center",
                         fontSize: 12, color: "#16181d"
@@ -2830,7 +2830,7 @@ function App() {
             <input style={styles.input} placeholder="Açılacak URL (isteğe bağlı)" value={notifActionUrl} onChange={e => setNotifActionUrl(e.target.value)} />
 
             {/* HEDEF ÜLKE */}
-            <div style={{ background: "#f4f2ed", borderRadius: 10, padding: 15 }}>
+            <div style={{ background: "#ebe8e2", borderRadius: 10, padding: 15 }}>
               <p style={{ color: "#4b5260", margin: "0 0 10px 0", fontSize: 13, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}>Hedef Ülke</p>
               <select style={{...styles.input, cursor: "pointer"}} value={notifTargetCountry} onChange={e => setNotifTargetCountry(e.target.value)}>
                 <option value="all">Tüm Ülkeler</option>
@@ -2860,7 +2860,7 @@ function App() {
             </div>
 
             {/* HEDEF MOD */}
-            <div style={{ background: "#f4f2ed", borderRadius: 10, padding: 15 }}>
+            <div style={{ background: "#ebe8e2", borderRadius: 10, padding: 15 }}>
               <p style={{ color: "#4b5260", margin: "0 0 10px 0", fontSize: 13, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}>Hedef Uygulama Modu</p>
               <div style={{ display: "flex", gap: 10 }}>
                 {[
@@ -2871,8 +2871,8 @@ function App() {
                   <button key={opt.value} onClick={() => setNotifTargetMode(opt.value)}
                     style={{
                       flex: 1, padding: "10px 8px", borderRadius: 8,
-                      border: notifTargetMode === opt.value ? "2px solid #3c4fe0" : "1px solid #d9d5cc",
-                      background: notifTargetMode === opt.value ? "#efe9fd" : "#eeebe5",
+                      border: notifTargetMode === opt.value ? "2px solid #3c4fe0" : "1px solid #cdc8be",
+                      background: notifTargetMode === opt.value ? "#efe9fd" : "#e4e1da",
                       color: notifTargetMode === opt.value ? "#2a39b8" : "#4b5260",
                       cursor: "pointer", fontSize: 13, fontWeight: notifTargetMode === opt.value ? 600 : 400
                     }}>
@@ -2880,13 +2880,13 @@ function App() {
                   </button>
                 ))}
               </div>
-              <p style={{ color: "#5f6672", fontSize: 11, marginTop: 8, marginBottom: 0 }}>
+              <p style={{ color: "#565c68", fontSize: 11, marginTop: 8, marginBottom: 0 }}>
                 OneSignal "app_mode" etiketine göre filtre uygulanır. Çalışması için Android uygulamasının OneSignal tag göndermesi gerekir.
               </p>
             </div>
 
             {/* ZAMANLAMA */}
-            <div style={{ background: "#f4f2ed", borderRadius: 10, padding: 15 }}>
+            <div style={{ background: "#ebe8e2", borderRadius: 10, padding: 15 }}>
               <p style={{ color: "#4b5260", margin: "0 0 10px 0", fontSize: 13, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}>Zamanlama</p>
               <div style={{ display: "flex", gap: 15, alignItems: "center" }}>
                 <label style={{ display: "flex", alignItems: "center", gap: 6, color: "#16181d", cursor: "pointer" }}>
@@ -2908,9 +2908,9 @@ function App() {
 
             {/* ÖN İZLEME */}
             {(notifTitle || notifMessage) && (
-              <div style={{ background: "#f4f2ed", borderRadius: 10, padding: 15 }}>
+              <div style={{ background: "#ebe8e2", borderRadius: 10, padding: 15 }}>
                 <p style={{ color: "#4b5260", margin: "0 0 10px 0", fontSize: 13, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}>Ön İzleme</p>
-                <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#e8e5de", borderRadius: 8, padding: 12 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#dedad2", borderRadius: 8, padding: 12 }}>
                   <span style={{ fontSize: 28 }}>🔔</span>
                   <div>
                     <p style={{ color: "#16181d", fontWeight: 700, margin: 0, fontSize: 15 }}>{notifTitle || "Bildirim Başlığı"}</p>
@@ -2972,7 +2972,7 @@ function App() {
                   </td>
                   <td style={styles.tdRight}>
                     <button style={styles.actionBtn} onClick={() => openModal(group)}>Düzenle</button>
-                    <span style={{color: "#6b7078", margin: "0 8px"}}>|</span>
+                    <span style={{color: "#61666e", margin: "0 8px"}}>|</span>
                     <button style={styles.actionBtn} onClick={() => deleteBlockedGroup(group.id)}>Kaldır</button>
                   </td>
                 </tr>
@@ -3011,7 +3011,7 @@ function App() {
 
                 return (
                   <div key={ann.id} style={{
-                    background: "#f4f2ed", border: `1px solid ${isActive ? "#3c4fe0" : "#cdc8be"}`,
+                    background: "#ebe8e2", border: `1px solid ${isActive ? "#3c4fe0" : "#c0bab0"}`,
                     borderRadius: 10, padding: 20
                   }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
@@ -3019,7 +3019,7 @@ function App() {
                         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
                           <span style={{
                             fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 20,
-                            background: isActive ? "#efe9fd" : "#e8e5de", color: isActive ? "#2a39b8" : "#5f6672"
+                            background: isActive ? "#efe9fd" : "#dedad2", color: isActive ? "#2a39b8" : "#565c68"
                           }}>
                             {isActive ? "● AKTİF" : "● PASİF"}
                           </span>
@@ -3046,7 +3046,7 @@ function App() {
                               BOZUK — yıldız algılanmıyor
                             </span>
                           )}
-                          <span style={{ fontSize: 11, color: "#5f6672" }}>
+                          <span style={{ fontSize: 11, color: "#565c68" }}>
                             {ann.countries === "all" ? "Tüm ülkeler" : (Array.isArray(ann.countries) ? ann.countries.join(", ") : ann.countries)}
                           </span>
                         </div>
@@ -3062,9 +3062,9 @@ function App() {
                         const count = (ann.votes || {})[btn.value] || 0;
                         const pct = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
                         return (
-                          <div key={i} style={{ background: "#eeebe5", border: "1px solid #d9d5cc", borderRadius: 8, padding: "10px 16px", minWidth: 120 }}>
+                          <div key={i} style={{ background: "#e4e1da", border: "1px solid #cdc8be", borderRadius: 8, padding: "10px 16px", minWidth: 120 }}>
                             <div style={{ color: "#2a39b8", fontSize: 13, fontWeight: 600, marginBottom: 6 }}>{btn.label}</div>
-                            <div style={{ background: "#f4f2ed", borderRadius: 4, height: 6, marginBottom: 4 }}>
+                            <div style={{ background: "#ebe8e2", borderRadius: 4, height: 6, marginBottom: 4 }}>
                               <div style={{ background: "#3c4fe0", width: `${pct}%`, height: "100%", borderRadius: 4, transition: "width 0.3s" }} />
                             </div>
                             <div style={{ color: "#4b5260", fontSize: 11 }}>{count} oy · %{pct}</div>
@@ -3073,7 +3073,7 @@ function App() {
                       })}
                     </div>
 
-                    <div style={{ marginTop: 10, display: "flex", gap: 20, fontSize: 12, color: "#5f6672" }}>
+                    <div style={{ marginTop: 10, display: "flex", gap: 20, fontSize: 12, color: "#565c68" }}>
                       <span>Toplam oy: <strong style={{ color: "#2a39b8" }}>{totalVotes}</strong></span>
                       {ann.minLaunches > 0 && <span>Min. kullanım: <strong style={{ color: "#8a5a00" }}>{ann.minLaunches}</strong></span>}
                       {ann.startTime && <span>Başlangıç: {new Date(ann.startTime).toLocaleString("tr-TR")}</span>}
@@ -3087,7 +3087,7 @@ function App() {
           )}
 
           {/* Geri Bildirimler */}
-          <div style={{ marginTop: 30, borderTop: "1px solid #cdc8be", paddingTop: 24 }}>
+          <div style={{ marginTop: 30, borderTop: "1px solid #c0bab0", paddingTop: 24 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
               <h3 style={{ margin: 0, fontSize: 17, fontWeight: 600, color: "#16181d" }}>Kullanıcı Geri Bildirimleri</h3>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -3097,25 +3097,25 @@ function App() {
             </div>
             <p style={{ color: "#4b5260", fontSize: 12, margin: "-8px 0 16px 0" }}>1-3 yıldız veren kullanıcılardan toplanan geri bildirimler</p>
             {feedbacks.length === 0 ? (
-              <div style={{ textAlign: "center", padding: 30, color: "#5f6672" }}>Henüz geri bildirim yok</div>
+              <div style={{ textAlign: "center", padding: 30, color: "#565c68" }}>Henüz geri bildirim yok</div>
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 {feedbacks.map(fb => (
-                  <div key={fb.id} style={{ background: "#eeebe5", border: "1px solid #cdc8be", borderRadius: 10, padding: 14 }}>
+                  <div key={fb.id} style={{ background: "#e4e1da", border: "1px solid #c0bab0", borderRadius: 10, padding: 14 }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                         <span style={{ fontSize: 16 }}>{"⭐".repeat(fb.rating)}</span>
                         <span style={{ color: fb.rating <= 2 ? "#b42318" : "#8a5a00", fontWeight: 600, fontSize: 13 }}>{fb.rating}/5</span>
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                        {fb.country && <span style={{ color: "#5f6672", fontSize: 11 }}>{fb.country}</span>}
-                        <span style={{ color: "#6b7078", fontSize: 11 }}>{new Date(fb.createdAt).toLocaleString("tr-TR")}</span>
+                        {fb.country && <span style={{ color: "#565c68", fontSize: 11 }}>{fb.country}</span>}
+                        <span style={{ color: "#61666e", fontSize: 11 }}>{new Date(fb.createdAt).toLocaleString("tr-TR")}</span>
                         <button onClick={() => { if (window.confirm("Silmek istediğine emin misin?")) deleteFeedback(fb.id); }}
                           style={{ background: "none", border: "none", color: "#b42318", cursor: "pointer", fontSize: 12 }}>🗑️</button>
                       </div>
                     </div>
                     {fb.text && <p style={{ margin: 0, color: "#2b2f37", fontSize: 13, lineHeight: 1.5, padding: "6px 0 0 0" }}>{fb.text}</p>}
-                    {fb.deviceId && <div style={{ color: "#6b7078", fontSize: 11, marginTop: 4 }}>Device: {fb.deviceId}</div>}
+                    {fb.deviceId && <div style={{ color: "#61666e", fontSize: 11, marginTop: 4 }}>Device: {fb.deviceId}</div>}
                   </div>
                 ))}
               </div>
@@ -3139,12 +3139,12 @@ function App() {
           </p>
 
           {!reviewLogs ? (
-            <div style={{ textAlign: "center", padding: 30, color: "#5f6672" }}>Yükleniyor...</div>
+            <div style={{ textAlign: "center", padding: 30, color: "#565c68" }}>Yükleniyor...</div>
           ) : (
             <>
               <div style={{ display: "flex", gap: 14, marginBottom: 24, flexWrap: "wrap" }}>
                 {[
-                  { label: "POPUP GÖSTERİLDİ", val: reviewLogs.counts?.popup_shown || 0, color: "#4b5260", bg: "#f4f2ed", br: "#d9d5cc" },
+                  { label: "POPUP GÖSTERİLDİ", val: reviewLogs.counts?.popup_shown || 0, color: "#4b5260", bg: "#ebe8e2", br: "#cdc8be" },
                   { label: "BUTONA BASILDI", val: reviewLogs.counts?.button_tap || 0, color: "#2a39b8", bg: "#efe9fd", br: "#d9cdfa" },
                   { label: "✅ GOOGLE KABUL ETTİ", val: reviewLogs.counts?.request_ok || 0, color: "#0d6b4d", bg: "#e4f4ec", br: "#bfe3cf" },
                   { label: "❌ GOOGLE REDDETTİ", val: reviewLogs.counts?.request_fail || 0, color: "#b42318", bg: "#fdecea", br: "#f3c2bd" },
@@ -3160,12 +3160,12 @@ function App() {
                 <div style={{ flex: "1 1 240px", padding: "16px 18px", borderRadius: 12, backgroundColor: "#e2f1fb", border: "1px solid #b9dcf1" }}>
                   <div style={{ color: "#4b5260", fontSize: 11 }}>KART EKRANDA GÖRÜLDÜ (tahmin)</div>
                   <div style={{ color: "#0b6aa2", fontSize: 32, fontWeight: 800, marginTop: 6 }}>{reviewLogs.cardShown || 0}</div>
-                  <div style={{ color: "#5f6672", fontSize: 10, marginTop: 4 }}>akış 500 ms'den uzun sürdü</div>
+                  <div style={{ color: "#565c68", fontSize: 10, marginTop: 4 }}>akış 500 ms'den uzun sürdü</div>
                 </div>
-                <div style={{ flex: "1 1 240px", padding: "16px 18px", borderRadius: 12, backgroundColor: "#f4f2ed", border: "1px solid #d9d5cc" }}>
+                <div style={{ flex: "1 1 240px", padding: "16px 18px", borderRadius: 12, backgroundColor: "#ebe8e2", border: "1px solid #cdc8be" }}>
                   <div style={{ color: "#4b5260", fontSize: 11 }}>KART AÇILMADI (tahmin)</div>
                   <div style={{ color: "#4b5260", fontSize: 32, fontWeight: 800, marginTop: 6 }}>{reviewLogs.cardNotShown || 0}</div>
-                  <div style={{ color: "#5f6672", fontSize: 10, marginTop: 4 }}>akış anında bitti — genelde kota dolu</div>
+                  <div style={{ color: "#565c68", fontSize: 10, marginTop: 4 }}>akış anında bitti — genelde kota dolu</div>
                 </div>
               </div>
 
@@ -3186,12 +3186,12 @@ function App() {
                 SON KAYITLAR ({reviewLogs.total} toplam)
               </div>
               {(!reviewLogs.logs || reviewLogs.logs.length === 0) ? (
-                <div style={{ textAlign: "center", padding: 30, color: "#5f6672" }}>Henüz log yok</div>
+                <div style={{ textAlign: "center", padding: 30, color: "#565c68" }}>Henüz log yok</div>
               ) : (
                 <div style={{ overflowX: "auto" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                     <thead>
-                      <tr style={{ borderBottom: "1px solid #cdc8be", color: "#4b5260", textAlign: "left" }}>
+                      <tr style={{ borderBottom: "1px solid #c0bab0", color: "#4b5260", textAlign: "left" }}>
                         <th style={{ padding: "8px 10px" }}>Olay</th>
                         <th style={{ padding: "8px 10px" }}>Detay</th>
                         <th style={{ padding: "8px 10px" }}>Süre</th>
@@ -3207,21 +3207,21 @@ function App() {
                           button_tap: { t: "Butona basıldı", c: "#2a39b8" },
                           request_ok: { t: "✅ Google kabul", c: "#0d6b4d" },
                           request_fail: { t: "❌ Google ret", c: "#b42318" },
-                          flow_done: { t: l.cardLikelyShown ? "Kart görüldü" : "Kart açılmadı", c: l.cardLikelyShown ? "#0b6aa2" : "#5f6672" },
+                          flow_done: { t: l.cardLikelyShown ? "Kart görüldü" : "Kart açılmadı", c: l.cardLikelyShown ? "#0b6aa2" : "#565c68" },
                         };
                         const s = map[l.event] || { t: l.event, c: "#2b2f37" };
                         return (
-                          <tr key={l.id} style={{ borderBottom: "1px solid #cdc8be" }}>
+                          <tr key={l.id} style={{ borderBottom: "1px solid #c0bab0" }}>
                             <td style={{ padding: "8px 10px", color: s.c, fontWeight: 600 }}>{s.t}</td>
                             <td style={{ padding: "8px 10px", color: "#4b5260", maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis" }}>
                               {l.errorCode ? `${l.errorCode} — ` : ""}{l.detail}
                             </td>
                             <td style={{ padding: "8px 10px", color: "#4b5260" }}>{l.durationMs ? `${l.durationMs} ms` : "—"}</td>
                             <td style={{ padding: "8px 10px", color: "#2b2f37" }}>{l.country}</td>
-                            <td style={{ padding: "8px 10px", color: "#5f6672", fontFamily: "monospace", fontSize: 11 }}>
+                            <td style={{ padding: "8px 10px", color: "#565c68", fontFamily: "monospace", fontSize: 11 }}>
                               {(l.deviceId || "—").slice(0, 10)}{l.sdk ? ` · SDK ${l.sdk}` : ""}
                             </td>
-                            <td style={{ padding: "8px 10px", color: "#5f6672", fontSize: 11 }}>
+                            <td style={{ padding: "8px 10px", color: "#565c68", fontSize: 11 }}>
                               {new Date(l.createdAt).toLocaleString("tr-TR")}
                             </td>
                           </tr>
@@ -3257,7 +3257,7 @@ function App() {
 
 
           {!liveUsers ? (
-            <div style={{ textAlign: "center", padding: 30, color: "#5f6672" }}>Yükleniyor...</div>
+            <div style={{ textAlign: "center", padding: 30, color: "#565c68" }}>Yükleniyor...</div>
           ) : (
             <>
               {/* SAYAÇLAR */}
@@ -3279,7 +3279,7 @@ function App() {
                     <div className="lv-card" key={title}>
                       <div className="lv-card-h"><b>{title}</b><small>{sub}</small></div>
                       <div className="lv-split">
-                        {total > 0 ? shown.filter(r => r.n > 0).map(r => <i key={r.k} style={{ flex: r.n, background: r.color }} />) : <i style={{ flex: 1, background: "#e3e0d9" }} />}
+                        {total > 0 ? shown.filter(r => r.n > 0).map(r => <i key={r.k} style={{ flex: r.n, background: r.color }} />) : <i style={{ flex: 1, background: "#d8d4cc" }} />}
                       </div>
                       {shown.map(r => (
                         <div key={r.k} className={"lv-row" + (r.onClick ? " link" : "")} onClick={r.onClick}>
@@ -3335,18 +3335,18 @@ function App() {
                       </button>
                     ))}
                   </div>
-                  <span style={{ color: "#5f6672", fontSize: 11 }}>
+                  <span style={{ color: "#565c68", fontSize: 11 }}>
                     {liveUsers.windowCount} cihaz{liveUsers.listed < liveUsers.windowCount ? ` — ilk ${liveUsers.listed} tanesi gösteriliyor` : ""}
                   </span>
                 </div>
               </div>
               {(liveExtractor === "all" ? liveUsers.users : liveUsers.users.filter(u => (u.extractor || "unknown") === liveExtractor)).length === 0 ? (
-                <div style={{ textAlign: "center", padding: 30, color: "#5f6672" }}>Şu an aktif kullanıcı yok</div>
+                <div style={{ textAlign: "center", padding: 30, color: "#565c68" }}>Şu an aktif kullanıcı yok</div>
               ) : (
                 <div style={{ overflowX: "auto" }}>
                   <table className="lv-dt" style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                     <thead>
-                      <tr style={{ borderBottom: "1px solid #cdc8be", color: "#4b5260", textAlign: "left" }}>
+                      <tr style={{ borderBottom: "1px solid #c0bab0", color: "#4b5260", textAlign: "left" }}>
                         <th style={{ padding: "8px 10px" }}>IP</th>
                         <th style={{ padding: "8px 10px" }}>Ülke</th>
                         <th style={{ padding: "8px 10px" }}>Kaynak</th>
@@ -3357,7 +3357,7 @@ function App() {
                     </thead>
                     <tbody>
                       {(liveExtractor === "all" ? liveUsers.users : liveUsers.users.filter(u => (u.extractor || "unknown") === liveExtractor)).map(u => (
-                        <tr key={u.uid} style={{ borderBottom: "1px solid #cdc8be" }}>
+                        <tr key={u.uid} style={{ borderBottom: "1px solid #c0bab0" }}>
                           <td style={{ padding: "8px 10px", color: "#16181d", fontFamily: "monospace" }}>
                             <span style={{ display: "inline-block", width: 7, height: 7, borderRadius: "50%", marginRight: 8,
                               backgroundColor: u.secondsAgo < 120 ? "#12805c" : "#eab308" }} />
@@ -3369,7 +3369,7 @@ function App() {
                               const map = {
                                 newpipe: { label: "NewPipe", color: "#0b6aa2", bg: "#e2f1fb", border: "#b9dcf1" },
                                 backend: { label: "Backend", color: "#8a5a00", bg: "#fdf0d5", border: "#f0d9a6" },
-                                unknown: { label: "Bilinmiyor", color: "#4b5260", bg: "#f4f2ed", border: "#d9d5cc" },
+                                unknown: { label: "Bilinmiyor", color: "#4b5260", bg: "#ebe8e2", border: "#cdc8be" },
                               };
                               const s = map[u.extractor] || map.unknown;
                               return (
@@ -3384,14 +3384,14 @@ function App() {
                             {u.secondsAgo < 60 ? `${u.secondsAgo} sn önce` : `${Math.round(u.secondsAgo / 60)} dk önce`}
                           </td>
                           <td style={{ padding: "8px 10px", color: "#2a39b8", fontWeight: 600 }}>{u.hits}</td>
-                          <td style={{ padding: "8px 10px", color: "#5f6672", fontSize: 11 }}>{u.endpoint}</td>
+                          <td style={{ padding: "8px 10px", color: "#565c68", fontSize: 11 }}>{u.endpoint}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
               )}
-              <div style={{ color: "#6b7078", fontSize: 11, marginTop: 14 }}>
+              <div style={{ color: "#61666e", fontSize: 11, marginTop: 14 }}>
                 Son güncelleme: {new Date(liveUsers.updatedAt).toLocaleTimeString("tr-TR")}
               </div>
               </div>
@@ -3507,7 +3507,7 @@ function App() {
           </p>
 
           {!rtUsers ? (
-            <div style={{ textAlign: "center", padding: 30, color: "#5f6672" }}>Yükleniyor...</div>
+            <div style={{ textAlign: "center", padding: 30, color: "#565c68" }}>Yükleniyor...</div>
           ) : (() => {
             const bm = rtUsers.byMode || {};
             const rt = bm.ringtone || {}, yt = bm.youtube || {}, un = bm.unknown || {};
@@ -3521,17 +3521,17 @@ function App() {
               {/* CİHAZ LİSTESİ */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, flexWrap: "wrap", gap: 10 }}>
                 <span style={{ color: "#4b5260", fontSize: 12 }}>ZİL SESİNDEKİ CİHAZLAR (son {rtUsers.window} dk)</span>
-                <span style={{ color: "#5f6672", fontSize: 11 }}>
+                <span style={{ color: "#565c68", fontSize: 11 }}>
                   {rtUsers.windowCount} cihaz{rtUsers.listed < rtUsers.windowCount ? ` — ilk ${rtUsers.listed} tanesi gösteriliyor` : ""}
                 </span>
               </div>
               {(!rtUsers.users || rtUsers.users.length === 0) ? (
-                <div style={{ textAlign: "center", padding: 30, color: "#5f6672" }}>Son {rtUsers.window} dakikada zil sesi moduna giren cihaz yok</div>
+                <div style={{ textAlign: "center", padding: 30, color: "#565c68" }}>Son {rtUsers.window} dakikada zil sesi moduna giren cihaz yok</div>
               ) : (
                 <div style={{ overflowX: "auto", marginBottom: 24 }}>
                   <table className="lv-zt" style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                     <thead>
-                      <tr style={{ borderBottom: "1px solid #cdc8be", color: "#4b5260", textAlign: "left" }}>
+                      <tr style={{ borderBottom: "1px solid #c0bab0", color: "#4b5260", textAlign: "left" }}>
                         <th style={{ padding: "8px 10px" }}>IP</th>
                         <th style={{ padding: "8px 10px" }}>Ülke</th>
                         <th style={{ padding: "8px 10px" }}>Uygulama</th>
@@ -3544,7 +3544,7 @@ function App() {
                     </thead>
                     <tbody>
                       {rtUsers.users.map(u => (
-                        <tr key={u.uid} style={{ borderBottom: "1px solid #cdc8be" }}>
+                        <tr key={u.uid} style={{ borderBottom: "1px solid #c0bab0" }}>
                           <td style={{ padding: "8px 10px", color: "#16181d", fontFamily: "monospace" }}>
                             <span style={{ display: "inline-block", width: 7, height: 7, borderRadius: "50%", marginRight: 8,
                               backgroundColor: u.secondsAgo < 120 ? "#0ea5e9" : "#eab308" }} />
@@ -3567,7 +3567,7 @@ function App() {
                             {u.secondsAgo < 60 ? `${u.secondsAgo} sn önce` : `${Math.round(u.secondsAgo / 60)} dk önce`}
                           </td>
                           <td style={{ padding: "8px 10px", color: "#0b6aa2", fontWeight: 600 }}>{u.hits}</td>
-                          <td style={{ padding: "8px 10px", color: "#5f6672", fontSize: 11 }}>{u.endpoint}</td>
+                          <td style={{ padding: "8px 10px", color: "#565c68", fontSize: 11 }}>{u.endpoint}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -3584,7 +3584,7 @@ function App() {
               {/* DAĞILIM ÇUBUĞU */}
               <div style={{ marginBottom: 26 }}>
                 <div style={{ color: "#4b5260", fontSize: 12, marginBottom: 8 }}>DAĞILIM (son 1 dk — toplam {tot5})</div>
-                <div style={{ display: "flex", height: 14, borderRadius: 7, overflow: "hidden", backgroundColor: "#eeebe5", border: "1px solid #d9d5cc" }}>
+                <div style={{ display: "flex", height: 14, borderRadius: 7, overflow: "hidden", backgroundColor: "#e4e1da", border: "1px solid #cdc8be" }}>
                   <div title={`Müzik: ${yt.online1m || 0}`} style={{ width: `${seg(yt.online1m || 0)}%`, backgroundColor: "#12805c" }} />
                   <div title={`Zil sesi: ${rt.online1m || 0}`} style={{ width: `${seg(rt.online1m || 0)}%`, backgroundColor: "#0ea5e9" }} />
                   <div title={`Bilinmiyor: ${un.online1m || 0}`} style={{ width: `${seg(un.online1m || 0)}%`, backgroundColor: "#c9c5bc" }} />
@@ -3592,10 +3592,10 @@ function App() {
                 <div style={{ display: "flex", gap: 16, marginTop: 8, fontSize: 11, color: "#4b5260", flexWrap: "wrap" }}>
                   <span><b style={{ color: "#0d6b4d" }}>●</b> Müzik {yt.online1m || 0}</span>
                   <span><b style={{ color: "#0b6aa2" }}>●</b> Zil sesi {rt.online1m || 0}</span>
-                  <span><b style={{ color: "#5f6672" }}>●</b> Bilinmiyor {un.online1m || 0}</span>
+                  <span><b style={{ color: "#565c68" }}>●</b> Bilinmiyor {un.online1m || 0}</span>
                 </div>
                 {(un.online1h || 0) > 0 && (
-                  <p style={{ color: "#5f6672", fontSize: 11, margin: "10px 0 0 0" }}>
+                  <p style={{ color: "#565c68", fontSize: 11, margin: "10px 0 0 0" }}>
                     "Bilinmiyor" = modunu bildirmeyen eski APK sürümleri. Bu cihazların bir kısmı zil sesi
                     modunda olabilir; kullanıcılar güncelledikçe sayı düşer.
                   </p>
@@ -3609,7 +3609,7 @@ function App() {
                   <div style={{ overflowX: "auto" }}>
                     <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                       <thead>
-                        <tr style={{ borderBottom: "1px solid #cdc8be", color: "#4b5260", textAlign: "left" }}>
+                        <tr style={{ borderBottom: "1px solid #c0bab0", color: "#4b5260", textAlign: "left" }}>
                           <th style={{ padding: "8px 10px" }}>Uygulama</th>
                           <th style={{ padding: "8px 10px" }}>Paket adı</th>
                           <th style={{ padding: "8px 10px" }}>Zil sesi</th>
@@ -3619,10 +3619,10 @@ function App() {
                       </thead>
                       <tbody>
                         {rtUsers.byApp.map(a => (
-                          <tr key={a.id} style={{ borderBottom: "1px solid #cdc8be" }}>
+                          <tr key={a.id} style={{ borderBottom: "1px solid #c0bab0" }}>
                             <td style={{ padding: "8px 10px", color: "#16181d" }}>{a.name}</td>
-                            <td style={{ padding: "8px 10px", color: "#5f6672", fontFamily: "monospace", fontSize: 11 }}>{a.packageName || "—"}</td>
-                            <td style={{ padding: "8px 10px", color: a.ringtone > 0 ? "#0b6aa2" : "#5f6672", fontWeight: 600 }}>{a.ringtone}</td>
+                            <td style={{ padding: "8px 10px", color: "#565c68", fontFamily: "monospace", fontSize: 11 }}>{a.packageName || "—"}</td>
+                            <td style={{ padding: "8px 10px", color: a.ringtone > 0 ? "#0b6aa2" : "#565c68", fontWeight: 600 }}>{a.ringtone}</td>
                             <td style={{ padding: "8px 10px", color: "#0d6b4d" }}>{a.youtube}</td>
                             <td style={{ padding: "8px 10px", color: "#2b2f37" }}>{a.total}</td>
                           </tr>
@@ -3630,7 +3630,7 @@ function App() {
                       </tbody>
                     </table>
                   </div>
-                  <p style={{ color: "#5f6672", fontSize: 11, margin: "10px 0 0 0" }}>
+                  <p style={{ color: "#565c68", fontSize: 11, margin: "10px 0 0 0" }}>
                     Paket ayrımı cihazın gönderdiği uygulama paketine göre yapılır. "Uygulamalar"
                     bölümünde kayıtlı olmayan bir paket tanınmaz ve ilk satıra (default) düşer —
                     orada beklediğinden fazla cihaz varsa eksik kayıt olabilir.
@@ -3644,7 +3644,7 @@ function App() {
                   ÜLKELERE GÖRE (zil sesindekiler — son {rtUsers.window} dk)
                 </div>
                 {(!rtUsers.byCountry || rtUsers.byCountry.length === 0) ? (
-                  <div style={{ color: "#5f6672", fontSize: 12 }}>Bu pencerede zil sesi modunda cihaz yok.</div>
+                  <div style={{ color: "#565c68", fontSize: 12 }}>Bu pencerede zil sesi modunda cihaz yok.</div>
                 ) : (
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                     {rtUsers.byCountry.map(c => (
@@ -3655,19 +3655,19 @@ function App() {
                     ))}
                   </div>
                 )}
-                <p style={{ color: "#5f6672", fontSize: 11, margin: "10px 0 0 0" }}>
+                <p style={{ color: "#565c68", fontSize: 11, margin: "10px 0 0 0" }}>
                   Buradaki ülke IP'den gelir. Mod kararı ise SIM → şebeke → IP sırasıyla verilir;
                   VPN/roaming'deki cihazda ikisi farklı çıkabilir.
                 </p>
               </div>
 
               {/* KURAL ↔ GERÇEK */}
-              <div style={{ marginBottom: 26, padding: "14px 16px", borderRadius: 10, backgroundColor: "#f4f2ed", border: "1px solid #d9d5cc" }}>
+              <div style={{ marginBottom: 26, padding: "14px 16px", borderRadius: 10, backgroundColor: "#ebe8e2", border: "1px solid #cdc8be" }}>
                 <div style={{ color: "#4b5260", fontSize: 12, marginBottom: 10 }}>YÜRÜRLÜKTEKİ KURALLAR</div>
                 <div style={{ fontSize: 12, color: "#2b2f37", marginBottom: 8, display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6 }}>
                   Ülke kuralı:{" "}
                   {ruleCountries.length === 0
-                    ? <span style={{ color: "#5f6672" }}>yok — hiçbir ülke zil sesine ayarlı değil</span>
+                    ? <span style={{ color: "#565c68" }}>yok — hiçbir ülke zil sesine ayarlı değil</span>
                     : ruleCountries.map(([code]) => (
                         <span key={code} style={{ padding: "3px 9px", borderRadius: 20, backgroundColor: "#e2f1fb",
                           border: "1px solid #b9dcf1", fontSize: 11, color: "#0b6aa2", marginRight: 6 }}>{code}</span>
@@ -3676,19 +3676,19 @@ function App() {
                 <div style={{ fontSize: 12, color: "#2b2f37", display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6 }}>
                   ASN kuralı:{" "}
                   {ruleAsns.length === 0
-                    ? <span style={{ color: "#5f6672" }}>yok</span>
+                    ? <span style={{ color: "#565c68" }}>yok</span>
                     : ruleAsns.map(a => (
                         <span key={a} style={{ padding: "3px 9px", borderRadius: 20, backgroundColor: "#fdf0d5",
                           border: "1px solid #f0d9a6", fontSize: 11, color: "#8a5a00", marginRight: 6 }}>AS{a}</span>
                       ))}
                 </div>
-                <p style={{ color: "#5f6672", fontSize: 11, margin: "10px 0 0 0" }}>
+                <p style={{ color: "#565c68", fontSize: 11, margin: "10px 0 0 0" }}>
                   Ülke kuralı boşken zil sesine yalnızca ASN listesindeki ağlar (Google altyapısı /
                   inceleme sunucuları) düşer — o yüzden sayının düşük olması normaldir.
                 </p>
               </div>
 
-              <div style={{ color: "#6b7078", fontSize: 11, marginTop: 14 }}>
+              <div style={{ color: "#61666e", fontSize: 11, marginTop: 14 }}>
                 Son güncelleme: {new Date(rtUsers.updatedAt).toLocaleTimeString("tr-TR")}
               </div>
             </>
@@ -3708,12 +3708,12 @@ function App() {
           </div>
           <p style={{ color: "#4b5260", fontSize: 12, margin: "-8px 0 16px 0" }}>Uygulamaya giriş yapan (config/token çeken) cihazların IP kayıtları — IP başına tek satır, tekrar girişte sayaç artar</p>
           {loginIps.length === 0 ? (
-            <div style={{ textAlign: "center", padding: 30, color: "#5f6672" }}>Henüz kayıt yok</div>
+            <div style={{ textAlign: "center", padding: 30, color: "#565c68" }}>Henüz kayıt yok</div>
           ) : (
             <div style={{ overflowX: "auto" }}>
               <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                 <thead>
-                  <tr style={{ borderBottom: "1px solid #cdc8be", color: "#4b5260", textAlign: "left" }}>
+                  <tr style={{ borderBottom: "1px solid #c0bab0", color: "#4b5260", textAlign: "left" }}>
                     <th style={{ padding: "8px 10px" }}>IP</th>
                     <th style={{ padding: "8px 10px" }}>Ülke</th>
                     <th style={{ padding: "8px 10px" }}>Giriş</th>
@@ -3724,13 +3724,13 @@ function App() {
                 </thead>
                 <tbody>
                   {loginIps.map(entry => (
-                    <tr key={entry.id} style={{ borderBottom: "1px solid #cdc8be" }}>
+                    <tr key={entry.id} style={{ borderBottom: "1px solid #c0bab0" }}>
                       <td style={{ padding: "8px 10px", color: "#16181d", fontFamily: "monospace" }}>{entry.ip}</td>
                       <td style={{ padding: "8px 10px", color: "#2b2f37" }}>{entry.country || "?"}</td>
                       <td style={{ padding: "8px 10px", color: "#2a39b8", fontWeight: 600 }}>{entry.count}</td>
                       <td style={{ padding: "8px 10px", color: "#4b5260" }}>{entry.firstSeen ? new Date(entry.firstSeen).toLocaleString("tr-TR") : "-"}</td>
                       <td style={{ padding: "8px 10px", color: "#4b5260" }}>{entry.lastSeen ? new Date(entry.lastSeen).toLocaleString("tr-TR") : "-"}</td>
-                      <td style={{ padding: "8px 10px", color: "#5f6672", fontSize: 11 }}>{entry.endpoint}</td>
+                      <td style={{ padding: "8px 10px", color: "#565c68", fontSize: 11 }}>{entry.endpoint}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -3864,8 +3864,8 @@ function App() {
                   ].map(t => (
                     <div key={t.key} onClick={() => setPopupType(t.key)}
                       style={{ flex: "1 1 260px", padding: "14px 16px", borderRadius: 10, cursor: "pointer",
-                        backgroundColor: popupType === t.key ? "#efe9fd" : "#f4f2ed",
-                        border: `1px solid ${popupType === t.key ? "#3c4fe0" : "#d9d5cc"}` }}>
+                        backgroundColor: popupType === t.key ? "#efe9fd" : "#ebe8e2",
+                        border: `1px solid ${popupType === t.key ? "#3c4fe0" : "#cdc8be"}` }}>
                       <div style={{ color: popupType === t.key ? "#2a39b8" : "#2b2f37", fontSize: 14, fontWeight: 600 }}>{t.title}</div>
                       <div style={{ color: "#4b5260", fontSize: 11, marginTop: 6, lineHeight: 1.5 }}>{t.desc}</div>
                     </div>
@@ -3910,7 +3910,7 @@ function App() {
                   {popupButtons.map((btn, i) => (
                     <div key={i} style={{ background: "#efe9fd", border: "1px solid #3c4fe0", borderRadius: 6, padding: "6px 12px", display: "flex", alignItems: "center", gap: 8 }}>
                       <span style={{ color: "#2a39b8", fontSize: 13 }}>{btn.label}</span>
-                      <span style={{ color: "#5f6672", fontSize: 11 }}>({btn.value})</span>
+                      <span style={{ color: "#565c68", fontSize: 11 }}>({btn.value})</span>
                       <span style={{ cursor: "pointer", color: "#4b5260" }} onClick={() => removePopupButton(i)}>✕</span>
                     </div>
                   ))}
@@ -3992,8 +3992,8 @@ function App() {
 
               {/* Önizleme */}
               {(popupTitle || popupMessage) && (
-                <div style={{ background: "#eeebe5", border: "1px solid #d9d5cc", borderRadius: 12, padding: 20 }}>
-                  <p style={{ color: "#5f6672", fontSize: 11, margin: "0 0 12px 0", textTransform: "uppercase", letterSpacing: 1 }}>Önizleme</p>
+                <div style={{ background: "#e4e1da", border: "1px solid #cdc8be", borderRadius: 12, padding: 20 }}>
+                  <p style={{ color: "#565c68", fontSize: 11, margin: "0 0 12px 0", textTransform: "uppercase", letterSpacing: 1 }}>Önizleme</p>
                   <p style={{ margin: "0 0 8px 0", fontWeight: 700, color: "#16181d", fontSize: 18 }}>{popupTitle || "Başlık"}</p>
                   <p style={{ margin: "0 0 16px 0", color: "#4b5260", fontSize: 14 }}>{popupMessage || "Mesaj..."}</p>
                   <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
@@ -4018,7 +4018,7 @@ function App() {
           </p>
 
           {/* Varsayılan (Global) Ayarlar */}
-          <div style={{ padding: "16px", background: "#f4f2ed", borderRadius: 8, border: "1px solid #d9d5cc", marginBottom: 20 }}>
+          <div style={{ padding: "16px", background: "#ebe8e2", borderRadius: 8, border: "1px solid #cdc8be", marginBottom: 20 }}>
             <h3 style={{ color: "#16181d", margin: "0 0 12px 0", fontSize: 15 }}>Varsayılan Ayar (Kural tanımlı olmayan ülkeler)</h3>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
               <label style={{ fontSize: 13, color: "#2b2f37" }}>Aktif:</label>
@@ -4034,7 +4034,7 @@ function App() {
                 <label style={{ fontSize: 12, color: "#4b5260", display: "block", marginBottom: 4 }}>Tür:</label>
                 <select value={config.downloadAd?.type || "url"}
                   onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, type: e.target.value } }))}
-                  style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                  style={{ background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                   <option value="url">URL Aç</option>
                   <option value="admob">AdMob</option>
                   <option value="both">URL + AdMob</option>
@@ -4044,7 +4044,7 @@ function App() {
                 <label style={{ fontSize: 12, color: "#4b5260", display: "block", marginBottom: 4 }}>Frekans:</label>
                 <select value={config.downloadAd?.showEveryNth || 1}
                   onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, showEveryNth: parseInt(e.target.value) } }))}
-                  style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                  style={{ background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                   <option value={1}>Her indirmede</option>
                   <option value={2}>Her 2</option>
                   <option value={3}>Her 3</option>
@@ -4057,14 +4057,14 @@ function App() {
               <input type="text" placeholder="https://..."
                 value={config.downloadAd?.url || ""}
                 onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, url: e.target.value } }))}
-                style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                style={{ width: "100%", background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
             </div>
             <div style={{ marginTop: 10 }}>
               <label style={{ fontSize: 12, color: "#4b5260", display: "block", marginBottom: 4 }}>AdMob Unit ID:</label>
               <input type="text" placeholder="ca-app-pub-xxx/yyy"
                 value={config.downloadAd?.admobUnitId || ""}
                 onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, admobUnitId: e.target.value } }))}
-                style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                style={{ width: "100%", background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
             </div>
 
             {/* İlk indirmede mutlaka reklam */}
@@ -4081,14 +4081,14 @@ function App() {
                 <span style={{ color: "#4b5260", fontSize: 13 }}>Her</span>
                 <input type="number" min={0} placeholder="10" value={config.downloadAd?.cycleSize || ""}
                   onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, cycleSize: parseInt(e.target.value) || 0 } }))}
-                  style={{ width: 70, background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                  style={{ width: 70, background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                 <span style={{ color: "#4b5260", fontSize: 13 }}>indirmede</span>
                 <input type="number" min={0} placeholder="2" value={config.downloadAd?.adsPerCycle || ""}
                   onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, adsPerCycle: parseInt(e.target.value) || 0 } }))}
-                  style={{ width: 70, background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                  style={{ width: 70, background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                 <span style={{ color: "#4b5260", fontSize: 13 }}>reklam</span>
               </div>
-              <span style={{ color: "#5f6672", fontSize: 11 }}>Doluysa üstteki "Frekans" yerine bu geçerli (örn. 10 indirmede 2 → ilk kullanıcıdan sonra 10'arlı bloklarda 2 reklam)</span>
+              <span style={{ color: "#565c68", fontSize: 11 }}>Doluysa üstteki "Frekans" yerine bu geçerli (örn. 10 indirmede 2 → ilk kullanıcıdan sonra 10'arlı bloklarda 2 reklam)</span>
             </div>
           </div>
 
@@ -4100,19 +4100,19 @@ function App() {
                 const rules = [...(config.downloadAd?.rules || [])];
                 rules.unshift({ countries: [], enabled: true, type: "url", url: "", admobUnitId: "", showEveryNth: 1, delaySeconds: 0 });
                 setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
-              }} style={{ background: "transparent", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+              }} style={{ background: "transparent", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
                 + Kural Ekle
               </button>
             </div>
 
             {(config.downloadAd?.rules || []).length === 0 && (
-              <p style={{ color: "#5f6672", fontSize: 13, textAlign: "center", padding: 20 }}>
+              <p style={{ color: "#565c68", fontSize: 13, textAlign: "center", padding: 20 }}>
                 Ülke kuralı yok — tüm ülkelere varsayılan ayar uygulanır.
               </p>
             )}
 
             {(config.downloadAd?.rules || []).map((rule, idx) => (
-              <div key={idx} style={{ padding: "14px", background: "#f4f2ed", borderRadius: 8, border: `1px solid ${rule.enabled ? "#d97706" : "#d9d5cc"}`, marginBottom: 12 }}>
+              <div key={idx} style={{ padding: "14px", background: "#ebe8e2", borderRadius: 8, border: `1px solid ${rule.enabled ? "#d97706" : "#cdc8be"}`, marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <span style={{ fontSize: 13, fontWeight: 600, color: "#2b2f37" }}>Kural #{idx + 1}</span>
@@ -4148,7 +4148,7 @@ function App() {
                         rules[idx] = { ...rules[idx], type: e.target.value };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value="url">URL Aç</option>
                       <option value="admob">AdMob</option>
                       <option value="both">URL + AdMob</option>
@@ -4166,7 +4166,7 @@ function App() {
                         rules[idx] = { ...rules[idx], url: e.target.value };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                   <div>
                     <label style={{ fontSize: 12, color: "#4b5260", display: "block", marginBottom: 4 }}>AdMob ID:</label>
@@ -4177,7 +4177,7 @@ function App() {
                         rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 </div>
 
@@ -4190,7 +4190,7 @@ function App() {
                         rules[idx] = { ...rules[idx], showEveryNth: parseInt(e.target.value) };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value={1}>Her indirmede</option>
                       <option value={2}>Her 2</option>
                       <option value={3}>Her 3</option>
@@ -4205,7 +4205,7 @@ function App() {
                         rules[idx] = { ...rules[idx], delaySeconds: parseInt(e.target.value) };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value={0}>Anında</option>
                       <option value={1}>1 sn</option>
                       <option value={2}>2 sn</option>
@@ -4232,7 +4232,7 @@ function App() {
           </p>
 
           {/* Global Ayar */}
-          <div style={{ padding: "16px", background: "#f4f2ed", borderRadius: 8, border: "1px solid #d9d5cc", marginBottom: 20 }}>
+          <div style={{ padding: "16px", background: "#ebe8e2", borderRadius: 8, border: "1px solid #cdc8be", marginBottom: 20 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
               <label style={{ fontSize: 14, color: "#2b2f37" }}>Banner Reklam Aktif:</label>
               <input type="checkbox" checked={config.bannerAd?.enabled || false}
@@ -4246,7 +4246,7 @@ function App() {
               <label style={{ fontSize: 12, color: "#4b5260", display: "block", marginBottom: 4 }}>Her kaç şarkıda bir banner göster:</label>
               <select value={config.bannerAd?.showEveryNth || 3}
                 onChange={e => setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, showEveryNth: parseInt(e.target.value) } }))}
-                style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }}>
+                style={{ background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13 }}>
                 <option value={2}>Her 2 şarkıda bir</option>
                 <option value={3}>Her 3 şarkıda bir</option>
                 <option value={4}>Her 4 şarkıda bir</option>
@@ -4256,7 +4256,7 @@ function App() {
           </div>
 
           {/* Belirli pozisyonlar */}
-          <div style={{ marginBottom: 20, padding: "14px 16px", background: "#f4f2ed", borderRadius: 8, border: "1px solid #d9d5cc" }}>
+          <div style={{ marginBottom: 20, padding: "14px 16px", background: "#ebe8e2", borderRadius: 8, border: "1px solid #cdc8be" }}>
             <label style={{ fontSize: 13, color: "#2b2f37", display: "block", marginBottom: 6 }}>
               Belirli pozisyonlar (virgülle ayır, örn: <b>2, 10</b>)
             </label>
@@ -4270,8 +4270,8 @@ function App() {
                 setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, positions: arr } }));
               }}
               placeholder="2, 10"
-              style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%", boxSizing: "border-box" }} />
-            <p style={{ fontSize: 11, color: "#5f6672", marginTop: 6, marginBottom: 0 }}>
+              style={{ background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%", boxSizing: "border-box" }} />
+            <p style={{ fontSize: 11, color: "#565c68", marginTop: 6, marginBottom: 0 }}>
               Bu alan doluysa banner <b>tam bu şarkılardan sonra</b> çıkar (örn. 2. ve 10. şarkıdan sonra). Boş bırakırsan yukarıdaki "her kaç şarkıda bir" ayarı kullanılır.
             </p>
           </div>
@@ -4284,19 +4284,19 @@ function App() {
                 const rules = [...(config.bannerAd?.rules || [])];
                 rules.push({ countries: [], enabled: true, type: "admob", admobUnitId: "", imageUrl: "", clickUrl: "" });
                 setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
-              }} style={{ background: "transparent", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+              }} style={{ background: "transparent", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
                 + Kural Ekle
               </button>
             </div>
 
             {(config.bannerAd?.rules || []).length === 0 && (
-              <p style={{ color: "#5f6672", fontSize: 13, textAlign: "center", padding: 20 }}>
+              <p style={{ color: "#565c68", fontSize: 13, textAlign: "center", padding: 20 }}>
                 Kural yok — banner reklam gösterilmez.
               </p>
             )}
 
             {(config.bannerAd?.rules || []).map((rule, idx) => (
-              <div key={idx} style={{ padding: "14px", background: "#f4f2ed", borderRadius: 8, border: `1px solid ${rule.enabled ? "#d97706" : "#d9d5cc"}`, marginBottom: 12 }}>
+              <div key={idx} style={{ padding: "14px", background: "#ebe8e2", borderRadius: 8, border: `1px solid ${rule.enabled ? "#d97706" : "#cdc8be"}`, marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <input type="checkbox" checked={rule.enabled}
@@ -4305,7 +4305,7 @@ function App() {
                         rules[idx] = { ...rules[idx], enabled: e.target.checked };
                         setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
                       }} style={{ width: 16, height: 16 }} />
-                    <span style={{ fontSize: 13, fontWeight: 600, color: rule.enabled ? "#8a5a00" : "#5f6672" }}>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: rule.enabled ? "#8a5a00" : "#565c68" }}>
                       Kural #{idx + 1} {rule.enabled ? "● AKTİF" : "● PASİF"}
                     </span>
                   </div>
@@ -4326,7 +4326,7 @@ function App() {
                         rules[idx] = { ...rules[idx], type: e.target.value };
                         setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
                       }}
-                      style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value="admob">Google AdMob</option>
                       <option value="custom">Kendi Görselim (Resim + Link)</option>
                     </select>
@@ -4343,7 +4343,7 @@ function App() {
                         rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                         setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 )}
 
@@ -4358,7 +4358,7 @@ function App() {
                           rules[idx] = { ...rules[idx], imageUrl: e.target.value };
                           setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                     <div>
                       <label style={{ fontSize: 12, color: "#4b5260", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
@@ -4369,7 +4369,7 @@ function App() {
                           rules[idx] = { ...rules[idx], clickUrl: e.target.value };
                           setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                   </>
                 )}
@@ -4406,19 +4406,19 @@ function App() {
               const rules = [...(config.bottomBannerAd?.rules || [])];
               rules.push({ countries: [], enabled: true, type: "admob", admobUnitId: "", imageUrl: "", clickUrl: "" });
               setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
-            }} style={{ background: "transparent", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+            }} style={{ background: "transparent", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
               + Kural Ekle
             </button>
           </div>
 
           {(config.bottomBannerAd?.rules || []).length === 0 && (
-            <p style={{ color: "#5f6672", fontSize: 13, textAlign: "center", padding: 20 }}>
+            <p style={{ color: "#565c68", fontSize: 13, textAlign: "center", padding: 20 }}>
               Kural yok — alt banner gösterilmez.
             </p>
           )}
 
           {(config.bottomBannerAd?.rules || []).map((rule, idx) => (
-            <div key={idx} style={{ padding: "14px", background: "#f4f2ed", borderRadius: 8, border: `1px solid ${rule.enabled ? "#d97706" : "#d9d5cc"}`, marginBottom: 12 }}>
+            <div key={idx} style={{ padding: "14px", background: "#ebe8e2", borderRadius: 8, border: `1px solid ${rule.enabled ? "#d97706" : "#cdc8be"}`, marginBottom: 12 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <input type="checkbox" checked={rule.enabled}
@@ -4427,7 +4427,7 @@ function App() {
                       rules[idx] = { ...rules[idx], enabled: e.target.checked };
                       setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
                     }} style={{ width: 16, height: 16 }} />
-                  <span style={{ fontSize: 13, fontWeight: 600, color: rule.enabled ? "#8a5a00" : "#5f6672" }}>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: rule.enabled ? "#8a5a00" : "#565c68" }}>
                     Kural #{idx + 1} {rule.enabled ? "● AKTİF" : "● PASİF"}
                   </span>
                 </div>
@@ -4448,7 +4448,7 @@ function App() {
                       rules[idx] = { ...rules[idx], type: e.target.value };
                       setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
                     }}
-                    style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                    style={{ background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                     <option value="admob">Google AdMob</option>
                     <option value="custom">Kendi Görselim (Resim + Link)</option>
                   </select>
@@ -4465,7 +4465,7 @@ function App() {
                       rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                       setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
                     }}
-                    style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                    style={{ width: "100%", background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                 </div>
               )}
 
@@ -4480,7 +4480,7 @@ function App() {
                         rules[idx] = { ...rules[idx], imageUrl: e.target.value };
                         setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                   <div style={{ marginBottom: 8 }}>
                     <label style={{ fontSize: 12, color: "#4b5260", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
@@ -4491,7 +4491,7 @@ function App() {
                         rules[idx] = { ...rules[idx], clickUrl: e.target.value };
                         setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 </>
               )}
@@ -4530,7 +4530,7 @@ function App() {
               <label style={{ fontSize: 12, color: "#4b5260", display: "block", marginBottom: 4 }}>Her kaç zil sesinde bir banner göster:</label>
               <select value={config.ringtoneBannerAd?.showEveryNth || 3}
                 onChange={e => setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, showEveryNth: parseInt(e.target.value) } }))}
-                style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }}>
+                style={{ background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13 }}>
                 <option value={2}>Her 2 zilde bir</option>
                 <option value={3}>Her 3 zilde bir</option>
                 <option value={4}>Her 4 zilde bir</option>
@@ -4550,8 +4550,8 @@ function App() {
                   setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, positions: arr } }));
                 }}
                 placeholder="2, 6"
-                style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%", boxSizing: "border-box" }} />
-              <p style={{ fontSize: 11, color: "#5f6672", marginTop: 6, marginBottom: 0 }}>
+                style={{ background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%", boxSizing: "border-box" }} />
+              <p style={{ fontSize: 11, color: "#565c68", marginTop: 6, marginBottom: 0 }}>
                 Doluysa banner tam bu zillerden sonra çıkar. Boşsa yukarıdaki "her kaç zilde bir" kullanılır.
               </p>
             </div>
@@ -4562,17 +4562,17 @@ function App() {
                 const rules = [...(config.ringtoneBannerAd?.rules || [])];
                 rules.push({ countries: [], enabled: true, type: "admob", admobUnitId: "", imageUrl: "", clickUrl: "" });
                 setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
-              }} style={{ background: "transparent", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+              }} style={{ background: "transparent", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
                 + Kural Ekle
               </button>
             </div>
 
             {(config.ringtoneBannerAd?.rules || []).length === 0 && (
-              <p style={{ color: "#5f6672", fontSize: 13, textAlign: "center", padding: 16 }}>Kural yok — banner gösterilmez.</p>
+              <p style={{ color: "#565c68", fontSize: 13, textAlign: "center", padding: 16 }}>Kural yok — banner gösterilmez.</p>
             )}
 
             {(config.ringtoneBannerAd?.rules || []).map((rule, idx) => (
-              <div key={idx} style={{ padding: "14px", background: "#f4f2ed", borderRadius: 8, border: `1px solid ${rule.enabled ? "#0b6aa2" : "#d9d5cc"}`, marginBottom: 12 }}>
+              <div key={idx} style={{ padding: "14px", background: "#ebe8e2", borderRadius: 8, border: `1px solid ${rule.enabled ? "#0b6aa2" : "#cdc8be"}`, marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <input type="checkbox" checked={rule.enabled}
@@ -4581,7 +4581,7 @@ function App() {
                         rules[idx] = { ...rules[idx], enabled: e.target.checked };
                         setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
                       }} style={{ width: 16, height: 16 }} />
-                    <span style={{ fontSize: 13, fontWeight: 600, color: rule.enabled ? "#0b6aa2" : "#5f6672" }}>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: rule.enabled ? "#0b6aa2" : "#565c68" }}>
                       Kural #{idx + 1} {rule.enabled ? "● AKTİF" : "● PASİF"}
                     </span>
                   </div>
@@ -4602,7 +4602,7 @@ function App() {
                         rules[idx] = { ...rules[idx], type: e.target.value };
                         setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
                       }}
-                      style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value="admob">Google AdMob</option>
                       <option value="custom">Kendi Görselim (Resim + Link)</option>
                     </select>
@@ -4618,7 +4618,7 @@ function App() {
                         rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                         setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 )}
 
@@ -4632,7 +4632,7 @@ function App() {
                           rules[idx] = { ...rules[idx], imageUrl: e.target.value };
                           setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                     <div>
                       <label style={{ fontSize: 12, color: "#4b5260", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
@@ -4642,7 +4642,7 @@ function App() {
                           rules[idx] = { ...rules[idx], clickUrl: e.target.value };
                           setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                   </>
                 )}
@@ -4670,17 +4670,17 @@ function App() {
                 const rules = [...(config.ringtoneBottomBannerAd?.rules || [])];
                 rules.push({ countries: [], enabled: true, type: "admob", admobUnitId: "", imageUrl: "", clickUrl: "" });
                 setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
-              }} style={{ background: "transparent", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+              }} style={{ background: "transparent", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
                 + Kural Ekle
               </button>
             </div>
 
             {(config.ringtoneBottomBannerAd?.rules || []).length === 0 && (
-              <p style={{ color: "#5f6672", fontSize: 13, textAlign: "center", padding: 16 }}>Kural yok — alt banner gösterilmez.</p>
+              <p style={{ color: "#565c68", fontSize: 13, textAlign: "center", padding: 16 }}>Kural yok — alt banner gösterilmez.</p>
             )}
 
             {(config.ringtoneBottomBannerAd?.rules || []).map((rule, idx) => (
-              <div key={idx} style={{ padding: "14px", background: "#f4f2ed", borderRadius: 8, border: `1px solid ${rule.enabled ? "#0b6aa2" : "#d9d5cc"}`, marginBottom: 12 }}>
+              <div key={idx} style={{ padding: "14px", background: "#ebe8e2", borderRadius: 8, border: `1px solid ${rule.enabled ? "#0b6aa2" : "#cdc8be"}`, marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <input type="checkbox" checked={rule.enabled}
@@ -4689,7 +4689,7 @@ function App() {
                         rules[idx] = { ...rules[idx], enabled: e.target.checked };
                         setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
                       }} style={{ width: 16, height: 16 }} />
-                    <span style={{ fontSize: 13, fontWeight: 600, color: rule.enabled ? "#0b6aa2" : "#5f6672" }}>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: rule.enabled ? "#0b6aa2" : "#565c68" }}>
                       Kural #{idx + 1} {rule.enabled ? "● AKTİF" : "● PASİF"}
                     </span>
                   </div>
@@ -4710,7 +4710,7 @@ function App() {
                         rules[idx] = { ...rules[idx], type: e.target.value };
                         setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
                       }}
-                      style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value="admob">Google AdMob</option>
                       <option value="custom">Kendi Görselim (Resim + Link)</option>
                     </select>
@@ -4726,7 +4726,7 @@ function App() {
                         rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                         setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 )}
 
@@ -4740,7 +4740,7 @@ function App() {
                           rules[idx] = { ...rules[idx], imageUrl: e.target.value };
                           setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                     <div style={{ marginBottom: 8 }}>
                       <label style={{ fontSize: 12, color: "#4b5260", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
@@ -4750,7 +4750,7 @@ function App() {
                           rules[idx] = { ...rules[idx], clickUrl: e.target.value };
                           setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                   </>
                 )}
@@ -4772,12 +4772,12 @@ function App() {
           <div style={{ position: "relative", marginBottom: 16 }}>
             <div
               onClick={() => document.getElementById("adFreeDropdown").style.display = document.getElementById("adFreeDropdown").style.display === "block" ? "none" : "block"}
-              style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "8px 12px", fontSize: 13, cursor: "pointer", minHeight: 36 }}>
+              style={{ background: "#e4e1da", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 6, padding: "8px 12px", fontSize: 13, cursor: "pointer", minHeight: 36 }}>
               {(config.adFreeCountries || []).length > 0
                 ? (config.adFreeCountries || []).map(c => { const found = COUNTRY_LIST.find(x => x.code === c); return found ? `${found.code} ${found.name}` : c; }).join(", ")
                 : "Ülke seçin..."}
             </div>
-            <div id="adFreeDropdown" style={{ display: "none", position: "absolute", top: "100%", left: 0, right: 0, background: "#eeebe5", border: "1px solid #cdc8be", borderRadius: 6, maxHeight: 250, overflowY: "auto", zIndex: 999 }}>
+            <div id="adFreeDropdown" style={{ display: "none", position: "absolute", top: "100%", left: 0, right: 0, background: "#e4e1da", border: "1px solid #c0bab0", borderRadius: 6, maxHeight: 250, overflowY: "auto", zIndex: 999 }}>
               {COUNTRY_LIST.map(c => (
                 <label key={c.code} style={{ display: "flex", alignItems: "center", padding: "6px 12px", fontSize: 13, color: "#2b2f37", cursor: "pointer" }}>
                   <input type="checkbox" checked={(config.adFreeCountries || []).includes(c.code)}
@@ -4843,7 +4843,7 @@ function App() {
               ))}
             </div>
           ) : (
-            <p style={{ color: "#5f6672", fontSize: 13, marginBottom: 20 }}>
+            <p style={{ color: "#565c68", fontSize: 13, marginBottom: 20 }}>
               Henüz ASN eklenmedi — mod kararı tamamen ülke/global ayarına göre veriliyor.
             </p>
           )}
@@ -4968,7 +4968,7 @@ function App() {
                     <span>Sürüm (versionCode)</span>
                     <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
                       <input type="number" style={{ ...styles.input, width: 80, padding: "6px 8px" }} placeholder="min" value={daMinVersion} onChange={e => setDaMinVersion(e.target.value)} />
-                      <span style={{ color: "#5f6672" }}>—</span>
+                      <span style={{ color: "#565c68" }}>—</span>
                       <input type="number" style={{ ...styles.input, width: 80, padding: "6px 8px" }} placeholder="max" value={daMaxVersion} onChange={e => setDaMaxVersion(e.target.value)} />
                     </div>
                   </div>
@@ -5069,7 +5069,7 @@ function App() {
                                 <small>{k}</small><div>{v}</div>
                               </div>
                             ))}
-                            <div style={{ gridColumn: "1 / -1", color: "#5f6672", fontFamily: "monospace", fontSize: 11 }}>{created} · ID: {action.id}</div>
+                            <div style={{ gridColumn: "1 / -1", color: "#565c68", fontFamily: "monospace", fontSize: 11 }}>{created} · ID: {action.id}</div>
                           </div>
                         )}
                       </div>
@@ -5180,8 +5180,8 @@ function App() {
 
           {/* Sağlık durumu özeti (salt-okunur) */}
           {apiHealth.length > 0 && apiHealth.map((p, i) => (
-            <div key={"h" + (p.id || i)} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#f4f2ed", border: "1px solid #cdc8be", borderRadius: 8, padding: "10px 16px", marginBottom: 8 }}>
-              <span style={{ color: "#2b2f37", fontSize: 13 }}>{p.name || p.id} <span style={{ color: "#5f6672" }}>· öncelik {p.priority}</span></span>
+            <div key={"h" + (p.id || i)} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#ebe8e2", border: "1px solid #c0bab0", borderRadius: 8, padding: "10px 16px", marginBottom: 8 }}>
+              <span style={{ color: "#2b2f37", fontSize: 13 }}>{p.name || p.id} <span style={{ color: "#565c68" }}>· öncelik {p.priority}</span></span>
               <span style={{
                 backgroundColor: p.status === "online" ? "#065f4620" : "#7f1d1d20",
                 color: p.status === "online" ? "#0d6b4d" : "#b42318",
@@ -5217,7 +5217,7 @@ function App() {
               }}>+ Yeni API Ekle</button>
           </div>
 
-          <p style={{ color: "#5f6672", fontSize: 12, marginBottom: 16 }}>
+          <p style={{ color: "#565c68", fontSize: 12, marginBottom: 16 }}>
             Düşük öncelik = önce denenir. Bir kaynak çökerse sıradakine geçilir. Şablon değişkenleri: <code style={{ color: "#2a39b8" }}>{"{id} {key} {bitrate} {quality} {query}"}</code> — uygulama hiç güncellenmez.
           </p>
 
@@ -5234,7 +5234,7 @@ function App() {
             };
             const ep = p.endpoints || {};
             return (
-              <div key={p.id || i} style={{ background: "#f4f2ed", border: `1px solid ${p.enabled !== false ? "#2a3a2a" : "#3a2a2a"}`, borderRadius: 10, padding: 18, marginBottom: 14 }}>
+              <div key={p.id || i} style={{ background: "#ebe8e2", border: `1px solid ${p.enabled !== false ? "#2a3a2a" : "#3a2a2a"}`, borderRadius: 10, padding: 18, marginBottom: 14 }}>
                 <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 12 }}>
                   <input type="text" placeholder="İsim" style={{ ...styles.input, flex: 1 }}
                     value={p.name || ""} onChange={e => updateField("name", e.target.value)} />
@@ -5308,7 +5308,7 @@ function App() {
             }).catch(() => alert("Sunucuya bağlanılamadı!"));
           }}>Tüm API Kaynaklarını Kaydet</button>
 
-          <div style={{ background: "#f4f2ed", border: "1px solid #cdc8be", borderRadius: 10, padding: 20, marginTop: 20 }}>
+          <div style={{ background: "#ebe8e2", border: "1px solid #c0bab0", borderRadius: 10, padding: 20, marginTop: 20 }}>
             <h3 style={{ color: "#16181d", fontSize: 16, margin: "0 0 16px 0" }}>API Haritası — Kim Neyi Kullanıyor?</h3>
             <p style={{ color: "#4b5260", fontSize: 12, marginBottom: 16 }}>Uygulamanın her özelliği hangi API kaynağını kullandığını gösterir</p>
             {[
@@ -5320,11 +5320,11 @@ function App() {
               { feature: "🔮 Otomatik Tamamlama", source: config?.autocompleteSource === "bazocam" ? "Bazocam API" : "Google Suggest", detail: config?.autocompleteSource === "bazocam" ? "ototamamlamaapi.php" : "suggestqueries.google.com", fallback: "—", where: config?.autocompleteSource === "bazocam" ? "Backend" : "Cihaz (direkt)" },
               { feature: "🏆 Top 50", source: "YouTube Data API v3", detail: "mostPopular chart", fallback: "Piped API", where: "Backend" },
             ].map((api, i) => (
-              <div key={i} style={{ background: "#eeebe5", borderRadius: 8, padding: "12px 14px", marginBottom: 8 }}>
+              <div key={i} style={{ background: "#e4e1da", borderRadius: 8, padding: "12px 14px", marginBottom: 8 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "6px 12px" }}>
                   <span style={{ color: "#16181d", fontSize: 13, fontWeight: 600, minWidth: 160 }}>{api.feature}</span>
                   <span style={{ color: "#0d6b4d", fontSize: 12, fontWeight: 600 }}>{api.source}</span>
-                  <span style={{ color: "#5f6672", fontSize: 11, fontFamily: "monospace" }}>{api.detail}</span>
+                  <span style={{ color: "#565c68", fontSize: 11, fontFamily: "monospace" }}>{api.detail}</span>
                   <span style={{ color: "#8a5a00", fontSize: 11 }}>Yedek: {api.fallback}</span>
                   <span style={{ backgroundColor: api.where === "Cihaz (direkt)" ? "#7c3aed20" : "#0ea5e920", color: api.where === "Cihaz (direkt)" ? "#2a39b8" : "#0b6aa2", padding: "2px 8px", borderRadius: 4, fontSize: 10, fontWeight: 600 }}>{api.where}</span>
                 </div>
@@ -5333,7 +5333,7 @@ function App() {
           </div>
 
           {/* Autocomplete Kaynak Seçimi */}
-          <div style={{ background: "#f4f2ed", border: "1px solid #cdc8be", borderRadius: 10, padding: 20, marginTop: 20 }}>
+          <div style={{ background: "#ebe8e2", border: "1px solid #c0bab0", borderRadius: 10, padding: 20, marginTop: 20 }}>
             <h3 style={{ color: "#16181d", fontSize: 16, margin: "0 0 12px 0" }}>Otomatik Tamamlama Kaynağı</h3>
             <p style={{ color: "#4b5260", fontSize: 12, marginBottom: 16 }}>Arama yazarken önerilerin nereden geleceğini seçin</p>
             <div style={{ display: "flex", gap: 12 }}>
@@ -5343,8 +5343,8 @@ function App() {
               ].map(opt => (
                 <div key={opt.value} onClick={() => setConfig({ ...config, autocompleteSource: opt.value })}
                   style={{
-                    flex: 1, background: config?.autocompleteSource === opt.value ? "#065f4630" : "#eeebe5",
-                    border: `2px solid ${config?.autocompleteSource === opt.value ? "#12805c" : "#cdc8be"}`,
+                    flex: 1, background: config?.autocompleteSource === opt.value ? "#065f4630" : "#e4e1da",
+                    border: `2px solid ${config?.autocompleteSource === opt.value ? "#12805c" : "#c0bab0"}`,
                     borderRadius: 10, padding: 16, cursor: "pointer", transition: "all 0.2s"
                   }}>
                   <div style={{ fontSize: 24, marginBottom: 8 }}>{opt.icon}</div>
@@ -5365,7 +5365,7 @@ function App() {
           </div>
 
           {/* Eski endpoint listesi */}
-          <div style={{ background: "#f4f2ed", border: "1px solid #cdc8be", borderRadius: 10, padding: 20, marginTop: 20 }}>
+          <div style={{ background: "#ebe8e2", border: "1px solid #c0bab0", borderRadius: 10, padding: 20, marginTop: 20 }}>
             <h3 style={{ color: "#16181d", fontSize: 16, margin: "0 0 12px 0" }}>Bazocam API Endpoint'leri</h3>
             <p style={{ color: "#4b5260", fontSize: 12, marginBottom: 12 }}>Patronun sunucusundaki kullanılabilir endpoint'ler</p>
             {[
@@ -5374,11 +5374,11 @@ function App() {
               { label: "🔍 Arama", method: "GET", path: `/searchapi.php?search=SORGU&key=API_KEY` },
               { label: "🔮 Otomatik Tamamlama", method: "GET", path: `/ototamamlamaapi.php?search=SORGU&key=API_KEY` },
             ].map((ep, i) => (
-              <div key={i} style={{ background: "#eeebe5", borderRadius: 8, padding: "10px 14px", marginBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div key={i} style={{ background: "#e4e1da", borderRadius: 8, padding: "10px 14px", marginBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div>
                   <span style={{ color: "#16181d", fontSize: 13 }}>{ep.label}</span>
                   <span style={{ backgroundColor: "#065f4620", color: "#0d6b4d", padding: "2px 8px", borderRadius: 4, fontSize: 11, marginLeft: 8 }}>{ep.method}</span>
-                  <div style={{ color: "#5f6672", fontSize: 11, marginTop: 4, fontFamily: "monospace" }}>{ep.path}</div>
+                  <div style={{ color: "#565c68", fontSize: 11, marginTop: 4, fontFamily: "monospace" }}>{ep.path}</div>
                 </div>
               </div>
             ))}
@@ -5438,30 +5438,30 @@ function App() {
           </div>
 
           {/* API Key & Quota */}
-          <div style={{ background: "#f4f2ed", border: "1px solid #cdc8be", borderRadius: 10, padding: 20, marginBottom: 20 }}>
+          <div style={{ background: "#ebe8e2", border: "1px solid #c0bab0", borderRadius: 10, padding: 20, marginBottom: 20 }}>
             <h3 style={{ color: "#16181d", fontSize: 16, margin: "0 0 16px 0" }}>YouTube API</h3>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-              <div style={{ background: "#eeebe5", borderRadius: 8, padding: 14 }}>
-                <div style={{ color: "#5f6672", fontSize: 11, marginBottom: 4 }}>API Key</div>
+              <div style={{ background: "#e4e1da", borderRadius: 8, padding: 14 }}>
+                <div style={{ color: "#565c68", fontSize: 11, marginBottom: 4 }}>API Key</div>
                 <div style={{ color: "#16181d", fontSize: 14, fontFamily: "monospace" }}>{youtubeData?.youtubeApiKey || "—"}</div>
               </div>
-              <div style={{ background: "#eeebe5", borderRadius: 8, padding: 14 }}>
-                <div style={{ color: "#5f6672", fontSize: 11, marginBottom: 4 }}>API Çağrısı (restart'tan beri)</div>
+              <div style={{ background: "#e4e1da", borderRadius: 8, padding: 14 }}>
+                <div style={{ color: "#565c68", fontSize: 11, marginBottom: 4 }}>API Çağrısı (restart'tan beri)</div>
                 <div style={{ color: "#16181d", fontSize: 14 }}>{youtubeData?.apiCallCount || 0}</div>
               </div>
-              <div style={{ background: "#eeebe5", borderRadius: 8, padding: 14 }}>
-                <div style={{ color: "#5f6672", fontSize: 11, marginBottom: 4 }}>Quota Aşım Sayısı</div>
+              <div style={{ background: "#e4e1da", borderRadius: 8, padding: 14 }}>
+                <div style={{ color: "#565c68", fontSize: 11, marginBottom: 4 }}>Quota Aşım Sayısı</div>
                 <div style={{ color: youtubeData?.quotaExceeded > 0 ? "#b42318" : "#0d6b4d", fontSize: 14 }}>{youtubeData?.quotaExceeded || 0}</div>
               </div>
-              <div style={{ background: "#eeebe5", borderRadius: 8, padding: 14 }}>
-                <div style={{ color: "#5f6672", fontSize: 11, marginBottom: 4 }}>Cache Süresi</div>
+              <div style={{ background: "#e4e1da", borderRadius: 8, padding: 14 }}>
+                <div style={{ color: "#565c68", fontSize: 11, marginBottom: 4 }}>Cache Süresi</div>
                 <div style={{ color: "#16181d", fontSize: 14 }}>{youtubeData?.cacheDurationMin || 60} dk</div>
               </div>
             </div>
           </div>
 
           {/* Warmup Ayarları */}
-          <div style={{ background: "#f4f2ed", border: "1px solid #cdc8be", borderRadius: 10, padding: 20, marginBottom: 20 }}>
+          <div style={{ background: "#ebe8e2", border: "1px solid #c0bab0", borderRadius: 10, padding: 20, marginBottom: 20 }}>
             <h3 style={{ color: "#16181d", fontSize: 16, margin: "0 0 16px 0" }}>Warmup Ayarları</h3>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
               <span style={{ color: "#4b5260", fontSize: 13 }}>Güncelleme aralığı:</span>
@@ -5469,7 +5469,7 @@ function App() {
                 style={{ ...styles.input, width: 80, textAlign: "center" }}
                 defaultValue={youtubeData?.warmupIntervalMin || 50}
                 id="warmupInterval" />
-              <span style={{ color: "#5f6672", fontSize: 12 }}>dakika</span>
+              <span style={{ color: "#565c68", fontSize: 12 }}>dakika</span>
               <button style={{ ...styles.primaryBtn, fontSize: 12, padding: "6px 14px" }} onClick={() => {
                 const val = parseInt(document.getElementById("warmupInterval").value);
                 if (val < 10 || val > 1440) return alert("10-1440 dakika arası olmalı");
@@ -5494,11 +5494,11 @@ function App() {
           </div>
 
           {/* Aktif Ülkeler */}
-          <div style={{ background: "#f4f2ed", border: "1px solid #cdc8be", borderRadius: 10, padding: 20 }}>
+          <div style={{ background: "#ebe8e2", border: "1px solid #c0bab0", borderRadius: 10, padding: 20 }}>
             <h3 style={{ color: "#0b6aa2", fontSize: 16, margin: "0 0 16px 0" }}>Aktif Ülkeler ({youtubeData?.activeRegions?.length || 0})</h3>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
               {(youtubeData?.activeRegions || []).map((r, i) => (
-                <div key={i} style={{ background: "#eeebe5", border: "1px solid #cdc8be", borderRadius: 8, padding: "8px 14px", display: "flex", alignItems: "center", gap: 8 }}>
+                <div key={i} style={{ background: "#e4e1da", border: "1px solid #c0bab0", borderRadius: 8, padding: "8px 14px", display: "flex", alignItems: "center", gap: 8 }}>
                   <span style={{ fontSize: 18 }}>{String.fromCodePoint(...r.region.split("").map(c => 127397 + c.charCodeAt(0)))}</span>
                   <span style={{ color: "#16181d", fontSize: 13, fontWeight: 500 }}>{r.region}</span>
                   <span style={{ color: r.cached ? "#0d6b4d" : "#b42318", fontSize: 11 }}>
@@ -5531,7 +5531,7 @@ function App() {
                 }).catch(() => alert("Hata!"));
               }}>Ülke Ekle</button>
             </div>
-            <p style={{ color: "#5f6672", fontSize: 11, marginTop: 12 }}>
+            <p style={{ color: "#565c68", fontSize: 11, marginTop: 12 }}>
               Kullanıcılar bir ülkeden istek attığında o ülke otomatik eklenir. Burada manuel ekleme/kaldırma yapabilirsin.
             </p>
           </div>
@@ -5546,52 +5546,52 @@ function App() {
 }
 
 const styles = {
-  container: { backgroundColor: "#eeebe5", minHeight: "100vh", color: "#16181d", fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif", padding: "40px 20px" },
+  container: { backgroundColor: "#e4e1da", minHeight: "100vh", color: "#16181d", fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif", padding: "40px 20px" },
   content: { maxWidth: 1000, margin: "0 auto", display: "flex", flexDirection: "column", gap: 30 },
-  card: { backgroundColor: "#f4f2ed", padding: "20px 22px", borderRadius: 14, border: "1px solid #d9d5cc" },
+  card: { backgroundColor: "#ebe8e2", padding: "20px 22px", borderRadius: 14, border: "1px solid #cdc8be" },
   title: { margin: "0 0 18px 0", fontSize: 16, fontWeight: "600", letterSpacing: -0.2, color: "#16181d" },
   headerRow: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 },
   inputGroup: { display: "flex", gap: 15, alignItems: "center", flexWrap: "wrap", marginBottom: 25 },
   labelCheckbox: { fontSize: 14, color: "#16181d", display: "flex", alignItems: "center", gap: 10, cursor: "pointer" },
   label: { fontSize: 12, color: "#4b5260", display: "block", marginBottom: 6, fontWeight: "600" },
-  input: { backgroundColor: "#f8f7f3", border: "1px solid #cdc8be", color: "#16181d", padding: "10px 12px", borderRadius: 10, outline: "none", fontSize: 14 },
-  inputDisabled: { backgroundColor: "#f4f2ed", border: "1px solid #d9d5cc", color: "#5f6672", padding: "12px 14px", borderRadius: 10, width: "100%", fontSize: 14, boxSizing: "border-box" },
-  select: { backgroundColor: "#f8f7f3", border: "1px solid #cdc8be", color: "#16181d", padding: "10px 12px", borderRadius: 10, outline: "none", fontSize: 14, cursor: "pointer" },
-  selectDark: { backgroundColor: "#f8f7f3", border: "1px solid #cdc8be", color: "#16181d", padding: "10px 12px", borderRadius: 10, outline: "none", width: "100%", fontSize: 14, cursor: "pointer", boxSizing: "border-box" },
+  input: { backgroundColor: "#f1efea", border: "1px solid #c0bab0", color: "#16181d", padding: "10px 12px", borderRadius: 10, outline: "none", fontSize: 14 },
+  inputDisabled: { backgroundColor: "#ebe8e2", border: "1px solid #cdc8be", color: "#565c68", padding: "12px 14px", borderRadius: 10, width: "100%", fontSize: 14, boxSizing: "border-box" },
+  select: { backgroundColor: "#f1efea", border: "1px solid #c0bab0", color: "#16181d", padding: "10px 12px", borderRadius: 10, outline: "none", fontSize: 14, cursor: "pointer" },
+  selectDark: { backgroundColor: "#f1efea", border: "1px solid #c0bab0", color: "#16181d", padding: "10px 12px", borderRadius: 10, outline: "none", width: "100%", fontSize: 14, cursor: "pointer", boxSizing: "border-box" },
   primaryBtn: { backgroundColor: "#16181d", color: "#fff", border: "none", padding: "10px 16px", borderRadius: 10, cursor: "pointer", transition: "all 0.2s", fontSize: 13.5, fontWeight: "600" },
   textBtn: { backgroundColor: "transparent", color: "#b42318", border: "none", cursor: "pointer", fontWeight: "500" },
   list: { display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 },
-  listItem: { display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "#f4f2ed", border: "1px solid #d9d5cc", padding: "10px 14px", borderRadius: 10, fontSize: 14 },
+  listItem: { display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "#ebe8e2", border: "1px solid #cdc8be", padding: "10px 14px", borderRadius: 10, fontSize: 14 },
   
   table: { width: "100%", borderCollapse: "collapse", fontSize: 14 },
-  th: { textAlign: "left", padding: "10px 14px", color: "#5f6672", fontWeight: "600", fontSize: 12, background: "#f4f2ed", borderBottom: "1px solid #d9d5cc" },
-  thRight: { textAlign: "right", padding: "10px 14px", color: "#5f6672", fontWeight: "600", fontSize: 12, background: "#f4f2ed", borderBottom: "1px solid #d9d5cc" },
-  tr: { borderBottom: "1px solid #e3e0d9", transition: "background 0.2s" },
+  th: { textAlign: "left", padding: "10px 14px", color: "#565c68", fontWeight: "600", fontSize: 12, background: "#ebe8e2", borderBottom: "1px solid #cdc8be" },
+  thRight: { textAlign: "right", padding: "10px 14px", color: "#565c68", fontWeight: "600", fontSize: 12, background: "#ebe8e2", borderBottom: "1px solid #cdc8be" },
+  tr: { borderBottom: "1px solid #d8d4cc", transition: "background 0.2s" },
   td: { padding: "12px 14px", verticalAlign: "top" },
   tdRight: { padding: "12px 14px", textAlign: "right", verticalAlign: "top" },
   actionBtn: { background: "none", border: "none", color: "#2a39b8", cursor: "pointer", fontSize: 13, fontWeight: "600", padding: 0 },
   
   chipContainer: { display: "flex", flexWrap: "wrap", gap: 10 },
-  chip: { backgroundColor: "#f4f2ed", padding: "4px 10px", borderRadius: 8, fontSize: 12.5, color: "#16181d", border: "1px solid #d9d5cc" },
+  chip: { backgroundColor: "#ebe8e2", padding: "4px 10px", borderRadius: 8, fontSize: 12.5, color: "#16181d", border: "1px solid #cdc8be" },
   
   modalOverlay: { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.65)", backdropFilter: "blur(4px)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1000 },
-  modal: { backgroundColor: "#f4f2ed", width: "100%", maxWidth: 650, borderRadius: 16, border: "1px solid #d9d5cc", boxShadow: "0 25px 60px rgba(22,24,29,0.12)" },
-  modalHeader: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 24px", borderBottom: "1px solid #d9d5cc" },
+  modal: { backgroundColor: "#ebe8e2", width: "100%", maxWidth: 650, borderRadius: 16, border: "1px solid #cdc8be", boxShadow: "0 25px 60px rgba(22,24,29,0.12)" },
+  modalHeader: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 24px", borderBottom: "1px solid #cdc8be" },
   modalTitle: { margin: 0, fontSize: 16, color: "#16181d", fontWeight: "600" },
-  cancelBtn: { backgroundColor: "transparent", color: "#16181d", border: "1px solid #d9d5cc", padding: "10px 16px", borderRadius: 10, cursor: "pointer", marginRight: 10, fontSize: 13.5, fontWeight: "600" },
+  cancelBtn: { backgroundColor: "transparent", color: "#16181d", border: "1px solid #cdc8be", padding: "10px 16px", borderRadius: 10, cursor: "pointer", marginRight: 10, fontSize: 13.5, fontWeight: "600" },
   saveBtn: { backgroundColor: "#16181d", color: "#fff", border: "none", padding: "10px 16px", borderRadius: 10, cursor: "pointer", fontSize: 13.5, fontWeight: "600" },
   modalBody: { padding: "22px 24px" },
   formGroup: { marginBottom: 25 },
   
-  chipsInputBox: { backgroundColor: "#f8f7f3", border: "1px solid #cdc8be", borderRadius: 10, padding: "12px", display: "flex", flexWrap: "wrap", gap: 8, minHeight: 110 },
-  chipEditable: { backgroundColor: "#e8e5de", padding: "5px 10px", borderRadius: 8, fontSize: 12.5, display: "flex", alignItems: "center", gap: 8, color: "#16181d" },
+  chipsInputBox: { backgroundColor: "#f1efea", border: "1px solid #c0bab0", borderRadius: 10, padding: "12px", display: "flex", flexWrap: "wrap", gap: 8, minHeight: 110 },
+  chipEditable: { backgroundColor: "#dedad2", padding: "5px 10px", borderRadius: 8, fontSize: 12.5, display: "flex", alignItems: "center", gap: 8, color: "#16181d" },
   chipClose: { cursor: "pointer", color: "#4b5260", fontSize: 14 },
   chipInput: { background: "transparent", border: "none", color: "#16181d", outline: "none", flex: 1, minWidth: 200, fontSize: 14 },
   
-  filterBox: { backgroundColor: "#f4f2ed", border: "1px solid #d9d5cc", borderRadius: 12, padding: "18px" },
-  multiSelectHeader: { backgroundColor: "#f8f7f3", border: "1px solid #cdc8be", color: "#16181d", padding: "10px 12px", borderRadius: 10, cursor: "pointer", fontSize: 14, userSelect: "none" },
-  multiSelectList: { position: "absolute", top: "100%", left: 0, right: 0, backgroundColor: "#f4f2ed", border: "1px solid #d9d5cc", borderRadius: 10, maxHeight: 250, overflowY: "auto", zIndex: 10, marginTop: 4 },
-  multiSelectItem: { display: "flex", alignItems: "center", padding: "9px 12px", cursor: "pointer", borderBottom: "1px solid #e3e0d9", fontSize: 14, color: "#16181d" }
+  filterBox: { backgroundColor: "#ebe8e2", border: "1px solid #cdc8be", borderRadius: 12, padding: "18px" },
+  multiSelectHeader: { backgroundColor: "#f1efea", border: "1px solid #c0bab0", color: "#16181d", padding: "10px 12px", borderRadius: 10, cursor: "pointer", fontSize: 14, userSelect: "none" },
+  multiSelectList: { position: "absolute", top: "100%", left: 0, right: 0, backgroundColor: "#ebe8e2", border: "1px solid #cdc8be", borderRadius: 10, maxHeight: 250, overflowY: "auto", zIndex: 10, marginTop: 4 },
+  multiSelectItem: { display: "flex", alignItems: "center", padding: "9px 12px", cursor: "pointer", borderBottom: "1px solid #d8d4cc", fontSize: 14, color: "#16181d" }
 };
 
 export default App;
