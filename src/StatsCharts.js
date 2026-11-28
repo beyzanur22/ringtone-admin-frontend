@@ -550,7 +550,7 @@ export const STATS_CSS = `
   .lb-legend { display: flex; gap: 16px; margin-top: 10px; font-size: 12.5px; color: #4b5260; }
   .lb-legend span { display: inline-flex; align-items: center; gap: 6px; }
   .lb-legend i { width: 10px; height: 10px; border-radius: 3px; }
-  @media (max-width: 560px) { .lb-v { font-size: 8px !important; letter-spacing: -0.3px; } .lb-plot, .lb-x { gap: 2px !important; } .lb-x small { font-size: 9.5px; } }
+  @media (max-width: 560px) { .lb-v { font-size: 8px !important; letter-spacing: -0.3px; } .lb-plot, .lb-x { gap: 2px !important; } .lb-x small { font-size: 9.5px; white-space: normal; line-height: 1.2; overflow: hidden; } }
 `;
 
 /* Bölüm başına grafik bloğu: aralık seçici + türüne göre grafikler
