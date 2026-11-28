@@ -15,12 +15,12 @@ const COLORS = ["#2a39b8", "#0b6aa2", "#0d6b4d", "#8a5a00", "#be185d", "#0f766e"
 const MODE_SERIES = [
   { key: "r", name: "Zil sesi", color: "#0b6aa2" },
   { key: "y", name: "Müzik", color: "#0d6b4d" },
-  { key: "u", name: "Bilinmiyor", color: "#5f6672" },
+  { key: "u", name: "Bilinmiyor", color: "#565c68" },
 ];
 const EXTRACTOR_SERIES = [
   { key: "n", name: "NewPipe (Android 13+)", color: "#0b6aa2" },
   { key: "b", name: "Backend (Android 12-)", color: "#8a5a00" },
-  { key: "xu", name: "Bilinmiyor", color: "#5f6672" },
+  { key: "xu", name: "Bilinmiyor", color: "#565c68" },
 ];
 const OTHER = "Diğer";
 
@@ -148,12 +148,12 @@ export function VisitorCountryChart({ data, error, height = 320 }) {
       right={data ? <div className="st-total"><b>{num(data.total)}</b><small>{rangeLabel.toLocaleLowerCase("tr")} farklı kişi</small></div> : null}>
       {!data || !data.points.some(p => p.total > 0) ? <Empty loading={!data && !error} error={error} /> : (
         <LineChart height={height} data={rows} theme="dark" margin={{ top: 10, right: 16, left: 0, bottom: 0 }}>
-          <CartesianGrid stroke="#e3e0d9" vertical={false} />
+          <CartesianGrid stroke="#d8d4cc" vertical={false} />
           <XAxis dataKey="label" {...axisProps} minTickGap={12} />
           <YAxis {...axisProps} allowDecimals={false} width={58} tickFormatter={v => num(v)} />
           <Tooltip content={<Tip />} cursor={{ stroke: "#c9c5bc" }} />
           {series.map((cc, i) => {
-            const col = cc === OTHER ? "#5f6672" : COLORS[i % COLORS.length];
+            const col = cc === OTHER ? "#565c68" : COLORS[i % COLORS.length];
             return (
               <Line key={cc} type="monotone" dataKey={cc} name={cc === OTHER ? "Diğer ülkeler" : `${flag(cc)} ${countryName(cc)}`}
                 stroke={col} strokeWidth={2} strokeDasharray={cc === OTHER ? "5 4" : undefined}
@@ -224,7 +224,7 @@ function makeTooltip(unit, maxOf, titleOf) {
   };
 }
 
-const axisProps = { tick: { fill: "#5f6672", fontSize: 11 }, stroke: "#d9d5cc" };
+const axisProps = { tick: { fill: "#565c68", fontSize: 11 }, stroke: "#cdc8be" };
 
 function ChartFrame({ title, sub, right, children }) {
   return (
@@ -262,7 +262,7 @@ export function ModeChart({ data, range, title = "Aktif kullanıcılar", sub, he
     <ChartFrame title={title} sub={sub}>
       {!data || !filled.length ? <Empty loading={!data} /> : (
         <AreaChart height={height} data={rows} theme="dark" margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
-          <CartesianGrid stroke="#e3e0d9" vertical={false} />
+          <CartesianGrid stroke="#d8d4cc" vertical={false} />
           <XAxis dataKey="label" {...axisProps} minTickGap={18} />
           <YAxis {...axisProps} allowDecimals={false} width={40} />
           <Tooltip content={makeTooltip(data.unit, maxOf)} cursor={{ stroke: "#c9c5bc" }} />
@@ -301,15 +301,15 @@ export function CountryTrendChart({ data, range, height = 260 }) {
     <ChartFrame title="Ülkelere göre zaman içinde" sub="Renkli 6 ülke grafikte ayrı çizilir; gri olanlar 'Diğer ülkeler'de toplanır">
       {!data || !hasData(data.points) ? <Empty loading={!data} /> : (
         <AreaChart height={height} data={rows} theme="dark" margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
-          <CartesianGrid stroke="#e3e0d9" vertical={false} />
+          <CartesianGrid stroke="#d8d4cc" vertical={false} />
           <XAxis dataKey="label" {...axisProps} minTickGap={18} />
           <YAxis {...axisProps} allowDecimals={false} width={40} />
           <Tooltip content={makeTooltip(data.unit, maxOf)} cursor={{ stroke: "#c9c5bc" }} />
           {series.map((cc, i) => (
             <Area key={cc} type="monotone" dataKey={cc} stackId="c"
               name={cc === OTHER ? "Diğer ülkeler" : `${flag(cc)} ${countryName(cc)}`}
-              stroke={cc === OTHER ? "#5f6672" : COLORS[i % COLORS.length]}
-              fill={cc === OTHER ? "#5f6672" : COLORS[i % COLORS.length]}
+              stroke={cc === OTHER ? "#565c68" : COLORS[i % COLORS.length]}
+              fill={cc === OTHER ? "#565c68" : COLORS[i % COLORS.length]}
               fillOpacity={0.2} strokeWidth={2} isAnimationActive={false} />
           ))}
         </AreaChart>
@@ -347,7 +347,7 @@ export function CountryBarChart({ data, range }) {
           margin={{ top: 0, right: 30, left: 0, bottom: 0 }} barCategoryGap={5}>
           <XAxis type="number" hide allowDecimals={false} />
           <YAxis type="category" dataKey="name" tick={{ fill: "#4b5260", fontSize: 11 }} axisLine={false} tickLine={false} width={112} interval={0} />
-          <Tooltip cursor={{ fill: "#5f6672" }}
+          <Tooltip cursor={{ fill: "#565c68" }}
             content={({ active, payload }) => active && payload && payload.length ? (
               <div className="st-tip"><div className="st-tip-h">{payload[0].payload.name}</div>
                 <div className="st-tip-r"><span>Aktif cihaz</span><b>{num(payload[0].value)}</b></div></div>) : null} />
@@ -382,7 +382,7 @@ export function AppTrendChart({ data, range, metric: metricProp, height = 280 })
       return row;
     });
     const series = top.map((a, i) => ({ key: a.id, name: a.name, color: COLORS[i % COLORS.length] }));
-    if (rest.length) series.push({ key: OTHER, name: `${OTHER} (${rest.length})`, color: "#5f6672" });
+    if (rest.length) series.push({ key: OTHER, name: `${OTHER} (${rest.length})`, color: "#565c68" });
     return { rows, series };
   }, [data, range, metric]);
   const maxOf = (row, key) => row._p && row._p[key];
@@ -393,7 +393,7 @@ export function AppTrendChart({ data, range, metric: metricProp, height = 280 })
       ))}</div>}>
       {!series.length ? <Empty loading={!data} /> : (
         <LineChart height={height} data={rows} theme="dark" margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
-          <CartesianGrid stroke="#e3e0d9" vertical={false} />
+          <CartesianGrid stroke="#d8d4cc" vertical={false} />
           <XAxis dataKey="label" {...axisProps} minTickGap={18} />
           <YAxis {...axisProps} allowDecimals={false} width={40} />
           <Tooltip content={makeTooltip(data.unit, maxOf)} cursor={{ stroke: "#c9c5bc" }} />
@@ -430,7 +430,7 @@ export function AppCompareBar({ data, range, onPickApp }) {
           margin={{ top: 4, right: 24, left: 8, bottom: 0 }}>
           <XAxis type="number" {...axisProps} allowDecimals={false} />
           <YAxis type="category" dataKey="name" {...axisProps} width={150} />
-          <Tooltip content={makeTooltip("minute", null, row => row.name)} cursor={{ fill: "#5f6672" }} />
+          <Tooltip content={makeTooltip("minute", null, row => row.name)} cursor={{ fill: "#565c68" }} />
           <Legend wrapperStyle={{ fontSize: 12, color: "#4b5260" }} />
           {MODE_SERIES.map((s, i) => (
             <Bar key={s.key} dataKey={s.name} name={s.name} stackId="a" fill={s.color} isAnimationActive={false}
@@ -470,8 +470,8 @@ export function StatTiles({ data }) {
 export const STATS_CSS = `
   .st-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
   .st-head h3 { margin: 0; font-size: 15px; color: #16181d; }
-  .st-head p { margin: 2px 0 0; font-size: 12px; color: #5f6672; }
-  .st-range, .st-seg { display: inline-flex; max-width: 100%; overflow-x: auto; scrollbar-width: none; padding: 3px; gap: 2px; border-radius: 10px; background: #eeebe5; border: 1px solid #d9d5cc; }
+  .st-head p { margin: 2px 0 0; font-size: 12px; color: #565c68; }
+  .st-range, .st-seg { display: inline-flex; max-width: 100%; overflow-x: auto; scrollbar-width: none; padding: 3px; gap: 2px; border-radius: 10px; background: #e4e1da; border: 1px solid #cdc8be; }
   .st-range button, .st-seg button { border: 0; background: none; color: #4b5260; font: inherit; font-size: 12.5px; font-weight: 600; padding: 6px 11px; border-radius: 7px; cursor: pointer; white-space: nowrap; }
   .st-seg button { font-size: 11.5px; padding: 4px 9px; }
   .st-range button:hover, .st-seg button:hover { color: #16181d; }
@@ -480,73 +480,73 @@ export const STATS_CSS = `
   .st-grid.two { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); }
   .st-grid.main-side { grid-template-columns: minmax(0, 3fr) minmax(210px, 1fr); align-items: start; }
   @media (max-width: 900px) { .st-grid.two, .st-grid.main-side { grid-template-columns: minmax(0, 1fr); } }
-  .st-card { background: #eeebe5; border: 1px solid #d9d5cc; border-radius: 14px; padding: 14px 14px 8px; min-width: 0; }
+  .st-card { background: #e4e1da; border: 1px solid #cdc8be; border-radius: 14px; padding: 14px 14px 8px; min-width: 0; }
   .st-card-h { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
   .st-card-h b { display: block; font-size: 13.5px; color: #16181d; }
-  .st-card-h small { display: block; font-size: 11.5px; color: #5f6672; margin-top: 2px; }
-  .st-empty { height: 180px; display: grid; place-items: center; color: #5f6672; font-size: 13px; text-align: center; padding: 0 20px; }
-  .st-tip { background: #f4f2ed; border: 1px solid #cdc8be; border-radius: 10px; padding: 10px 12px; box-shadow: 0 12px 30px rgba(22,24,29,0.113); min-width: 180px; font-size: 12.5px; color: #16181d; }
+  .st-card-h small { display: block; font-size: 11.5px; color: #565c68; margin-top: 2px; }
+  .st-empty { height: 180px; display: grid; place-items: center; color: #565c68; font-size: 13px; text-align: center; padding: 0 20px; }
+  .st-tip { background: #ebe8e2; border: 1px solid #c0bab0; border-radius: 10px; padding: 10px 12px; box-shadow: 0 12px 30px rgba(22,24,29,0.113); min-width: 180px; font-size: 12.5px; color: #16181d; }
   .st-tip-h { font-weight: 700; margin-bottom: 7px; color: #16181d; }
   .st-tip-r { display: flex; align-items: center; gap: 8px; padding: 2px 0; }
   .st-tip-r i { width: 9px; height: 9px; border-radius: 3px; flex-shrink: 0; }
   .st-tip-r span { flex: 1; color: #4b5260; }
   .st-tip-r b { font-variant-numeric: tabular-nums; }
-  .st-tip-r small { color: #5f6672; font-size: 11px; margin-left: 4px; }
-  .st-dots { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; padding: 12px 4px 6px; margin-top: 6px; border-top: 1px solid #d9d5cc; }
-  .st-dots small { width: 100%; font-size: 11px; font-weight: 600; color: #5f6672; letter-spacing: .3px; margin-bottom: 2px; }
+  .st-tip-r small { color: #565c68; font-size: 11px; margin-left: 4px; }
+  .st-dots { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; padding: 12px 4px 6px; margin-top: 6px; border-top: 1px solid #cdc8be; }
+  .st-dots small { width: 100%; font-size: 11px; font-weight: 600; color: #565c68; letter-spacing: .3px; margin-bottom: 2px; }
   .st-dot { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: #2b2f37; white-space: nowrap; }
   .st-dot i { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
   .st-dot b { color: #16181d; font-weight: 650; font-variant-numeric: tabular-nums; }
-  .st-dot.more { color: #5f6672; }
+  .st-dot.more { color: #565c68; }
   .st-head-r { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
   .st-total { text-align: right; }
   .st-total b { display: block; font-size: 22px; font-weight: 750; color: #16181d; font-variant-numeric: tabular-nums; line-height: 1.1; }
-  .st-total small { font-size: 11px; color: #5f6672; }
+  .st-total small { font-size: 11px; color: #565c68; }
   .st-tip-big b { font-size: 15px; }
   .st-tip-sub { display: flex; flex-wrap: wrap; gap: 3px 10px; padding: 3px 0 6px 17px; font-size: 11.5px; color: #4b5260; max-width: 300px; }
   .st-tip-sub b { color: #16181d; font-weight: 600; }
-  .st-tip-t { border-top: 1px solid #d9d5cc; margin-top: 5px; padding-top: 6px; }
-  .st-tip-n { color: #5f6672; font-size: 10.5px; margin-top: 6px; }
+  .st-tip-t { border-top: 1px solid #cdc8be; margin-top: 5px; padding-top: 6px; }
+  .st-tip-n { color: #565c68; font-size: 10.5px; margin-top: 6px; }
   .st-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 14px; }
-  .st-tile { background: #eeebe5; border: 1px solid #d9d5cc; border-radius: 12px; padding: 12px 14px; }
-  .st-tile small { display: block; font-size: 11px; color: #5f6672; text-transform: uppercase; letter-spacing: .5px; }
+  .st-tile { background: #e4e1da; border: 1px solid #cdc8be; border-radius: 12px; padding: 12px 14px; }
+  .st-tile small { display: block; font-size: 11px; color: #565c68; text-transform: uppercase; letter-spacing: .5px; }
   .st-tile b { display: block; font-size: 24px; margin-top: 4px; font-variant-numeric: tabular-nums; }
   .st-cl { display: flex; flex-direction: column; gap: 2px; padding-bottom: 6px; }
   .st-cl-r { display: grid; grid-template-columns: 26px minmax(120px, 1.2fr) minmax(60px, 2fr) 60px 42px; align-items: center; gap: 10px; padding: 6px 4px; border-radius: 8px; font-size: 13px; }
   .st-cl-r:hover { background: rgba(22,24,29,0.03); }
-  .st-cl-n { color: #5f6672; font-size: 11.5px; text-align: right; font-variant-numeric: tabular-nums; }
+  .st-cl-n { color: #565c68; font-size: 11.5px; text-align: right; font-variant-numeric: tabular-nums; }
   .st-cl-c { color: #16181d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .st-cl-bar { height: 6px; background: rgba(22,24,29,0.042); border-radius: 3px; overflow: hidden; }
   .st-cl-bar i { display: block; height: 100%; background: #3c4fe0; border-radius: 3px; }
   .st-cl-r b { color: #16181d; text-align: right; font-variant-numeric: tabular-nums; }
-  .st-cl-r small { color: #5f6672; font-size: 11px; text-align: right; }
+  .st-cl-r small { color: #565c68; font-size: 11px; text-align: right; }
   .st-vb { display: flex; gap: 4px; align-items: flex-end; height: 120px; padding: 4px 2px 0; }
   .st-vb-c { flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; }
   .st-vb-c span { font-size: 10.5px; font-weight: 700; color: #16181d; margin-bottom: 3px; }
   .st-vb-c i { display: block; width: 100%; background: #3c4fe0; border-radius: 4px 4px 0 0; }
   .st-vb-c:last-child i { background: #16181d; }
   .st-vb-l { height: auto; padding: 6px 2px 8px; }
-  .st-vb-l small { flex: 1; min-width: 0; text-align: center; font-size: 10px; color: #5f6672; white-space: nowrap; overflow: visible; }
-  .st-cl-more { margin-top: 6px; padding: 8px; border: 0; border-radius: 8px; background: #f4f2ed; color: #2b2f37; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
+  .st-vb-l small { flex: 1; min-width: 0; text-align: center; font-size: 10px; color: #565c68; white-space: nowrap; overflow: visible; }
+  .st-cl-more { margin-top: 6px; padding: 8px; border: 0; border-radius: 8px; background: #ebe8e2; color: #2b2f37; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
   .recharts-legend-item-text { color: #4b5260 !important; }
   @media (max-width: 560px) { .st-range button { padding: 6px 8px; font-size: 12px; } .st-tile b { font-size: 20px; } }
-  .st-range, .st-seg { gap: 2px; padding: 3px; background: #e3e0d9; border: 1px solid #d6d2c8; border-radius: 11px; box-shadow: inset 0 1px 2px rgba(22,24,29,0.05); }
+  .st-range, .st-seg { gap: 2px; padding: 3px; background: #d8d4cc; border: 1px solid #cac5ba; border-radius: 11px; box-shadow: inset 0 1px 2px rgba(22,24,29,0.05); }
   .st-range button, .st-seg button { color: #4b5260; font-weight: 500; font-size: 12.5px; padding: 6px 12px; border-radius: 8px; transition: background .12s, color .12s; }
   .st-range button:hover, .st-seg button:hover { background: rgba(22,24,29,0.05); color: #16181d; }
-  .st-range button.on, .st-seg button.on { background: #f8f7f3; color: #16181d; font-weight: 600; box-shadow: 0 1px 2px rgba(22,24,29,0.12), 0 0 0 1px #cfcac0; }
-  .lb-card { background: #f4f2ed; border: 1px solid #d9d5cc; border-radius: 12px; padding: 18px 20px 14px; margin-bottom: 24px; min-width: 0; }
+  .st-range button.on, .st-seg button.on { background: #f1efea; color: #16181d; font-weight: 600; box-shadow: 0 1px 2px rgba(22,24,29,0.12), 0 0 0 1px #c3bdb2; }
+  .lb-card { background: #ebe8e2; border: 1px solid #cdc8be; border-radius: 12px; padding: 18px 20px 14px; margin-bottom: 24px; min-width: 0; }
   .lb-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
   .lb-head h3 { margin: 0; font-size: 15px; font-weight: 600; color: #16181d; }
-  .lb-head p { margin: 3px 0 0; font-size: 12.5px; color: #5f6672; }
+  .lb-head p { margin: 3px 0 0; font-size: 12.5px; color: #565c68; }
   .lb-ctrl { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-  .lb-plot { display: flex; align-items: flex-end; border-bottom: 1px solid #d9d5cc; }
+  .lb-plot { display: flex; align-items: flex-end; border-bottom: 1px solid #cdc8be; }
   .lb-c { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch; height: 100%; }
-  .lb-v { text-align: center; font-weight: 600; color: #5f6672; margin-bottom: 4px; white-space: nowrap; font-variant-numeric: tabular-nums; line-height: 1.2; }
+  .lb-v { text-align: center; font-weight: 600; color: #565c68; margin-bottom: 4px; white-space: nowrap; font-variant-numeric: tabular-nums; line-height: 1.2; }
   .lb-c.now .lb-v { color: #16181d; }
   .lb-stack { display: flex; flex-direction: column; gap: 1px; border-radius: 4px 4px 0 0; overflow: hidden; }
   .lb-stack i { display: block; min-height: 1px; }
   .lb-x { display: flex; padding-top: 7px; }
-  .lb-x small { flex: 1; min-width: 0; text-align: center; font-size: 11px; color: #5f6672; white-space: nowrap; overflow: visible; font-variant-numeric: tabular-nums; }
+  .lb-x small { flex: 1; min-width: 0; text-align: center; font-size: 11px; color: #565c68; white-space: nowrap; overflow: visible; font-variant-numeric: tabular-nums; }
   .lb-legend { display: flex; gap: 16px; margin-top: 10px; font-size: 12.5px; color: #4b5260; }
   .lb-legend span { display: inline-flex; align-items: center; gap: 6px; }
   .lb-legend i { width: 10px; height: 10px; border-radius: 3px; }
@@ -632,15 +632,15 @@ export function VisitorSummary({ apiUrl, appKey, scope, scopeLabel }) {
   const hint = (VISITOR_RANGES.find(r => r.key === range) || {}).hint;
   const tot = (st) => (st.data ? (st.data.total || 0).toLocaleString("tr-TR") : "—");
   const big = (key, label, st, sub) => (
-    <div key={key} onClick={() => setRange(key)} style={{ flex: "1 1 170px", padding: "18px 20px", borderRadius: 12, cursor: "pointer", backgroundColor: "#f4f2ed",
-      border: `1px solid ${range === key ? "#3c4fe0" : "#cdc8be"}` }}>
+    <div key={key} onClick={() => setRange(key)} style={{ flex: "1 1 170px", padding: "18px 20px", borderRadius: 12, cursor: "pointer", backgroundColor: "#ebe8e2",
+      border: `1px solid ${range === key ? "#3c4fe0" : "#c0bab0"}` }}>
       <div style={{ color: "#4b5260", fontSize: 13, fontWeight: 700 }}>{label}</div>
       <div style={{ color: "#16181d", fontSize: 36, fontWeight: 800, lineHeight: 1.1, marginTop: 6 }}>{tot(st)}</div>
-      <div style={{ color: "#5f6672", fontSize: 11, marginTop: 4 }}>{sub}</div>
+      <div style={{ color: "#565c68", fontSize: 11, marginTop: 4 }}>{sub}</div>
     </div>
   );
   return (
-    <div style={{ marginBottom: 28, paddingTop: 20, borderTop: "1px solid #d9d5cc" }}>
+    <div style={{ marginBottom: 28, paddingTop: 20, borderTop: "1px solid #cdc8be" }}>
       <div className="st-head">
         <div><h3>Ziyaretçi Özeti</h3><p>{scopeLabel} · {hint}</p></div>
         <div className="st-head-r"><RangePicker range={range} onChange={setRange} ranges={VISITOR_RANGES} /></div>
@@ -655,7 +655,7 @@ export function VisitorSummary({ apiUrl, appKey, scope, scopeLabel }) {
       {/* sütunlar */}
       {pts.length > 0 && (
         <>
-          <div style={{ display: "flex", gap: pts.length > 14 ? 3 : 8, alignItems: "flex-end", height: 120, padding: "12px 12px 0", background: "#eeebe5", border: "1px solid #d9d5cc", borderRadius: 10, marginBottom: 6 }}>
+          <div style={{ display: "flex", gap: pts.length > 14 ? 3 : 8, alignItems: "flex-end", height: 120, padding: "12px 12px 0", background: "#e4e1da", border: "1px solid #cdc8be", borderRadius: 10, marginBottom: 6 }}>
             {pts.map((p, i) => (
               <div key={p.ts} style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", height: "100%" }}>
                 {pts.length <= 31 && <span style={{ color: "#16181d", fontSize: pts.length > 14 ? 9 : 11, fontWeight: 700, marginBottom: 4 }}>{p.total}</span>}
@@ -675,14 +675,14 @@ export function VisitorSummary({ apiUrl, appKey, scope, scopeLabel }) {
 
       {/* ülke tablosu */}
       {rows.length === 0 ? (
-        <div style={{ padding: 20, textAlign: "center", color: "#4b5260", fontSize: 13, border: "1px dashed #cdc8be", borderRadius: 10 }}>
+        <div style={{ padding: 20, textAlign: "center", color: "#4b5260", fontSize: 13, border: "1px dashed #c0bab0", borderRadius: 10 }}>
           {!sel.data && !sel.error ? "Yükleniyor…" : sel.error ? `Yüklenemedi: ${sel.error}` : "Bu aralıkta veri yok."}
         </div>
       ) : (
-        <div style={{ border: "1px solid #d9d5cc", borderRadius: 10, overflow: "hidden" }}>
+        <div style={{ border: "1px solid #cdc8be", borderRadius: 10, overflow: "hidden" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
             <thead>
-              <tr style={{ background: "#f4f2ed", color: "#4b5260", textAlign: "left" }}>
+              <tr style={{ background: "#ebe8e2", color: "#4b5260", textAlign: "left" }}>
                 <th style={{ padding: "10px 14px", fontWeight: 700 }}>Ülke</th>
                 <th style={{ padding: "10px 14px", fontWeight: 700, textAlign: "right" }}>{colLabel}</th>
                 <th style={{ padding: "10px 14px", fontWeight: 700, width: "34%" }}>Pay</th>
@@ -692,10 +692,10 @@ export function VisitorSummary({ apiUrl, appKey, scope, scopeLabel }) {
               {shown.map(c => {
                 const share = total > 0 ? Math.round((c.value / total) * 100) : 0;
                 return (
-                  <tr key={c.country} style={{ borderTop: "1px solid #d9d5cc" }}>
+                  <tr key={c.country} style={{ borderTop: "1px solid #cdc8be" }}>
                     <td style={{ padding: "9px 14px", color: "#16181d", fontWeight: 600 }}>
                       {flag(c.country)} {countryName(c.country)}
-                      <span style={{ color: "#5f6672", fontFamily: "monospace", fontSize: 11, marginLeft: 6 }}>{c.country !== "XX" ? c.country : ""}</span>
+                      <span style={{ color: "#565c68", fontFamily: "monospace", fontSize: 11, marginLeft: 6 }}>{c.country !== "XX" ? c.country : ""}</span>
                     </td>
                     <td style={{ padding: "9px 14px", color: "#16181d", textAlign: "right", fontWeight: 700 }}>{num(c.value)}</td>
                     <td style={{ padding: "9px 14px" }}>
@@ -713,7 +713,7 @@ export function VisitorSummary({ apiUrl, appKey, scope, scopeLabel }) {
           </table>
           {rows.length > 15 && (
             <button onClick={() => setShowAll(v => !v)}
-              style={{ width: "100%", padding: 10, background: "#f4f2ed", border: "none", borderTop: "1px solid #d9d5cc", color: "#16181d", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
+              style={{ width: "100%", padding: 10, background: "#ebe8e2", border: "none", borderTop: "1px solid #cdc8be", color: "#16181d", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
               {showAll ? "Daha az göster" : `Tüm ülkeleri göster (${rows.length})`}
             </button>
           )}
@@ -785,7 +785,7 @@ function StatsBlock({ apiUrl, appKey, scope, scopeLabel, kind, onPickApp, allowB
 }
 
 /* ===== Açık tema: sütun üstü sayılı çubuk grafik ===== */
-export const BAR_COLORS = { music: "#3c4fe0", ring: "#b9c1f5", unknown: "#d6d3cc", single: "#3c4fe0", now: "#16181d" };
+export const BAR_COLORS = { music: "#3c4fe0", ring: "#b9c1f5", unknown: "#cbc7bf", single: "#3c4fe0", now: "#16181d" };
 const LIVE_RANGES = [
   { key: "live", label: "Anlık", hint: "Son 15 dakika, dakika dakika" },
   { key: "1h", label: "Saatlik", hint: "Son 1 saat, 5 dakikalık dilimler" },
