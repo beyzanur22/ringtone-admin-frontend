@@ -106,7 +106,7 @@ function CountryRulePicker({ rule, idx, configKey, config, setConfig }) {
       <select value={mode} onChange={e => {
         const newMode = e.target.value;
         updateRule({ countryMode: newMode, countries: newMode === "all" ? [] : (rule.countries || []) });
-      }} style={{ background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 12, width: "100%", marginBottom: 6 }}>
+      }} style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 12, width: "100%", marginBottom: 6 }}>
         <option value="all">Tüm ülkeler</option>
         <option value="include">Sadece seçtiğim ülkeler</option>
         <option value="exclude">Bu ülkeler HARİÇ</option>
@@ -114,13 +114,13 @@ function CountryRulePicker({ rule, idx, configKey, config, setConfig }) {
       {mode !== "all" && (
         <>
           <div onClick={() => setOpen(!open)}
-            style={{ background: "#faf9f7", color: mode === "exclude" ? "#b42318" : "#16181d", border: `1px solid ${mode === "exclude" ? "#d92d20" : "#e6e3dc"}`, borderRadius: 6, padding: "6px 10px", fontSize: 13, cursor: "pointer", minHeight: 30 }}>
+            style={{ background: "#eeebe5", color: mode === "exclude" ? "#b42318" : "#16181d", border: `1px solid ${mode === "exclude" ? "#d92d20" : "#d9d5cc"}`, borderRadius: 6, padding: "6px 10px", fontSize: 13, cursor: "pointer", minHeight: 30 }}>
             {modeLabel}
           </div>
           {open && (
-            <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "#faf9f7", border: "1px solid #dcd8cf", borderRadius: 6, maxHeight: 250, overflowY: "auto", zIndex: 999, padding: "4px 0" }}>
+            <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "#eeebe5", border: "1px solid #cdc8be", borderRadius: 6, maxHeight: 250, overflowY: "auto", zIndex: 999, padding: "4px 0" }}>
               <input type="text" placeholder="Ülke ara..." value={search} onChange={e => setSearch(e.target.value)}
-                style={{ width: "calc(100% - 16px)", margin: "4px 8px", background: "#ffffff", color: "#16181d", border: "1px solid #dcd8cf", borderRadius: 4, padding: "4px 8px", fontSize: 12 }} />
+                style={{ width: "calc(100% - 16px)", margin: "4px 8px", background: "#f4f2ed", color: "#16181d", border: "1px solid #cdc8be", borderRadius: 4, padding: "4px 8px", fontSize: 12 }} />
               {filtered.map(c => (
                 <label key={c.code} style={{ display: "flex", alignItems: "center", padding: "4px 10px", fontSize: 12, color: "#2b2f37", cursor: "pointer" }}>
                   <input type="checkbox" checked={(rule.countries || []).includes(c.code)}
@@ -172,7 +172,7 @@ function DaCountryPicker({ mode, countries, onChange, disabled }) {
   const accent = mode === "exclude" ? "#b42318" : "#0b6aa2";
 
   const row = c => (
-    <label key={c.code} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 14px", cursor: "pointer", fontSize: 13, color: "#2b2f37", borderBottom: "1px solid #e6e3dc", background: countries.includes(c.code) ? "#e2f1fb" : "transparent" }}>
+    <label key={c.code} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 14px", cursor: "pointer", fontSize: 13, color: "#2b2f37", borderBottom: "1px solid #d9d5cc", background: countries.includes(c.code) ? "#e2f1fb" : "transparent" }}>
       <input type="checkbox" checked={countries.includes(c.code)} onChange={() => toggle(c.code)} />
       <span style={{ fontSize: 16 }}>{countryFlag(c.code)}</span>
       <span style={{ flex: 1 }}>{c.name}</span>
@@ -183,7 +183,7 @@ function DaCountryPicker({ mode, countries, onChange, disabled }) {
   return (
     <div style={{ position: "relative", flex: 1, opacity: disabled ? 0.4 : 1, pointerEvents: disabled ? "none" : "auto" }}>
       <div onClick={() => setOpen(!open)}
-        style={{ background: "#ffffff", border: `1px solid ${open ? accent : "#23262d"}`, borderRadius: 8, padding: "8px 12px", minHeight: 42, boxSizing: "border-box", cursor: "pointer", display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
+        style={{ background: "#f4f2ed", border: `1px solid ${open ? accent : "#23262d"}`, borderRadius: 8, padding: "8px 12px", minHeight: 42, boxSizing: "border-box", cursor: "pointer", display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
         {countries.length === 0 && <span style={{ color: "#5f6672", fontSize: 14 }}>{disabled ? "Tüm ülkelere gönderilir" : "Ülke seçmek için tıkla..."}</span>}
         {countries.map(code => (
           <span key={code} onClick={e => { e.stopPropagation(); toggle(code); }} title="Kaldır"
@@ -194,19 +194,19 @@ function DaCountryPicker({ mode, countries, onChange, disabled }) {
         <span style={{ marginLeft: "auto", color: "#4b5260", fontSize: 12 }}>{open ? "▲" : "▼"}</span>
       </div>
       {open && (
-        <div style={{ position: "absolute", top: "100%", left: 0, right: 0, marginTop: 4, background: "#ffffff", border: "1px solid #e6e3dc", borderRadius: 8, zIndex: 50, boxShadow: "0 12px 32px rgba(22,24,29,0.12)" }}>
-          <div style={{ display: "flex", gap: 8, padding: 8, borderBottom: "1px solid #e6e3dc" }}>
+        <div style={{ position: "absolute", top: "100%", left: 0, right: 0, marginTop: 4, background: "#f4f2ed", border: "1px solid #d9d5cc", borderRadius: 8, zIndex: 50, boxShadow: "0 12px 32px rgba(22,24,29,0.12)" }}>
+          <div style={{ display: "flex", gap: 8, padding: 8, borderBottom: "1px solid #d9d5cc" }}>
             <input autoFocus type="text" placeholder="Ülke ara (Türkiye, TR...)" value={search} onChange={e => setSearch(e.target.value)}
-              style={{ flex: 1, background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "8px 10px", fontSize: 13 }} />
+              style={{ flex: 1, background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "8px 10px", fontSize: 13 }} />
             {countries.length > 0 && <button type="button" onClick={() => onChange([])}
-              style={{ background: "none", border: "1px solid #e6e3dc", color: "#b42318", borderRadius: 6, padding: "0 10px", cursor: "pointer", fontSize: 12 }}>Temizle</button>}
+              style={{ background: "none", border: "1px solid #d9d5cc", color: "#b42318", borderRadius: 6, padding: "0 10px", cursor: "pointer", fontSize: 12 }}>Temizle</button>}
             <button type="button" onClick={() => setOpen(false)}
               style={{ background: "#0ea5e9", border: "none", color: "#fff", borderRadius: 6, padding: "0 14px", cursor: "pointer", fontSize: 12 }}>Tamam</button>
           </div>
           <div style={{ maxHeight: 300, overflowY: "auto" }}>
-            {top.length > 0 && <div style={{ padding: "6px 14px", fontSize: 11, color: "#5f6672", background: "#ffffff" }}>SIK KULLANILANLAR</div>}
+            {top.length > 0 && <div style={{ padding: "6px 14px", fontSize: 11, color: "#5f6672", background: "#f4f2ed" }}>SIK KULLANILANLAR</div>}
             {top.map(row)}
-            {rest.length > 0 && <div style={{ padding: "6px 14px", fontSize: 11, color: "#5f6672", background: "#ffffff" }}>TÜM ÜLKELER</div>}
+            {rest.length > 0 && <div style={{ padding: "6px 14px", fontSize: 11, color: "#5f6672", background: "#f4f2ed" }}>TÜM ÜLKELER</div>}
             {rest.map(row)}
             {top.length + rest.length === 0 && <div style={{ padding: 14, color: "#5f6672", fontSize: 13 }}>Sonuç yok</div>}
           </div>
@@ -242,9 +242,9 @@ function CredRow({ label, value }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
       <span style={{ color: "#2b2f37", fontSize: 13, fontWeight: 700, minWidth: 80 }}>{label}</span>
-      <code title={value} style={{ flex: 1, minWidth: 0, color: "#16181d", fontSize: 14, fontWeight: 500, background: "#faf9f7", border: "1px solid #dcd8cf", padding: "9px 12px", borderRadius: 8, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</code>
+      <code title={value} style={{ flex: 1, minWidth: 0, color: "#16181d", fontSize: 14, fontWeight: 500, background: "#eeebe5", border: "1px solid #cdc8be", padding: "9px 12px", borderRadius: 8, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</code>
       <button onClick={copy} className="cred-copy"
-        style={{ padding: "8px 14px", fontSize: 12, fontWeight: 700, borderRadius: 8, border: copied ? "1px solid #12805c" : "1px solid #dcd8cf", background: copied ? "#dcf2e8" : "transparent", color: copied ? "#0d6b4d" : "#16181d", cursor: "pointer", flexShrink: 0, minWidth: 100 }}>
+        style={{ padding: "8px 14px", fontSize: 12, fontWeight: 700, borderRadius: 8, border: copied ? "1px solid #12805c" : "1px solid #cdc8be", background: copied ? "#dcf2e8" : "transparent", color: copied ? "#0d6b4d" : "#16181d", cursor: "pointer", flexShrink: 0, minWidth: 100 }}>
         {copied ? "✓ Kopyalandı" : "📋 Kopyala"}
       </button>
     </div>
@@ -331,7 +331,7 @@ function AlbumsSection({ apiUrl }) {
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(140px,1fr))", gap: 10, marginBottom: 22 }}>
         {sum.map(([t, n, c]) => (
-          <div key={t} style={{ background: "#ffffff", border: "1px solid #e6e3dc", borderRadius: 12, padding: "12px 14px" }}>
+          <div key={t} style={{ background: "#f4f2ed", border: "1px solid #d9d5cc", borderRadius: 12, padding: "12px 14px" }}>
             <div style={{ color: "#4b5260", fontSize: 12, fontWeight: 600 }}>{t}</div>
             <div style={{ color: c, fontSize: 24, fontWeight: 800 }}>{data ? n : "…"}</div>
           </div>
@@ -343,10 +343,10 @@ function AlbumsSection({ apiUrl }) {
         <input style={{ ...styles.input, width: 90, textTransform: "uppercase" }} maxLength={2} placeholder="TR" value={testCc}
           onChange={e => setTestCc(e.target.value)} onKeyDown={e => e.key === "Enter" && runTest()} />
         <button style={styles.primaryBtn} onClick={runTest}>Bu ülkeye ne gider?</button>
-        <button style={{ ...styles.primaryBtn, background: "transparent", color: "#16181d", border: "1px solid #dcd8cf" }} onClick={load}>Yenile</button>
+        <button style={{ ...styles.primaryBtn, background: "transparent", color: "#16181d", border: "1px solid #cdc8be" }} onClick={load}>Yenile</button>
       </div>
       {test && (
-        <div style={{ background: "#ffffff", border: "1px solid #e6e3dc", borderRadius: 12, padding: 14, marginBottom: 20, fontSize: 13 }}>
+        <div style={{ background: "#f4f2ed", border: "1px solid #d9d5cc", borderRadius: 12, padding: 14, marginBottom: 20, fontSize: 13 }}>
           <div style={{ marginBottom: 8 }}>
             {ccFlag(test.cc)} <b>{ccName(test.cc)}</b> → {test.served ? <>{ccFlag(test.served)} <b>{ccName(test.served)}</b></> : <b style={{ color: "#b42318" }}>hiç liste yok (boş)</b>}
             {" "}· {test.albumCount} albüm · {agoTr(test.updatedAt ? Date.now() - test.updatedAt : null)}
@@ -355,7 +355,7 @@ function AlbumsSection({ apiUrl }) {
           <div style={{ display: "flex", gap: 8, overflowX: "auto" }}>
             {(test.albums || []).map(a => (
               <div key={a.id} style={{ width: 84, flexShrink: 0 }} title={`${a.artist} — ${a.title}`}>
-                <img src={a.cover} alt="" style={{ width: 84, height: 84, borderRadius: 8, objectFit: "cover", background: "#ecebe6" }} />
+                <img src={a.cover} alt="" style={{ width: 84, height: 84, borderRadius: 8, objectFit: "cover", background: "#e3e0d9" }} />
                 <div style={{ fontSize: 11, color: "#2b2f37", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{a.title}</div>
               </div>
             ))}
@@ -412,7 +412,7 @@ function AlbumsSection({ apiUrl }) {
       )}
 
       <h3 style={{ fontSize: 15, margin: "26px 0 10px", color: "#16181d" }}>Son olaylar</h3>
-      <div style={{ background: "#faf9f7", border: "1px solid #e6e3dc", borderRadius: 10, padding: 10, maxHeight: 280, overflowY: "auto", fontFamily: "ui-monospace, Menlo, monospace", fontSize: 12 }}>
+      <div style={{ background: "#eeebe5", border: "1px solid #d9d5cc", borderRadius: 10, padding: 10, maxHeight: 280, overflowY: "auto", fontFamily: "ui-monospace, Menlo, monospace", fontSize: 12 }}>
         {(data && data.log && data.log.length) ? data.log.map((l, i) => (
           <div key={i} style={{ color: lvlColor[l.level] || "#4b5260", padding: "2px 0" }}>
             <span style={{ color: "#5f6672" }}>{new Date(l.t).toLocaleString("tr")}</span> {l.cc}: {l.msg}
@@ -542,19 +542,19 @@ function PanelIcon({ k, fallback }) {
 }
 const PANEL_CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap');
-  .pn-root { display: flex; min-height: 100vh; background: #faf9f7; color: #16181d; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  .pn-root { display: flex; min-height: 100vh; background: #eeebe5; color: #16181d; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
   .pn-root svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
   .pn-root ::-webkit-scrollbar { width: 8px; height: 8px; }
   .pn-root ::-webkit-scrollbar-thumb { background: rgba(22,24,29,0.072); border-radius: 4px; }
-  .pn-side { width: 264px; min-width: 264px; background: #faf9f7; border-right: 1px solid #e6e3dc; height: 100vh; position: sticky; top: 0; display: flex; flex-direction: column; box-sizing: border-box; z-index: 40; }
+  .pn-side { width: 264px; min-width: 264px; background: #eeebe5; border-right: 1px solid #d9d5cc; height: 100vh; position: sticky; top: 0; display: flex; flex-direction: column; box-sizing: border-box; z-index: 40; }
   .pn-side-top { padding: 18px 16px 10px; }
   .pn-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; text-decoration: none; color: #16181d; }
   .pn-brand b { font-size: 15px; font-weight: 700; }
   .pn-mark { width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center; background: linear-gradient(135deg, #3c4fe0, #ec4899); color: #fff; box-shadow: 0 6px 18px rgba(60,79,224,0.3); }
   .pn-mark svg { width: 17px; height: 17px; }
   .pn-lbl { font-size: 10.5px; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; color: #5f6672; margin-bottom: 6px; }
-  .pn-app { position: relative; display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; background: #ffffff; border: 1px solid #e6e3dc; transition: border-color .15s; }
-  .pn-app:hover { border-color: #dcd8cf; }
+  .pn-app { position: relative; display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; background: #f4f2ed; border: 1px solid #d9d5cc; transition: border-color .15s; }
+  .pn-app:hover { border-color: #cdc8be; }
   .pn-av { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-weight: 800; font-size: 13px; color: #16181d; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(22,24,29,0.075); }
   .pn-app-t { flex: 1; min-width: 0; }
   .pn-app-t b { display: block; font-size: 13.5px; }
@@ -567,7 +567,7 @@ const PANEL_CSS = `
   @keyframes pnPulse { 0% { box-shadow: 0 0 0 0 rgba(18,128,92,0.6); } 70%, 100% { box-shadow: 0 0 0 7px rgba(18,128,92,0); } }
   .pn-live b { font-size: 15px; color: #0d6b4d; font-variant-numeric: tabular-nums; }
   .pn-live span { font-size: 12px; color: #0d6b4d; }
-  .pn-search { display: flex; align-items: center; gap: 8px; margin-top: 12px; height: 34px; padding: 0 10px; border-radius: 10px; background: #faf9f7; border: 1px solid #e6e3dc; color: #5f6672; }
+  .pn-search { display: flex; align-items: center; gap: 8px; margin-top: 12px; height: 34px; padding: 0 10px; border-radius: 10px; background: #eeebe5; border: 1px solid #d9d5cc; color: #5f6672; }
   .pn-search:focus-within { border-color: #3c4fe0; color: #16181d; }
   .pn-search svg { width: 15px; height: 15px; }
   .pn-search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #16181d; font: inherit; font-size: 13px; }
@@ -586,18 +586,18 @@ const PANEL_CSS = `
   .pn-chev { width: 15px !important; height: 15px !important; color: #5f6672; transition: transform .2s; }
   .pn-chev.open { transform: rotate(180deg); }
   .pn-none { color: #5f6672; font-size: 12.5px; padding: 14px 10px; }
-  .pn-logout { display: flex; align-items: center; gap: 8px; margin: 0; padding: 14px 20px; border-top: 1px solid #e6e3dc; color: #4b5260; font-size: 13px; font-weight: 600; text-decoration: none; transition: color .15s, background .15s; }
+  .pn-logout { display: flex; align-items: center; gap: 8px; margin: 0; padding: 14px 20px; border-top: 1px solid #d9d5cc; color: #4b5260; font-size: 13px; font-weight: 600; text-decoration: none; transition: color .15s, background .15s; }
   .pn-logout:hover { color: #b42318; background: rgba(217,45,32,0.08); }
   .pn-logout svg { width: 16px; height: 16px; }
   .pn-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-  .pn-top { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 12px; padding: 13px 32px; background: rgba(17,17,20,0.84); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid #e6e3dc; }
+  .pn-top { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 12px; padding: 13px 32px; background: rgba(17,17,20,0.84); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid #d9d5cc; }
   .pn-burger { display: none; background: none; border: 0; color: #16181d; cursor: pointer; padding: 4px; }
   .pn-crumb { display: flex; align-items: center; gap: 7px; font-size: 13px; color: #5f6672; min-width: 0; }
   .pn-crumb b { color: #16181d; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .pn-crumb-app { white-space: nowrap; }
   .pn-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .pn-ghost { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: #4b5260; background: #ffffff; border: 1px solid #e6e3dc; padding: 7px 11px; border-radius: 9px; text-decoration: none; white-space: nowrap; }
-  .pn-ghost:hover { color: #16181d; border-color: #dcd8cf; }
+  .pn-ghost { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: #4b5260; background: #f4f2ed; border: 1px solid #d9d5cc; padding: 7px 11px; border-radius: 9px; text-decoration: none; white-space: nowrap; }
+  .pn-ghost:hover { color: #16181d; border-color: #cdc8be; }
   .pn-ghost svg { width: 15px; height: 15px; }
   .pn-content { width: 100%; max-width: 1180px; margin: 0 auto; padding: 28px 32px 80px; display: flex; flex-direction: column; gap: 22px; box-sizing: border-box; }
   .pn-content h2 { letter-spacing: -0.3px; }
@@ -607,20 +607,20 @@ const PANEL_CSS = `
   .pn-content button:not(:disabled):active { transform: translateY(1px); }
   .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]):focus,
   .pn-content select:focus, .pn-content textarea:focus { border-color: #3c4fe0 !important; box-shadow: 0 0 0 3px rgba(60,79,224,0.18); outline: none; }
-  .pn-root input[type=checkbox] { -webkit-appearance: none; appearance: none; width: 36px; height: 21px; min-width: 36px; border-radius: 999px; background: #e6e3dc; position: relative; cursor: pointer; vertical-align: middle; border: 0; transition: background .18s; }
+  .pn-root input[type=checkbox] { -webkit-appearance: none; appearance: none; width: 36px; height: 21px; min-width: 36px; border-radius: 999px; background: #d9d5cc; position: relative; cursor: pointer; vertical-align: middle; border: 0; transition: background .18s; }
   .pn-root input[type=checkbox]::after { content: ""; position: absolute; top: 3px; left: 3px; width: 15px; height: 15px; border-radius: 50%; background: #16181d; box-shadow: 0 1px 3px rgba(22,24,29,0.1); transition: transform .18s; }
   .pn-root input[type=checkbox]:checked { background: #12805c; }
   .pn-root input[type=checkbox]:checked::after { transform: translateX(15px); }
   .pn-root input[type=checkbox]:disabled { opacity: 0.5; cursor: not-allowed; }
   .pn-root input[type=radio] { accent-color: #3c4fe0; }
-  .pn-head { position: sticky; top: 0; z-index: 20; background: rgba(17,17,20,0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid #e6e3dc; }
+  .pn-head { position: sticky; top: 0; z-index: 20; background: rgba(17,17,20,0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid #d9d5cc; }
   .pn-head .pn-top { position: static; background: none; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: 0; }
   .pn-appbar { display: flex; align-items: center; gap: 8px; padding: 4px 32px 12px; }
   .pn-appbar-scroll { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; overflow-x: auto; padding: 3px 3px 4px; scrollbar-width: thin; scrollbar-color: #5f6672 transparent; }
   .pn-appbar-scroll::-webkit-scrollbar { height: 6px; }
-  .pn-chip { --c: #2a39b8; position: relative; display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; height: 38px; padding: 0 12px 0 5px; border-radius: 11px; background: #ffffff; border: 1px solid #e6e3dc; color: #2b2f37; font: inherit; font-size: 13px; cursor: pointer; user-select: none; transition: border-color .15s, background .15s, color .15s; }
-  .pn-chip:hover { border-color: #dcd8cf; color: #16181d; }
-  .pn-chip.on { background: #f1efea; border-color: var(--c); color: #16181d; box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 22%, transparent); }
+  .pn-chip { --c: #2a39b8; position: relative; display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; height: 38px; padding: 0 12px 0 5px; border-radius: 11px; background: #f4f2ed; border: 1px solid #d9d5cc; color: #2b2f37; font: inherit; font-size: 13px; cursor: pointer; user-select: none; transition: border-color .15s, background .15s, color .15s; }
+  .pn-chip:hover { border-color: #cdc8be; color: #16181d; }
+  .pn-chip.on { background: #e8e5de; border-color: var(--c); color: #16181d; box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 22%, transparent); }
   .pn-chip b { font-weight: 650; white-space: nowrap; }
   .pn-chip .pn-av { width: 28px; height: 28px; border-radius: 8px; font-size: 12px; }
   .pn-av-all { background: #e8ebfd; color: #2a39b8; }
@@ -631,23 +631,23 @@ const PANEL_CSS = `
   .pn-chip-x { display: grid; place-items: center; width: 22px; height: 22px; margin-right: -4px; border-radius: 7px; border: 0; background: rgba(217,45,32,0.15); color: #b42318; cursor: pointer; }
   .pn-chip-x:hover { background: #d92d20; color: #fff; }
   .pn-chip-x svg { width: 13px !important; height: 13px !important; stroke-width: 2.4; }
-  .pn-appbar-tools { display: inline-flex; gap: 6px; padding-left: 8px; border-left: 1px solid #e6e3dc; flex-shrink: 0; }
-  .pn-tool { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 11px; border-radius: 10px; border: 1px dashed #dcd8cf; background: none; color: #4b5260; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; white-space: nowrap; }
-  .pn-tool:hover { color: #16181d; border-color: #dcd8cf; }
+  .pn-appbar-tools { display: inline-flex; gap: 6px; padding-left: 8px; border-left: 1px solid #d9d5cc; flex-shrink: 0; }
+  .pn-tool { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 11px; border-radius: 10px; border: 1px dashed #cdc8be; background: none; color: #4b5260; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .pn-tool:hover { color: #16181d; border-color: #cdc8be; }
   .pn-tool.on { border-style: solid; border-color: #d92d20; color: #b42318; background: rgba(217,45,32,0.1); }
   .pn-tool svg { width: 15px !important; height: 15px !important; }
-  .pn-tabs { display: flex; gap: 4px; padding: 4px; border-radius: 13px; background: #faf9f7; border: 1px solid #e6e3dc; overflow-x: auto; }
+  .pn-tabs { display: flex; gap: 4px; padding: 4px; border-radius: 13px; background: #eeebe5; border: 1px solid #d9d5cc; overflow-x: auto; }
   .pn-tabs button { display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0; border: 0; background: none; color: #4b5260; font: inherit; font-size: 13px; font-weight: 600; padding: 8px 13px; border-radius: 9px; cursor: pointer; white-space: nowrap; }
   .pn-tabs button:hover { color: #16181d; background: rgba(22,24,29,0.03); }
-  .pn-tabs button.on { background: #f1efea; color: #16181d; box-shadow: inset 0 0 0 1px rgba(60,79,224,0.45); }
+  .pn-tabs button.on { background: #e8e5de; color: #16181d; box-shadow: inset 0 0 0 1px rgba(60,79,224,0.45); }
   .pn-tabs button.on .pn-ico { color: #2a39b8; }
   .pn-tabs .pn-ico { width: 16px !important; height: 16px !important; }
   .da-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 18px; align-items: start; }
-  .da-step { background: #ffffff; border: 1px solid #e6e3dc; border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
+  .da-step { background: #f4f2ed; border: 1px solid #d9d5cc; border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
   .da-sh { display: flex; align-items: center; gap: 9px; font-size: 14px; font-weight: 650; color: #16181d; margin-bottom: 12px; }
   .da-sh b { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 11.5px; background: rgba(60,79,224,0.18); color: #2a39b8; }
   .da-types { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-  .da-type { text-align: left; background: #faf9f7; border: 1px solid #e6e3dc; border-radius: 11px; padding: 10px 11px; color: #4b5260; cursor: pointer; font: inherit; }
+  .da-type { text-align: left; background: #eeebe5; border: 1px solid #d9d5cc; border-radius: 11px; padding: 10px 11px; color: #4b5260; cursor: pointer; font: inherit; }
   .da-type svg { width: 19px !important; height: 19px !important; color: #2b2f37; display: block; margin-bottom: 6px; }
   .da-type span { display: block; color: #16181d; font-size: 13px; font-weight: 650; }
   .da-type small { display: block; font-size: 11.5px; margin-top: 2px; line-height: 1.35; }
@@ -655,18 +655,18 @@ const PANEL_CSS = `
   .da-type.on svg { color: #2a39b8; }
   .da-lbl { display: block; font-size: 12px; color: #4b5260; margin: 12px 0 5px; }
   .da-two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .da-seg { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; border-radius: 10px; background: #faf9f7; border: 1px solid #e6e3dc; }
+  .da-seg { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; border-radius: 10px; background: #eeebe5; border: 1px solid #d9d5cc; }
   .da-seg button { border: 0; background: none; color: #4b5260; font: inherit; font-size: 12.5px; font-weight: 600; padding: 6px 11px; border-radius: 7px; cursor: pointer; white-space: nowrap; }
   .da-seg button:hover { color: #16181d; }
-  .da-seg button.on { background: #f1efea; color: #16181d; box-shadow: inset 0 0 0 1px rgba(60,79,224,0.5); }
-  .da-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: 13px; color: #4b5260; border-top: 1px solid #e6e3dc; flex-wrap: wrap; }
+  .da-seg button.on { background: #e8e5de; color: #16181d; box-shadow: inset 0 0 0 1px rgba(60,79,224,0.5); }
+  .da-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: 13px; color: #4b5260; border-top: 1px solid #d9d5cc; flex-wrap: wrap; }
   .da-step .da-row:first-of-type { border-top: 0; }
   .da-hint { font-size: 11.5px; color: #5f6672; text-align: right; }
   .da-side { position: sticky; top: 150px; }
-  .da-phone { border: 1px solid #dcd8cf; border-radius: 30px; padding: 10px; background: #0b0c0e; max-width: 300px; margin: 0 auto; }
-  .da-screen { position: relative; height: 340px; border-radius: 22px; background: #ffffff; overflow: hidden; }
+  .da-phone { border: 1px solid #cdc8be; border-radius: 30px; padding: 10px; background: #0b0c0e; max-width: 300px; margin: 0 auto; }
+  .da-screen { position: relative; height: 340px; border-radius: 22px; background: #f4f2ed; overflow: hidden; }
   .da-app { display: flex; align-items: center; gap: 8px; padding: 14px; font-size: 12.5px; color: #4b5260; font-weight: 600; }
-  .da-dlg { position: absolute; left: 14px; right: 14px; top: 105px; background: #f1efea; border-radius: 16px; padding: 16px; font-size: 13.5px; color: #16181d; box-shadow: 0 18px 40px rgba(22,24,29,0.12); }
+  .da-dlg { position: absolute; left: 14px; right: 14px; top: 105px; background: #e8e5de; border-radius: 16px; padding: 16px; font-size: 13.5px; color: #16181d; box-shadow: 0 18px 40px rgba(22,24,29,0.12); }
   .da-muted { color: #5f6672; font-style: italic; }
   .da-btns { display: flex; justify-content: flex-end; gap: 18px; margin-top: 16px; font-size: 13px; }
   .da-btns span { color: #4b5260; }
@@ -675,24 +675,24 @@ const PANEL_CSS = `
   .da-direct svg { width: 26px !important; height: 26px !important; color: #2a39b8; }
   .da-direct code { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; }
   .da-chips { display: flex; flex-wrap: wrap; gap: 5px; margin: 14px 0 10px; }
-  .da-chips span { font-size: 11.5px; color: #2b2f37; background: #ffffff; border: 1px solid #e6e3dc; padding: 3px 9px; border-radius: 999px; }
+  .da-chips span { font-size: 11.5px; color: #2b2f37; background: #f4f2ed; border: 1px solid #d9d5cc; padding: 3px 9px; border-radius: 999px; }
   .da-match { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; background: rgba(60,79,224,0.08); border: 1px solid rgba(60,79,224,0.3); margin-bottom: 12px; font-size: 12.5px; color: #2b2f37; }
   .da-match b { font-size: 22px; color: #16181d; font-variant-numeric: tabular-nums; white-space: nowrap; }
   .da-match small { color: #5f6672; font-size: 11px; }
-  .da-hist { border: 1px solid #e6e3dc; border-radius: 14px; overflow: hidden; }
-  .da-hr { border-top: 1px solid #e6e3dc; }
+  .da-hist { border: 1px solid #d9d5cc; border-radius: 14px; overflow: hidden; }
+  .da-hr { border-top: 1px solid #d9d5cc; }
   .da-hr:first-child { border-top: 0; }
   .da-hr.act { background: rgba(11,106,162,0.05); }
   .da-hr-main { display: flex; align-items: center; gap: 10px; padding: 10px 14px; cursor: pointer; font-size: 13px; }
   .da-hr-main:hover { background: rgba(22,24,29,0.03); }
-  .da-pill { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 999px; background: #f1efea; color: #5f6672; flex-shrink: 0; }
+  .da-pill { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 999px; background: #e8e5de; color: #5f6672; flex-shrink: 0; }
   .da-pill.on { background: rgba(18,128,92,0.14); color: #0d6b4d; }
   .da-hr-i { width: 16px !important; height: 16px !important; color: #4b5260; }
   .da-hr-v { flex: 1; min-width: 0; color: #16181d; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .da-tag { font-size: 11.5px; color: #4b5260; background: #ffffff; padding: 2px 8px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
+  .da-tag { font-size: 11.5px; color: #4b5260; background: #f4f2ed; padding: 2px 8px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
   .da-cnt { font-size: 12px; color: #0d6b4d; font-weight: 600; white-space: nowrap; }
   .da-acts { display: inline-flex; gap: 6px; }
-  .da-b { border: 1px solid #e6e3dc; background: #ffffff; color: #4b5260; font: inherit; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 8px; cursor: pointer; }
+  .da-b { border: 1px solid #d9d5cc; background: #f4f2ed; color: #4b5260; font: inherit; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 8px; cursor: pointer; }
   .da-b:hover { color: #b42318; border-color: rgba(217,45,32,0.4); }
   .da-b.warn { color: #8a5a00; }
   .da-det { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px 16px; padding: 4px 14px 14px 52px; font-size: 12.5px; color: #16181d; }
@@ -706,7 +706,7 @@ const PANEL_CSS = `
   .ad h1 { font-size: 26px; font-weight: 750; letter-spacing: -0.5px; margin: 0; }
   .ad-sub { color: #5f6672; font-size: 13.5px; margin-top: 4px; }
   .ad-tools { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .ad-search { display: flex; align-items: center; gap: 8px; width: 270px; height: 40px; padding: 0 12px; border-radius: 11px; background: #ffffff; border: 1px solid #e6e3dc; color: #5f6672; }
+  .ad-search { display: flex; align-items: center; gap: 8px; width: 270px; height: 40px; padding: 0 12px; border-radius: 11px; background: #f4f2ed; border: 1px solid #d9d5cc; color: #5f6672; }
   .ad-search:focus-within { border-color: #3c4fe0; }
   .ad-search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #16181d; font: inherit; font-size: 13.5px; box-shadow: none !important; }
   .ad-btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; height: 40px; padding: 0 16px; border-radius: 11px; font: inherit; font-size: 13.5px; font-weight: 650; border: 0; cursor: pointer; }
@@ -715,17 +715,17 @@ const PANEL_CSS = `
   .ad-btn.wide { width: 100%; height: 46px; font-size: 14.5px; margin-top: 16px; }
   .ad-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
   .ad-stats.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .ad-st { background: #ffffff; border: 1px solid #e6e3dc; border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
+  .ad-st { background: #f4f2ed; border: 1px solid #d9d5cc; border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
   .ad-st-ic { width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center; flex-shrink: 0; }
   .ad-st-ic svg { width: 18px; height: 18px; }
   .ad-st small { display: block; color: #5f6672; font-size: 11px; font-weight: 650; letter-spacing: .3px; }
   .ad-st b { display: block; font-size: 22px; font-weight: 750; font-variant-numeric: tabular-nums; }
   .ad-filters { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
-  .ad-filters button { font: inherit; font-size: 12.5px; font-weight: 600; color: #4b5260; padding: 6px 12px; border-radius: 999px; border: 1px solid #e6e3dc; background: none; cursor: pointer; }
+  .ad-filters button { font: inherit; font-size: 12.5px; font-weight: 600; color: #4b5260; padding: 6px 12px; border-radius: 999px; border: 1px solid #d9d5cc; background: none; cursor: pointer; }
   .ad-filters button.on { background: #16181d; color: #ffffff; border-color: #16181d; }
   .ad-empty { color: #5f6672; font-size: 13.5px; padding: 40px 0; text-align: center; }
   .ad-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; align-items: start; }
-  .ad-card { --c: #3c4fe0; background: #ffffff; border: 1px solid #e6e3dc; border-radius: 16px; padding: 16px; position: relative; }
+  .ad-card { --c: #3c4fe0; background: #f4f2ed; border: 1px solid #d9d5cc; border-radius: 16px; padding: 16px; position: relative; }
   .ad-card.stripe::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; border-radius: 16px 16px 0 0; background: var(--c); }
   .ad-ch { display: flex; align-items: center; gap: 12px; }
   .ad-av { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; color: #16181d; font-weight: 800; font-size: 17px; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(22,24,29,0.075); }
@@ -751,60 +751,60 @@ const PANEL_CSS = `
   .ad-access { margin: 14px 0 12px; }
   .ad-access small { display: block; font-size: 10.5px; font-weight: 700; letter-spacing: .6px; color: #5f6672; margin-bottom: 7px; }
   .ad-apps, .ad-pick { display: flex; flex-wrap: wrap; gap: 6px; }
-  .ad-mini { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 9px 0 3px; border-radius: 9px; background: #ffffff; border: 1px solid #e6e3dc; font: inherit; font-size: 12px; font-weight: 600; color: #2b2f37; }
+  .ad-mini { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 9px 0 3px; border-radius: 9px; background: #f4f2ed; border: 1px solid #d9d5cc; font: inherit; font-size: 12px; font-weight: 600; color: #2b2f37; }
   .ad-mini .ad-av { width: 22px; height: 22px; border-radius: 7px; font-size: 10.5px; }
   .ad-mini.more { padding: 0 9px; color: #5f6672; }
   .ad-mini.sel { cursor: pointer; height: 32px; }
   .ad-mini.sel.on { border-color: #3c4fe0; background: rgba(60,79,224,0.12); color: #16181d; }
   .ad-mini.sel svg { width: 13px; height: 13px; color: #2a39b8; stroke-width: 2.4; }
-  .ad-acts { display: flex; gap: 8px; align-items: center; border-top: 1px solid #e6e3dc; padding-top: 12px; }
-  .ad-a { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 11px; border-radius: 9px; font: inherit; font-size: 12.5px; font-weight: 650; color: #2b2f37; background: #ffffff; border: 1px solid #e6e3dc; cursor: pointer; text-decoration: none; white-space: nowrap; }
-  .ad-a:hover { color: #16181d; border-color: #dcd8cf; }
+  .ad-acts { display: flex; gap: 8px; align-items: center; border-top: 1px solid #d9d5cc; padding-top: 12px; }
+  .ad-a { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 11px; border-radius: 9px; font: inherit; font-size: 12.5px; font-weight: 650; color: #2b2f37; background: #f4f2ed; border: 1px solid #d9d5cc; cursor: pointer; text-decoration: none; white-space: nowrap; }
+  .ad-a:hover { color: #16181d; border-color: #cdc8be; }
   .ad-a svg { width: 15px; height: 15px; }
   .ad-a.ghost { background: none; }
   .ad-a.ghost.on { color: #2a39b8; border-color: rgba(60,79,224,0.45); }
   .ad-a.more { padding: 0 8px; color: #5f6672; background: none; border-color: transparent; }
   .ad-more-wrap { margin-left: auto; position: relative; }
-  .ad-menu { position: absolute; right: 0; bottom: 38px; z-index: 30; min-width: 190px; background: #ffffff; border: 1px solid #e6e3dc; border-radius: 12px; padding: 5px; box-shadow: 0 18px 40px rgba(22,24,29,0.12); }
+  .ad-menu { position: absolute; right: 0; bottom: 38px; z-index: 30; min-width: 190px; background: #f4f2ed; border: 1px solid #d9d5cc; border-radius: 12px; padding: 5px; box-shadow: 0 18px 40px rgba(22,24,29,0.12); }
   .ad-menu button { display: flex; align-items: center; gap: 8px; width: 100%; padding: 8px 10px; border-radius: 8px; border: 0; background: none; color: #2b2f37; font: inherit; font-size: 13px; cursor: pointer; text-align: left; }
   .ad-menu button:hover { background: rgba(22,24,29,0.036); }
   .ad-menu button.danger { color: #b42318; }
   .ad-menu button.danger:hover { background: rgba(217,45,32,0.12); }
-  .ad-cred { background: #faf9f7; border: 1px solid #e6e3dc; border-radius: 12px; padding: 4px 10px; margin: 2px 0 12px; }
+  .ad-cred { background: #eeebe5; border: 1px solid #d9d5cc; border-radius: 12px; padding: 4px 10px; margin: 2px 0 12px; }
   .ad-cr { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 12.5px; }
-  .ad-cr + .ad-cr { border-top: 1px solid #e6e3dc; }
+  .ad-cr + .ad-cr { border-top: 1px solid #d9d5cc; }
   .ad-cr span { color: #5f6672; width: 58px; font-weight: 600; font-size: 11.5px; flex-shrink: 0; }
   .ad-cr code { flex: 1; min-width: 0; font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: #16181d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: none !important; padding: 0 !important; }
   .ad-cred.big .ad-cr { padding: 10px 0; }
   .ad-ib { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; border: 0; background: none; color: #5f6672; cursor: pointer; flex-shrink: 0; }
   .ad-ib:hover { background: rgba(22,24,29,0.036); color: #16181d; }
   .ad-scrim { position: fixed; inset: 0; z-index: 60; background: rgba(6,6,9,0.6); }
-  .ad-sheet { position: fixed; top: 0; right: 0; bottom: 0; z-index: 61; width: min(420px, 100vw); background: #ffffff; border-left: 1px solid #e6e3dc; box-shadow: -30px 0 60px rgba(22,24,29,0.12); padding: 26px; display: flex; flex-direction: column; box-sizing: border-box; animation: adIn .2s ease-out; }
+  .ad-sheet { position: fixed; top: 0; right: 0; bottom: 0; z-index: 61; width: min(420px, 100vw); background: #f4f2ed; border-left: 1px solid #d9d5cc; box-shadow: -30px 0 60px rgba(22,24,29,0.12); padding: 26px; display: flex; flex-direction: column; box-sizing: border-box; animation: adIn .2s ease-out; }
   @keyframes adIn { from { transform: translateX(30px); opacity: 0; } to { transform: none; opacity: 1; } }
   .ad-sheet h2 { font-size: 20px; font-weight: 750; margin: 0; }
   .ad-sheet-body { flex: 1; overflow-y: auto; margin: 0 -6px; padding: 0 6px; }
   .ad-x { position: absolute; top: 22px; right: 20px; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9px; border: 0; background: none; color: #5f6672; cursor: pointer; }
   .ad-x:hover { background: rgba(22,24,29,0.036); color: #16181d; }
   .ad-lbl { font-size: 12.5px; font-weight: 600; color: #4b5260; margin: 18px 0 7px; }
-  .ad-inp { width: 100%; box-sizing: border-box; height: 42px; border-radius: 11px; background: #faf9f7; border: 1px solid #e6e3dc; padding: 0 13px; font: inherit; font-size: 14px; color: #16181d; outline: 0; }
+  .ad-inp { width: 100%; box-sizing: border-box; height: 42px; border-radius: 11px; background: #eeebe5; border: 1px solid #d9d5cc; padding: 0 13px; font: inherit; font-size: 14px; color: #16181d; outline: 0; }
   .ad-inp:disabled { opacity: .6; }
   .ad-hint { font-size: 11.5px; color: #5f6672; margin-top: 6px; }
   .ad-pw { display: flex; gap: 6px; align-items: center; position: relative; }
   .ad-pw .ad-a { height: 42px; }
   .ad-auto { position: absolute; right: 13px; font-size: 11.5px; color: #5f6672; pointer-events: none; }
-  .ad-seg { display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: #faf9f7; border: 1px solid #e6e3dc; margin-bottom: 10px; }
+  .ad-seg { display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: #eeebe5; border: 1px solid #d9d5cc; margin-bottom: 10px; }
   .ad-seg button { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 34px; border: 0; border-radius: 8px; background: none; color: #4b5260; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
-  .ad-seg button.on { background: #f1efea; color: #16181d; box-shadow: inset 0 0 0 1px rgba(60,79,224,0.5); }
+  .ad-seg button.on { background: #e8e5de; color: #16181d; box-shadow: inset 0 0 0 1px rgba(60,79,224,0.5); }
   .ad-sw { display: flex; gap: 9px; align-items: center; }
   .ad-sw button { width: 30px; height: 30px; border-radius: 9px; border: 0; cursor: pointer; padding: 0; }
-  .ad-sw button.on { box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #16181d; }
-  .ad-sw-custom { width: 30px; height: 30px; border-radius: 9px; border: 1px dashed #dcd8cf; display: grid; place-items: center; color: #5f6672; cursor: pointer; position: relative; overflow: hidden; }
+  .ad-sw button.on { box-shadow: 0 0 0 2px #f4f2ed, 0 0 0 4px #16181d; }
+  .ad-sw-custom { width: 30px; height: 30px; border-radius: 9px; border: 1px dashed #cdc8be; display: grid; place-items: center; color: #5f6672; cursor: pointer; position: relative; overflow: hidden; }
   .ad-sw-custom input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-  .ad-pv { margin-top: 22px; background: #faf9f7; border: 1px solid #e6e3dc; border-radius: 14px; padding: 14px; }
+  .ad-pv { margin-top: 22px; background: #eeebe5; border: 1px solid #d9d5cc; border-radius: 14px; padding: 14px; }
   .ad-pv small { display: block; font-size: 11px; font-weight: 700; letter-spacing: .6px; color: #5f6672; margin-bottom: 10px; }
   .ad-pvr { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 12.5px; color: #4b5260; margin-top: 10px; }
   .ad-pvr code { font-family: ui-monospace, Menlo, monospace; color: #2a39b8; font-size: 12px; background: none !important; }
-  .ad-group { font-size: 11px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; color: #5f6672; margin: 22px 0 -6px; padding-top: 16px; border-top: 1px solid #e6e3dc; }
+  .ad-group { font-size: 11px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; color: #5f6672; margin: 22px 0 -6px; padding-top: 16px; border-top: 1px solid #d9d5cc; }
   .ad-sheet-body .ad-group:first-child { border-top: 0; padding-top: 0; margin-top: 18px; }
   .ad-opt { color: #5f6672; font-weight: 500; margin-left: 4px; }
   .ad-inp.mono { font-family: ui-monospace, Menlo, monospace; font-size: 13px; }
@@ -814,8 +814,8 @@ const PANEL_CSS = `
   @media (max-width: 900px) { .ad-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ad-stats.three { grid-template-columns: repeat(3, minmax(0, 1fr)); } .ad-search { width: 100%; } .ad-tools { width: 100%; } }
   @media (max-width: 560px) { .ad-stats.three { grid-template-columns: minmax(0, 1fr); } .ad-grid { grid-template-columns: minmax(0, 1fr); } }
   .sw-wrap { position: relative; }
-  .sw-btn { display: flex; align-items: center; gap: 9px; height: 38px; padding: 0 10px 0 5px; border-radius: 11px; background: #ffffff; border: 1px solid #e6e3dc; color: #16181d; font: inherit; font-size: 13.5px; cursor: pointer; max-width: 320px; transition: border-color .15s, background .15s; }
-  .sw-btn:hover, .sw-btn.open { border-color: rgba(60,79,224,0.55); background: #ffffff; }
+  .sw-btn { display: flex; align-items: center; gap: 9px; height: 38px; padding: 0 10px 0 5px; border-radius: 11px; background: #f4f2ed; border: 1px solid #d9d5cc; color: #16181d; font: inherit; font-size: 13.5px; cursor: pointer; max-width: 320px; transition: border-color .15s, background .15s; }
+  .sw-btn:hover, .sw-btn.open { border-color: rgba(60,79,224,0.55); background: #f4f2ed; }
   .sw-btn.locked { cursor: default; }
   .sw-btn b { font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .sw-btn .pn-av, .sw-item .pn-av { width: 28px; height: 28px; border-radius: 8px; font-size: 12px; }
@@ -824,12 +824,12 @@ const PANEL_CSS = `
   .sw-btn em.live, .sw-item em.live { color: #0d6b4d; background: rgba(18,128,92,0.12); }
   .sw-btn em.live i, .sw-item em.live i { background: #12805c; }
   .sw-ic { width: 15px !important; height: 15px !important; color: #5f6672; }
-  .sw-pop { position: absolute; top: calc(100% + 8px); left: 0; z-index: 50; width: 360px; max-width: calc(100vw - 24px); background: #ffffff; border: 1px solid #e6e3dc; border-radius: 14px; box-shadow: 0 24px 60px rgba(22,24,29,0.12); overflow: hidden; animation: swIn .14s ease-out; }
+  .sw-pop { position: absolute; top: calc(100% + 8px); left: 0; z-index: 50; width: 360px; max-width: calc(100vw - 24px); background: #f4f2ed; border: 1px solid #d9d5cc; border-radius: 14px; box-shadow: 0 24px 60px rgba(22,24,29,0.12); overflow: hidden; animation: swIn .14s ease-out; }
   @keyframes swIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
-  .sw-search { display: flex; align-items: center; gap: 8px; padding: 0 12px; height: 46px; border-bottom: 1px solid #e6e3dc; color: #5f6672; }
+  .sw-search { display: flex; align-items: center; gap: 8px; padding: 0 12px; height: 46px; border-bottom: 1px solid #d9d5cc; color: #5f6672; }
   .sw-search svg { width: 16px; height: 16px; }
   .sw-search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #16181d; font: inherit; font-size: 14px; box-shadow: none !important; }
-  .sw-search kbd { font: inherit; font-size: 10.5px; color: #5f6672; border: 1px solid #e6e3dc; border-radius: 5px; padding: 1px 5px; }
+  .sw-search kbd { font: inherit; font-size: 10.5px; color: #5f6672; border: 1px solid #d9d5cc; border-radius: 5px; padding: 1px 5px; }
   .sw-list { max-height: 380px; overflow-y: auto; padding: 6px; }
   .sw-item { display: flex; align-items: center; gap: 10px; width: 100%; padding: 7px 8px; border: 0; border-radius: 9px; background: none; color: #2b2f37; font: inherit; text-align: left; cursor: pointer; }
   .sw-item:hover { background: rgba(22,24,29,0.03); }
@@ -838,12 +838,12 @@ const PANEL_CSS = `
   .sw-t b { font-size: 13.5px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .sw-t small { font-size: 11px; color: #5f6672; font-family: ui-monospace, Menlo, monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .sw-none { color: #5f6672; font-size: 13px; padding: 16px; text-align: center; }
-  .sw-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 12px; border-top: 1px solid #e6e3dc; font-size: 11.5px; color: #5f6672; }
+  .sw-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 12px; border-top: 1px solid #d9d5cc; font-size: 11.5px; color: #5f6672; }
   .sw-foot button { border: 0; background: none; color: #2a39b8; font: inherit; font-size: 12px; font-weight: 650; cursor: pointer; padding: 0; }
   .pn-side { width: 272px; min-width: 272px; }
   .pn-side-top { padding: 18px 14px 6px; }
   .pn-brand { margin-bottom: 14px; padding: 0 4px; }
-  .pn-side .sw-wrap .sw-btn { width: 100%; max-width: none; height: 52px; padding: 0 10px 0 9px; border-radius: 12px; background: #ffffff; }
+  .pn-side .sw-wrap .sw-btn { width: 100%; max-width: none; height: 52px; padding: 0 10px 0 9px; border-radius: 12px; background: #f4f2ed; }
   .pn-side .sw-wrap .sw-btn b { flex: 1; text-align: left; }
   .pn-side .sw-btn .pn-av { width: 32px; height: 32px; }
   .pn-side .sw-pop { width: 340px; }
@@ -864,16 +864,16 @@ const PANEL_CSS = `
   .pn-title h1 { margin: 2px 0 0; font-size: 21px; font-weight: 650; letter-spacing: -0.3px; color: #16181d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .pn-tabs { align-self: flex-start; max-width: 100%; scrollbar-width: none; }
   .pn-tabs::-webkit-scrollbar { display: none; }
-  .pn-side .sw-btn.locked { width: 100%; max-width: none; height: 52px; box-sizing: border-box; background: #ffffff; }
+  .pn-side .sw-btn.locked { width: 100%; max-width: none; height: 52px; box-sizing: border-box; background: #f4f2ed; }
   .pn-side .sw-btn.locked b { flex: 1; }
   .pn-apps-chev { transition: transform .18s; }
   .pn-apps-chev.open { transform: rotate(180deg); }
   .pn-side .sw-wrap .pn-apps { margin-top: 6px; }
-  .pn-apps { background: #ffffff; border: 1px solid #e6e3dc; border-radius: 12px; padding: 8px 6px 6px; }
+  .pn-apps { background: #f4f2ed; border: 1px solid #d9d5cc; border-radius: 12px; padding: 8px 6px 6px; }
   .pn-apps-h { display: flex; align-items: center; justify-content: space-between; padding: 0 6px 6px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase; color: #5f6672; }
   .pn-apps-h em { font-style: normal; color: #5f6672; margin-left: 4px; }
   .pn-apps-h button { border: 0; background: none; color: #2a39b8; font: inherit; font-size: 11.5px; font-weight: 650; letter-spacing: 0; text-transform: none; cursor: pointer; padding: 0; }
-  .pn-apps-q { display: flex; align-items: center; gap: 7px; height: 32px; margin: 0 2px 6px; padding: 0 9px; border-radius: 9px; background: #faf9f7; border: 1px solid #e6e3dc; color: #5f6672; }
+  .pn-apps-q { display: flex; align-items: center; gap: 7px; height: 32px; margin: 0 2px 6px; padding: 0 9px; border-radius: 9px; background: #eeebe5; border: 1px solid #d9d5cc; color: #5f6672; }
   .pn-apps-q:focus-within { border-color: #3c4fe0; }
   .pn-apps-q svg { width: 14px !important; height: 14px !important; }
   .pn-apps-q input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: #16181d; font: inherit; font-size: 12.5px; }
@@ -883,64 +883,64 @@ const PANEL_CSS = `
   .pn-apps .sw-t b { font-size: 13px; }
   .pn-apps .sw-item.on { box-shadow: inset 0 0 0 1px rgba(60,79,224,0.5); }
   .pn-root { font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-  .pn-side { background: #ffffff; border-right-color: #e6e3dc; }
-  .pn-head { background: rgba(17,17,20,0.92); border-bottom-color: #e6e3dc; }
-  .pn-mi:hover { background: #f1efea; }
-  .pn-mi.active { background: #ffffff; box-shadow: 0 0 0 1px #e6e3dc; }
+  .pn-side { background: #f4f2ed; border-right-color: #d9d5cc; }
+  .pn-head { background: rgba(17,17,20,0.92); border-bottom-color: #d9d5cc; }
+  .pn-mi:hover { background: #e8e5de; }
+  .pn-mi.active { background: #f4f2ed; box-shadow: 0 0 0 1px #d9d5cc; }
   .pn-mi.active .pn-mt b { color: #2a39b8; }
-  .pn-ni { background: #f1efea; }
-  .pn-tabs { background: #ffffff; border: 1px solid #e6e3dc; border-radius: 12px; }
+  .pn-ni { background: #e8e5de; }
+  .pn-tabs { background: #f4f2ed; border: 1px solid #d9d5cc; border-radius: 12px; }
   .pn-tabs button { font-weight: 500; color: #4b5260; }
-  .pn-tabs button.on { background: #f1efea; color: #16181d; box-shadow: 0 0 0 1px #dcd8cf; }
+  .pn-tabs button.on { background: #e8e5de; color: #16181d; box-shadow: 0 0 0 1px #cdc8be; }
   .pn-tabs button.on .pn-ico { color: #2a39b8; }
-  .pn-ghost { background: #ffffff; border-color: #e6e3dc; }
+  .pn-ghost { background: #f4f2ed; border-color: #d9d5cc; }
   .pn-content { gap: 20px; }
   .pn-content h2 { font-weight: 600; }
   .pn-content table { border-collapse: collapse; }
-  .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]), .pn-content select, .pn-content textarea { border-color: #e6e3dc; border-radius: 10px; }
+  .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]), .pn-content select, .pn-content textarea { border-color: #d9d5cc; border-radius: 10px; }
   .pn-root input[type=checkbox]:checked { background: #3c4fe0; }
   .pn-live { background: #e4f4ec; border-color: #bfe3cf; }
   .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]), .pn-content select, .pn-content textarea { box-sizing: border-box; max-width: 100%; }
   /* v2 — koyu, sade */
-  .pn-root { background: #faf9f7; color: #16181d; }
-  .pn-side { background: #faf9f7; border-right-color: #efede8; }
+  .pn-root { background: #eeebe5; color: #16181d; }
+  .pn-side { background: #eeebe5; border-right-color: #e3e0d9; }
   .pn-mark { background: #3c4fe0; box-shadow: none; border-radius: 8px; }
-  .pn-side .sw-wrap .sw-btn { background: #ffffff; border-color: #e6e3dc; }
+  .pn-side .sw-wrap .sw-btn { background: #f4f2ed; border-color: #d9d5cc; }
   .pn-live { background: #dcf2e8; border-color: #bfe3cf; }
   .pn-live b { color: #0d6b4d; } .pn-live span { color: #8fcfae; }
-  .pn-search { background: #faf9f7; border-color: #e6e3dc; }
+  .pn-search { background: #eeebe5; border-color: #d9d5cc; }
   .pn-grp { color: #6e747e; letter-spacing: .4px; }
   .pn-mi { color: #16181d; }
-  .pn-mi:hover { background: #ffffff; }
-  .pn-mi.active { background: #f1efea; }
-  .pn-ni { background: #ffffff; color: #4b5260; }
+  .pn-mi:hover { background: #f4f2ed; }
+  .pn-mi.active { background: #e8e5de; }
+  .pn-ni { background: #f4f2ed; color: #4b5260; }
   .pn-mi.active .pn-ni { background: #3c4fe0; color: #fff; }
   .pn-mt b { color: #16181d; font-weight: 500; }
   .pn-mi.active .pn-mt b { color: #16181d; }
   .pn-mt small, .pn-mi.active .pn-mt small { color: #5f6672; }
-  .pn-logout { border-top-color: #efede8; color: #4b5260; }
-  .pn-head { background: #faf9f7; border-bottom: 0; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .pn-logout { border-top-color: #e3e0d9; color: #4b5260; }
+  .pn-head { background: #eeebe5; border-bottom: 0; backdrop-filter: none; -webkit-backdrop-filter: none; }
   .pn-top { padding: 32px 48px 4px; align-items: flex-start; }
   .pn-title h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.4px; color: #16181d; margin: 0; }
   .pn-title p { margin: 6px 0 0; font-size: 14px; color: #4b5260; }
-  .pn-ghost { background: #ffffff; border-color: #e6e3dc; color: #4b5260; }
+  .pn-ghost { background: #f4f2ed; border-color: #d9d5cc; color: #4b5260; }
   .pn-content { margin: 0; max-width: 1100px; padding: 20px 48px 72px; gap: 28px; }
-  .pn-tabs { align-self: stretch; background: none; border: 0; border-bottom: 1px solid #e6e3dc; border-radius: 0; padding: 0; gap: 24px; overflow-x: auto; }
+  .pn-tabs { align-self: stretch; background: none; border: 0; border-bottom: 1px solid #d9d5cc; border-radius: 0; padding: 0; gap: 24px; overflow-x: auto; }
   .pn-tabs button { padding: 0 0 12px; margin-bottom: -1px; border-radius: 0; background: none !important; border-bottom: 2px solid transparent; color: #4b5260; font-weight: 500; font-size: 14px; box-shadow: none !important; }
   .pn-tabs button:hover { color: #16181d; }
   .pn-tabs button.on { color: #16181d; border-bottom-color: #5b8cff; }
   .pn-tabs .pn-ico { display: none; }
-  .pn-root input[type=checkbox] { background: #e6e3dc; }
+  .pn-root input[type=checkbox] { background: #d9d5cc; }
   .pn-root input[type=checkbox]:checked { background: #3c4fe0; }
   .pn-root input[type=radio] { accent-color: #3c4fe0; }
-  .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]), .pn-content select, .pn-content textarea { background-color: #faf9f7; border-color: #dcd8cf; color: #16181d; }
+  .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]), .pn-content select, .pn-content textarea { background-color: #eeebe5; border-color: #cdc8be; color: #16181d; }
   .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]):focus, .pn-content select:focus, .pn-content textarea:focus { border-color: #5b8cff !important; box-shadow: 0 0 0 3px rgba(60,79,224,0.18); }
   .v2-stack { display: flex; flex-direction: column; gap: 36px; }
   .v2-sec { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 32px; }
   .v2-sh h2 { margin: 0; font-size: 15px; font-weight: 600; color: #16181d; letter-spacing: 0; }
   .v2-sh p { margin: 6px 0 0; font-size: 13px; color: #4b5260; line-height: 1.5; }
-  .v2-box { background: #ffffff; border: 1px solid #e6e3dc; border-radius: 12px; min-width: 0; }
-  .v2-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 16px 20px; border-top: 1px solid #efede8; }
+  .v2-box { background: #f4f2ed; border: 1px solid #d9d5cc; border-radius: 12px; min-width: 0; }
+  .v2-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 16px 20px; border-top: 1px solid #e3e0d9; }
   .v2-box > .v2-row:first-child { border-top: 0; }
   .v2-row.stack { flex-direction: column; align-items: stretch; gap: 10px; }
   .v2-row.stack .v2-ctl { justify-content: flex-start; }
@@ -952,24 +952,24 @@ const PANEL_CSS = `
   .v2-t b { display: block; font-size: 14px; font-weight: 500; color: #16181d; }
   .v2-t span { display: block; font-size: 13px; color: #4b5260; margin-top: 2px; }
   .v2-ctl { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
-  .v2-foot { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 20px; border-top: 1px solid #efede8; }
+  .v2-foot { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 20px; border-top: 1px solid #e3e0d9; }
   .v2-endsave { display: flex; justify-content: flex-end; }
-  .v2-seg { display: inline-flex; border: 1px solid #dcd8cf; border-radius: 9px; overflow: hidden; }
-  .v2-seg button { border: 0; border-left: 1px solid #dcd8cf; background: none; color: #4b5260; font: inherit; font-size: 13px; padding: 7px 13px; cursor: pointer; }
+  .v2-seg { display: inline-flex; border: 1px solid #cdc8be; border-radius: 9px; overflow: hidden; }
+  .v2-seg button { border: 0; border-left: 1px solid #cdc8be; background: none; color: #4b5260; font: inherit; font-size: 13px; padding: 7px 13px; cursor: pointer; }
   .v2-seg button:first-child { border-left: 0; }
   .v2-seg button.on { background: #e8ebfd; color: #16181d; }
   .v2-info { background: #dcf2e8; color: #0d6b4d; font-size: 13px; justify-content: flex-start; }
   .v2-info.bad { background: #fdecea; color: #b42318; }
-  .v2-btn { height: 34px; padding: 0 14px; border-radius: 9px; border: 1px solid #dcd8cf; background: #f1efea; color: #16181d; font: inherit; font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; }
-  .v2-chip { display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 10px; border-radius: 7px; background: #f1efea; border: 1px solid #dcd8cf; font-size: 12.5px; color: #c9ced6; }
+  .v2-btn { height: 34px; padding: 0 14px; border-radius: 9px; border: 1px solid #cdc8be; background: #e8e5de; color: #16181d; font: inherit; font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; }
+  .v2-chip { display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 10px; border-radius: 7px; background: #e8e5de; border: 1px solid #cdc8be; font-size: 12.5px; color: #c9ced6; }
   .v2-muted { color: #4b5260; font-size: 13px; }
-  .v2-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid #e6e3dc; border-radius: 12px; background: #ffffff; margin-bottom: 24px; }
-  .v2-st { padding: 20px 24px; border-left: 1px solid #e6e3dc; }
+  .v2-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid #d9d5cc; border-radius: 12px; background: #f4f2ed; margin-bottom: 24px; }
+  .v2-st { padding: 20px 24px; border-left: 1px solid #d9d5cc; }
   .v2-st:first-child { border-left: 0; }
   .v2-st small { display: block; font-size: 12.5px; color: #4b5260; }
   .v2-st b { display: block; font-size: 32px; font-weight: 600; line-height: 1.15; color: #16181d; margin-top: 6px; letter-spacing: -0.5px; font-variant-numeric: tabular-nums; }
   .v2-st span { font-size: 12.5px; color: #5f6672; }
-  @media (max-width: 700px) { .v2-stats { grid-template-columns: minmax(0, 1fr); } .v2-st { border-left: 0; border-top: 1px solid #e6e3dc; } .v2-st:first-child { border-top: 0; } }
+  @media (max-width: 700px) { .v2-stats { grid-template-columns: minmax(0, 1fr); } .v2-st { border-left: 0; border-top: 1px solid #d9d5cc; } .v2-st:first-child { border-top: 0; } }
   @media (max-width: 900px) { .v2-sec { grid-template-columns: minmax(0, 1fr); gap: 12px; } .pn-top { padding: 20px 16px 4px; } .pn-content { padding: 16px 16px 60px; } }
   .pn-scrim { display: none; }
   @media (max-width: 900px) {
@@ -984,53 +984,53 @@ const PANEL_CSS = `
   @media (max-width: 560px) { .pn-ghost span, .pn-crumb-app, .pn-sep { display: none; } .pn-tool span { display: none; } .pn-tool { padding: 0 9px; } .pn-chip { height: 34px; } }
 
   /* ===== Açık Stüdyo (B) — kabuk ===== */
-  .pn-root { background: #f6f5f2; color: #16181d; font-family: Geist, Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-feature-settings: "tnum" 0; }
-  .pn-side { background: #fbfaf8; border-right: 1px solid #e6e3dc; }
+  .pn-root { background: #e7e5df; color: #16181d; font-family: Geist, Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-feature-settings: "tnum" 0; }
+  .pn-side { background: #eceae4; border-right: 1px solid #d9d5cc; }
   .pn-mark { background: #16181d; color: #fff; border-radius: 8px; box-shadow: none; }
   .pn-brand b { font-weight: 600; }
-  .pn-side .sw-wrap .sw-btn { background: #fff; border: 1px solid #e6e3dc; box-shadow: 0 1px 2px rgba(22,24,29,0.04); }
+  .pn-side .sw-wrap .sw-btn { background: #f4f2ed; border: 1px solid #d9d5cc; box-shadow: 0 1px 2px rgba(22,24,29,0.04); }
   .pn-live { background: #dcf2e8; border-color: #bfe3cf; }
   .pn-live b { color: #0d6b4d; } .pn-live span { color: #0d6b4d; }
   .pn-live i { background: #12805c; }
-  .pn-search { background: #fff; border-color: #e6e3dc; }
+  .pn-search { background: #f4f2ed; border-color: #d9d5cc; }
   .pn-grp { color: #5f6672; font-weight: 500; text-transform: none; letter-spacing: 0; font-size: 11.5px; }
   .pn-mi { color: #2b2f37; }
-  .pn-mi:hover { background: #ecebe6; }
-  .pn-mi.active { background: #fff; box-shadow: 0 0 0 1px #e6e3dc; }
+  .pn-mi:hover { background: #e3e0d9; }
+  .pn-mi.active { background: #f4f2ed; box-shadow: 0 0 0 1px #d9d5cc; }
   .pn-ni { background: transparent; color: #4b5260; }
   .pn-mi.active .pn-ni { background: #16181d; color: #fff; }
   .pn-mt b { color: #16181d; font-weight: 500; }
   .pn-mi.active .pn-mt b { color: #16181d; font-weight: 600; }
   .pn-mt small, .pn-mi.active .pn-mt small { color: #5f6672; }
   .pn-mbadge { margin-left: auto; font-size: 11px; font-weight: 600; color: #0d6b4d; background: #dcf2e8; border-radius: 999px; padding: 1px 7px; font-variant-numeric: tabular-nums; }
-  .pn-logout { color: #4b5260; border-top-color: #e6e3dc; }
-  .pn-head { background: #f6f5f2; }
+  .pn-logout { color: #4b5260; border-top-color: #d9d5cc; }
+  .pn-head { background: #e7e5df; }
   .pn-title h1 { font-weight: 600; }
   .pn-title p { color: #5f6672; }
-  .pn-ghost { background: #fff; border-color: #e6e3dc; color: #2b2f37; }
+  .pn-ghost { background: #f4f2ed; border-color: #d9d5cc; color: #2b2f37; }
   .pn-tabs { border-bottom: 0; gap: 4px; flex-wrap: wrap; }
   .pn-tabs button { padding: 7px 12px; margin: 0; border: 0 !important; border-radius: 8px; color: #4b5260; font-size: 13px; }
-  .pn-tabs button:hover { background: #ecebe6 !important; color: #16181d; }
+  .pn-tabs button:hover { background: #e3e0d9 !important; color: #16181d; }
   .pn-tabs button.on { background: #16181d !important; color: #fff; }
-  .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]), .pn-content select, .pn-content textarea { background-color: #fff; border-color: #dcd8cf; color: #16181d; }
+  .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]), .pn-content select, .pn-content textarea { background-color: #f4f2ed; border-color: #cdc8be; color: #16181d; }
   .pn-content input:not([type=checkbox]):not([type=radio]):not([type=color]):focus, .pn-content select:focus, .pn-content textarea:focus { border-color: #3c4fe0 !important; box-shadow: 0 0 0 3px rgba(60,79,224,0.15); }
-  .pn-root input[type=checkbox] { background: #dcd8cf; }
-  .pn-root input[type=checkbox]::after { background: #fff; box-shadow: 0 1px 2px rgba(22,24,29,0.2); }
+  .pn-root input[type=checkbox] { background: #cdc8be; }
+  .pn-root input[type=checkbox]::after { background: #f4f2ed; box-shadow: 0 1px 2px rgba(22,24,29,0.2); }
   .pn-root input[type=checkbox]:checked { background: #16181d; }
-  .v2-stats { background: #fff; border-color: #e6e3dc; }
+  .v2-stats { background: #f4f2ed; border-color: #d9d5cc; }
   .v2-st b.v2-now { color: #0d6b4d; }
   @media (max-width: 900px) { .pn-side.open { box-shadow: 20px 0 50px rgba(22,24,29,0.12); } }
 
   /* ===== İzleme / Ziyaretçi: kartlar, kırılımlar, tablo ===== */
   .lv-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin: 0 0 24px; }
-  .lv-card { background: #fff; border: 1px solid #e6e3dc; border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .lv-card { background: #f4f2ed; border: 1px solid #d9d5cc; border-radius: 12px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
   .lv-card-h b { display: block; font-size: 14px; font-weight: 600; color: #16181d; }
   .lv-card-h small { display: block; font-size: 12px; color: #5f6672; margin-top: 2px; }
   .lv-split { display: flex; gap: 2px; height: 8px; border-radius: 4px; overflow: hidden; margin: 2px 0 4px; }
   .lv-split i { display: block; height: 100%; }
-  .lv-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid #f1efea; }
+  .lv-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid #e8e5de; }
   .lv-row.link { cursor: pointer; border-radius: 8px; }
-  .lv-row.link:hover { background: #faf9f7; }
+  .lv-row.link:hover { background: #eeebe5; }
   .lv-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
   .lv-av { width: 26px !important; height: 26px !important; font-size: 12px !important; border-radius: 7px !important; flex-shrink: 0; }
   .lv-row-t { flex: 1; min-width: 0; display: flex; flex-direction: column; }
@@ -1040,29 +1040,46 @@ const PANEL_CSS = `
   .lv-row-n b { font-size: 14px; font-weight: 600; color: #16181d; font-variant-numeric: tabular-nums; white-space: nowrap; }
   .lv-row-n small { font-size: 11px; color: #5f6672; white-space: nowrap; font-variant-numeric: tabular-nums; }
   .lv-note { margin: 2px 0 0; font-size: 11.5px; color: #5f6672; line-height: 1.45; }
-  .lv-empty { padding: 28px; text-align: center; color: #5f6672; font-size: 13px; border: 1px dashed #dcd8cf; border-radius: 12px; background: #fff; }
+  .lv-empty { padding: 28px; text-align: center; color: #5f6672; font-size: 13px; border: 1px dashed #cdc8be; border-radius: 12px; background: #f4f2ed; }
   .lv-sub-h { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
   .lv-sub-h b { display: block; font-size: 15px; font-weight: 600; color: #16181d; }
   .lv-sub-h small { display: block; font-size: 12.5px; color: #5f6672; margin-top: 2px; }
   .lv-sub-h > span { font-size: 12px; color: #5f6672; }
-  .lv-table { background: #fff; border: 1px solid #e6e3dc; border-radius: 12px; overflow: hidden; }
+  .lv-table { background: #f4f2ed; border: 1px solid #d9d5cc; border-radius: 12px; overflow: hidden; }
   .lv-table table { width: 100%; border-collapse: collapse; min-width: 640px; }
-  .lv-table th { font-size: 12px; font-weight: 600; color: #5f6672; text-align: left; padding: 11px 16px; background: #faf9f7; border-bottom: 1px solid #e6e3dc; white-space: nowrap; }
-  .lv-table td { font-size: 13.5px; color: #2b2f37; padding: 10px 16px; border-bottom: 1px solid #efede8; }
+  .lv-table th { font-size: 12px; font-weight: 600; color: #5f6672; text-align: left; padding: 11px 16px; background: #eeebe5; border-bottom: 1px solid #d9d5cc; white-space: nowrap; }
+  .lv-table td { font-size: 13.5px; color: #2b2f37; padding: 10px 16px; border-bottom: 1px solid #e3e0d9; }
   .lv-table tr:last-child td { border-bottom: 0; }
   .lv-table .r { text-align: right; }
   .lv-table .n { font-weight: 600; color: #16181d; font-variant-numeric: tabular-nums; }
   .lv-table td b { font-weight: 600; color: #16181d; }
   .lv-cc { margin-left: 6px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11.5px; color: #5f6672; }
   .lv-share { display: flex; align-items: center; gap: 10px; }
-  .lv-share > div { flex: 1; height: 6px; border-radius: 3px; background: #efede8; overflow: hidden; }
+  .lv-share > div { flex: 1; height: 6px; border-radius: 3px; background: #e3e0d9; overflow: hidden; }
   .lv-share i { display: block; height: 100%; background: #3c4fe0; border-radius: 3px; }
   .lv-share span { width: 36px; text-align: right; font-size: 12px; color: #4b5260; font-variant-numeric: tabular-nums; }
   .lv-wrap { display: flex; flex-direction: column; }
   .lv-wrap > h2, .lv-wrap > div:first-child h2 { color: #16181d; }
   .lv-dev { gap: 0; }
-  .lv-dev table th { background: #faf9f7; }
-  .lv-more { width: 100%; padding: 11px; border: 0; border-top: 1px solid #e6e3dc; background: #faf9f7; color: #16181d; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; }
+  .lv-dev table th { background: #eeebe5; }
+  .lv-more { width: 100%; padding: 11px; border: 0; border-top: 1px solid #d9d5cc; background: #eeebe5; color: #16181d; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; }
+
+  /* ===== Sol menü: sıkı liste, maddeler arası çizgi ===== */
+  .pn-menu { padding: 0 12px 12px; }
+  .pn-grp { padding: 16px 10px 6px; font-size: 11px; font-weight: 600; color: #5f6672; text-transform: uppercase; letter-spacing: .5px; }
+  .pn-list { border: 1px solid #d9d5cc; border-radius: 10px; overflow: hidden; background: #f1efea; }
+  .pn-menu .pn-mi { margin: 0; padding: 0 12px; height: 38px; gap: 10px; border-radius: 0; box-shadow: none; border-bottom: 1px solid #dedad2; }
+  .pn-menu .pn-mi:last-child { border-bottom: 0; }
+  .pn-menu .pn-mi:hover { background: #e8e5de; }
+  .pn-menu .pn-mi.active { background: #e3e0d9; box-shadow: inset 3px 0 0 #16181d; }
+  .pn-menu .pn-ni { width: 18px; height: 18px; border-radius: 0; background: none !important; color: #5f6672; }
+  .pn-menu .pn-ni .pn-ico { width: 16px !important; height: 16px !important; }
+  .pn-menu .pn-mi.active .pn-ni { color: #16181d; }
+  .pn-menu .pn-mt small { display: none; }
+  .pn-menu .pn-mt b { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pn-menu .pn-mi.active .pn-mt b { font-weight: 600; }
+  .pn-menu .pn-mbadge { padding: 0 6px; font-size: 10.5px; }
+  .pn-menu .pn-none { background: none; }
 `;
 
 function App() {
@@ -1968,7 +1985,7 @@ function App() {
     return () => clearInterval(id);
   }, [rtWindow, activeSection, scopeAll]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!config) return <div style={{ color: "#4b5260", padding: 50, backgroundColor: "#faf9f7", minHeight: "100vh", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif" }}>Yükleniyor...</div>;
+  if (!config) return <div style={{ color: "#4b5260", padding: 50, backgroundColor: "#eeebe5", minHeight: "100vh", fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif" }}>Yükleniyor...</div>;
 
   // Ekranlar: yalnız erişilebilir sekmeleri olanlar (izole panelde bazı sekmeler yok)
   const itemByKey = Object.fromEntries(menuItems.map(m => [m.key, m]));
@@ -2100,7 +2117,7 @@ function App() {
           ) : (
             SCREEN_GROUPS.map(g => {
               const its = g.keys.map(k => screens.find(sc => sc.key === k)).filter(Boolean);
-              return its.length ? <div key={g.title}><div className="pn-grp">{g.title}</div>{its.map(screenItem)}</div> : null;
+              return its.length ? <div key={g.title}><div className="pn-grp">{g.title}</div><div className="pn-list">{its.map(screenItem)}</div></div> : null;
             })
           )}
         </nav>
@@ -2517,13 +2534,13 @@ function App() {
           ) : (
             <div style={{ display: "grid", gap: 12 }}>
               {policyList.map(p => (
-                <div key={p.packageName} style={{ background: "#ffffff", border: "1px solid #e6e3dc", borderRadius: 10, padding: 14 }}>
+                <div key={p.packageName} style={{ background: "#f4f2ed", border: "1px solid #d9d5cc", borderRadius: 10, padding: 14 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8, gap: 8 }}>
                     <div style={{ color: "#16181d", fontWeight: 700 }}>{p.appName}</div>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <div style={{ color: "#5f6672", fontSize: 12 }}>{p.email}</div>
                       <button onClick={() => openPolicySheet(p)} title="Düzenle"
-                        style={{ background: "transparent", border: "1px solid #e6e3dc", color: "#2a39b8", borderRadius: 6, padding: "4px 8px", cursor: "pointer", fontSize: 14, lineHeight: 1, flexShrink: 0 }}>✏️</button>
+                        style={{ background: "transparent", border: "1px solid #d9d5cc", color: "#2a39b8", borderRadius: 6, padding: "4px 8px", cursor: "pointer", fontSize: 14, lineHeight: 1, flexShrink: 0 }}>✏️</button>
                       <button onClick={() => deletePolicy(p)} title="Politikayı sil"
                         style={{ background: "transparent", border: "1px solid #3a2230", color: "#b42318", borderRadius: 6, padding: "4px 8px", cursor: "pointer", fontSize: 14, lineHeight: 1, flexShrink: 0 }}>🗑️</button>
                     </div>
@@ -2627,7 +2644,7 @@ function App() {
             <div
               onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
               style={{
-                background: "#ffffff", border: "1px solid #e6e3dc", borderRadius: 8,
+                background: "#f4f2ed", border: "1px solid #d9d5cc", borderRadius: 8,
                 padding: "12px 16px", cursor: "pointer", display: "flex",
                 justifyContent: "space-between", alignItems: "center", color: "#16181d"
               }}>
@@ -2642,13 +2659,13 @@ function App() {
             {isCountryDropdownOpen && (
               <div style={{
                 position: "absolute", top: "100%", left: 0, right: 0, zIndex: 999,
-                background: "#ffffff", border: "1px solid #e6e3dc", borderRadius: 8,
+                background: "#f4f2ed", border: "1px solid #d9d5cc", borderRadius: 8,
                 maxHeight: 300, overflowY: "auto", marginTop: 4
               }}>
                 {/* ARAMA */}
-                <div style={{ padding: 8, borderBottom: "1px solid #e6e3dc", position: "sticky", top: 0, background: "#ffffff" }}>
+                <div style={{ padding: 8, borderBottom: "1px solid #d9d5cc", position: "sticky", top: 0, background: "#f4f2ed" }}>
                   <input
-                    style={{...styles.input, margin: 0, background: "#faf9f7", fontSize: 13}}
+                    style={{...styles.input, margin: 0, background: "#eeebe5", fontSize: 13}}
                     placeholder="Ülke ara..."
                     value={countrySearch}
                     onChange={e => setCountrySearch(e.target.value)}
@@ -2664,12 +2681,12 @@ function App() {
                       onClick={() => toggleCountry(c.code)}
                       style={{
                         padding: "10px 14px", cursor: "pointer", display: "flex",
-                        alignItems: "center", gap: 10, borderBottom: "1px solid #e6e3dc",
+                        alignItems: "center", gap: 10, borderBottom: "1px solid #d9d5cc",
                         background: isSelected ? "#e8ebfd" : "transparent"
                       }}>
                       <div style={{
                         width: 18, height: 18, borderRadius: 4,
-                        border: isSelected ? "none" : "2px solid #dcd8cf",
+                        border: isSelected ? "none" : "2px solid #cdc8be",
                         background: isSelected ? "#3b82f6" : "transparent",
                         display: "flex", alignItems: "center", justifyContent: "center",
                         fontSize: 12, color: "#16181d"
@@ -2740,7 +2757,7 @@ function App() {
             <input style={styles.input} placeholder="Açılacak URL (isteğe bağlı)" value={notifActionUrl} onChange={e => setNotifActionUrl(e.target.value)} />
 
             {/* HEDEF ÜLKE */}
-            <div style={{ background: "#ffffff", borderRadius: 10, padding: 15 }}>
+            <div style={{ background: "#f4f2ed", borderRadius: 10, padding: 15 }}>
               <p style={{ color: "#4b5260", margin: "0 0 10px 0", fontSize: 13, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}>Hedef Ülke</p>
               <select style={{...styles.input, cursor: "pointer"}} value={notifTargetCountry} onChange={e => setNotifTargetCountry(e.target.value)}>
                 <option value="all">Tüm Ülkeler</option>
@@ -2770,7 +2787,7 @@ function App() {
             </div>
 
             {/* HEDEF MOD */}
-            <div style={{ background: "#ffffff", borderRadius: 10, padding: 15 }}>
+            <div style={{ background: "#f4f2ed", borderRadius: 10, padding: 15 }}>
               <p style={{ color: "#4b5260", margin: "0 0 10px 0", fontSize: 13, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}>Hedef Uygulama Modu</p>
               <div style={{ display: "flex", gap: 10 }}>
                 {[
@@ -2781,8 +2798,8 @@ function App() {
                   <button key={opt.value} onClick={() => setNotifTargetMode(opt.value)}
                     style={{
                       flex: 1, padding: "10px 8px", borderRadius: 8,
-                      border: notifTargetMode === opt.value ? "2px solid #3c4fe0" : "1px solid #e6e3dc",
-                      background: notifTargetMode === opt.value ? "#efe9fd" : "#faf9f7",
+                      border: notifTargetMode === opt.value ? "2px solid #3c4fe0" : "1px solid #d9d5cc",
+                      background: notifTargetMode === opt.value ? "#efe9fd" : "#eeebe5",
                       color: notifTargetMode === opt.value ? "#2a39b8" : "#4b5260",
                       cursor: "pointer", fontSize: 13, fontWeight: notifTargetMode === opt.value ? 600 : 400
                     }}>
@@ -2796,7 +2813,7 @@ function App() {
             </div>
 
             {/* ZAMANLAMA */}
-            <div style={{ background: "#ffffff", borderRadius: 10, padding: 15 }}>
+            <div style={{ background: "#f4f2ed", borderRadius: 10, padding: 15 }}>
               <p style={{ color: "#4b5260", margin: "0 0 10px 0", fontSize: 13, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}>Zamanlama</p>
               <div style={{ display: "flex", gap: 15, alignItems: "center" }}>
                 <label style={{ display: "flex", alignItems: "center", gap: 6, color: "#16181d", cursor: "pointer" }}>
@@ -2818,9 +2835,9 @@ function App() {
 
             {/* ÖN İZLEME */}
             {(notifTitle || notifMessage) && (
-              <div style={{ background: "#ffffff", borderRadius: 10, padding: 15 }}>
+              <div style={{ background: "#f4f2ed", borderRadius: 10, padding: 15 }}>
                 <p style={{ color: "#4b5260", margin: "0 0 10px 0", fontSize: 13, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}>Ön İzleme</p>
-                <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#f1efea", borderRadius: 8, padding: 12 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#e8e5de", borderRadius: 8, padding: 12 }}>
                   <span style={{ fontSize: 28 }}>🔔</span>
                   <div>
                     <p style={{ color: "#16181d", fontWeight: 700, margin: 0, fontSize: 15 }}>{notifTitle || "Bildirim Başlığı"}</p>
@@ -2921,7 +2938,7 @@ function App() {
 
                 return (
                   <div key={ann.id} style={{
-                    background: "#ffffff", border: `1px solid ${isActive ? "#3c4fe0" : "#dcd8cf"}`,
+                    background: "#f4f2ed", border: `1px solid ${isActive ? "#3c4fe0" : "#cdc8be"}`,
                     borderRadius: 10, padding: 20
                   }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
@@ -2929,7 +2946,7 @@ function App() {
                         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
                           <span style={{
                             fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 20,
-                            background: isActive ? "#efe9fd" : "#f1efea", color: isActive ? "#2a39b8" : "#5f6672"
+                            background: isActive ? "#efe9fd" : "#e8e5de", color: isActive ? "#2a39b8" : "#5f6672"
                           }}>
                             {isActive ? "● AKTİF" : "● PASİF"}
                           </span>
@@ -2972,9 +2989,9 @@ function App() {
                         const count = (ann.votes || {})[btn.value] || 0;
                         const pct = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
                         return (
-                          <div key={i} style={{ background: "#faf9f7", border: "1px solid #e6e3dc", borderRadius: 8, padding: "10px 16px", minWidth: 120 }}>
+                          <div key={i} style={{ background: "#eeebe5", border: "1px solid #d9d5cc", borderRadius: 8, padding: "10px 16px", minWidth: 120 }}>
                             <div style={{ color: "#2a39b8", fontSize: 13, fontWeight: 600, marginBottom: 6 }}>{btn.label}</div>
-                            <div style={{ background: "#ffffff", borderRadius: 4, height: 6, marginBottom: 4 }}>
+                            <div style={{ background: "#f4f2ed", borderRadius: 4, height: 6, marginBottom: 4 }}>
                               <div style={{ background: "#3c4fe0", width: `${pct}%`, height: "100%", borderRadius: 4, transition: "width 0.3s" }} />
                             </div>
                             <div style={{ color: "#4b5260", fontSize: 11 }}>{count} oy · %{pct}</div>
@@ -2997,7 +3014,7 @@ function App() {
           )}
 
           {/* Geri Bildirimler */}
-          <div style={{ marginTop: 30, borderTop: "1px solid #dcd8cf", paddingTop: 24 }}>
+          <div style={{ marginTop: 30, borderTop: "1px solid #cdc8be", paddingTop: 24 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
               <h3 style={{ margin: 0, fontSize: 17, fontWeight: 600, color: "#16181d" }}>Kullanıcı Geri Bildirimleri</h3>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -3011,7 +3028,7 @@ function App() {
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 {feedbacks.map(fb => (
-                  <div key={fb.id} style={{ background: "#faf9f7", border: "1px solid #dcd8cf", borderRadius: 10, padding: 14 }}>
+                  <div key={fb.id} style={{ background: "#eeebe5", border: "1px solid #cdc8be", borderRadius: 10, padding: 14 }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                         <span style={{ fontSize: 16 }}>{"⭐".repeat(fb.rating)}</span>
@@ -3054,7 +3071,7 @@ function App() {
             <>
               <div style={{ display: "flex", gap: 14, marginBottom: 24, flexWrap: "wrap" }}>
                 {[
-                  { label: "POPUP GÖSTERİLDİ", val: reviewLogs.counts?.popup_shown || 0, color: "#4b5260", bg: "#ffffff", br: "#e6e3dc" },
+                  { label: "POPUP GÖSTERİLDİ", val: reviewLogs.counts?.popup_shown || 0, color: "#4b5260", bg: "#f4f2ed", br: "#d9d5cc" },
                   { label: "BUTONA BASILDI", val: reviewLogs.counts?.button_tap || 0, color: "#2a39b8", bg: "#efe9fd", br: "#d9cdfa" },
                   { label: "✅ GOOGLE KABUL ETTİ", val: reviewLogs.counts?.request_ok || 0, color: "#0d6b4d", bg: "#e4f4ec", br: "#bfe3cf" },
                   { label: "❌ GOOGLE REDDETTİ", val: reviewLogs.counts?.request_fail || 0, color: "#b42318", bg: "#fdecea", br: "#f3c2bd" },
@@ -3072,7 +3089,7 @@ function App() {
                   <div style={{ color: "#0b6aa2", fontSize: 32, fontWeight: 800, marginTop: 6 }}>{reviewLogs.cardShown || 0}</div>
                   <div style={{ color: "#5f6672", fontSize: 10, marginTop: 4 }}>akış 500 ms'den uzun sürdü</div>
                 </div>
-                <div style={{ flex: "1 1 240px", padding: "16px 18px", borderRadius: 12, backgroundColor: "#ffffff", border: "1px solid #e6e3dc" }}>
+                <div style={{ flex: "1 1 240px", padding: "16px 18px", borderRadius: 12, backgroundColor: "#f4f2ed", border: "1px solid #d9d5cc" }}>
                   <div style={{ color: "#4b5260", fontSize: 11 }}>KART AÇILMADI (tahmin)</div>
                   <div style={{ color: "#4b5260", fontSize: 32, fontWeight: 800, marginTop: 6 }}>{reviewLogs.cardNotShown || 0}</div>
                   <div style={{ color: "#5f6672", fontSize: 10, marginTop: 4 }}>akış anında bitti — genelde kota dolu</div>
@@ -3101,7 +3118,7 @@ function App() {
                 <div style={{ overflowX: "auto" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                     <thead>
-                      <tr style={{ borderBottom: "1px solid #dcd8cf", color: "#4b5260", textAlign: "left" }}>
+                      <tr style={{ borderBottom: "1px solid #cdc8be", color: "#4b5260", textAlign: "left" }}>
                         <th style={{ padding: "8px 10px" }}>Olay</th>
                         <th style={{ padding: "8px 10px" }}>Detay</th>
                         <th style={{ padding: "8px 10px" }}>Süre</th>
@@ -3121,7 +3138,7 @@ function App() {
                         };
                         const s = map[l.event] || { t: l.event, c: "#2b2f37" };
                         return (
-                          <tr key={l.id} style={{ borderBottom: "1px solid #dcd8cf" }}>
+                          <tr key={l.id} style={{ borderBottom: "1px solid #cdc8be" }}>
                             <td style={{ padding: "8px 10px", color: s.c, fontWeight: 600 }}>{s.t}</td>
                             <td style={{ padding: "8px 10px", color: "#4b5260", maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis" }}>
                               {l.errorCode ? `${l.errorCode} — ` : ""}{l.detail}
@@ -3189,7 +3206,7 @@ function App() {
                     <div className="lv-card" key={title}>
                       <div className="lv-card-h"><b>{title}</b><small>{sub}</small></div>
                       <div className="lv-split">
-                        {total > 0 ? shown.filter(r => r.n > 0).map(r => <i key={r.k} style={{ flex: r.n, background: r.color }} />) : <i style={{ flex: 1, background: "#ecebe6" }} />}
+                        {total > 0 ? shown.filter(r => r.n > 0).map(r => <i key={r.k} style={{ flex: r.n, background: r.color }} />) : <i style={{ flex: 1, background: "#e3e0d9" }} />}
                       </div>
                       {shown.map(r => (
                         <div key={r.k} className={"lv-row" + (r.onClick ? " link" : "")} onClick={r.onClick}>
@@ -3242,9 +3259,9 @@ function App() {
                     ].filter(f => f.key !== "unknown" || f.count > 0).map(f => (
                       <button key={f.key} onClick={() => setLiveExtractor(f.key)}
                         style={{ padding: "5px 11px", borderRadius: 6, fontSize: 11, cursor: "pointer",
-                          backgroundColor: liveExtractor === f.key ? "#e6e3dc" : "transparent",
+                          backgroundColor: liveExtractor === f.key ? "#d9d5cc" : "transparent",
                           color: liveExtractor === f.key ? "#16181d" : "#4b5260",
-                          border: `1px solid ${liveExtractor === f.key ? "#3c4fe0" : "#e6e3dc"}` }}>
+                          border: `1px solid ${liveExtractor === f.key ? "#3c4fe0" : "#d9d5cc"}` }}>
                         {f.label} {f.count != null ? `(${f.count})` : ""}
                       </button>
                     ))}
@@ -3260,7 +3277,7 @@ function App() {
                 <div style={{ overflowX: "auto" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                     <thead>
-                      <tr style={{ borderBottom: "1px solid #dcd8cf", color: "#4b5260", textAlign: "left" }}>
+                      <tr style={{ borderBottom: "1px solid #cdc8be", color: "#4b5260", textAlign: "left" }}>
                         <th style={{ padding: "8px 10px" }}>IP</th>
                         <th style={{ padding: "8px 10px" }}>Ülke</th>
                         <th style={{ padding: "8px 10px" }}>Kaynak</th>
@@ -3271,7 +3288,7 @@ function App() {
                     </thead>
                     <tbody>
                       {(liveExtractor === "all" ? liveUsers.users : liveUsers.users.filter(u => (u.extractor || "unknown") === liveExtractor)).map(u => (
-                        <tr key={u.uid} style={{ borderBottom: "1px solid #dcd8cf" }}>
+                        <tr key={u.uid} style={{ borderBottom: "1px solid #cdc8be" }}>
                           <td style={{ padding: "8px 10px", color: "#16181d", fontFamily: "monospace" }}>
                             <span style={{ display: "inline-block", width: 7, height: 7, borderRadius: "50%", marginRight: 8,
                               backgroundColor: u.secondsAgo < 120 ? "#12805c" : "#eab308" }} />
@@ -3283,7 +3300,7 @@ function App() {
                               const map = {
                                 newpipe: { label: "NewPipe", color: "#0b6aa2", bg: "#e2f1fb", border: "#b9dcf1" },
                                 backend: { label: "Backend", color: "#8a5a00", bg: "#fdf0d5", border: "#f0d9a6" },
-                                unknown: { label: "Bilinmiyor", color: "#4b5260", bg: "#ffffff", border: "#e6e3dc" },
+                                unknown: { label: "Bilinmiyor", color: "#4b5260", bg: "#f4f2ed", border: "#d9d5cc" },
                               };
                               const s = map[u.extractor] || map.unknown;
                               return (
@@ -3445,7 +3462,7 @@ function App() {
                 <div style={{ overflowX: "auto", marginBottom: 24 }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                     <thead>
-                      <tr style={{ borderBottom: "1px solid #dcd8cf", color: "#4b5260", textAlign: "left" }}>
+                      <tr style={{ borderBottom: "1px solid #cdc8be", color: "#4b5260", textAlign: "left" }}>
                         <th style={{ padding: "8px 10px" }}>IP</th>
                         <th style={{ padding: "8px 10px" }}>Ülke</th>
                         <th style={{ padding: "8px 10px" }}>Uygulama</th>
@@ -3458,7 +3475,7 @@ function App() {
                     </thead>
                     <tbody>
                       {rtUsers.users.map(u => (
-                        <tr key={u.uid} style={{ borderBottom: "1px solid #dcd8cf" }}>
+                        <tr key={u.uid} style={{ borderBottom: "1px solid #cdc8be" }}>
                           <td style={{ padding: "8px 10px", color: "#16181d", fontFamily: "monospace" }}>
                             <span style={{ display: "inline-block", width: 7, height: 7, borderRadius: "50%", marginRight: 8,
                               backgroundColor: u.secondsAgo < 120 ? "#0ea5e9" : "#eab308" }} />
@@ -3498,7 +3515,7 @@ function App() {
               {/* DAĞILIM ÇUBUĞU */}
               <div style={{ marginBottom: 26 }}>
                 <div style={{ color: "#4b5260", fontSize: 12, marginBottom: 8 }}>DAĞILIM (son 1 dk — toplam {tot5})</div>
-                <div style={{ display: "flex", height: 14, borderRadius: 7, overflow: "hidden", backgroundColor: "#faf9f7", border: "1px solid #e6e3dc" }}>
+                <div style={{ display: "flex", height: 14, borderRadius: 7, overflow: "hidden", backgroundColor: "#eeebe5", border: "1px solid #d9d5cc" }}>
                   <div title={`Müzik: ${yt.online1m || 0}`} style={{ width: `${seg(yt.online1m || 0)}%`, backgroundColor: "#12805c" }} />
                   <div title={`Zil sesi: ${rt.online1m || 0}`} style={{ width: `${seg(rt.online1m || 0)}%`, backgroundColor: "#0ea5e9" }} />
                   <div title={`Bilinmiyor: ${un.online1m || 0}`} style={{ width: `${seg(un.online1m || 0)}%`, backgroundColor: "#c9c5bc" }} />
@@ -3523,7 +3540,7 @@ function App() {
                   <div style={{ overflowX: "auto" }}>
                     <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                       <thead>
-                        <tr style={{ borderBottom: "1px solid #dcd8cf", color: "#4b5260", textAlign: "left" }}>
+                        <tr style={{ borderBottom: "1px solid #cdc8be", color: "#4b5260", textAlign: "left" }}>
                           <th style={{ padding: "8px 10px" }}>Uygulama</th>
                           <th style={{ padding: "8px 10px" }}>Paket adı</th>
                           <th style={{ padding: "8px 10px" }}>Zil sesi</th>
@@ -3533,7 +3550,7 @@ function App() {
                       </thead>
                       <tbody>
                         {rtUsers.byApp.map(a => (
-                          <tr key={a.id} style={{ borderBottom: "1px solid #dcd8cf" }}>
+                          <tr key={a.id} style={{ borderBottom: "1px solid #cdc8be" }}>
                             <td style={{ padding: "8px 10px", color: "#16181d" }}>{a.name}</td>
                             <td style={{ padding: "8px 10px", color: "#5f6672", fontFamily: "monospace", fontSize: 11 }}>{a.packageName || "—"}</td>
                             <td style={{ padding: "8px 10px", color: a.ringtone > 0 ? "#0b6aa2" : "#5f6672", fontWeight: 600 }}>{a.ringtone}</td>
@@ -3576,7 +3593,7 @@ function App() {
               </div>
 
               {/* KURAL ↔ GERÇEK */}
-              <div style={{ marginBottom: 26, padding: "14px 16px", borderRadius: 10, backgroundColor: "#ffffff", border: "1px solid #e6e3dc" }}>
+              <div style={{ marginBottom: 26, padding: "14px 16px", borderRadius: 10, backgroundColor: "#f4f2ed", border: "1px solid #d9d5cc" }}>
                 <div style={{ color: "#4b5260", fontSize: 12, marginBottom: 10 }}>YÜRÜRLÜKTEKİ KURALLAR</div>
                 <div style={{ fontSize: 12, color: "#2b2f37", marginBottom: 8 }}>
                   Ülke kuralı:{" "}
@@ -3627,7 +3644,7 @@ function App() {
             <div style={{ overflowX: "auto" }}>
               <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                 <thead>
-                  <tr style={{ borderBottom: "1px solid #dcd8cf", color: "#4b5260", textAlign: "left" }}>
+                  <tr style={{ borderBottom: "1px solid #cdc8be", color: "#4b5260", textAlign: "left" }}>
                     <th style={{ padding: "8px 10px" }}>IP</th>
                     <th style={{ padding: "8px 10px" }}>Ülke</th>
                     <th style={{ padding: "8px 10px" }}>Giriş</th>
@@ -3638,7 +3655,7 @@ function App() {
                 </thead>
                 <tbody>
                   {loginIps.map(entry => (
-                    <tr key={entry.id} style={{ borderBottom: "1px solid #dcd8cf" }}>
+                    <tr key={entry.id} style={{ borderBottom: "1px solid #cdc8be" }}>
                       <td style={{ padding: "8px 10px", color: "#16181d", fontFamily: "monospace" }}>{entry.ip}</td>
                       <td style={{ padding: "8px 10px", color: "#2b2f37" }}>{entry.country || "?"}</td>
                       <td style={{ padding: "8px 10px", color: "#2a39b8", fontWeight: 600 }}>{entry.count}</td>
@@ -3778,8 +3795,8 @@ function App() {
                   ].map(t => (
                     <div key={t.key} onClick={() => setPopupType(t.key)}
                       style={{ flex: "1 1 260px", padding: "14px 16px", borderRadius: 10, cursor: "pointer",
-                        backgroundColor: popupType === t.key ? "#efe9fd" : "#ffffff",
-                        border: `1px solid ${popupType === t.key ? "#3c4fe0" : "#e6e3dc"}` }}>
+                        backgroundColor: popupType === t.key ? "#efe9fd" : "#f4f2ed",
+                        border: `1px solid ${popupType === t.key ? "#3c4fe0" : "#d9d5cc"}` }}>
                       <div style={{ color: popupType === t.key ? "#2a39b8" : "#2b2f37", fontSize: 14, fontWeight: 600 }}>{t.title}</div>
                       <div style={{ color: "#4b5260", fontSize: 11, marginTop: 6, lineHeight: 1.5 }}>{t.desc}</div>
                     </div>
@@ -3906,7 +3923,7 @@ function App() {
 
               {/* Önizleme */}
               {(popupTitle || popupMessage) && (
-                <div style={{ background: "#faf9f7", border: "1px solid #e6e3dc", borderRadius: 12, padding: 20 }}>
+                <div style={{ background: "#eeebe5", border: "1px solid #d9d5cc", borderRadius: 12, padding: 20 }}>
                   <p style={{ color: "#5f6672", fontSize: 11, margin: "0 0 12px 0", textTransform: "uppercase", letterSpacing: 1 }}>Önizleme</p>
                   <p style={{ margin: "0 0 8px 0", fontWeight: 700, color: "#16181d", fontSize: 18 }}>{popupTitle || "Başlık"}</p>
                   <p style={{ margin: "0 0 16px 0", color: "#4b5260", fontSize: 14 }}>{popupMessage || "Mesaj..."}</p>
@@ -3932,7 +3949,7 @@ function App() {
           </p>
 
           {/* Varsayılan (Global) Ayarlar */}
-          <div style={{ padding: "16px", background: "#ffffff", borderRadius: 8, border: "1px solid #e6e3dc", marginBottom: 20 }}>
+          <div style={{ padding: "16px", background: "#f4f2ed", borderRadius: 8, border: "1px solid #d9d5cc", marginBottom: 20 }}>
             <h3 style={{ color: "#16181d", margin: "0 0 12px 0", fontSize: 15 }}>Varsayılan Ayar (Kural tanımlı olmayan ülkeler)</h3>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
               <label style={{ fontSize: 13, color: "#2b2f37" }}>Aktif:</label>
@@ -3948,7 +3965,7 @@ function App() {
                 <label style={{ fontSize: 12, color: "#4b5260", display: "block", marginBottom: 4 }}>Tür:</label>
                 <select value={config.downloadAd?.type || "url"}
                   onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, type: e.target.value } }))}
-                  style={{ background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                  style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                   <option value="url">URL Aç</option>
                   <option value="admob">AdMob</option>
                   <option value="both">URL + AdMob</option>
@@ -3958,7 +3975,7 @@ function App() {
                 <label style={{ fontSize: 12, color: "#4b5260", display: "block", marginBottom: 4 }}>Frekans:</label>
                 <select value={config.downloadAd?.showEveryNth || 1}
                   onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, showEveryNth: parseInt(e.target.value) } }))}
-                  style={{ background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                  style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                   <option value={1}>Her indirmede</option>
                   <option value={2}>Her 2</option>
                   <option value={3}>Her 3</option>
@@ -3971,14 +3988,14 @@ function App() {
               <input type="text" placeholder="https://..."
                 value={config.downloadAd?.url || ""}
                 onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, url: e.target.value } }))}
-                style={{ width: "100%", background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
             </div>
             <div style={{ marginTop: 10 }}>
               <label style={{ fontSize: 12, color: "#4b5260", display: "block", marginBottom: 4 }}>AdMob Unit ID:</label>
               <input type="text" placeholder="ca-app-pub-xxx/yyy"
                 value={config.downloadAd?.admobUnitId || ""}
                 onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, admobUnitId: e.target.value } }))}
-                style={{ width: "100%", background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
             </div>
 
             {/* İlk indirmede mutlaka reklam */}
@@ -3995,11 +4012,11 @@ function App() {
                 <span style={{ color: "#4b5260", fontSize: 13 }}>Her</span>
                 <input type="number" min={0} placeholder="10" value={config.downloadAd?.cycleSize || ""}
                   onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, cycleSize: parseInt(e.target.value) || 0 } }))}
-                  style={{ width: 70, background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                  style={{ width: 70, background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                 <span style={{ color: "#4b5260", fontSize: 13 }}>indirmede</span>
                 <input type="number" min={0} placeholder="2" value={config.downloadAd?.adsPerCycle || ""}
                   onChange={e => setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, adsPerCycle: parseInt(e.target.value) || 0 } }))}
-                  style={{ width: 70, background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                  style={{ width: 70, background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                 <span style={{ color: "#4b5260", fontSize: 13 }}>reklam</span>
               </div>
               <span style={{ color: "#5f6672", fontSize: 11 }}>Doluysa üstteki "Frekans" yerine bu geçerli (örn. 10 indirmede 2 → ilk kullanıcıdan sonra 10'arlı bloklarda 2 reklam)</span>
@@ -4014,7 +4031,7 @@ function App() {
                 const rules = [...(config.downloadAd?.rules || [])];
                 rules.unshift({ countries: [], enabled: true, type: "url", url: "", admobUnitId: "", showEveryNth: 1, delaySeconds: 0 });
                 setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
-              }} style={{ background: "transparent", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+              }} style={{ background: "transparent", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
                 + Kural Ekle
               </button>
             </div>
@@ -4026,7 +4043,7 @@ function App() {
             )}
 
             {(config.downloadAd?.rules || []).map((rule, idx) => (
-              <div key={idx} style={{ padding: "14px", background: "#ffffff", borderRadius: 8, border: `1px solid ${rule.enabled ? "#d97706" : "#e6e3dc"}`, marginBottom: 12 }}>
+              <div key={idx} style={{ padding: "14px", background: "#f4f2ed", borderRadius: 8, border: `1px solid ${rule.enabled ? "#d97706" : "#d9d5cc"}`, marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <span style={{ fontSize: 13, fontWeight: 600, color: "#2b2f37" }}>Kural #{idx + 1}</span>
@@ -4062,7 +4079,7 @@ function App() {
                         rules[idx] = { ...rules[idx], type: e.target.value };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value="url">URL Aç</option>
                       <option value="admob">AdMob</option>
                       <option value="both">URL + AdMob</option>
@@ -4080,7 +4097,7 @@ function App() {
                         rules[idx] = { ...rules[idx], url: e.target.value };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                   <div>
                     <label style={{ fontSize: 12, color: "#4b5260", display: "block", marginBottom: 4 }}>AdMob ID:</label>
@@ -4091,7 +4108,7 @@ function App() {
                         rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 </div>
 
@@ -4104,7 +4121,7 @@ function App() {
                         rules[idx] = { ...rules[idx], showEveryNth: parseInt(e.target.value) };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value={1}>Her indirmede</option>
                       <option value={2}>Her 2</option>
                       <option value={3}>Her 3</option>
@@ -4119,7 +4136,7 @@ function App() {
                         rules[idx] = { ...rules[idx], delaySeconds: parseInt(e.target.value) };
                         setConfig(prev => ({ ...prev, downloadAd: { ...prev.downloadAd, rules } }));
                       }}
-                      style={{ background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value={0}>Anında</option>
                       <option value={1}>1 sn</option>
                       <option value={2}>2 sn</option>
@@ -4146,7 +4163,7 @@ function App() {
           </p>
 
           {/* Global Ayar */}
-          <div style={{ padding: "16px", background: "#ffffff", borderRadius: 8, border: "1px solid #e6e3dc", marginBottom: 20 }}>
+          <div style={{ padding: "16px", background: "#f4f2ed", borderRadius: 8, border: "1px solid #d9d5cc", marginBottom: 20 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
               <label style={{ fontSize: 14, color: "#2b2f37" }}>Banner Reklam Aktif:</label>
               <input type="checkbox" checked={config.bannerAd?.enabled || false}
@@ -4160,7 +4177,7 @@ function App() {
               <label style={{ fontSize: 12, color: "#4b5260", display: "block", marginBottom: 4 }}>Her kaç şarkıda bir banner göster:</label>
               <select value={config.bannerAd?.showEveryNth || 3}
                 onChange={e => setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, showEveryNth: parseInt(e.target.value) } }))}
-                style={{ background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }}>
+                style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }}>
                 <option value={2}>Her 2 şarkıda bir</option>
                 <option value={3}>Her 3 şarkıda bir</option>
                 <option value={4}>Her 4 şarkıda bir</option>
@@ -4170,7 +4187,7 @@ function App() {
           </div>
 
           {/* Belirli pozisyonlar */}
-          <div style={{ marginBottom: 20, padding: "14px 16px", background: "#ffffff", borderRadius: 8, border: "1px solid #e6e3dc" }}>
+          <div style={{ marginBottom: 20, padding: "14px 16px", background: "#f4f2ed", borderRadius: 8, border: "1px solid #d9d5cc" }}>
             <label style={{ fontSize: 13, color: "#2b2f37", display: "block", marginBottom: 6 }}>
               Belirli pozisyonlar (virgülle ayır, örn: <b>2, 10</b>)
             </label>
@@ -4184,7 +4201,7 @@ function App() {
                 setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, positions: arr } }));
               }}
               placeholder="2, 10"
-              style={{ background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%", boxSizing: "border-box" }} />
+              style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%", boxSizing: "border-box" }} />
             <p style={{ fontSize: 11, color: "#5f6672", marginTop: 6, marginBottom: 0 }}>
               Bu alan doluysa banner <b>tam bu şarkılardan sonra</b> çıkar (örn. 2. ve 10. şarkıdan sonra). Boş bırakırsan yukarıdaki "her kaç şarkıda bir" ayarı kullanılır.
             </p>
@@ -4198,7 +4215,7 @@ function App() {
                 const rules = [...(config.bannerAd?.rules || [])];
                 rules.push({ countries: [], enabled: true, type: "admob", admobUnitId: "", imageUrl: "", clickUrl: "" });
                 setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
-              }} style={{ background: "transparent", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+              }} style={{ background: "transparent", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
                 + Kural Ekle
               </button>
             </div>
@@ -4210,7 +4227,7 @@ function App() {
             )}
 
             {(config.bannerAd?.rules || []).map((rule, idx) => (
-              <div key={idx} style={{ padding: "14px", background: "#ffffff", borderRadius: 8, border: `1px solid ${rule.enabled ? "#d97706" : "#e6e3dc"}`, marginBottom: 12 }}>
+              <div key={idx} style={{ padding: "14px", background: "#f4f2ed", borderRadius: 8, border: `1px solid ${rule.enabled ? "#d97706" : "#d9d5cc"}`, marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <input type="checkbox" checked={rule.enabled}
@@ -4240,7 +4257,7 @@ function App() {
                         rules[idx] = { ...rules[idx], type: e.target.value };
                         setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
                       }}
-                      style={{ background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value="admob">Google AdMob</option>
                       <option value="custom">Kendi Görselim (Resim + Link)</option>
                     </select>
@@ -4257,7 +4274,7 @@ function App() {
                         rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                         setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 )}
 
@@ -4272,7 +4289,7 @@ function App() {
                           rules[idx] = { ...rules[idx], imageUrl: e.target.value };
                           setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                     <div>
                       <label style={{ fontSize: 12, color: "#4b5260", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
@@ -4283,7 +4300,7 @@ function App() {
                           rules[idx] = { ...rules[idx], clickUrl: e.target.value };
                           setConfig(prev => ({ ...prev, bannerAd: { ...prev.bannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                   </>
                 )}
@@ -4320,7 +4337,7 @@ function App() {
               const rules = [...(config.bottomBannerAd?.rules || [])];
               rules.push({ countries: [], enabled: true, type: "admob", admobUnitId: "", imageUrl: "", clickUrl: "" });
               setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
-            }} style={{ background: "transparent", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+            }} style={{ background: "transparent", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
               + Kural Ekle
             </button>
           </div>
@@ -4332,7 +4349,7 @@ function App() {
           )}
 
           {(config.bottomBannerAd?.rules || []).map((rule, idx) => (
-            <div key={idx} style={{ padding: "14px", background: "#ffffff", borderRadius: 8, border: `1px solid ${rule.enabled ? "#d97706" : "#e6e3dc"}`, marginBottom: 12 }}>
+            <div key={idx} style={{ padding: "14px", background: "#f4f2ed", borderRadius: 8, border: `1px solid ${rule.enabled ? "#d97706" : "#d9d5cc"}`, marginBottom: 12 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <input type="checkbox" checked={rule.enabled}
@@ -4362,7 +4379,7 @@ function App() {
                       rules[idx] = { ...rules[idx], type: e.target.value };
                       setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
                     }}
-                    style={{ background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                    style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                     <option value="admob">Google AdMob</option>
                     <option value="custom">Kendi Görselim (Resim + Link)</option>
                   </select>
@@ -4379,7 +4396,7 @@ function App() {
                       rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                       setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
                     }}
-                    style={{ width: "100%", background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                    style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                 </div>
               )}
 
@@ -4394,7 +4411,7 @@ function App() {
                         rules[idx] = { ...rules[idx], imageUrl: e.target.value };
                         setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                   <div style={{ marginBottom: 8 }}>
                     <label style={{ fontSize: 12, color: "#4b5260", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
@@ -4405,7 +4422,7 @@ function App() {
                         rules[idx] = { ...rules[idx], clickUrl: e.target.value };
                         setConfig(prev => ({ ...prev, bottomBannerAd: { ...prev.bottomBannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 </>
               )}
@@ -4444,7 +4461,7 @@ function App() {
               <label style={{ fontSize: 12, color: "#4b5260", display: "block", marginBottom: 4 }}>Her kaç zil sesinde bir banner göster:</label>
               <select value={config.ringtoneBannerAd?.showEveryNth || 3}
                 onChange={e => setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, showEveryNth: parseInt(e.target.value) } }))}
-                style={{ background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }}>
+                style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }}>
                 <option value={2}>Her 2 zilde bir</option>
                 <option value={3}>Her 3 zilde bir</option>
                 <option value={4}>Her 4 zilde bir</option>
@@ -4464,7 +4481,7 @@ function App() {
                   setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, positions: arr } }));
                 }}
                 placeholder="2, 6"
-                style={{ background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%", boxSizing: "border-box" }} />
+                style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "8px 12px", fontSize: 14, width: "100%", boxSizing: "border-box" }} />
               <p style={{ fontSize: 11, color: "#5f6672", marginTop: 6, marginBottom: 0 }}>
                 Doluysa banner tam bu zillerden sonra çıkar. Boşsa yukarıdaki "her kaç zilde bir" kullanılır.
               </p>
@@ -4476,7 +4493,7 @@ function App() {
                 const rules = [...(config.ringtoneBannerAd?.rules || [])];
                 rules.push({ countries: [], enabled: true, type: "admob", admobUnitId: "", imageUrl: "", clickUrl: "" });
                 setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
-              }} style={{ background: "transparent", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+              }} style={{ background: "transparent", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
                 + Kural Ekle
               </button>
             </div>
@@ -4486,7 +4503,7 @@ function App() {
             )}
 
             {(config.ringtoneBannerAd?.rules || []).map((rule, idx) => (
-              <div key={idx} style={{ padding: "14px", background: "#ffffff", borderRadius: 8, border: `1px solid ${rule.enabled ? "#0b6aa2" : "#e6e3dc"}`, marginBottom: 12 }}>
+              <div key={idx} style={{ padding: "14px", background: "#f4f2ed", borderRadius: 8, border: `1px solid ${rule.enabled ? "#0b6aa2" : "#d9d5cc"}`, marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <input type="checkbox" checked={rule.enabled}
@@ -4516,7 +4533,7 @@ function App() {
                         rules[idx] = { ...rules[idx], type: e.target.value };
                         setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
                       }}
-                      style={{ background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value="admob">Google AdMob</option>
                       <option value="custom">Kendi Görselim (Resim + Link)</option>
                     </select>
@@ -4532,7 +4549,7 @@ function App() {
                         rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                         setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 )}
 
@@ -4546,7 +4563,7 @@ function App() {
                           rules[idx] = { ...rules[idx], imageUrl: e.target.value };
                           setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                     <div>
                       <label style={{ fontSize: 12, color: "#4b5260", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
@@ -4556,7 +4573,7 @@ function App() {
                           rules[idx] = { ...rules[idx], clickUrl: e.target.value };
                           setConfig(prev => ({ ...prev, ringtoneBannerAd: { ...prev.ringtoneBannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                   </>
                 )}
@@ -4584,7 +4601,7 @@ function App() {
                 const rules = [...(config.ringtoneBottomBannerAd?.rules || [])];
                 rules.push({ countries: [], enabled: true, type: "admob", admobUnitId: "", imageUrl: "", clickUrl: "" });
                 setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
-              }} style={{ background: "transparent", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+              }} style={{ background: "transparent", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 10, padding: "7px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
                 + Kural Ekle
               </button>
             </div>
@@ -4594,7 +4611,7 @@ function App() {
             )}
 
             {(config.ringtoneBottomBannerAd?.rules || []).map((rule, idx) => (
-              <div key={idx} style={{ padding: "14px", background: "#ffffff", borderRadius: 8, border: `1px solid ${rule.enabled ? "#0b6aa2" : "#e6e3dc"}`, marginBottom: 12 }}>
+              <div key={idx} style={{ padding: "14px", background: "#f4f2ed", borderRadius: 8, border: `1px solid ${rule.enabled ? "#0b6aa2" : "#d9d5cc"}`, marginBottom: 12 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <input type="checkbox" checked={rule.enabled}
@@ -4624,7 +4641,7 @@ function App() {
                         rules[idx] = { ...rules[idx], type: e.target.value };
                         setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
                       }}
-                      style={{ background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
+                      style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13, width: "100%" }}>
                       <option value="admob">Google AdMob</option>
                       <option value="custom">Kendi Görselim (Resim + Link)</option>
                     </select>
@@ -4640,7 +4657,7 @@ function App() {
                         rules[idx] = { ...rules[idx], admobUnitId: e.target.value };
                         setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
                       }}
-                      style={{ width: "100%", background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                      style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                   </div>
                 )}
 
@@ -4654,7 +4671,7 @@ function App() {
                           rules[idx] = { ...rules[idx], imageUrl: e.target.value };
                           setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                     <div style={{ marginBottom: 8 }}>
                       <label style={{ fontSize: 12, color: "#4b5260", display: "block", marginBottom: 4 }}>Tıklama URL:</label>
@@ -4664,7 +4681,7 @@ function App() {
                           rules[idx] = { ...rules[idx], clickUrl: e.target.value };
                           setConfig(prev => ({ ...prev, ringtoneBottomBannerAd: { ...prev.ringtoneBottomBannerAd, rules } }));
                         }}
-                        style={{ width: "100%", background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
+                        style={{ width: "100%", background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "6px 10px", fontSize: 13 }} />
                     </div>
                   </>
                 )}
@@ -4686,12 +4703,12 @@ function App() {
           <div style={{ position: "relative", marginBottom: 16 }}>
             <div
               onClick={() => document.getElementById("adFreeDropdown").style.display = document.getElementById("adFreeDropdown").style.display === "block" ? "none" : "block"}
-              style={{ background: "#faf9f7", color: "#16181d", border: "1px solid #e6e3dc", borderRadius: 6, padding: "8px 12px", fontSize: 13, cursor: "pointer", minHeight: 36 }}>
+              style={{ background: "#eeebe5", color: "#16181d", border: "1px solid #d9d5cc", borderRadius: 6, padding: "8px 12px", fontSize: 13, cursor: "pointer", minHeight: 36 }}>
               {(config.adFreeCountries || []).length > 0
                 ? (config.adFreeCountries || []).map(c => { const found = COUNTRY_LIST.find(x => x.code === c); return found ? `${found.code} ${found.name}` : c; }).join(", ")
                 : "Ülke seçin..."}
             </div>
-            <div id="adFreeDropdown" style={{ display: "none", position: "absolute", top: "100%", left: 0, right: 0, background: "#faf9f7", border: "1px solid #dcd8cf", borderRadius: 6, maxHeight: 250, overflowY: "auto", zIndex: 999 }}>
+            <div id="adFreeDropdown" style={{ display: "none", position: "absolute", top: "100%", left: 0, right: 0, background: "#eeebe5", border: "1px solid #cdc8be", borderRadius: 6, maxHeight: 250, overflowY: "auto", zIndex: 999 }}>
               {COUNTRY_LIST.map(c => (
                 <label key={c.code} style={{ display: "flex", alignItems: "center", padding: "6px 12px", fontSize: 13, color: "#2b2f37", cursor: "pointer" }}>
                   <input type="checkbox" checked={(config.adFreeCountries || []).includes(c.code)}
@@ -5094,7 +5111,7 @@ function App() {
 
           {/* Sağlık durumu özeti (salt-okunur) */}
           {apiHealth.length > 0 && apiHealth.map((p, i) => (
-            <div key={"h" + (p.id || i)} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#ffffff", border: "1px solid #dcd8cf", borderRadius: 8, padding: "10px 16px", marginBottom: 8 }}>
+            <div key={"h" + (p.id || i)} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#f4f2ed", border: "1px solid #cdc8be", borderRadius: 8, padding: "10px 16px", marginBottom: 8 }}>
               <span style={{ color: "#2b2f37", fontSize: 13 }}>{p.name || p.id} <span style={{ color: "#5f6672" }}>· öncelik {p.priority}</span></span>
               <span style={{
                 backgroundColor: p.status === "online" ? "#065f4620" : "#7f1d1d20",
@@ -5148,7 +5165,7 @@ function App() {
             };
             const ep = p.endpoints || {};
             return (
-              <div key={p.id || i} style={{ background: "#ffffff", border: `1px solid ${p.enabled !== false ? "#2a3a2a" : "#3a2a2a"}`, borderRadius: 10, padding: 18, marginBottom: 14 }}>
+              <div key={p.id || i} style={{ background: "#f4f2ed", border: `1px solid ${p.enabled !== false ? "#2a3a2a" : "#3a2a2a"}`, borderRadius: 10, padding: 18, marginBottom: 14 }}>
                 <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 12 }}>
                   <input type="text" placeholder="İsim" style={{ ...styles.input, flex: 1 }}
                     value={p.name || ""} onChange={e => updateField("name", e.target.value)} />
@@ -5222,7 +5239,7 @@ function App() {
             }).catch(() => alert("Sunucuya bağlanılamadı!"));
           }}>Tüm API Kaynaklarını Kaydet</button>
 
-          <div style={{ background: "#ffffff", border: "1px solid #dcd8cf", borderRadius: 10, padding: 20, marginTop: 20 }}>
+          <div style={{ background: "#f4f2ed", border: "1px solid #cdc8be", borderRadius: 10, padding: 20, marginTop: 20 }}>
             <h3 style={{ color: "#16181d", fontSize: 16, margin: "0 0 16px 0" }}>API Haritası — Kim Neyi Kullanıyor?</h3>
             <p style={{ color: "#4b5260", fontSize: 12, marginBottom: 16 }}>Uygulamanın her özelliği hangi API kaynağını kullandığını gösterir</p>
             {[
@@ -5234,7 +5251,7 @@ function App() {
               { feature: "🔮 Otomatik Tamamlama", source: config?.autocompleteSource === "bazocam" ? "Bazocam API" : "Google Suggest", detail: config?.autocompleteSource === "bazocam" ? "ototamamlamaapi.php" : "suggestqueries.google.com", fallback: "—", where: config?.autocompleteSource === "bazocam" ? "Backend" : "Cihaz (direkt)" },
               { feature: "🏆 Top 50", source: "YouTube Data API v3", detail: "mostPopular chart", fallback: "Piped API", where: "Backend" },
             ].map((api, i) => (
-              <div key={i} style={{ background: "#faf9f7", borderRadius: 8, padding: "12px 14px", marginBottom: 8 }}>
+              <div key={i} style={{ background: "#eeebe5", borderRadius: 8, padding: "12px 14px", marginBottom: 8 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <span style={{ color: "#16181d", fontSize: 13, fontWeight: 600, minWidth: 160 }}>{api.feature}</span>
                   <span style={{ color: "#0d6b4d", fontSize: 12, fontWeight: 600 }}>{api.source}</span>
@@ -5247,7 +5264,7 @@ function App() {
           </div>
 
           {/* Autocomplete Kaynak Seçimi */}
-          <div style={{ background: "#ffffff", border: "1px solid #dcd8cf", borderRadius: 10, padding: 20, marginTop: 20 }}>
+          <div style={{ background: "#f4f2ed", border: "1px solid #cdc8be", borderRadius: 10, padding: 20, marginTop: 20 }}>
             <h3 style={{ color: "#16181d", fontSize: 16, margin: "0 0 12px 0" }}>Otomatik Tamamlama Kaynağı</h3>
             <p style={{ color: "#4b5260", fontSize: 12, marginBottom: 16 }}>Arama yazarken önerilerin nereden geleceğini seçin</p>
             <div style={{ display: "flex", gap: 12 }}>
@@ -5257,8 +5274,8 @@ function App() {
               ].map(opt => (
                 <div key={opt.value} onClick={() => setConfig({ ...config, autocompleteSource: opt.value })}
                   style={{
-                    flex: 1, background: config?.autocompleteSource === opt.value ? "#065f4630" : "#faf9f7",
-                    border: `2px solid ${config?.autocompleteSource === opt.value ? "#12805c" : "#dcd8cf"}`,
+                    flex: 1, background: config?.autocompleteSource === opt.value ? "#065f4630" : "#eeebe5",
+                    border: `2px solid ${config?.autocompleteSource === opt.value ? "#12805c" : "#cdc8be"}`,
                     borderRadius: 10, padding: 16, cursor: "pointer", transition: "all 0.2s"
                   }}>
                   <div style={{ fontSize: 24, marginBottom: 8 }}>{opt.icon}</div>
@@ -5279,7 +5296,7 @@ function App() {
           </div>
 
           {/* Eski endpoint listesi */}
-          <div style={{ background: "#ffffff", border: "1px solid #dcd8cf", borderRadius: 10, padding: 20, marginTop: 20 }}>
+          <div style={{ background: "#f4f2ed", border: "1px solid #cdc8be", borderRadius: 10, padding: 20, marginTop: 20 }}>
             <h3 style={{ color: "#16181d", fontSize: 16, margin: "0 0 12px 0" }}>Bazocam API Endpoint'leri</h3>
             <p style={{ color: "#4b5260", fontSize: 12, marginBottom: 12 }}>Patronun sunucusundaki kullanılabilir endpoint'ler</p>
             {[
@@ -5288,7 +5305,7 @@ function App() {
               { label: "🔍 Arama", method: "GET", path: `/searchapi.php?search=SORGU&key=API_KEY` },
               { label: "🔮 Otomatik Tamamlama", method: "GET", path: `/ototamamlamaapi.php?search=SORGU&key=API_KEY` },
             ].map((ep, i) => (
-              <div key={i} style={{ background: "#faf9f7", borderRadius: 8, padding: "10px 14px", marginBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div key={i} style={{ background: "#eeebe5", borderRadius: 8, padding: "10px 14px", marginBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div>
                   <span style={{ color: "#16181d", fontSize: 13 }}>{ep.label}</span>
                   <span style={{ backgroundColor: "#065f4620", color: "#0d6b4d", padding: "2px 8px", borderRadius: 4, fontSize: 11, marginLeft: 8 }}>{ep.method}</span>
@@ -5352,22 +5369,22 @@ function App() {
           </div>
 
           {/* API Key & Quota */}
-          <div style={{ background: "#ffffff", border: "1px solid #dcd8cf", borderRadius: 10, padding: 20, marginBottom: 20 }}>
+          <div style={{ background: "#f4f2ed", border: "1px solid #cdc8be", borderRadius: 10, padding: 20, marginBottom: 20 }}>
             <h3 style={{ color: "#16181d", fontSize: 16, margin: "0 0 16px 0" }}>YouTube API</h3>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-              <div style={{ background: "#faf9f7", borderRadius: 8, padding: 14 }}>
+              <div style={{ background: "#eeebe5", borderRadius: 8, padding: 14 }}>
                 <div style={{ color: "#5f6672", fontSize: 11, marginBottom: 4 }}>API Key</div>
                 <div style={{ color: "#16181d", fontSize: 14, fontFamily: "monospace" }}>{youtubeData?.youtubeApiKey || "—"}</div>
               </div>
-              <div style={{ background: "#faf9f7", borderRadius: 8, padding: 14 }}>
+              <div style={{ background: "#eeebe5", borderRadius: 8, padding: 14 }}>
                 <div style={{ color: "#5f6672", fontSize: 11, marginBottom: 4 }}>API Çağrısı (restart'tan beri)</div>
                 <div style={{ color: "#16181d", fontSize: 14 }}>{youtubeData?.apiCallCount || 0}</div>
               </div>
-              <div style={{ background: "#faf9f7", borderRadius: 8, padding: 14 }}>
+              <div style={{ background: "#eeebe5", borderRadius: 8, padding: 14 }}>
                 <div style={{ color: "#5f6672", fontSize: 11, marginBottom: 4 }}>Quota Aşım Sayısı</div>
                 <div style={{ color: youtubeData?.quotaExceeded > 0 ? "#b42318" : "#0d6b4d", fontSize: 14 }}>{youtubeData?.quotaExceeded || 0}</div>
               </div>
-              <div style={{ background: "#faf9f7", borderRadius: 8, padding: 14 }}>
+              <div style={{ background: "#eeebe5", borderRadius: 8, padding: 14 }}>
                 <div style={{ color: "#5f6672", fontSize: 11, marginBottom: 4 }}>Cache Süresi</div>
                 <div style={{ color: "#16181d", fontSize: 14 }}>{youtubeData?.cacheDurationMin || 60} dk</div>
               </div>
@@ -5375,7 +5392,7 @@ function App() {
           </div>
 
           {/* Warmup Ayarları */}
-          <div style={{ background: "#ffffff", border: "1px solid #dcd8cf", borderRadius: 10, padding: 20, marginBottom: 20 }}>
+          <div style={{ background: "#f4f2ed", border: "1px solid #cdc8be", borderRadius: 10, padding: 20, marginBottom: 20 }}>
             <h3 style={{ color: "#16181d", fontSize: 16, margin: "0 0 16px 0" }}>Warmup Ayarları</h3>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
               <span style={{ color: "#4b5260", fontSize: 13 }}>Güncelleme aralığı:</span>
@@ -5408,11 +5425,11 @@ function App() {
           </div>
 
           {/* Aktif Ülkeler */}
-          <div style={{ background: "#ffffff", border: "1px solid #dcd8cf", borderRadius: 10, padding: 20 }}>
+          <div style={{ background: "#f4f2ed", border: "1px solid #cdc8be", borderRadius: 10, padding: 20 }}>
             <h3 style={{ color: "#0b6aa2", fontSize: 16, margin: "0 0 16px 0" }}>Aktif Ülkeler ({youtubeData?.activeRegions?.length || 0})</h3>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
               {(youtubeData?.activeRegions || []).map((r, i) => (
-                <div key={i} style={{ background: "#faf9f7", border: "1px solid #dcd8cf", borderRadius: 8, padding: "8px 14px", display: "flex", alignItems: "center", gap: 8 }}>
+                <div key={i} style={{ background: "#eeebe5", border: "1px solid #cdc8be", borderRadius: 8, padding: "8px 14px", display: "flex", alignItems: "center", gap: 8 }}>
                   <span style={{ fontSize: 18 }}>{String.fromCodePoint(...r.region.split("").map(c => 127397 + c.charCodeAt(0)))}</span>
                   <span style={{ color: "#16181d", fontSize: 13, fontWeight: 500 }}>{r.region}</span>
                   <span style={{ color: r.cached ? "#0d6b4d" : "#b42318", fontSize: 11 }}>
@@ -5460,52 +5477,52 @@ function App() {
 }
 
 const styles = {
-  container: { backgroundColor: "#faf9f7", minHeight: "100vh", color: "#16181d", fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif", padding: "40px 20px" },
+  container: { backgroundColor: "#eeebe5", minHeight: "100vh", color: "#16181d", fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif", padding: "40px 20px" },
   content: { maxWidth: 1000, margin: "0 auto", display: "flex", flexDirection: "column", gap: 30 },
-  card: { backgroundColor: "#ffffff", padding: "20px 22px", borderRadius: 14, border: "1px solid #e6e3dc" },
+  card: { backgroundColor: "#f4f2ed", padding: "20px 22px", borderRadius: 14, border: "1px solid #d9d5cc" },
   title: { margin: "0 0 18px 0", fontSize: 16, fontWeight: "600", letterSpacing: -0.2, color: "#16181d" },
   headerRow: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 },
   inputGroup: { display: "flex", gap: 15, alignItems: "center", flexWrap: "wrap", marginBottom: 25 },
   labelCheckbox: { fontSize: 14, color: "#16181d", display: "flex", alignItems: "center", gap: 10, cursor: "pointer" },
   label: { fontSize: 12, color: "#4b5260", display: "block", marginBottom: 6, fontWeight: "600" },
-  input: { backgroundColor: "#faf9f7", border: "1px solid #e6e3dc", color: "#16181d", padding: "10px 12px", borderRadius: 10, outline: "none", fontSize: 14 },
-  inputDisabled: { backgroundColor: "#ffffff", border: "1px solid #e6e3dc", color: "#5f6672", padding: "12px 14px", borderRadius: 10, width: "100%", fontSize: 14, boxSizing: "border-box" },
-  select: { backgroundColor: "#faf9f7", border: "1px solid #e6e3dc", color: "#16181d", padding: "10px 12px", borderRadius: 10, outline: "none", fontSize: 14, cursor: "pointer" },
-  selectDark: { backgroundColor: "#faf9f7", border: "1px solid #e6e3dc", color: "#16181d", padding: "10px 12px", borderRadius: 10, outline: "none", width: "100%", fontSize: 14, cursor: "pointer", boxSizing: "border-box" },
+  input: { backgroundColor: "#eeebe5", border: "1px solid #d9d5cc", color: "#16181d", padding: "10px 12px", borderRadius: 10, outline: "none", fontSize: 14 },
+  inputDisabled: { backgroundColor: "#f4f2ed", border: "1px solid #d9d5cc", color: "#5f6672", padding: "12px 14px", borderRadius: 10, width: "100%", fontSize: 14, boxSizing: "border-box" },
+  select: { backgroundColor: "#eeebe5", border: "1px solid #d9d5cc", color: "#16181d", padding: "10px 12px", borderRadius: 10, outline: "none", fontSize: 14, cursor: "pointer" },
+  selectDark: { backgroundColor: "#eeebe5", border: "1px solid #d9d5cc", color: "#16181d", padding: "10px 12px", borderRadius: 10, outline: "none", width: "100%", fontSize: 14, cursor: "pointer", boxSizing: "border-box" },
   primaryBtn: { backgroundColor: "#16181d", color: "#fff", border: "none", padding: "10px 16px", borderRadius: 10, cursor: "pointer", transition: "all 0.2s", fontSize: 13.5, fontWeight: "600" },
   textBtn: { backgroundColor: "transparent", color: "#b42318", border: "none", cursor: "pointer", fontWeight: "500" },
   list: { display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 },
-  listItem: { display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "#ffffff", border: "1px solid #e6e3dc", padding: "10px 14px", borderRadius: 10, fontSize: 14 },
+  listItem: { display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "#f4f2ed", border: "1px solid #d9d5cc", padding: "10px 14px", borderRadius: 10, fontSize: 14 },
   
   table: { width: "100%", borderCollapse: "collapse", fontSize: 14 },
-  th: { textAlign: "left", padding: "10px 14px", color: "#5f6672", fontWeight: "600", fontSize: 12, background: "#ffffff", borderBottom: "1px solid #e6e3dc" },
-  thRight: { textAlign: "right", padding: "10px 14px", color: "#5f6672", fontWeight: "600", fontSize: 12, background: "#ffffff", borderBottom: "1px solid #e6e3dc" },
-  tr: { borderBottom: "1px solid #efede8", transition: "background 0.2s" },
+  th: { textAlign: "left", padding: "10px 14px", color: "#5f6672", fontWeight: "600", fontSize: 12, background: "#f4f2ed", borderBottom: "1px solid #d9d5cc" },
+  thRight: { textAlign: "right", padding: "10px 14px", color: "#5f6672", fontWeight: "600", fontSize: 12, background: "#f4f2ed", borderBottom: "1px solid #d9d5cc" },
+  tr: { borderBottom: "1px solid #e3e0d9", transition: "background 0.2s" },
   td: { padding: "12px 14px", verticalAlign: "top" },
   tdRight: { padding: "12px 14px", textAlign: "right", verticalAlign: "top" },
   actionBtn: { background: "none", border: "none", color: "#2a39b8", cursor: "pointer", fontSize: 13, fontWeight: "600", padding: 0 },
   
   chipContainer: { display: "flex", flexWrap: "wrap", gap: 10 },
-  chip: { backgroundColor: "#ffffff", padding: "4px 10px", borderRadius: 8, fontSize: 12.5, color: "#16181d", border: "1px solid #e6e3dc" },
+  chip: { backgroundColor: "#f4f2ed", padding: "4px 10px", borderRadius: 8, fontSize: 12.5, color: "#16181d", border: "1px solid #d9d5cc" },
   
   modalOverlay: { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.65)", backdropFilter: "blur(4px)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1000 },
-  modal: { backgroundColor: "#ffffff", width: "100%", maxWidth: 650, borderRadius: 16, border: "1px solid #e6e3dc", boxShadow: "0 25px 60px rgba(22,24,29,0.12)" },
-  modalHeader: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 24px", borderBottom: "1px solid #e6e3dc" },
+  modal: { backgroundColor: "#f4f2ed", width: "100%", maxWidth: 650, borderRadius: 16, border: "1px solid #d9d5cc", boxShadow: "0 25px 60px rgba(22,24,29,0.12)" },
+  modalHeader: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 24px", borderBottom: "1px solid #d9d5cc" },
   modalTitle: { margin: 0, fontSize: 16, color: "#16181d", fontWeight: "600" },
-  cancelBtn: { backgroundColor: "transparent", color: "#16181d", border: "1px solid #e6e3dc", padding: "10px 16px", borderRadius: 10, cursor: "pointer", marginRight: 10, fontSize: 13.5, fontWeight: "600" },
+  cancelBtn: { backgroundColor: "transparent", color: "#16181d", border: "1px solid #d9d5cc", padding: "10px 16px", borderRadius: 10, cursor: "pointer", marginRight: 10, fontSize: 13.5, fontWeight: "600" },
   saveBtn: { backgroundColor: "#16181d", color: "#fff", border: "none", padding: "10px 16px", borderRadius: 10, cursor: "pointer", fontSize: 13.5, fontWeight: "600" },
   modalBody: { padding: "22px 24px" },
   formGroup: { marginBottom: 25 },
   
-  chipsInputBox: { backgroundColor: "#faf9f7", border: "1px solid #e6e3dc", borderRadius: 10, padding: "12px", display: "flex", flexWrap: "wrap", gap: 8, minHeight: 110 },
-  chipEditable: { backgroundColor: "#f1efea", padding: "5px 10px", borderRadius: 8, fontSize: 12.5, display: "flex", alignItems: "center", gap: 8, color: "#16181d" },
+  chipsInputBox: { backgroundColor: "#eeebe5", border: "1px solid #d9d5cc", borderRadius: 10, padding: "12px", display: "flex", flexWrap: "wrap", gap: 8, minHeight: 110 },
+  chipEditable: { backgroundColor: "#e8e5de", padding: "5px 10px", borderRadius: 8, fontSize: 12.5, display: "flex", alignItems: "center", gap: 8, color: "#16181d" },
   chipClose: { cursor: "pointer", color: "#4b5260", fontSize: 14 },
   chipInput: { background: "transparent", border: "none", color: "#16181d", outline: "none", flex: 1, minWidth: 200, fontSize: 14 },
   
-  filterBox: { backgroundColor: "#ffffff", border: "1px solid #e6e3dc", borderRadius: 12, padding: "18px" },
-  multiSelectHeader: { backgroundColor: "#faf9f7", border: "1px solid #e6e3dc", color: "#16181d", padding: "10px 12px", borderRadius: 10, cursor: "pointer", fontSize: 14, userSelect: "none" },
-  multiSelectList: { position: "absolute", top: "100%", left: 0, right: 0, backgroundColor: "#ffffff", border: "1px solid #e6e3dc", borderRadius: 10, maxHeight: 250, overflowY: "auto", zIndex: 10, marginTop: 4 },
-  multiSelectItem: { display: "flex", alignItems: "center", padding: "9px 12px", cursor: "pointer", borderBottom: "1px solid #efede8", fontSize: 14, color: "#16181d" }
+  filterBox: { backgroundColor: "#f4f2ed", border: "1px solid #d9d5cc", borderRadius: 12, padding: "18px" },
+  multiSelectHeader: { backgroundColor: "#eeebe5", border: "1px solid #d9d5cc", color: "#16181d", padding: "10px 12px", borderRadius: 10, cursor: "pointer", fontSize: 14, userSelect: "none" },
+  multiSelectList: { position: "absolute", top: "100%", left: 0, right: 0, backgroundColor: "#f4f2ed", border: "1px solid #d9d5cc", borderRadius: 10, maxHeight: 250, overflowY: "auto", zIndex: 10, marginTop: 4 },
+  multiSelectItem: { display: "flex", alignItems: "center", padding: "9px 12px", cursor: "pointer", borderBottom: "1px solid #e3e0d9", fontSize: 14, color: "#16181d" }
 };
 
 export default App;
