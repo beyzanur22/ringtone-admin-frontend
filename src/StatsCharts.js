@@ -530,9 +530,10 @@ export const STATS_CSS = `
   .st-cl-more { margin-top: 6px; padding: 8px; border: 0; border-radius: 8px; background: #f4f2ed; color: #2b2f37; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
   .recharts-legend-item-text { color: #4b5260 !important; }
   @media (max-width: 560px) { .st-range button { padding: 6px 8px; font-size: 12px; } .st-tile b { font-size: 20px; } }
-  .st-range, .st-seg { background: #e3e0d9; border: 0; }
-  .st-range button.on, .st-seg button.on { background: #16181d; color: #fff; }
-  .st-range button, .st-seg button { color: #4b5260; font-weight: 500; }
+  .st-range, .st-seg { gap: 2px; padding: 3px; background: #e3e0d9; border: 1px solid #d6d2c8; border-radius: 11px; box-shadow: inset 0 1px 2px rgba(22,24,29,0.05); }
+  .st-range button, .st-seg button { color: #4b5260; font-weight: 500; font-size: 12.5px; padding: 6px 12px; border-radius: 8px; transition: background .12s, color .12s; }
+  .st-range button:hover, .st-seg button:hover { background: rgba(22,24,29,0.05); color: #16181d; }
+  .st-range button.on, .st-seg button.on { background: #f8f7f3; color: #16181d; font-weight: 600; box-shadow: 0 1px 2px rgba(22,24,29,0.12), 0 0 0 1px #cfcac0; }
   .lb-card { background: #f4f2ed; border: 1px solid #d9d5cc; border-radius: 12px; padding: 18px 20px 14px; margin-bottom: 24px; min-width: 0; }
   .lb-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
   .lb-head h3 { margin: 0; font-size: 15px; font-weight: 600; color: #16181d; }

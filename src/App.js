@@ -1080,6 +1080,37 @@ const PANEL_CSS = `
   .pn-menu .pn-mi.active .pn-mt b { font-weight: 600; }
   .pn-menu .pn-mbadge { padding: 0 6px; font-size: 10.5px; }
   .pn-menu .pn-none { background: none; }
+
+  /* ===== Seçenekler: tek ortak görünüm (sekme, segment, filtre) ===== */
+  .pn-tabs, .pn-seg, .da-seg, .ad-seg, .v2-seg {
+    display: inline-flex; flex-wrap: nowrap; gap: 2px; padding: 3px; max-width: 100%; overflow-x: auto; scrollbar-width: none;
+    background: #e3e0d9 !important; border: 1px solid #d6d2c8 !important; border-radius: 11px !important; box-shadow: inset 0 1px 2px rgba(22,24,29,0.05);
+  }
+  .pn-tabs::-webkit-scrollbar, .pn-seg::-webkit-scrollbar { display: none; }
+  .pn-tabs { align-self: flex-start; }
+  .pn-tabs button, .pn-seg button, .da-seg button, .ad-seg button, .v2-seg button {
+    display: inline-flex; align-items: center; justify-content: center; gap: 7px; flex-shrink: 0; height: auto;
+    padding: 7px 13px !important; margin: 0 !important; border: 0 !important; border-radius: 8px !important;
+    background: transparent !important; box-shadow: none !important; color: #4b5260 !important;
+    font: inherit; font-size: 13px !important; font-weight: 500 !important; cursor: pointer; white-space: nowrap;
+    transition: background .12s, color .12s, box-shadow .12s;
+  }
+  .pn-tabs button { padding: 8px 14px !important; font-size: 13.5px !important; }
+  .pn-tabs button:hover, .pn-seg button:hover, .da-seg button:hover, .ad-seg button:hover, .v2-seg button:hover {
+    background: rgba(22,24,29,0.05) !important; color: #16181d !important;
+  }
+  .pn-tabs button.on, .pn-seg button.on, .da-seg button.on, .ad-seg button.on, .v2-seg button.on {
+    background: #f8f7f3 !important; color: #16181d !important; font-weight: 600 !important;
+    box-shadow: 0 1px 2px rgba(22,24,29,0.12), 0 0 0 1px #cfcac0 !important;
+  }
+  .pn-tabs .pn-ico { display: inline-block !important; width: 15px !important; height: 15px !important; color: #6b7078; }
+  .pn-tabs button.on .pn-ico { color: #3c4fe0; }
+  .pn-seg.sm button { padding: 5px 10px !important; font-size: 12px !important; }
+  .ad-seg { display: flex; }
+  .ad-seg button { flex: 1; }
+  .ad-filters button { background: #f4f2ed; border-color: #d6d2c8; color: #4b5260; font-weight: 500; }
+  .ad-filters button:hover { background: #ebe8e1; color: #16181d; }
+  .ad-filters button.on { background: #e8ebfd; color: #2a39b8; border-color: #b9c1f5; font-weight: 600; }
 `;
 
 function App() {
@@ -3250,18 +3281,14 @@ function App() {
                 <SectionHead title="Şu An Aktif Cihazlar" sub={`Son ${liveUsers.window} dakika`} />
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   {/* KAYNAK FİLTRESİ */}
-                  <div style={{ display: "flex", gap: 4 }}>
+                  <div className="pn-seg sm">
                     {[
                       { key: "all", label: "Tümü", count: liveUsers.windowCount },
                       { key: "newpipe", label: "NewPipe", count: (liveUsers.windowByExtractor || {}).newpipe },
                       { key: "backend", label: "Backend", count: (liveUsers.windowByExtractor || {}).backend },
                       { key: "unknown", label: "Bilinmiyor", count: (liveUsers.windowByExtractor || {}).unknown },
                     ].filter(f => f.key !== "unknown" || f.count > 0).map(f => (
-                      <button key={f.key} onClick={() => setLiveExtractor(f.key)}
-                        style={{ padding: "5px 11px", borderRadius: 6, fontSize: 11, cursor: "pointer",
-                          backgroundColor: liveExtractor === f.key ? "#d9d5cc" : "transparent",
-                          color: liveExtractor === f.key ? "#16181d" : "#4b5260",
-                          border: `1px solid ${liveExtractor === f.key ? "#3c4fe0" : "#d9d5cc"}` }}>
+                      <button key={f.key} type="button" onClick={() => setLiveExtractor(f.key)} className={liveExtractor === f.key ? "on" : ""}>
                         {f.label} {f.count != null ? `(${f.count})` : ""}
                       </button>
                     ))}
